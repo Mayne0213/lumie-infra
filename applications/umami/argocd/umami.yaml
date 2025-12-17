@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: umami
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  
+  sources:
+    - repoURL: https://charts.christianhuth.de
+      chart: umami
+      targetRevision: 6.0.1
+      helm:
+        valueFiles:
+          - $values/umami/helm-values/umami.yaml
+    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+      targetRevision: main
+      path: umami
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: analytics
+  
+  ignoreDifferences:
+    # Ignore app-secret data changes in umami-app-secret
+    # Helm chart generates random app-secret value on each sync,
+    # causing ArgoCD to detect it as OutOfSync
+    - group: ""
+      kind: Secret
+      name: umami-app-secret
+      jsonPointers:
+        - /data
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

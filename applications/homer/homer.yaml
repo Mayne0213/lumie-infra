@@ -1,0 +1,125 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: homer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homer
+  namespace: homer
+  labels:
+    app: homer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homer
+  template:
+    metadata:
+      labels:
+        app: homer
+    spec:
+      initContainers:
+      - name: copy-homer-files
+        image: b4bz/homer:latest
+        command: ['sh', '-c']
+        args:
+          - |
+            # Homer의 기본 파일들을 emptyDir로 복사
+            cp -r /www/* /tmp/www/
+        volumeMounts:
+        - name: www
+          mountPath: /tmp/www
+      - name: copy-assets
+        image: alpine/git:latest
+        command: ['sh', '-c']
+        args:
+          - |
+            # Git에서 assets 복사
+            git clone --depth 1 --branch main https://gitea0213.kro.kr/bluemayne/infrastructure.git /tmp/repo
+            # assets 폴더 덮어쓰기
+            rm -rf /www/assets
+            cp -r /tmp/repo/homer/assets /www/assets
+            # config.yml 복사
+            cp /config/config.yml /www/assets/config.yml
+            # lighttpd 사용자(uid=1000)가 읽을 수 있도록 권한 변경
+            chmod -R 755 /www/assets
+            chown -R 1000:65533 /www/assets
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: www
+          mountPath: /www
+      containers:
+      - name: homer
+        image: b4bz/homer:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - name: www
+          mountPath: "/www"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+      volumes:
+      - name: config
+        configMap:
+          name: homer-config
+      - name: www
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: homer
+  namespace: homer
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: homer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homer-ingress
+  namespace: homer
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - mayne.kro.kr
+    - www.mayne.kro.kr
+    secretName: homer-tls
+  rules:
+  - host: mayne.kro.kr
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: homer
+            port:
+              number: 80
+  - host: www.mayne.kro.kr
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: homer
+            port:
+              number: 80
