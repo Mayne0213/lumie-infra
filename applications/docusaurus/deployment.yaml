@@ -30,7 +30,7 @@ spec:
         - |
           apk add --no-cache git
           echo "Cloning repository..."
-          git clone https://gitea0213.kro.kr/bluemayne/infrastructure.git /tmp/repo
+          git clone https://gitea0213.kro.kr/bluemayne/applications.git /tmp/repo
           cd /tmp/repo/docusaurus
           echo "Installing dependencies..."
           npm install --legacy-peer-deps
