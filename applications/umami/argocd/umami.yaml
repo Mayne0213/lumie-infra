@@ -15,10 +15,10 @@ spec:
       helm:
         valueFiles:
           - $values/umami/helm-values/umami.yaml
-    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
       targetRevision: main
       ref: values
-    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
       targetRevision: main
       path: umami
   
