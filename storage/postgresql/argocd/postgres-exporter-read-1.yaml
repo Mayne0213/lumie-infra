@@ -15,7 +15,7 @@ spec:
       helm:
         valueFiles:
           - $values/postgresql/helm-values/postgres-exporter-read-1.yaml
-    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+    - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
       targetRevision: main
       ref: values
 

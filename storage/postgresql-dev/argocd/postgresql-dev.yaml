@@ -15,11 +15,11 @@ spec:
       helm:
         valueFiles:
           - $values/postgresql-dev/helm-values/postgresql-dev.yaml
-    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+    - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
       targetRevision: main
       ref: values
     # Vault secrets from Git repository
-    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+    - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
       targetRevision: main
       path: postgresql-dev
 
