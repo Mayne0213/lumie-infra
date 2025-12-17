@@ -37,7 +37,7 @@ spec:
           echo "Building Docusaurus site..."
           npm run build
           echo "Copying build output..."
-          cp -r build/* /build/
+          cp -r build/. /build/
           echo "Build complete!"
         volumeMounts:
         - name: build-output
