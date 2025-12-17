@@ -1,0 +1,24 @@
+# Kube State Metrics Helm Values
+# Chart: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics
+
+fullnameOverride: kube-state-metrics
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+
+service:
+  type: ClusterIP
+  clusterIP: None
+
+# Prometheus ServiceMonitor 설정
+prometheus:
+  monitor:
+    enabled: true
+    additionalLabels:
+      release: prometheus
+    namespace: monitoring
+    relabelings:
+      - targetLabel: cluster
+        replacement: "mayne-cluster"

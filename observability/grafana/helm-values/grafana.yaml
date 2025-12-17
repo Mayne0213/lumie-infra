@@ -1,0 +1,63 @@
+# Grafana Helm Values
+# Chart: https://github.com/grafana/helm-charts/tree/main/charts/grafana
+
+fullnameOverride: grafana
+
+admin:
+  user: bluemayne
+  # Password is managed via SealedSecret: grafana-admin-password
+  existingSecret: grafana-admin-password
+  userKey: admin-user
+  passwordKey: admin-password
+
+persistence:
+  enabled: true
+  size: 2Gi
+  storageClass: local-path
+
+initChownData:
+  enabled: false
+
+podSecurityContext:
+  fsGroup: 472
+  fsGroupChangePolicy: "Always"
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 128Mi
+
+service:
+  type: ClusterIP
+  port: 80
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus-kube-prometheus-prometheus:9090
+      isDefault: true
+      editable: true
+    - name: Loki
+      type: loki
+      access: proxy
+      url: http://loki.logging.svc.cluster.local:3100
+      editable: true
+
+grafana.ini:
+  server:
+    root_url: "http://grafana0213.kro.kr"
+  auth.anonymous:
+    enabled: false
+  security:
+    allow_embedding: true
+  auth.basic:
+    enabled: false
+  auth:
+    disable_login_form: false
+    disable_signout_menu: true
+  news:
+    news_feed_enabled: false
