@@ -9,7 +9,7 @@ spec:
   project: default
 
   sources:
-    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
       targetRevision: main
       path: docusaurus
 
