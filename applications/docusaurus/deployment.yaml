@@ -99,9 +99,14 @@ data:
         gzip_min_length 1024;
         gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml+rss application/javascript application/json;
 
+        # Redirect root to intro page
+        location = / {
+            return 301 /intro/;
+        }
+
         # SPA fallback
         location / {
-            try_files $uri $uri/ /index.html;
+            try_files $uri $uri/ /intro/index.html;
         }
 
         # Cache static assets
