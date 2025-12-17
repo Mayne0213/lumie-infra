@@ -5,3 +5,8 @@ resources:
   # ArgoCD Application 리소스는 infrastructure/kustomization.yaml에서 관리
   # - argocd/vault.yaml
   # - argocd/vault-secrets.yaml
+
+  # External Secrets integration
+  # ServiceAccount is managed by external-secrets Helm chart
+  - cluster-secret-store.yaml
+  # vault-config-job.yaml은 삭제됨 (민감한 정보 포함으로 인해 .md 파일로 대체)
