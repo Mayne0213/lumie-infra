@@ -16,12 +16,12 @@ spec:
       helm:
         valueFiles:
           - $values/gitea/helm-values/gitea.yaml
-    # Values file from Git repository
-    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+    # Values file from applications repository
+    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
       targetRevision: main
       ref: values
-    # Vault secrets from Git repository
-    - repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+    # Vault secrets from applications repository
+    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
       targetRevision: main
       path: gitea
 
