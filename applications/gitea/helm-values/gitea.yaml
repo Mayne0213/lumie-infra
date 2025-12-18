@@ -110,6 +110,10 @@ deployment:
           name: gitea-postgres-password
           key: password
 
+  # Deployment strategy: Recreate to avoid leveldb lock conflicts
+  strategy:
+    type: Recreate
+
 # Persistence for Gitea data
 persistence:
   enabled: true
