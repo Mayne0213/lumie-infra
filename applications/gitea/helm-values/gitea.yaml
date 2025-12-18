@@ -102,7 +102,7 @@ redis-cluster:
   enabled: false
 
 # Deployment strategy: Recreate to avoid leveldb lock conflicts
-deploymentStrategy:
+strategy:
   type: Recreate
 
 # Environment variables for database password
