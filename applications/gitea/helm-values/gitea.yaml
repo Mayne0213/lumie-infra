@@ -101,6 +101,10 @@ valkey-cluster:
 redis-cluster:
   enabled: false
 
+# Deployment strategy: Recreate to avoid leveldb lock conflicts
+deploymentStrategy:
+  type: Recreate
+
 # Environment variables for database password
 deployment:
   env:
@@ -109,10 +113,6 @@ deployment:
         secretKeyRef:
           name: gitea-postgres-password
           key: password
-
-  # Deployment strategy: Recreate to avoid leveldb lock conflicts
-  strategy:
-    type: Recreate
 
 # Persistence for Gitea data
 persistence:
