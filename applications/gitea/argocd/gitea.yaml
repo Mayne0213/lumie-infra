@@ -48,16 +48,3 @@ spec:
         maxDuration: 3m
 
   revisionHistoryLimit: 10
-
-  # Ignore differences in checksum annotations and manual restart annotations
-  ignoreDifferences:
-    - group: apps
-      kind: Deployment
-      name: gitea
-      jsonPointers:
-        - /spec/template/metadata/annotations
-    - group: apps
-      kind: Deployment
-      name: gitea
-      jqPathExpressions:
-        - .spec.replicas
