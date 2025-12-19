@@ -18,6 +18,8 @@ gitea:
   admin:
     # Admin credentials managed via environment variables
     existingSecret: gitea-admin-secret
+    # Do not update password on every restart
+    passwordMode: initialOnlyNoReset
 
   config:
     server:
