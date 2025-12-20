@@ -38,7 +38,7 @@ spec:
         args:
           - |
             # Git에서 assets 복사
-            git clone --depth 1 --branch main https://gitea0213.kro.kr/bluemayne/infrastructure.git /tmp/repo
+            git clone --depth 1 --branch main https://gitea0213.kro.kr/bluemayne/applications.git /tmp/repo
             # assets 폴더 덮어쓰기
             rm -rf /www/assets
             cp -r /tmp/repo/homer/assets /www/assets
