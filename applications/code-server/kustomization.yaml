@@ -5,3 +5,9 @@ resources:
   # ArgoCD Application 리소스는 infrastructure/kustomization.yaml에서 관리
   # - argocd/code-server.yaml
   - vault/code-server-password.yaml
+
+patches:
+  - path: deployment-patch.yaml
+    target:
+      kind: Deployment
+      name: code-server
