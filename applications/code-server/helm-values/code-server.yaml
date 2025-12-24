@@ -50,6 +50,8 @@ extraArgs:
 extraVars:
   - name: TZ
     value: "Asia/Seoul"
+  - name: PS1
+    value: "coder:\\w~ "
 
 # Health checks
 livenessProbe:
