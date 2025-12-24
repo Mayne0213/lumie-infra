@@ -31,11 +31,12 @@ resources:
     cpu: 300m  # Reduced to 30% of original (1000m -> 300m)
     memory: 4Gi  # 4GB (within available ~15GB)
 
-# Security context
+# Security context - privileged to access host resources
 securityContext:
   enabled: true
-  fsGroup: 1000
-  runAsUser: 1000
+  fsGroup: 0
+  runAsUser: 0
+  privileged: true
 
 # Volume permissions
 volumePermissions:
@@ -51,27 +52,27 @@ extraVars:
   - name: TZ
     value: "Asia/Seoul"
   - name: KUBECONFIG
-    value: "/host/etc/rancher/k3s/k3s.yaml"
+    value: "/etc/rancher/k3s/k3s.yaml"
   - name: PATH
-    value: "/host/usr/local/bin:/host/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    value: "/usr/local/bin:/usr/bin:/bin:/sbin"
 
-# Mount host paths for kubectl access
+# Mount host paths for k3s config and binaries access
 extraVolumes:
-  - name: host-bin
-    hostPath:
-      path: /usr/local/bin
-      type: Directory
   - name: host-k3s-config
     hostPath:
       path: /etc/rancher/k3s
       type: Directory
+  - name: host-usr-local-bin
+    hostPath:
+      path: /usr/local/bin
+      type: Directory
 
 extraVolumeMounts:
-  - name: host-bin
-    mountPath: /host/usr/local/bin
-    readOnly: true
   - name: host-k3s-config
-    mountPath: /host/etc/rancher/k3s
+    mountPath: /etc/rancher/k3s
+    readOnly: true
+  - name: host-usr-local-bin
+    mountPath: /usr/local/bin
     readOnly: true
 
 # Health checks
