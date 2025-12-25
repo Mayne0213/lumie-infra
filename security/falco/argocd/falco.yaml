@@ -89,7 +89,7 @@ spec:
   syncPolicy:
     automated:
       prune: true
-      selfHeal: false  # Disabled to prevent constant sync due to StatefulSet PVC retention policy
+      selfHeal: true
       allowEmpty: false
 
     syncOptions:
@@ -107,19 +107,12 @@ spec:
         factor: 2
         maxDuration: 3m
 
-  # Ignore StatefulSet differences
-  # persistentVolumeClaimRetentionPolicy is set by Kubernetes automatically
+  # Ignore StatefulSet differences managed by Kubernetes
   ignoreDifferences:
     - group: apps
       kind: StatefulSet
-      name: falco-falcosidekick-ui-redis
-      jsonPointers:
-        - /spec/persistentVolumeClaimRetentionPolicy
       jqPathExpressions:
-        - .spec.persistentVolumeClaimRetentionPolicy
-    - group: apps
-      kind: StatefulSet
-      managedFieldsManagers:
-        - kube-controller-manager
+        - '.spec.persistentVolumeClaimRetentionPolicy'
+        - '.spec.volumeClaimTemplates[]?.metadata.creationTimestamp'
 
   revisionHistoryLimit: 10
