@@ -6,3 +6,4 @@ resources:
   # - argocd/code-server.yaml
   - vault/code-server-password.yaml
   - rbac.yaml
+  - ingress.yaml
