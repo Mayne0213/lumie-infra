@@ -51,7 +51,7 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "50m"
+            cpu: "5m"  # Reduced from 50m based on actual usage (1m)
         livenessProbe:
           tcpSocket:
             port: 8081
