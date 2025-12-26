@@ -15,7 +15,7 @@ image:
 # Resource requests
 resources:
   requests:
-    cpu: 40m  # Reduced from 50m for worker-node-2 CPU optimization (actual usage ~39m)
+    cpu: 30m  # Reduced for CPU optimization to allow CNPG join pod scheduling
     memory: 256Mi
 
 # Falco configuration
@@ -134,7 +134,7 @@ falcosidekick:
 
     resources:
       requests:
-        cpu: 50m
+        cpu: 30m
         memory: 128Mi
       limits:
         # cpu: removed to prevent throttling
