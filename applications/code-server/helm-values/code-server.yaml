@@ -9,8 +9,8 @@ image:
 persistence:
   enabled: true
   accessMode: ReadWriteOnce
-  size: 20Gi
-  storageClassName: longhorn  # Migrated from local-path to Longhorn (replica=3)
+  size: 5Gi
+  storageClassName: local-path  # Reverted from longhorn due to storage constraints
 
 # Use existing secret for password
 existingSecret: code-server-password
