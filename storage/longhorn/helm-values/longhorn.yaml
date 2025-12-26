@@ -9,13 +9,13 @@ preUpgradeChecker:
 # Persistence settings
 persistence:
   defaultClass: true  # Set Longhorn as default StorageClass
-  defaultClassReplicaCount: 3  # Number of replicas for high availability
+  defaultClassReplicaCount: 2  # Number of replicas for high availability
   reclaimPolicy: Retain  # Keep PV data when PVC is deleted
 
 # Default settings
 defaultSettings:
   # Storage
-  defaultReplicaCount: 3  # Default number of replicas for volumes
+  defaultReplicaCount: 2  # Default number of replicas for volumes
   defaultDataPath: /mnt/longhorn-storage  # Data storage path on nodes (NEW: dedicated 50GB disks)
 
   # Backup settings
@@ -113,7 +113,7 @@ defaultStorageClass:
   reclaimPolicy: Retain
   allowVolumeExpansion: true
   parameters:
-    numberOfReplicas: "3"
+    numberOfReplicas: "2"
     staleReplicaTimeout: "2880"  # 48 hours
     fromBackup: ""
     fsType: "ext4"
