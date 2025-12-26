@@ -20,10 +20,11 @@ spec:
     - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
       targetRevision: main
       ref: values
-    # Ingress from Git repository
+    # Ingress and Nodes from Git repository
     - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
       targetRevision: main
-      path: longhorn/ingress
+      path: longhorn
+      kustomize: {}
 
   destination:
     server: https://kubernetes.default.svc
