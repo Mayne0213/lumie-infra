@@ -32,6 +32,7 @@ spec:
             cpu: 100m
             memory: 256Mi
           limits:
+            cpu: "100"  # Very high limit (effectively unlimited)
             memory: 1Gi
 
         # Falco configuration
