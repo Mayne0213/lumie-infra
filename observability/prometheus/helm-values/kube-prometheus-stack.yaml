@@ -44,7 +44,7 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: local-path
+          storageClassName: longhorn  # Migrated from local-path to Longhorn (replica=3)
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:

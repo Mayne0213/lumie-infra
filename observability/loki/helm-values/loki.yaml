@@ -40,7 +40,7 @@ singleBinary:
   persistence:
     enabled: true
     size: 10Gi
-    storageClass: local-path
+    storageClass: longhorn  # Migrated from local-path to Longhorn (replica=3)
   resources:
     requests:
       cpu: 15m  # Reduced from 50m based on actual usage (10m)
