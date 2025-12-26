@@ -16,7 +16,7 @@ persistence:
 defaultSettings:
   # Storage
   defaultReplicaCount: 3  # Default number of replicas for volumes
-  defaultDataPath: /var/lib/longhorn  # Data storage path on nodes
+  defaultDataPath: /mnt/longhorn-storage  # Data storage path on nodes (NEW: dedicated 50GB disks)
 
   # Backup settings
   backupTarget: ""  # S3/NFS backup target (configure later if needed)
