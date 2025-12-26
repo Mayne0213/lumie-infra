@@ -28,7 +28,7 @@ service:
 # Resource limits
 resources:
   requests:
-    cpu: 50m  # Reduced from 100m for worker-node-2 CPU optimization (actual usage ~5m)
+    cpu: 5m  # Reduced from 50m based on actual usage (1m)
     memory: 1Gi  # Reduced from 4Gi for worker-node-2 optimization
 
 # Security context
