@@ -94,7 +94,5 @@ spec:
               subPath: config.yaml
           resources:
             requests:
-              cpu: 100m
-              memory: 256Mi
-            limits:
-              memory: 2Gi
+              cpu: 50m
+              memory: 128Mi

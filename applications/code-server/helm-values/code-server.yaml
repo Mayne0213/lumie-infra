@@ -28,8 +28,8 @@ service:
 # Resource limits
 resources:
   requests:
-    cpu: 300m  # Reduced to 30% of original (1000m -> 300m)
-    memory: 4Gi  # 4GB (within available ~15GB)
+    cpu: 100m  # Reduced for worker-node-2 CPU optimization
+    memory: 1Gi  # Reduced from 4Gi for worker-node-2 optimization
 
 # Security context
 securityContext:
