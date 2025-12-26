@@ -32,7 +32,6 @@ spec:
             cpu: 100m
             memory: 256Mi
           limits:
-            cpu: "100"  # Very high limit (effectively unlimited)
             memory: 1Gi
 
         # Falco configuration
@@ -87,11 +86,10 @@ spec:
     namespace: falco
 
   syncPolicy:
-    # Auto-sync disabled to allow manual CPU limit removal
-    # automated:
-    #   prune: true
-    #   selfHeal: true
-    #   allowEmpty: false
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
 
     syncOptions:
       - CreateNamespace=true
