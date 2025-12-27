@@ -11,6 +11,9 @@ persistence:
   accessMode: ReadWriteOnce
   size: 5Gi
   storageClassName: longhorn  # Migrated to Longhorn for HA (replica=2)
+  annotations:
+    # Longhorn volume display name (for UI visibility)
+    longhorn.io/display-name: code-server
 
 # Use existing secret for password
 existingSecret: code-server-password
