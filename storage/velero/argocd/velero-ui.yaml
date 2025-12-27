@@ -40,7 +40,9 @@ spec:
 
         # Environment variables
         env: []
-        envFrom: []
+        envFrom:
+          - secretRef:
+              name: velero-ui-secret
 
         # Pod security context
         podSecurityContext:
