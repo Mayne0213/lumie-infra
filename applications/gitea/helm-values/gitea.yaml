@@ -119,6 +119,7 @@ deployment:
 # Persistence for Gitea data
 persistence:
   enabled: true
+  existingClaim: gitea-shared-storage-longhorn  # Use existing PVC with data
   size: 10Gi
   storageClass: longhorn  # Migrated from local-path to Longhorn (replica=3)
   accessModes:
