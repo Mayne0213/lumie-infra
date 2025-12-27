@@ -33,9 +33,9 @@ gitea:
 
     database:
       DB_TYPE: postgres
-      HOST: postgresql-primary.postgresql.svc.cluster.local:5432
+      HOST: postgresql-cnpg-rw.postgresql-cnpg.svc.cluster.local:5432
       NAME: gitea
-      USER: postgres
+      USER: bluemayne
       SCHEMA: public
       SSL_MODE: disable
 
