@@ -10,7 +10,7 @@ postgresql:
 # External database configuration
 externalDatabase:
   type: postgresql
-  hostname: postgresql-primary.postgresql.svc.cluster.local
+  hostname: postgresql-cnpg-rw.postgresql-cnpg.svc.cluster.local
   port: 5432
   auth:
     database: umami
