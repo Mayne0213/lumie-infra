@@ -39,10 +39,18 @@ spec:
           port: 3000
 
         # Environment variables
-        env: []
-        envFrom:
-          - secretRef:
-              name: velero-ui-secret
+        env:
+          - name: BASIC_AUTH_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: velero-ui-secret
+                key: username
+          - name: BASIC_AUTH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: velero-ui-secret
+                key: password
+        envFrom: []
 
         # Pod security context
         podSecurityContext:
