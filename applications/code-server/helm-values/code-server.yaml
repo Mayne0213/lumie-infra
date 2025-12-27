@@ -10,7 +10,7 @@ persistence:
   enabled: true
   accessMode: ReadWriteOnce
   size: 5Gi
-  storageClassName: local-path  # Reverted from longhorn due to storage constraints
+  storageClassName: longhorn  # Migrated to Longhorn for HA (replica=2)
 
 # Use existing secret for password
 existingSecret: code-server-password
