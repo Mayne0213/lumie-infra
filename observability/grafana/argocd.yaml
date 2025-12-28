@@ -20,7 +20,7 @@ spec:
     - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
       targetRevision: main
       ref: values
-    # Vault secrets from Git repository
+    # Additional resources (ExternalSecret, Ingress, etc.)
     - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
       targetRevision: main
       path: grafana
