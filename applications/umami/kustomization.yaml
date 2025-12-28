@@ -4,5 +4,9 @@ kind: Kustomization
 resources:
   # ArgoCD Application 리소스는 infrastructure/kustomization.yaml에서 관리
   # - argocd/umami.yaml
+
+  # Namespace with Goldilocks label
+  - namespace.yaml
+
   - vault/umami-password.yaml
   - ingress.yaml

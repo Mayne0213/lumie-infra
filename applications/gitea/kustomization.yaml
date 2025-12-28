@@ -5,10 +5,13 @@ resources:
   # ArgoCD Application (주석 처리: circular dependency 방지)
   # - argocd/gitea.yaml
   # Gitea Application은 수동으로 적용: kubectl apply -f gitea/argocd/gitea.yaml
-  
+
+  # Namespace with Goldilocks label
+  - namespace.yaml
+
   # Gitea Runner
   - deployment.yaml
-  
+
   # Vault secrets
   - vault/gitea-admin-secret.yaml
   - vault/gitea-postgres-password.yaml

@@ -4,6 +4,10 @@ kind: Kustomization
 resources:
   # ArgoCD Application 리소스는 infrastructure/kustomization.yaml에서 관리
   # - argocd/homer.yaml
+
+  # Namespace with Goldilocks label
+  - namespace.yaml
+
   - homer.yaml
 
 # ConfigMap 생성: config.yml만 포함 (assets는 InitContainer에서 Git에서 복사)
