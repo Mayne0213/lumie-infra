@@ -8,7 +8,7 @@ resources:
   # Namespace with Goldilocks label
   - namespace.yaml
 
-  - homer.yaml
+  - deployment.yaml
 
 # ConfigMap 생성: config.yml만 포함 (assets는 InitContainer에서 Git에서 복사)
 configMapGenerator:
