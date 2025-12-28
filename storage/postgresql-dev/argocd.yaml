@@ -14,7 +14,7 @@ spec:
       targetRevision: 16.2.1
       helm:
         valueFiles:
-          - $values/postgresql-dev/helm-values/postgresql-dev.yaml
+          - $values/postgresql-dev/helm-values.yaml
     - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
       targetRevision: main
       ref: values
