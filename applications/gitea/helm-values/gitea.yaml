@@ -119,8 +119,8 @@ deployment:
 # Persistence for Gitea data
 persistence:
   enabled: true
-  create: true  # Create new PVC managed by Helm
-  claimName: gitea-data  # New PVC name to avoid conflict
+  create: true
+  volumeName: pvc-ec9c8a13-61a8-4722-8842-14d5570612a0  # Bind to existing PV with data
   size: 10Gi
   storageClass: longhorn
   accessModes:
