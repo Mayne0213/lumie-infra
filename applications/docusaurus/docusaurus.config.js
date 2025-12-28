@@ -47,13 +47,6 @@ const config = {
           editUrl:
             'https://gitea0213.kro.kr/bluemayne/infrastructure/src/branch/main/docusaurus/',
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://gitea0213.kro.kr/bluemayne/infrastructure/src/branch/main/docusaurus/',
-        },
         theme: {
           customCss: './src/css/custom.css',
         },
