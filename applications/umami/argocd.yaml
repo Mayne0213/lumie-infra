@@ -24,7 +24,7 @@ spec:
   
   destination:
     server: https://kubernetes.default.svc
-    namespace: analytics
+    namespace: umami
   
   ignoreDifferences:
     # Ignore app-secret data changes in umami-app-secret
