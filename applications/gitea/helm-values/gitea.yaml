@@ -169,7 +169,7 @@ securityContext:
 initPreScript: |
   #!/bin/sh
   echo "Waiting for PostgreSQL..."
-  until nc -z postgresql-primary.postgresql.svc.cluster.local 5432; do
+  until nc -z postgresql-cnpg-rw.postgresql-cnpg.svc.cluster.local 5432; do
     echo "Waiting for PostgreSQL to be ready..."
     sleep 2
   done
