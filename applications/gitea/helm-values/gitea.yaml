@@ -155,10 +155,11 @@ ingress:
 
 # Resource limits
 resources:
+  limits:
+    memory: 512Mi
   requests:
     cpu: 10m  # Reduced from 50m based on actual usage (5m)
     memory: 256Mi
-  limits: {}
 
 # Security context
 securityContext: {}
