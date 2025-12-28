@@ -134,6 +134,8 @@ service:
     type: LoadBalancer
     port: 2222
     externalTrafficPolicy: Local
+    annotations:
+      metallb.universe.tf/allow-shared-ip: gitea
 
 # Ingress configuration
 ingress:
