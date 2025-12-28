@@ -15,33 +15,14 @@ recommender:
       memory: 512Mi
 
 # Updater - applies recommended resource requests to pods
+# Disabled because we're using updateMode: Off (recommendations only)
 updater:
-  enabled: true
-  replicaCount: 1
-
-  resources:
-    limits:
-      cpu: null
-      memory: 1Gi
-    requests:
-      cpu: 50m
-      memory: 512Mi
+  enabled: false
 
 # Admission Controller - injects resource requests into new pods
+# Disabled because we're using updateMode: Off (recommendations only)
 admissionController:
-  enabled: true
-  replicaCount: 1
-
-  resources:
-    limits:
-      cpu: null
-      memory: 512Mi
-    requests:
-      cpu: 50m
-      memory: 256Mi
-
-  # Generate self-signed certificate
-  generateCertificate: true
+  enabled: false
 
 # Optional: Configure default VPA behavior
 # metrics-server should be installed in the cluster
