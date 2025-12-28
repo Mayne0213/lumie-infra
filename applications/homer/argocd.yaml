@@ -1,37 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: code-server
+  name: homer
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-
+  
   sources:
-    - repoURL: https://github.com/coder/code-server.git
-      targetRevision: main
-      path: ci/helm-chart
-      helm:
-        valueFiles:
-          - $values/code-server/helm-values/code-server.yaml
     - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
       targetRevision: main
-      ref: values
-    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
-      targetRevision: main
-      path: code-server
-
+      path: homer
+  
   destination:
     server: https://kubernetes.default.svc
-    namespace: code-server
-
+    namespace: homer
+  
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+
     retry:
       limit: 5
       backoff:
