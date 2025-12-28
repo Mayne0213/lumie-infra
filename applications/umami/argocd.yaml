@@ -14,7 +14,7 @@ spec:
       targetRevision: 6.0.1
       helm:
         valueFiles:
-          - $values/umami/helm-values/umami.yaml
+          - $values/umami/helm-values.yaml
     - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
       targetRevision: main
       ref: values
@@ -40,8 +40,7 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+
     retry:
       limit: 5
       backoff:

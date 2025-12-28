@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: docusaurus
+  name: gitea
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -9,13 +9,25 @@ spec:
   project: default
 
   sources:
+    # Helm chart from Gitea repository
+    - repoURL: https://dl.gitea.com/charts/
+      chart: gitea
+      targetRevision: 12.4.0
+      helm:
+        valueFiles:
+          - $values/gitea/helm-values.yaml
+    # Values file from applications repository
     - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
       targetRevision: main
-      path: docusaurus
+      ref: values
+    # Vault secrets from applications repository
+    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
+      targetRevision: main
+      path: gitea
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: docusaurus
+    namespace: gitea
 
   syncPolicy:
     automated:
@@ -24,7 +36,6 @@ spec:
       allowEmpty: false
 
     syncOptions:
-      - CreateNamespace=true
       - PrunePropagationPolicy=foreground
       - PruneLast=true
 
@@ -36,18 +47,3 @@ spec:
         maxDuration: 3m
 
   revisionHistoryLimit: 10
-
-  # Ignore differences in checksum annotations and manual restart annotations
-  ignoreDifferences:
-    - group: apps
-      kind: Deployment
-      jqPathExpressions:
-        - .spec.template.metadata.annotations
-        - .metadata.annotations
-
-    - group: ""
-      kind: Service
-      name: docusaurus
-      namespace: docusaurus
-      jsonPointers:
-        - /spec/clusterIP
