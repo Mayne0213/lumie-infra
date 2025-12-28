@@ -119,10 +119,10 @@ deployment:
 # Persistence for Gitea data
 persistence:
   enabled: true
-  create: false  # Use existing PVC (created during Longhorn migration)
-  claimName: gitea-shared-storage
+  create: true  # Create new PVC managed by Helm
+  claimName: gitea-data  # New PVC name to avoid conflict
   size: 10Gi
-  storageClass: longhorn  # Migrated from local-path to Longhorn (replica=3)
+  storageClass: longhorn
   accessModes:
     - ReadWriteOnce
 
