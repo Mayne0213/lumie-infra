@@ -17,8 +17,8 @@ spec:
       name: letsencrypt-prod
 
     # HTTP-01 challenge를 사용하여 도메인 소유권 검증
-    # Nginx Ingress를 통해 /.well-known/acme-challenge/ 경로로 검증
+    # HAProxy Ingress를 통해 /.well-known/acme-challenge/ 경로로 검증
     solvers:
     - http01:
         ingress:
-          class: nginx
+          class: haproxy
