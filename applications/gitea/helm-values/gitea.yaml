@@ -123,6 +123,7 @@ persistence:
   storageClass: longhorn
   accessModes:
     - ReadWriteOnce
+  claimName: gitea-data
 
 # Service configuration
 service:
