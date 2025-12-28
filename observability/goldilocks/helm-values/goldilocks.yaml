@@ -1,0 +1,52 @@
+# Goldilocks Helm Values
+# Reference: https://github.com/FairwindsOps/charts/tree/master/stable/goldilocks
+
+# Dashboard configuration
+dashboard:
+  enabled: true
+  replicaCount: 1
+
+  resources:
+    limits:
+      cpu: null
+      memory: 256Mi
+    requests:
+      cpu: 25m
+      memory: 128Mi
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  # Ingress configuration (optional)
+  ingress:
+    enabled: false
+    # Uncomment below to enable ingress
+    # enabled: true
+    # ingressClassName: nginx
+    # hosts:
+    #   - host: goldilocks.example.com
+    #     paths:
+    #       - path: /
+    #         type: Prefix
+
+# Controller configuration
+controller:
+  enabled: true
+
+  resources:
+    limits:
+      cpu: null
+      memory: 256Mi
+    requests:
+      cpu: 25m
+      memory: 128Mi
+
+  # Enable VPA recommendations for all namespaces
+  # Set to false to only monitor namespaces with the label: goldilocks.fairwinds.com/enabled=true
+  enableCostRecommendations: true
+
+# VPA configuration (should already be installed)
+vpa:
+  # Set to false since we're installing VPA separately
+  enabled: false

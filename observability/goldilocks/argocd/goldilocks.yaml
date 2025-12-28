@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: goldilocks
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  sources:
+    # Helm chart from external repository
+    - repoURL: https://charts.fairwinds.com/stable
+      chart: goldilocks
+      targetRevision: 8.0.2
+      helm:
+        valueFiles:
+          - $values/goldilocks/helm-values/goldilocks.yaml
+    # Values file from Git repository
+    - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
+      targetRevision: main
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: goldilocks
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+      - RespectIgnoreDifferences=true
+
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+
+  # Ignore Deployment differences for CPU limits (set to null)
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jqPathExpressions:
+        - '.spec.template.spec.containers[].resources.limits.cpu'
+
+  revisionHistoryLimit: 10
