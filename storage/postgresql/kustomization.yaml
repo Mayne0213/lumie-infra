@@ -7,12 +7,10 @@ resources:
   # Vault External Secrets
   - vault/app-user-secret.yaml
   - vault/superuser-secret.yaml
-  - vault/vault-user-secret.yaml
   # - vault/backup-s3-secret.yaml  # Disabled - using Velero instead
 
   # CNPG Cluster
   - manifests/cluster.yaml
-  - manifests/vault-database.yaml
 
   # PodMonitor is auto-created by CNPG operator via cluster.spec.monitoring.enablePodMonitor
 
