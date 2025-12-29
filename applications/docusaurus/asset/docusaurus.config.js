@@ -45,7 +45,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://gitea0213.kro.kr/bluemayne/infrastructure/src/branch/main/docusaurus/',
+            'https://github.com/Mayne0213/infrastructure/src/branch/main/docusaurus/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -78,7 +78,7 @@ const config = {
             position: 'right',
           },
           {
-            href: 'https://gitea0213.kro.kr/bluemayne/infrastructure',
+            href: 'https://github.com/Mayne0213/infrastructure',
             label: 'Gitea',
             position: 'right',
           },
@@ -122,7 +122,7 @@ const config = {
               },
               {
                 label: 'Repository',
-                href: 'https://gitea0213.kro.kr/bluemayne/infrastructure',
+                href: 'https://github.com/Mayne0213/infrastructure',
               },
             ],
           },

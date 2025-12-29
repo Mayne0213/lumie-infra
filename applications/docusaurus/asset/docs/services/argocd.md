@@ -31,7 +31,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://gitea0213.kro.kr/bluemayne/infrastructure.git
+    repoURL: https://github.com/Mayne0213/infrastructure.git
     targetRevision: main
     path: example-service
   destination:

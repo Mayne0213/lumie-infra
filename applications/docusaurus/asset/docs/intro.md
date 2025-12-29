@@ -37,4 +37,4 @@ If you have questions or need assistance:
 
 1. Check the documentation sections
 2. Search for specific topics
-3. Visit our [Gitea repository](https://gitea0213.kro.kr/bluemayne/infrastructure)
+3. Visit our [Gitea repository](https://github.com/Mayne0213/infrastructure)
