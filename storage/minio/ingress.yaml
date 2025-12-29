@@ -5,12 +5,8 @@ metadata:
   namespace: minio
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-  ingressClassName: haproxy
+  ingressClassName: traefik
   tls:
   - hosts:
     - s3.minio0213.kro.kr
@@ -34,10 +30,8 @@ metadata:
   namespace: minio
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-  ingressClassName: haproxy
+  ingressClassName: traefik
   tls:
   - hosts:
     - minio.minio0213.kro.kr
