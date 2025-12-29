@@ -12,7 +12,7 @@ spec:
     helm:
       valueFiles:
       - $values/loki/helm-values.yaml
-  - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
+  - repoURL: https://github.com/Mayne0213/monitoring.git
     targetRevision: HEAD
     ref: values
   destination:
