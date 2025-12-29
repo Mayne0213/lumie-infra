@@ -4,27 +4,28 @@ metadata:
   name: homer
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  
   sources:
-    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
-      targetRevision: main
-      path: homer
-  
+  - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
+    targetRevision: main
+    path: homer
   destination:
     server: https://kubernetes.default.svc
     namespace: homer
-  
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+    syncOptions:
+    - CreateNamespace=true

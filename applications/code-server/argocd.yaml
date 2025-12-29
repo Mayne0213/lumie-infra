@@ -4,36 +4,37 @@ metadata:
   name: code-server
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-
   sources:
-    - repoURL: https://github.com/coder/code-server.git
-      targetRevision: main
-      path: ci/helm-chart
-      helm:
-        valueFiles:
-          - $values/code-server/helm-values.yaml
-    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
-      targetRevision: main
-      ref: values
-    - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
-      targetRevision: main
-      path: code-server
-
+  - repoURL: https://github.com/coder/code-server.git
+    targetRevision: main
+    path: ci/helm-chart
+    helm:
+      valueFiles:
+      - $values/code-server/helm-values.yaml
+  - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
+    targetRevision: main
+    ref: values
+  - repoURL: https://gitea0213.kro.kr/bluemayne/applications.git
+    targetRevision: main
+    path: code-server
   destination:
     server: https://kubernetes.default.svc
     namespace: code-server
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+    syncOptions:
+    - CreateNamespace=true
