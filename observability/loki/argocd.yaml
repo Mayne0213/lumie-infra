@@ -6,15 +6,15 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: https://grafana.github.io/helm-charts
-      chart: loki
-      targetRevision: 6.24.0
-      helm:
-        valueFiles:
-          - $values/loki/helm-values.yaml
-    - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
-      targetRevision: HEAD
-      ref: values
+  - repoURL: https://grafana.github.io/helm-charts
+    chart: loki
+    targetRevision: 6.24.0
+    helm:
+      valueFiles:
+      - $values/loki/helm-values.yaml
+  - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
+    targetRevision: HEAD
+    ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: loki
@@ -23,4 +23,7 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'

@@ -4,47 +4,41 @@ metadata:
   name: grafana
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-
   sources:
-    # Helm chart from external repository
-    - repoURL: https://grafana.github.io/helm-charts
-      chart: grafana
-      targetRevision: 10.3.0
-      helm:
-        valueFiles:
-          - $values/grafana/helm-values.yaml
-    # Values file from Git repository
-    - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
-      targetRevision: main
-      ref: values
-    # Additional resources (ExternalSecret, Ingress, etc.)
-    - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
-      targetRevision: main
-      path: grafana
-
+  - repoURL: https://grafana.github.io/helm-charts
+    chart: grafana
+    targetRevision: 10.3.0
+    helm:
+      valueFiles:
+      - $values/grafana/helm-values.yaml
+  - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
+    targetRevision: main
+    ref: values
+  - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
+    targetRevision: main
+    path: grafana
   destination:
     server: https://kubernetes.default.svc
     namespace: grafana
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
       allowEmpty: false
-
     syncOptions:
-      - CreateNamespace=true
-      - PrunePropagationPolicy=foreground
-      - PruneLast=true
-
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
-
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
   revisionHistoryLimit: 10

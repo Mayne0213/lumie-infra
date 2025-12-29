@@ -6,15 +6,15 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: https://grafana.github.io/helm-charts
-      chart: promtail
-      targetRevision: 6.16.6
-      helm:
-        valueFiles:
-          - $values/promtail/helm-values.yaml
-    - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
-      targetRevision: HEAD
-      ref: values
+  - repoURL: https://grafana.github.io/helm-charts
+    chart: promtail
+    targetRevision: 6.16.6
+    helm:
+      valueFiles:
+      - $values/promtail/helm-values.yaml
+  - repoURL: https://gitea0213.kro.kr/bluemayne/monitoring.git
+    targetRevision: HEAD
+    ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: promtail
@@ -23,4 +23,7 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
