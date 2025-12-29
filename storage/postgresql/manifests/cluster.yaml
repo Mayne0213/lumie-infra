@@ -1,0 +1,75 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgresql
+  namespace: postgresql
+spec:
+  # PostgreSQL version
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.6
+
+  # Number of instances
+  instances: 3  # 1 primary + 2 replicas for HA
+
+  # Storage configuration - using local-path
+  storage:
+    storageClass: local-path
+    size: 10Gi
+
+  # Resource requests and limits
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "150m"
+    limits:
+      memory: "2Gi"
+      # cpu: no limit to prevent throttling
+
+  # PostgreSQL configuration
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: "512MB"
+      effective_cache_size: "1536MB"
+      maintenance_work_mem: "128MB"
+      checkpoint_completion_target: "0.9"
+      wal_buffers: "16MB"
+      default_statistics_target: "100"
+      random_page_cost: "1.1"
+      effective_io_concurrency: "200"
+      work_mem: "2621kB"
+      min_wal_size: "1GB"
+      max_wal_size: "4GB"
+
+  # Bootstrap configuration
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+      secret:
+        name: postgresql-app-user
+
+  # Monitoring
+  monitoring:
+    enablePodMonitor: true
+    customQueriesConfigMap:
+      - name: cnpg-default-monitoring
+        key: queries
+    # Add pod labels to metrics for Grafana dashboard compatibility
+    podMonitorRelabelings:
+      # Add cluster label from pod label
+      - sourceLabels: [__meta_kubernetes_pod_label_cnpg_io_cluster]
+        targetLabel: cluster
+      # Add instance role label
+      - sourceLabels: [__meta_kubernetes_pod_label_cnpg_io_instanceRole]
+        targetLabel: role
+
+  # Backup disabled - using Velero for backups instead
+
+  # Affinity to spread replicas across nodes
+  affinity:
+    podAntiAffinityType: required
+
+  # Enable superuser access
+  enableSuperuserAccess: true
+  superuserSecret:
+    name: postgresql-superuser
