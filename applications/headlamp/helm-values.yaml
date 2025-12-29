@@ -1,0 +1,40 @@
+# Headlamp Helm Values
+
+replicaCount: 1
+
+image:
+  registry: ghcr.io
+  repository: headlamp-k8s/headlamp
+  tag: ""
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: headlamp
+
+clusterRoleBinding:
+  create: true
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+  limits:
+    memory: 128Mi
+
+# Ingress disabled - managed separately
+ingress:
+  enabled: false
+
+# Config
+config:
+  baseURL: ""
+  oidc:
+    clientID: ""
+    clientSecret: ""
+    issuerURL: ""
+    scopes: ""
