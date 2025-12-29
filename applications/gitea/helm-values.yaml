@@ -140,10 +140,9 @@ service:
 # Ingress configuration
 ingress:
   enabled: true
-  className: haproxy
+  className: traefik
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    # HAProxy handles large body sizes by default, no annotation needed
   hosts:
     - host: gitea0213.kro.kr
       paths:
