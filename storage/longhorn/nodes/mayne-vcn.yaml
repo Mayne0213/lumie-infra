@@ -2,7 +2,7 @@ apiVersion: longhorn.io/v1beta2
 kind: Node
 metadata:
   name: mayne-vcn
-  namespace: longhorn-system
+  namespace: longhorn
 spec:
   disks:
     default-disk:
