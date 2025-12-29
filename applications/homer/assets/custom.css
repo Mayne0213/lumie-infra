@@ -140,3 +140,70 @@ body #bighead .navbar a:focus, body #bighead .navbar a:hover {
 .navbar-item[aria-label="Toggle dark mode"] {
     display: none !important;
 }
+
+/* Prod/Dev 버튼 스타일 */
+.prod-dev-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .prod-dev-buttons,
+.dark .prod-dev-buttons {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.env-button {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.prod-button {
+    background-color: #48c774;
+    color: white;
+}
+
+.prod-button:hover {
+    background-color: #3ab66d;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(72, 199, 116, 0.3);
+}
+
+.dev-button {
+    background-color: #ffdd57;
+    color: #363636;
+}
+
+.dev-button:hover {
+    background-color: #ffd83d;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(255, 221, 87, 0.3);
+}
+
+.env-button i {
+    font-size: 0.875rem;
+}
+
+/* Production 카드의 기존 링크 비활성화 */
+.card[data-has-buttons] > a,
+.card[data-has-buttons] .card-content > a {
+    pointer-events: none;
+    cursor: default;
+}
+
+/* 버튼이 있는 카드의 하단 여백 조정 */
+.card:has(.prod-dev-buttons) .card-content {
+    padding-bottom: 0.5rem;
+}
