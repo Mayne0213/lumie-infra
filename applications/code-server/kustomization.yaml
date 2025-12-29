@@ -4,10 +4,7 @@ kind: Kustomization
 namespace: code-server
 
 resources:
-  # ArgoCD Application 리소스는 infrastructure/kustomization.yaml에서 관리
-  # - argocd/code-server.yaml
 
-  # Namespace with Goldilocks label
   - namespace.yaml
 
   - vault/code-server-password.yaml

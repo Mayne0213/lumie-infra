@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -60,61 +59,10 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "5m"  # Reduced from 50m based on actual usage (1m)
+            cpu: "5m"
       volumes:
       - name: config
         configMap:
           name: homer-config
       - name: www
         emptyDir: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: homer
-  namespace: homer
-spec:
-  type: ClusterIP
-  ports:
-  - name: http
-    port: 80
-    targetPort: 8080
-  selector:
-    app: homer
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: homer-ingress
-  namespace: homer
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-spec:
-  ingressClassName: haproxy
-  tls:
-  - hosts:
-    - mayne.kro.kr
-    - www.mayne.kro.kr
-    secretName: homer-tls
-  rules:
-  - host: mayne.kro.kr
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: homer
-            port:
-              number: 80
-  - host: www.mayne.kro.kr
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: homer
-            port:
-              number: 80

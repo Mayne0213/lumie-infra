@@ -26,7 +26,7 @@ spec:
           apk add --no-cache git
           echo "Cloning repository..."
           git clone https://gitea0213.kro.kr/bluemayne/applications.git /tmp/repo
-          cd /tmp/repo/docusaurus
+          cd /tmp/repo/docusaurus/asset
           echo "Installing dependencies..."
           npm install --legacy-peer-deps
           echo "Building Docusaurus site..."
