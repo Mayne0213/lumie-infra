@@ -6,7 +6,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
-  ingressClassName: haproxy
+  ingressClassName: traefik
   tls:
   - hosts:
     - mayne.kro.kr
