@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: headlamp
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  - repoURL: https://headlamp-k8s.github.io/headlamp
+    chart: headlamp
+    targetRevision: 0.25.1
+    helm:
+      valueFiles:
+      - $values/headlamp/helm-values.yaml
+  - repoURL: https://github.com/Mayne0213/applications.git
+    targetRevision: main
+    ref: values
+  - repoURL: https://github.com/Mayne0213/applications.git
+    targetRevision: main
+    path: headlamp
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: headlamp
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+  revisionHistoryLimit: 10
