@@ -1,7 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
-  - namespace.yaml
-  - vault/minio-root-password.yaml
-  - ingress.yaml
+- vault/minio-root-password.yaml
+- ingress.yaml

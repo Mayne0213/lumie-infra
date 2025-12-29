@@ -4,47 +4,41 @@ metadata:
   name: minio
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-
   sources:
-    # Official MinIO Helm chart
-    - repoURL: https://charts.min.io
-      chart: minio
-      targetRevision: 5.2.0
-      helm:
-        valueFiles:
-          - $values/minio/helm-values.yaml
-    # Values file from Git repository
-    - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
-      targetRevision: main
-      ref: values
-    # Vault secrets from Git repository
-    - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
-      targetRevision: main
-      path: minio
-
+  - repoURL: https://charts.min.io
+    chart: minio
+    targetRevision: 5.2.0
+    helm:
+      valueFiles:
+      - $values/minio/helm-values.yaml
+  - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
+    targetRevision: main
+    ref: values
+  - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
+    targetRevision: main
+    path: minio
   destination:
     server: https://kubernetes.default.svc
     namespace: minio
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
       allowEmpty: false
-
     syncOptions:
-      - CreateNamespace=true
-      - PrunePropagationPolicy=foreground
-      - PruneLast=true
-
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
-
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
   revisionHistoryLimit: 10

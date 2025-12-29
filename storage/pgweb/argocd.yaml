@@ -4,28 +4,28 @@ metadata:
   name: pgweb
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  
   sources:
-    - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
-      targetRevision: main
-      path: pgweb
-  
+  - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
+    targetRevision: main
+    path: pgweb
   destination:
     server: https://kubernetes.default.svc
     namespace: pgweb
-  
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'

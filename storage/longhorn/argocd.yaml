@@ -4,123 +4,115 @@ metadata:
   name: longhorn
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-
   sources:
-    # Helm chart from Longhorn repository
-    - repoURL: https://charts.longhorn.io
-      chart: longhorn
-      targetRevision: 1.7.2
-      helm:
-        valueFiles:
-          - $values/longhorn/helm-values.yaml
-    # Values file from Git repository
-    - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
-      targetRevision: main
-      ref: values
-    # Ingress and Nodes from Git repository
-    - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
-      targetRevision: main
-      path: longhorn
-      kustomize: {}
-
+  - repoURL: https://charts.longhorn.io
+    chart: longhorn
+    targetRevision: 1.7.2
+    helm:
+      valueFiles:
+      - $values/longhorn/helm-values.yaml
+  - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
+    targetRevision: main
+    ref: values
+  - repoURL: https://gitea0213.kro.kr/bluemayne/databases.git
+    targetRevision: main
+    path: longhorn
+    kustomize: {}
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
-
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
       allowEmpty: false
-
     syncOptions:
-      - CreateNamespace=true
-      - PrunePropagationPolicy=foreground
-      - PruneLast=true
-      - RespectIgnoreDifferences=true
-      - ServerSideApply=true
-
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - RespectIgnoreDifferences=true
+    - ServerSideApply=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
-
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
   revisionHistoryLimit: 10
-
-  # Ignore differences in CRDs managed by Longhorn
   ignoreDifferences:
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      name: engines.longhorn.io
-      jqPathExpressions:
-        - .spec.conversion.webhook.clientConfig
-        - .status
-        - .metadata.annotations
-        - .metadata.generation
-        - .metadata.resourceVersion
-        - .spec.preserveUnknownFields
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      name: engineimages.longhorn.io
-      jqPathExpressions:
-        - .spec.conversion.webhook.clientConfig
-        - .status
-        - .metadata.annotations
-        - .metadata.generation
-        - .metadata.resourceVersion
-        - .spec.preserveUnknownFields
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      name: instancemanagers.longhorn.io
-      jqPathExpressions:
-        - .spec.conversion.webhook.clientConfig
-        - .status
-        - .metadata.annotations
-        - .metadata.generation
-        - .metadata.resourceVersion
-        - .spec.preserveUnknownFields
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      name: nodes.longhorn.io
-      jqPathExpressions:
-        - .spec.conversion.webhook.clientConfig
-        - .status
-        - .metadata.annotations
-        - .metadata.generation
-        - .metadata.resourceVersion
-        - .spec.preserveUnknownFields
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      name: replicas.longhorn.io
-      jqPathExpressions:
-        - .spec.conversion.webhook.clientConfig
-        - .status
-        - .metadata.annotations
-        - .metadata.generation
-        - .metadata.resourceVersion
-        - .spec.preserveUnknownFields
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      name: settings.longhorn.io
-      jqPathExpressions:
-        - .spec.conversion.webhook.clientConfig
-        - .status
-        - .metadata.annotations
-        - .metadata.generation
-        - .metadata.resourceVersion
-        - .spec.preserveUnknownFields
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      name: volumes.longhorn.io
-      jqPathExpressions:
-        - .spec.conversion.webhook.clientConfig
-        - .status
-        - .metadata.annotations
-        - .metadata.generation
-        - .metadata.resourceVersion
-        - .spec.preserveUnknownFields
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    name: engines.longhorn.io
+    jqPathExpressions:
+    - .spec.conversion.webhook.clientConfig
+    - .status
+    - .metadata.annotations
+    - .metadata.generation
+    - .metadata.resourceVersion
+    - .spec.preserveUnknownFields
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    name: engineimages.longhorn.io
+    jqPathExpressions:
+    - .spec.conversion.webhook.clientConfig
+    - .status
+    - .metadata.annotations
+    - .metadata.generation
+    - .metadata.resourceVersion
+    - .spec.preserveUnknownFields
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    name: instancemanagers.longhorn.io
+    jqPathExpressions:
+    - .spec.conversion.webhook.clientConfig
+    - .status
+    - .metadata.annotations
+    - .metadata.generation
+    - .metadata.resourceVersion
+    - .spec.preserveUnknownFields
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    name: nodes.longhorn.io
+    jqPathExpressions:
+    - .spec.conversion.webhook.clientConfig
+    - .status
+    - .metadata.annotations
+    - .metadata.generation
+    - .metadata.resourceVersion
+    - .spec.preserveUnknownFields
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    name: replicas.longhorn.io
+    jqPathExpressions:
+    - .spec.conversion.webhook.clientConfig
+    - .status
+    - .metadata.annotations
+    - .metadata.generation
+    - .metadata.resourceVersion
+    - .spec.preserveUnknownFields
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    name: settings.longhorn.io
+    jqPathExpressions:
+    - .spec.conversion.webhook.clientConfig
+    - .status
+    - .metadata.annotations
+    - .metadata.generation
+    - .metadata.resourceVersion
+    - .spec.preserveUnknownFields
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    name: volumes.longhorn.io
+    jqPathExpressions:
+    - .spec.conversion.webhook.clientConfig
+    - .status
+    - .metadata.annotations
+    - .metadata.generation
+    - .metadata.resourceVersion
+    - .spec.preserveUnknownFields
