@@ -18,7 +18,7 @@ prometheus:
     enabled: true
     additionalLabels:
       release: prometheus
-    namespace: monitoring
+    namespace: prometheus
     relabelings:
       - targetLabel: cluster
         replacement: "mayne-cluster"
