@@ -13,9 +13,9 @@ spec:
       storageReserved: 10737418240
       tags: []
     new-disk:
-      allowScheduling: true
+      allowScheduling: false
       diskType: filesystem
-      evictionRequested: false
+      evictionRequested: true
       path: /mnt/longhorn-storage
       storageReserved: 5368709120
       tags: []
