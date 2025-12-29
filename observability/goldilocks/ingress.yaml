@@ -5,9 +5,8 @@ metadata:
   namespace: goldilocks
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    haproxy.org/ssl-redirect: "true"
 spec:
-  ingressClassName: haproxy
+  ingressClassName: traefik
   tls:
     - hosts:
         - goldilocks0213.kro.kr
