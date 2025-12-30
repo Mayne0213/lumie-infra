@@ -38,12 +38,12 @@ resources:
     cpu: 5m  # Reduced from 30m based on actual usage (1m)
     memory: 256Mi
 
-replicaCount: 2
+replicaCount: 1
 
 # Autoscaling
 autoscaling:
   enabled: false
-  minReplicas: 2
+  minReplicas: 1
   maxReplicas: 4
   targetCPUUtilizationPercentage: 80
 
