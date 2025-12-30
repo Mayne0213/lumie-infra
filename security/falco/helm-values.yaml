@@ -142,12 +142,16 @@ falcosidekick:
         memory: 512Mi
 
     redis:
+      storageEnabled: false
       resources:
         requests:
           cpu: 10m
           memory: 64Mi
         limits:
-          memory: 128Mi
+          memory: 256Mi
+      extraArgs:
+        - "--maxmemory 200mb"
+        - "--maxmemory-policy allkeys-lru"
 
     # Use custom secret for authentication
     existingSecret: falco-ui-secret
