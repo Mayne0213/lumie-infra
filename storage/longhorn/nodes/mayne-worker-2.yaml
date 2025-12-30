@@ -5,13 +5,6 @@ metadata:
   namespace: longhorn
 spec:
   disks:
-    default-disk:
-      allowScheduling: false
-      diskType: filesystem
-      evictionRequested: true
-      path: /var/lib/longhorn
-      storageReserved: 10737418240
-      tags: []
     new-disk:
       allowScheduling: true
       diskType: filesystem
