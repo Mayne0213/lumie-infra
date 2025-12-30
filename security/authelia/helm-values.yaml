@@ -1,0 +1,102 @@
+# Authelia Helm Values
+# Chart: https://charts.authelia.com
+
+# Domain configuration
+domain: mayne0213.kro.kr
+
+# Ingress - disabled, using separate ingress.yaml
+ingress:
+  enabled: false
+
+# Pod configuration
+pod:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      memory: 128Mi
+  extraVolumes:
+    - name: users-database
+      configMap:
+        name: authelia-users
+  extraVolumeMounts:
+    - name: users-database
+      mountPath: /config/users_database.yml
+      subPath: users_database.yml
+      readOnly: true
+
+# ConfigMap configuration
+configMap:
+  # Authentication backend - file-based users
+  authentication_backend:
+    file:
+      enabled: true
+      path: /config/users_database.yml
+      password:
+        algorithm: argon2
+        argon2:
+          variant: argon2id
+          iterations: 3
+          memory: 65536
+          parallelism: 4
+          key_length: 32
+          salt_length: 16
+
+  # Session configuration
+  session:
+    cookies:
+      - domain: mayne0213.kro.kr
+        authelia_url: https://auth.mayne0213.kro.kr
+        default_redirection_url: https://mayne.kro.kr
+
+  # Storage - local SQLite (lightweight)
+  storage:
+    local:
+      enabled: true
+      path: /data/db.sqlite3
+
+  # Access control rules
+  access_control:
+    default_policy: deny
+    rules:
+      # Bypass for public services
+      - domain:
+          - mayne.kro.kr
+          - "*.jaejadle.kro.kr"
+          - "*.joossameng.kro.kr"
+          - "*.jovies.kro.kr"
+          - "*.minjo0213.kro.kr"
+          - "*.todo0213.kro.kr"
+        policy: bypass
+      # One factor for admin services
+      - domain:
+          - "*.mayne0213.kro.kr"
+        policy: one_factor
+
+  # Notifier - filesystem (no email)
+  notifier:
+    filesystem:
+      enabled: true
+      filename: /data/notification.txt
+
+  # TOTP configuration
+  totp:
+    enabled: true
+    issuer: mayne0213.kro.kr
+
+  # Identity providers (OIDC) - can be enabled later
+  identity_providers:
+    oidc:
+      enabled: false
+
+# Secret configuration - use existing secret from Vault
+secret:
+  existingSecret: authelia-secrets
+
+# Persistence for SQLite database
+persistence:
+  enabled: true
+  storageClass: longhorn
+  size: 1Gi
