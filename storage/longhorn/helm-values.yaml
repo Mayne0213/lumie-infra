@@ -76,7 +76,12 @@ service:
     nodePort: null
 
 # Monitoring
-# Enable if Prometheus is available
+metrics:
+  serviceMonitor:
+    enabled: true
+    additionalLabels:
+      release: prometheus
+
 enablePSP: false  # Pod Security Policy (deprecated in K8s 1.25+)
 
 # Resources - NO CPU LIMITS per user request
