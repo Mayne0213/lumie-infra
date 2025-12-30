@@ -14,6 +14,8 @@ spec:
     metadata:
       labels:
         app: docusaurus
+      annotations:
+        docusaurus/source-hash: "2024-12-30-v1"
     spec:
       initContainers:
       - name: build-docusaurus
