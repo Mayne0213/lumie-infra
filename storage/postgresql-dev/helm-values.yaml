@@ -17,10 +17,11 @@ auth:
   username: bluemayne
   database: postgres
 
-persistence:
-  enabled: true
-  size: 1Gi
-  storageClass: longhorn
+primary:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: longhorn
 
 resources:
   requests:
