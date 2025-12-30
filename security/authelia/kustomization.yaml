@@ -4,4 +4,4 @@ resources:
 - vault/authelia-secrets.yaml
 - ingress.yaml
 - middleware.yaml
-- users-database.yaml
+- config.yaml

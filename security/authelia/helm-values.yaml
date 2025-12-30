@@ -17,7 +17,7 @@ pod:
   extraVolumes:
     - name: users-database
       configMap:
-        name: authelia-users
+        name: authelia-config
   extraVolumeMounts:
     - name: users-database
       mountPath: /config/users_database.yml
