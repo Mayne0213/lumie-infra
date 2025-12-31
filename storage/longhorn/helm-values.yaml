@@ -18,6 +18,9 @@ defaultSettings:
   defaultReplicaCount: 2  # Default number of replicas for volumes
   defaultDataPath: /mnt/longhorn-storage  # Data storage path on nodes (NEW: dedicated 50GB disks)
 
+  # Taint toleration for data plane components (instance-manager, etc.)
+  taintToleration: "node-role.kubernetes.io/master:NoExecute"
+
   # Backup settings
   backupTarget: ""  # S3/NFS backup target (configure later if needed)
   backupTargetCredentialSecret: ""
