@@ -52,7 +52,7 @@ prometheus:
     
     resources:
       requests:
-        cpu: 50m
+        cpu: 200m  # Increased from 50m (actual usage: 188m)
         memory: 256Mi
     
     # ServiceMonitor 자동 발견 - 모든 ServiceMonitor 선택
