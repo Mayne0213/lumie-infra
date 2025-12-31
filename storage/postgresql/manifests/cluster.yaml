@@ -10,9 +10,9 @@ spec:
   # Number of instances
   instances: 3  # 1 primary + 2 replicas for HA
 
-  # Storage configuration - using local-path
+  # Storage configuration - using local-path-retain for data protection
   storage:
-    storageClass: local-path
+    storageClass: local-path-retain
     size: 10Gi
 
   # Resource requests and limits

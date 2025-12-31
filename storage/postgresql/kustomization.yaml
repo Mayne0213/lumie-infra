@@ -9,6 +9,9 @@ resources:
   - vault/superuser-secret.yaml
   # - vault/backup-s3-secret.yaml  # Disabled - using Velero instead
 
+  # StorageClass with Retain policy
+  - manifests/storageclass.yaml
+
   # CNPG Cluster
   - manifests/cluster.yaml
 
