@@ -4,6 +4,7 @@ metadata:
   name: mayne-worker-2
   namespace: longhorn
 spec:
+  allowScheduling: true
   disks:
     new-disk:
       allowScheduling: true

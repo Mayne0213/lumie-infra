@@ -4,6 +4,7 @@ metadata:
   name: mayne-vcn
   namespace: longhorn
 spec:
+  allowScheduling: true
   disks:
     new-disk:
       allowScheduling: true
