@@ -1,5 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- redirect.yaml
-namespace: gitea
+- pvc.yaml
+- vault/immich-postgres-password.yaml
+namespace: immich

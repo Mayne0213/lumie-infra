@@ -324,7 +324,7 @@ services:
         tag: "monitoring"
         tagstyle: "is-warning"
         keywords: "traefik dashboard"
-        url: "https://traefik0213.kro.kr/dashboard"
+        url: "https://traefik0213.kro.kr/dashboard/#/"
         target: "_blank"
       - name: "Trivy"
         logo: "/assets/icons/trivy.svg"

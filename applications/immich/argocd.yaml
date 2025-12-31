@@ -1,19 +1,28 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: gitea
+  name: immich
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  source:
-    repoURL: https://github.com/Mayne0213/applications.git
+  sources:
+  - repoURL: ghcr.io/immich-app/immich-charts
+    chart: immich
+    targetRevision: 0.9.0
+    helm:
+      valueFiles:
+      - $values/immich/helm-values.yaml
+  - repoURL: https://github.com/Mayne0213/applications.git
     targetRevision: main
-    path: gitea
+    ref: values
+  - repoURL: https://github.com/Mayne0213/applications.git
+    targetRevision: main
+    path: immich
   destination:
     server: https://kubernetes.default.svc
-    namespace: gitea
+    namespace: immich
   syncPolicy:
     automated:
       prune: true
@@ -29,4 +38,7 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
   revisionHistoryLimit: 10
