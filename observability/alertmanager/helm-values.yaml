@@ -20,56 +20,13 @@ serviceMonitor:
     release: prometheus
   namespace: prometheus
 
-# SMTP Secret 환경변수 주입
-extraEnv:
-  - name: SMTP_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: alertmanager-smtp
-        key: smtp_auth_password
-
+# Disable default config - use secret instead
 config:
-  global:
-    resolve_timeout: 5m
-    smtp_smarthost: "smtp.mail.me.com:587"
-    smtp_from: "bluemayne0213@icloud.com"
-    smtp_auth_username: "bluemayne0213@icloud.com"
-    smtp_auth_password: $(SMTP_PASSWORD)
-    smtp_require_tls: true
-  route:
-    group_by: ["alertname", "cluster", "service"]
-    group_wait: 30s
-    group_interval: 5m
-    repeat_interval: 4h
-    receiver: "email"
-    routes:
-    # Critical - 즉시 전송
-    - match:
-        severity: critical
-      receiver: "email"
-      group_wait: 10s
-      repeat_interval: 1h
-    # Warning
-    - match:
-        severity: warning
-      receiver: "email"
-      group_wait: 1m
-      repeat_interval: 4h
-    # Watchdog 제외 (항상 firing)
-    - match:
-        alertname: Watchdog
-      receiver: "null"
-  receivers:
-  - name: "email"
-    email_configs:
-    - to: "bluemayne0213@icloud.com"
-      send_resolved: true
-      headers:
-        subject: "[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}"
-  - name: "null"
-  inhibit_rules:
-  - source_match:
-      severity: "critical"
-    target_match:
-      severity: "warning"
-    equal: ["alertname", "cluster", "service"]
+  enabled: false
+
+# Mount config from ExternalSecret
+extraSecretMounts:
+  - name: alertmanager-config
+    mountPath: /etc/alertmanager
+    secretName: alertmanager-config
+    readOnly: true
