@@ -68,6 +68,10 @@ spec:
   # Affinity to spread replicas across nodes
   affinity:
     podAntiAffinityType: required
+    tolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoExecute"
 
   # Enable superuser access
   enableSuperuserAccess: true
