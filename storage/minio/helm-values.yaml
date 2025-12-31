@@ -85,6 +85,12 @@ affinity:
                   - minio
           topologyKey: kubernetes.io/hostname
 
+# Tolerations for master node (minio-0 runs on master)
+tolerations:
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
+    effect: "NoExecute"
+
 # Prometheus metrics
 metrics:
   serviceMonitor:
