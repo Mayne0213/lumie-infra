@@ -12,7 +12,7 @@ spec:
 
   # Storage configuration - using local-path-retain for data protection
   storage:
-    storageClass: local-path-retain
+    storageClass: local-path
     size: 10Gi
 
   # Resource requests and limits
