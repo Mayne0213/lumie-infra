@@ -21,6 +21,9 @@ defaultSettings:
   # Taint toleration for data plane components (instance-manager, etc.)
   taintToleration: "node-role.kubernetes.io/master:NoExecute"
 
+  # Node selector for system managed components (instance-manager, engine-image, etc.)
+  systemManagedComponentsNodeSelector: "longhorn:enabled"
+
   # Backup settings
   backupTarget: ""  # S3/NFS backup target (configure later if needed)
   backupTargetCredentialSecret: ""
