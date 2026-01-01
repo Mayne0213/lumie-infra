@@ -47,11 +47,11 @@ spec:
               values:
                 - mayne-worker-1
 ---
-# PV 3: mayne-worker-1 - /mnt/minio-data2
+# PV 3: mayne-vcn (master) - /mnt/minio-data2
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: minio-pv-worker1-data2
+  name: minio-pv-mayne-vcn-data2
 spec:
   capacity:
     storage: 45Gi
@@ -69,7 +69,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - mayne-worker-1
+                - mayne-vcn
 ---
 # PV 4: mayne-worker-2 - /mnt/minio-data1
 apiVersion: v1

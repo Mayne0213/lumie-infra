@@ -3,9 +3,9 @@
 # Mode: Distributed with Erasure Coding (4 drives total)
 #
 # Disk allocation:
-# - master node: 1 x 50GB (1 disk for MinIO, 1 for MariaDB)
-# - worker-1: 2 x 50GB (2 disks for MinIO)
-# - worker-2: 1 x 50GB (1 disk for MinIO)
+# - master node: 2 x 50GB (minio-data1, minio-data2)
+# - worker-1: 1 x 50GB (minio-data1)
+# - worker-2: 1 x 50GB (minio-data1)
 # Total: 4 drives for erasure coding
 
 # Use latest MinIO image
