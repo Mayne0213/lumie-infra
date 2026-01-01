@@ -62,12 +62,6 @@ dashboardProviders:
 
 dashboards:
   default:
-  
-    #Global Dashboard
-    kubernetes-views-global:
-      gnetId: 15757
-      revision: 43
-      datasource: Prometheus
     # Node Exporter Full - 노드 상세 메트릭
     node-exporter-full:
       gnetId: 1860
