@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-console
+  namespace: minio
+  labels:
+    app: minio-console
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio-console
+  template:
+    metadata:
+      labels:
+        app: minio-console
+    spec:
+      containers:
+        - name: console
+          image: ghcr.io/georgmangold/console:v1.9.1
+          ports:
+            - containerPort: 9090
+              name: http
+          env:
+            - name: CONSOLE_MINIO_SERVER
+              value: "http://minio.minio.svc.cluster.local:9000"
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-console
+  namespace: minio
+spec:
+  selector:
+    app: minio-console
+  ports:
+    - port: 9090
+      targetPort: 9090
+      name: http
