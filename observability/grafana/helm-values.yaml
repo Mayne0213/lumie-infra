@@ -13,7 +13,7 @@ admin:
 persistence:
   enabled: true
   size: 2Gi
-  storageClass: longhorn  # Migrated to Longhorn for HA (replica=2)
+  storageClass: local-path-retain
 
 initChownData:
   enabled: false
