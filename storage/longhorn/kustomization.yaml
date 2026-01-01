@@ -3,6 +3,3 @@ kind: Kustomization
 namespace: longhorn
 resources:
 - ingress.yaml
-- nodes/mayne-vcn.yaml
-- nodes/mayne-worker-1.yaml
-- nodes/mayne-worker-2.yaml
