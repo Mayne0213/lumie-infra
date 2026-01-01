@@ -6,11 +6,11 @@ driver:
   enabled: true
   kind: modern_ebpf  # Uses modern eBPF features, no driver compilation needed
 
-# Image configuration
+# Image configuration - use Falco 0.40.0 for kernel 6.14 support
 image:
   registry: docker.io
-  repository: falcosecurity/falco-no-driver
-  tag: 0.39.2
+  repository: falcosecurity/falco
+  tag: 0.40.0
 
 # Resource requests
 resources:
