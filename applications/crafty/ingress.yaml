@@ -7,7 +7,7 @@ metadata:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     traefik.ingress.kubernetes.io/router.tls: "true"
     traefik.ingress.kubernetes.io/service.serversscheme: "https"
-    traefik.ingress.kubernetes.io/service.serverstransport: "crafty-insecure@kubernetescrd"
+    traefik.ingress.kubernetes.io/service.serverstransport: "crafty-crafty-insecure@kubernetescrd"
 spec:
   ingressClassName: traefik
   tls:
