@@ -17,6 +17,25 @@ spec:
       labels:
         app: crafty
     spec:
+      securityContext:
+        fsGroup: 0
+      initContainers:
+      - name: init-permissions
+        image: busybox:latest
+        command: ['sh', '-c', 'chown -R 1000:0 /crafty && chmod -R g+rwX /crafty']
+        volumeMounts:
+        - name: backups
+          mountPath: /crafty/backups
+        - name: logs
+          mountPath: /crafty/logs
+        - name: servers
+          mountPath: /crafty/servers
+        - name: config
+          mountPath: /crafty/app/config
+        - name: import
+          mountPath: /crafty/import
+        securityContext:
+          runAsUser: 0
       containers:
       - name: crafty
         image: registry.gitlab.com/crafty-controller/crafty-4:latest
