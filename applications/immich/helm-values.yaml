@@ -35,13 +35,6 @@ valkey:
           image:
             repository: docker.io/valkey/valkey
             tag: 9.0-alpine
-  persistence:
-    data:
-      enabled: true
-      size: 1Gi
-      type: persistentVolumeClaim
-      accessMode: ReadWriteOnce
-      storageClass: longhorn
 
 # Server component
 server:
@@ -88,8 +81,4 @@ machine-learning:
               memory: 4Gi
   persistence:
     cache:
-      enabled: true
-      size: 10Gi
-      type: persistentVolumeClaim
-      accessMode: ReadWriteOnce
-      storageClass: longhorn
+      enabled: false
