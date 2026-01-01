@@ -44,7 +44,7 @@ volumePermissions:
 # Extra arguments for code-server
 extraArgs:
   - --auth
-  - password
+  - none
 
 # Extra environment variables
 extraVars:
