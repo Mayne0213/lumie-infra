@@ -24,16 +24,10 @@ spec:
         image: busybox:latest
         command: ['sh', '-c', 'chown -R 1000:0 /crafty && chmod -R g+rwX /crafty']
         volumeMounts:
-        - name: backups
-          mountPath: /crafty/backups
-        - name: logs
-          mountPath: /crafty/logs
         - name: servers
           mountPath: /crafty/servers
         - name: config
           mountPath: /crafty/app/config
-        - name: import
-          mountPath: /crafty/import
         securityContext:
           runAsUser: 0
       containers:
@@ -59,31 +53,16 @@ spec:
           limits:
             memory: "2Gi"
         volumeMounts:
-        - name: backups
-          mountPath: /crafty/backups
-        - name: logs
-          mountPath: /crafty/logs
         - name: servers
           mountPath: /crafty/servers
         - name: config
           mountPath: /crafty/app/config
-        - name: import
-          mountPath: /crafty/import
         securityContext:
           allowPrivilegeEscalation: false
       volumes:
-      - name: backups
-        persistentVolumeClaim:
-          claimName: crafty-backups
-      - name: logs
-        persistentVolumeClaim:
-          claimName: crafty-logs
       - name: servers
         persistentVolumeClaim:
           claimName: crafty-servers
       - name: config
         persistentVolumeClaim:
           claimName: crafty-config
-      - name: import
-        persistentVolumeClaim:
-          claimName: crafty-import
