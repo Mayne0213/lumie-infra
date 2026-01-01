@@ -67,11 +67,6 @@ dashboards:
       gnetId: 1860
       revision: 37
       datasource: Prometheus
-    # Kubernetes Global (CPU Real 포함)
-    kubernetes-views-global-15757:
-      gnetId: 15757
-      revision: 43
-      datasource: Prometheus
     # Kubernetes Cluster Overview
     kubernetes-views-global:
       gnetId: 15760
