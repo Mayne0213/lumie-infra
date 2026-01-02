@@ -24,6 +24,8 @@ pod:
         items:
           - key: HEADLAMP_CLIENT_SECRET
             path: HEADLAMP_CLIENT_SECRET
+          - key: VAULT_CLIENT_SECRET
+            path: VAULT_CLIENT_SECRET
           - key: identity_providers.oidc.jwks.key
             path: jwks.pem
   extraVolumeMounts:
@@ -34,6 +36,10 @@ pod:
     - name: oidc-secrets
       mountPath: /secrets/HEADLAMP_CLIENT_SECRET
       subPath: HEADLAMP_CLIENT_SECRET
+      readOnly: true
+    - name: oidc-secrets
+      mountPath: /secrets/VAULT_CLIENT_SECRET
+      subPath: VAULT_CLIENT_SECRET
       readOnly: true
     - name: oidc-secrets
       mountPath: /secrets/jwks.pem
@@ -114,6 +120,21 @@ configMap:
           authorization_policy: one_factor
           redirect_uris:
             - https://kubernetes0213.kro.kr/oidc-callback
+          scopes:
+            - openid
+            - profile
+            - email
+            - groups
+          token_endpoint_auth_method: client_secret_post
+        - client_id: vault
+          client_name: Vault
+          client_secret:
+            path: /secrets/VAULT_CLIENT_SECRET
+          public: false
+          authorization_policy: one_factor
+          redirect_uris:
+            - https://vault0213.kro.kr/ui/vault/auth/oidc/oidc/callback
+            - http://localhost:8250/oidc/callback
           scopes:
             - openid
             - profile
