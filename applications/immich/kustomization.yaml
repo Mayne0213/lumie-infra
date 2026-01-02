@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
 - pvc.yaml
 - vault/immich-postgres-password.yaml
+- vault/immich-oidc.yaml
 namespace: immich

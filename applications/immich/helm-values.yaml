@@ -18,6 +18,19 @@ controllers:
               secretKeyRef:
                 name: immich-postgres-password
                 key: password
+          # OAuth/OIDC configuration
+          OAUTH_ENABLED: "true"
+          OAUTH_ISSUER_URL: https://auth0213.kro.kr
+          OAUTH_CLIENT_ID: immich
+          OAUTH_CLIENT_SECRET:
+            valueFrom:
+              secretKeyRef:
+                name: immich-oidc
+                key: OAUTH_CLIENT_SECRET
+          OAUTH_SCOPE: "openid profile email"
+          OAUTH_AUTO_REGISTER: "true"
+          OAUTH_BUTTON_TEXT: "Login with Authelia"
+          OAUTH_AUTO_LAUNCH: "true"
 
 # Immich configuration
 immich:
@@ -55,7 +68,6 @@ server:
       className: traefik
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
-        traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
       hosts:
         - host: immich0213.kro.kr
           paths:

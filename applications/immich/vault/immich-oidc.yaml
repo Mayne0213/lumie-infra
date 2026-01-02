@@ -1,0 +1,18 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: immich-oidc
+  namespace: immich
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-backend
+  target:
+    name: immich-oidc
+    creationPolicy: Owner
+  data:
+    - secretKey: OAUTH_CLIENT_SECRET
+      remoteRef:
+        key: cluster-infrastructure/authelia
+        property: IMMICH_CLIENT_SECRET
