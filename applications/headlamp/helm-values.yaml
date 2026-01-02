@@ -33,3 +33,9 @@ ingress:
 # Config
 config:
   baseURL: ""
+  oidc:
+    secret:
+      create: false
+    externalSecret:
+      enabled: true
+      name: headlamp-oidc
