@@ -32,7 +32,7 @@ ingress:
 
 # Config
 config:
-  baseURL: "https://kubernetes0213.kro.kr"
+  baseURL: ""
   oidc:
     secret:
       create: false
