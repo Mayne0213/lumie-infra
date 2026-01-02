@@ -142,7 +142,7 @@ falcosidekick:
         memory: 512Mi
 
     redis:
-      storageEnabled: false
+      storageEnabled: true
       resources:
         requests:
           cpu: 10m
@@ -172,7 +172,11 @@ nodeSelector: {}
 tolerations:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
+  - effect: NoExecute
+    key: node-role.kubernetes.io/master
   - effect: NoSchedule
+    key: node-role.kubernetes.io/control-plane
+  - effect: NoExecute
     key: node-role.kubernetes.io/control-plane
 
 # Run as DaemonSet on all nodes
