@@ -33,7 +33,12 @@ spec:
     api:
       dashboard: true
 
-    # CLI 추가 인자 (insecure는 helm values에 없어서 직접 추가)
+    # Cross-namespace middleware 허용
+    providers:
+      kubernetesCRD:
+        allowCrossNamespace: true
+
+    # CLI 추가 인자
     additionalArguments:
       - "--api.insecure=true"
 
