@@ -24,6 +24,8 @@ pod:
         items:
           - key: HEADLAMP_CLIENT_SECRET
             path: HEADLAMP_CLIENT_SECRET
+          - key: identity_providers.oidc.jwks.key
+            path: jwks.pem
   extraVolumeMounts:
     - name: users-database
       mountPath: /config/users_database.yml
@@ -32,6 +34,10 @@ pod:
     - name: oidc-secrets
       mountPath: /secrets/HEADLAMP_CLIENT_SECRET
       subPath: HEADLAMP_CLIENT_SECRET
+      readOnly: true
+    - name: oidc-secrets
+      mountPath: /secrets/jwks.pem
+      subPath: jwks.pem
       readOnly: true
 
 # ConfigMap configuration
@@ -85,6 +91,12 @@ configMap:
   identity_providers:
     oidc:
       enabled: true
+      jwks:
+        - key_id: 'main'
+          algorithm: 'RS256'
+          use: 'sig'
+          key:
+            path: /secrets/jwks.pem
       cors:
         endpoints:
           - authorization
