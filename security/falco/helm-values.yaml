@@ -45,12 +45,32 @@ falco:
 customRules:
   custom-rules.yaml: |-
     # Custom Falco Rules for your cluster
+    # Optimized to reduce noise from trivy, postgres, minio, vault, etc.
+
+    # Macro for known safe processes
+    - macro: known_safe_processes
+      condition: >
+        proc.name in (sh, bash, node, python, java, nginx, postgres,
+                      trivy, minio, vault, containerd-shim, runc,
+                      pidof, cat, ls, grep, find, head, tail,
+                      kubectl, helm, git, curl, wget)
+
+    # Macro for known safe container images
+    - macro: known_safe_images
+      condition: >
+        (container.image.repository contains "trivy" or
+         container.image.repository contains "aquasec" or
+         container.image.repository contains "postgres" or
+         container.image.repository contains "minio" or
+         container.image.repository contains "vault" or
+         container.image.repository contains "falco")
 
     - rule: Unauthorized Process in Container
       desc: Detect unexpected processes in containers
       condition: >
         spawned_process and container and
-        not proc.name in (sh, bash, node, python, java, nginx, postgres)
+        not known_safe_processes and
+        not known_safe_images
       output: >
         Unauthorized process started in container
         (user=%user.name command=%proc.cmdline container=%container.name image=%container.image.repository)
@@ -58,27 +78,22 @@ customRules:
       tags: [container, process]
 
     - rule: Sensitive File Access
-      desc: Detect access to sensitive files
+      desc: Detect access to sensitive files (excluding /etc/passwd for normal lookups)
       condition: >
         open_read and container and
-        fd.name in (/etc/shadow, /etc/passwd, /root/.ssh/id_rsa, /root/.ssh/authorized_keys)
+        fd.name in (/etc/shadow, /root/.ssh/id_rsa, /root/.ssh/authorized_keys) and
+        not known_safe_images
       output: >
         Sensitive file accessed
         (user=%user.name file=%fd.name container=%container.name image=%container.image.repository)
       priority: CRITICAL
       tags: [file, security]
 
-    - rule: Container Drift Detection
-      desc: Detect file modifications in containers
-      condition: >
-        container and
-        open_write and
-        not proc.name in (apt, yum, dnf, apk, npm, pip)
-      output: >
-        File modified in container
-        (user=%user.name file=%fd.name proc=%proc.name container=%container.name)
-      priority: WARNING
-      tags: [container, drift]
+    # Disabled: Too noisy, causes excessive events
+    # - rule: Container Drift Detection
+    #   desc: Detect file modifications in containers
+    #   condition: ...
+    #   Reason: trivy, postgres, minio constantly write files
 
 # Enable Prometheus metrics
 metrics:
@@ -98,6 +113,13 @@ falcosidekick:
   enabled: true
   fullfqdn: false
   replicaCount: 1
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      memory: 256Mi  # Prevent memory leak from accumulating events
 
   config:
     # Output to stdout/logs
