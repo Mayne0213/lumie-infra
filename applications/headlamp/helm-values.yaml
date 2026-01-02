@@ -32,9 +32,17 @@ ingress:
 
 # Config
 config:
-  baseURL: ""
+  baseURL: "https://kubernetes0213.kro.kr"
   oidc:
-    clientID: ""
+    clientID: "headlamp"
     clientSecret: ""
-    issuerURL: ""
-    scopes: ""
+    issuerURL: "https://auth0213.kro.kr"
+    scopes: "openid profile email groups"
+
+# OIDC client secret from ExternalSecret
+env:
+  - name: HEADLAMP_CONFIG_OIDC_clientSecret
+    valueFrom:
+      secretKeyRef:
+        name: headlamp-oidc
+        key: clientSecret
