@@ -76,6 +76,7 @@ spec:
             cpu: 50m
             memory: 64Mi
           limits:
+            cpu: null  # Prevent CPU throttling
             memory: 128Mi
 
         env:
