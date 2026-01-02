@@ -27,7 +27,6 @@ primary:
       memory: "128Mi"
       cpu: "30m"
     limits:
-      cpu: null
       memory: "256Mi"
 
 metrics:

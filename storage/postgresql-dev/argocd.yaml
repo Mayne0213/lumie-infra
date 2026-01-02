@@ -7,11 +7,6 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  ignoreDifferences:
-  - group: apps
-    kind: StatefulSet
-    jqPathExpressions:
-    - .spec.template.spec.containers[].resources.limits
   sources:
   - repoURL: https://charts.bitnami.com/bitnami
     chart: postgresql
