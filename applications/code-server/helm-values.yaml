@@ -29,7 +29,7 @@ service:
 resources:
   requests:
     cpu: 5m  # Reduced from 50m based on actual usage (1m)
-    memory: 1Gi  # Reduced from 4Gi for worker-node-2 optimization
+    memory: 128Mi  # Reduced from 1Gi - actual usage ~105Mi
 
 # Security context
 securityContext:
