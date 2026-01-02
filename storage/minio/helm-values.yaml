@@ -95,13 +95,10 @@ metrics:
   serviceMonitor:
     enabled: false
 
-# Disable post-install jobs (bucket/user/policy creation)
-# These cause ArgoCD sync to hang waiting for job completion
-makeBucketJob:
-  enabled: false
-makeUserJob:
-  enabled: false
-makePolicyJob:
-  enabled: false
-customCommandJob:
-  enabled: false
+# Disable post-install job by setting all triggers to empty
+# Job is created if any of: buckets, users, policies, customCommands, svcaccts exist
+buckets: []
+users: []
+policies: []
+customCommands: []
+svcaccts: []
