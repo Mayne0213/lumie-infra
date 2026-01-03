@@ -32,6 +32,14 @@ spec:
                 name: umami
                 port:
                   number: 3000
+          # Websites API (used by share page)
+          - path: /api/websites
+            pathType: Prefix
+            backend:
+              service:
+                name: umami
+                port:
+                  number: 3000
           # Next.js static files
           - path: /_next
             pathType: Prefix
