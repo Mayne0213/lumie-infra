@@ -96,7 +96,7 @@ configMap:
 
   # TOTP configuration
   totp:
-    enabled: true
+    disable: false
     issuer: mayne.kro.kr
 
   # OIDC Identity Provider
