@@ -27,7 +27,7 @@ spec:
         - |
           apk add --no-cache git
           echo "Cloning repository..."
-          git clone https://github.com/Mayne0213/applications.git /tmp/repo
+          git clone https://github.com/K3S-HOME/applications.git /tmp/repo
           cd /tmp/repo/docusaurus/asset
           echo "Installing dependencies..."
           npm install --legacy-peer-deps
