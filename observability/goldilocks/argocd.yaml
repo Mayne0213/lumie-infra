@@ -14,10 +14,10 @@ spec:
     helm:
       valueFiles:
       - $values/goldilocks/helm-values.yaml
-  - repoURL: https://github.com/Mayne0213/monitoring.git
+  - repoURL: https://github.com/K3S-HOME/monitoring.git
     targetRevision: main
     ref: values
-  - repoURL: https://github.com/Mayne0213/monitoring.git
+  - repoURL: https://github.com/K3S-HOME/monitoring.git
     targetRevision: main
     path: goldilocks
   destination:
