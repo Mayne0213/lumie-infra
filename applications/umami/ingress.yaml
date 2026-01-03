@@ -64,6 +64,14 @@ spec:
                 name: umami
                 port:
                   number: 3000
+          # Tracking API (required for script.js to send data)
+          - path: /api/send
+            pathType: Exact
+            backend:
+              service:
+                name: umami
+                port:
+                  number: 3000
 ---
 # Protected Ingress - Dashboard (Authelia SSO required)
 apiVersion: networking.k8s.io/v1
