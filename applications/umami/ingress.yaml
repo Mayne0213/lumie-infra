@@ -48,6 +48,14 @@ spec:
                 name: umami
                 port:
                   number: 3000
+          # Internationalization (language files)
+          - path: /intl
+            pathType: Prefix
+            backend:
+              service:
+                name: umami
+                port:
+                  number: 3000
           # Tracking script (also public)
           - path: /script.js
             pathType: Exact
