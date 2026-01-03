@@ -9,14 +9,16 @@ spec:
     deployment:
       replicas: 3
 
-    # Pod Anti-Affinity - 각 노드에 최대 1개씩만 배치
+    # Pod Anti-Affinity - 가능하면 각 노드에 분산 배치 (soft)
     affinity:
       podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: traefik
-            topologyKey: kubernetes.io/hostname
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: traefik
+              topologyKey: kubernetes.io/hostname
 
     # Master 노드에도 배치 허용
     tolerations:
