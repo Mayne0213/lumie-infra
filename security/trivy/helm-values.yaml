@@ -9,9 +9,17 @@ excludeNamespaces: "kube-system,kube-public,kube-node-lease"
 operator:
   replicas: 1
 
+  # Operator 리소스
+  resources:
+    requests:
+      cpu: 10m
+      memory: 128Mi
+    limits:
+      memory: 512Mi  # Prevent OOM
+
   # 스캔 설정
   scanJobTimeout: 10m
-  scanJobsConcurrentLimit: 3  # 리소스 절약을 위해 동시 스캔 제한
+  scanJobsConcurrentLimit: 2  # Reduced from 3 to save resources
   scannerReportTTL: "24h"
 
   # 스캐너 활성화
@@ -50,10 +58,10 @@ trivy:
   resources:
     requests:
       cpu: 50m
-      memory: 100M
+      memory: 128Mi
     limits:
       # cpu: removed to prevent throttling
-      memory: 500M
+      memory: 768Mi  # Increased from 500M to prevent OOM during scans
 
 # 스캔 작업 설정
 trivyOperator:
