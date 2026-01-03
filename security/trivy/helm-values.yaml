@@ -60,7 +60,7 @@ trivy:
       cpu: 50m
       memory: 128Mi
     limits:
-      # cpu: removed to prevent throttling
+      cpu: null  # Remove CPU limit to prevent throttling (chart default is 500m)
       memory: 768Mi  # Increased from 500M to prevent OOM during scans
 
 # 스캔 작업 설정
