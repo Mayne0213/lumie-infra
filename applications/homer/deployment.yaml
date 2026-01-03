@@ -32,7 +32,7 @@ spec:
         args:
           - |
             # Git에서 assets 복사
-            git clone --depth 1 --branch main https://github.com/Mayne0213/applications.git /tmp/repo
+            git clone --depth 1 --branch main https://github.com/K3S-HOME/applications.git /tmp/repo
             # assets 폴더 덮어쓰기
             rm -rf /www/assets
             cp -r /tmp/repo/homer/assets /www/assets

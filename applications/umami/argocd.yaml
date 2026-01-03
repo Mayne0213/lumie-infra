@@ -14,10 +14,10 @@ spec:
     helm:
       valueFiles:
       - $values/umami/helm-values.yaml
-  - repoURL: https://github.com/Mayne0213/applications.git
+  - repoURL: https://github.com/K3S-HOME/applications.git
     targetRevision: main
     ref: values
-  - repoURL: https://github.com/Mayne0213/applications.git
+  - repoURL: https://github.com/K3S-HOME/applications.git
     targetRevision: main
     path: umami
   destination:

@@ -31,7 +31,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Mayne0213/infrastructure.git
+    repoURL: https://github.com/K3S-HOME/infrastructure.git
     targetRevision: main
     path: example-service
   destination:
