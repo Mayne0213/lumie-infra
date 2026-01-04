@@ -6,7 +6,7 @@ fullnameOverride: alertmanager
 persistence:
   enabled: true
   size: 1Gi
-  storageClass: local-path-retain
+  storageClass: local-path
 
 resources:
   requests:
