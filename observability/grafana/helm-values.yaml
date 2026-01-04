@@ -13,7 +13,7 @@ admin:
 persistence:
   enabled: true
   size: 2Gi
-  storageClassName: local-path-retain
+  storageClassName: local-path
 
 initChownData:
   enabled: false
