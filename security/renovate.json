@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["argocd\\.yaml$"],
+      "matchStrings": [
+        "repoURL:\\s*(?<registryUrl>ghcr\\.io/[^\\s]+)\\n\\s+chart:\\s*(?<depName>[^\\s]+)\\n\\s+targetRevision:\\s*(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "helm",
+      "registryUrlTemplate": "oci://{{registryUrl}}"
+    }
+  ],
+  "kubernetes": {
+    "fileMatch": ["\\.yaml$"]
+  },
+  "helmv3": {
+    "fileMatch": ["helm-values\\.yaml$"]
+  },
+  "argocd": {
+    "fileMatch": ["argocd\\.yaml$"]
+  }
+}

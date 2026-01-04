@@ -14,10 +14,10 @@ spec:
     helm:
       valueFiles:
       - $values/trivy/helm-values.yaml
-  - repoURL: https://github.com/K3S-HOME/monitoring.git
+  - repoURL: https://github.com/K3S-HOME/security.git
     targetRevision: main
     ref: values
-  - repoURL: https://github.com/K3S-HOME/monitoring.git
+  - repoURL: https://github.com/K3S-HOME/security.git
     targetRevision: main
     path: trivy
   destination:
