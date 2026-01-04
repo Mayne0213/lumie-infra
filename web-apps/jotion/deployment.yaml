@@ -20,6 +20,8 @@ spec:
       labels:
         app: jotion
     spec:
+      imagePullSecrets:
+      - name: ghcr-secret
       containers:
       - name: jotion
         image: ghcr.io/mayne0213/jotion:latest
