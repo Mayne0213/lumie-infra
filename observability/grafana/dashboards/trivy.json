@@ -2685,7 +2685,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Trivy Operator - Vulnerabilities",
+  "title": "Trivy",
   "uid": "security_trivy_operator",
   "version": 2,
   "weekStart": ""
