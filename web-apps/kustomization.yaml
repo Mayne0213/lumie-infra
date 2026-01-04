@@ -5,3 +5,4 @@ resources:
   - jovies/argocd.yaml
   - portfolio/argocd.yaml
   - todo/argocd.yaml
+  - jotion/argocd.yaml
