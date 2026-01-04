@@ -54,3 +54,18 @@ spec:
     service:
       annotations:
         svccontroller.k3s.cattle.io/tolerations: '[{"key":"node-role.kubernetes.io/master","operator":"Exists","effect":"NoExecute"}]'
+
+    # Prometheus metrics
+    metrics:
+      prometheus:
+        entryPoint: metrics
+        addEntryPointsLabels: true
+        addRoutersLabels: true
+        addServicesLabels: true
+        service:
+          enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: prometheus
+          additionalLabels:
+            release: prometheus
