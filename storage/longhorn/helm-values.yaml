@@ -84,7 +84,14 @@ csi:
 
 # Ingress for Longhorn UI
 ingress:
-  enabled: false  # We'll create a separate Ingress resource
+  enabled: true
+  ingressClassName: traefik
+  host: longhorn0213.kro.kr
+  tls: true
+  tlsSecret: longhorn-tls
+  path: /
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 
 # Service configuration
 service:
