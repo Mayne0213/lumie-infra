@@ -16,9 +16,24 @@ persistence:
 existingSecret: code-server-password
 existingSecretKey: password
 
-# Ingress configuration (will use main ingress)
 ingress:
-  enabled: false
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
+  hosts:
+    - host: vscode0213.kro.kr
+      paths:
+        - /
+    - host: www.vscode0213.kro.kr
+      paths:
+        - /
+  tls:
+    - secretName: code-server-tls
+      hosts:
+        - vscode0213.kro.kr
+        - www.vscode0213.kro.kr
 
 # Service configuration
 service:

@@ -26,9 +26,17 @@ resources:
   limits:
     memory: 128Mi
 
-# Ingress disabled - managed separately
 ingress:
-  enabled: false
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - kubernetes0213.kro.kr
+  tls:
+    - secretName: headlamp-tls
+      hosts:
+        - kubernetes0213.kro.kr
 
 # Config
 config:
