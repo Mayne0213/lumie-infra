@@ -72,3 +72,18 @@ grafana.ini:
     disable_signout_menu: true
   news:
     news_feed_enabled: false
+
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
+  hosts:
+    - grafana0213.kro.kr
+    - www.grafana0213.kro.kr
+  tls:
+    - secretName: grafana-tls
+      hosts:
+        - grafana0213.kro.kr
+        - www.grafana0213.kro.kr

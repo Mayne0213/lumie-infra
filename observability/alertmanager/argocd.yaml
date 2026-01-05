@@ -91,6 +91,21 @@ spec:
           httpGet:
             path: /health
             port: http
+
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
+          hosts:
+            - karma0213.kro.kr
+          path: /
+          pathType: Prefix
+          tls:
+            - secretName: karma-tls
+              hosts:
+                - karma0213.kro.kr
   destination:
     server: https://kubernetes.default.svc
     namespace: alertmanager

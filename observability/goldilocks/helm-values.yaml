@@ -18,17 +18,21 @@ dashboard:
     type: ClusterIP
     port: 80
 
-  # Ingress configuration (optional)
   ingress:
-    enabled: false
-    # Uncomment below to enable ingress
-    # enabled: true
-    # ingressClassName: nginx
-    # hosts:
-    #   - host: goldilocks.example.com
-    #     paths:
-    #       - path: /
-    #         type: Prefix
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
+    hosts:
+      - host: goldilocks0213.kro.kr
+        paths:
+          - path: /
+            type: Prefix
+    tls:
+      - secretName: goldilocks-dashboard-tls
+        hosts:
+          - goldilocks0213.kro.kr
 
 # Controller configuration
 controller:

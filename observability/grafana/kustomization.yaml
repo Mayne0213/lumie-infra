@@ -2,7 +2,3 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - vault/grafana-admin-password.yaml
-- ingress.yaml
-
-# Dashboard JSON files are stored in dashboards/ for manual import reference
-# Auto-provisioning disabled due to ConfigMap size limits
