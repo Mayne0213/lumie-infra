@@ -6,3 +6,7 @@ resources:
   - portfolio/argocd.yaml
   - todo/argocd.yaml
   - jotion/argocd.yaml
+  - jaejadle/argocd.yaml
+  - jaejadle-dev/argocd.yaml
+  - joossam/argocd.yaml
+  - joossam-dev/argocd.yaml

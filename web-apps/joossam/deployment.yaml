@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joossam
+  labels:
+    app: joossam
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: joossam
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        app: joossam
+    spec:
+      imagePullSecrets:
+      - name: ghcr-secret
+      containers:
+      - name: joossam
+        image: ghcr.io/mayne0213/joossam:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 20m
+          limits:
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      restartPolicy: Always

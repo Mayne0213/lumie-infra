@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jaejadle-dev-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia@kubernetescrd
+spec:
+  ingressClassName: traefik
+  tls:
+  - hosts:
+    - dev.jaejadle.kro.kr
+    secretName: jaejadle-dev-tls
+  rules:
+  - host: dev.jaejadle.kro.kr
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jaejadle-dev
+            port:
+              number: 80
