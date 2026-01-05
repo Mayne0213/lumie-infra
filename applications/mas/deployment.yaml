@@ -54,12 +54,6 @@ spec:
           value: "5432"
         - name: POSTGRES_USER
           value: "bluemayne"
-        - name: GITEA_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: mas-api-keys
-              key: gitea-token
-              optional: true
         - name: REDIS_URL
           value: "redis://redis:6379/0"
         resources:
