@@ -1,0 +1,81 @@
+# Todo Web App Helm Values
+
+name: todo
+
+image:
+  registry: ghcr.io
+  repository: mayne0213/todo
+  tag: latest
+  pullPolicy: Always
+
+# No imagePullSecrets needed (public or already configured)
+imagePullSecrets: []
+
+replicaCount: 1
+containerPort: 3000
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: todo0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.todo0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: todo-tls
+      hosts:
+        - todo0213.kro.kr
+        - www.todo0213.kro.kr
+
+resources:
+  requests:
+    memory: 50Mi
+    cpu: 20m
+  limits:
+    memory: 120Mi
+
+healthCheck:
+  enabled: true
+  path: /api/health
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+env:
+  - name: NODE_ENV
+    value: production
+  - name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: todo-secrets
+        key: database-url
+
+externalSecret:
+  enabled: true
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+  data:
+    - secretKey: database-url
+      remoteRef:
+        key: todo/prod
+        property: DATABASE_URL

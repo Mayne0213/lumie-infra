@@ -1,0 +1,99 @@
+# Jaejadle Web App Helm Values
+
+name: jaejadle
+
+image:
+  registry: ghcr.io
+  repository: mayne0213/jaejadle
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: ghcr-secret
+
+replicaCount: 1
+containerPort: 3000
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: jaejadle.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: jaejadle-tls
+      hosts:
+        - jaejadle.kro.kr
+
+resources:
+  requests:
+    memory: 80Mi
+    cpu: 20m
+  limits:
+    memory: 300Mi
+
+healthCheck:
+  enabled: true
+  path: /
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+envFrom:
+  - secretRef:
+      name: jaejadle-secrets
+
+externalSecret:
+  enabled: true
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+  data:
+    - secretKey: DATABASE_URL
+      remoteRef:
+        key: jaejadle
+        property: DATABASE_URL
+    - secretKey: JWT_SECRET
+      remoteRef:
+        key: jaejadle
+        property: JWT_SECRET
+    - secretKey: AWS_ACCESS_KEY_ID
+      remoteRef:
+        key: jaejadle
+        property: AWS_ACCESS_KEY_ID
+    - secretKey: AWS_SECRET_ACCESS_KEY
+      remoteRef:
+        key: jaejadle
+        property: AWS_SECRET_ACCESS_KEY
+    - secretKey: AWS_S3_BUCKET_NAME
+      remoteRef:
+        key: jaejadle
+        property: AWS_S3_BUCKET_NAME
+    - secretKey: AWS_S3_ENDPOINT
+      remoteRef:
+        key: jaejadle
+        property: AWS_S3_ENDPOINT
+    - secretKey: AWS_REGION
+      remoteRef:
+        key: jaejadle
+        property: AWS_REGION
+    - secretKey: CODE
+      remoteRef:
+        key: jaejadle
+        property: CODE

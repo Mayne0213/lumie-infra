@@ -1,0 +1,65 @@
+# Portfolio Web App Helm Values
+
+name: portfolio
+
+image:
+  registry: ghcr.io
+  repository: mayne0213/portfolio
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets: []
+
+replicaCount: 1
+containerPort: 3000
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: minjo0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.minjo0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: portfolio-tls
+      hosts:
+        - minjo0213.kro.kr
+        - www.minjo0213.kro.kr
+
+resources:
+  requests:
+    memory: 80Mi
+    cpu: 20m
+  limits:
+    memory: 150Mi
+
+healthCheck:
+  enabled: true
+  path: /
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+env:
+  - name: NODE_ENV
+    value: production
+  - name: PROMETHEUS_URL
+    value: http://prometheus.prometheus.svc.cluster.local:9090
+
+externalSecret:
+  enabled: false
