@@ -11,3 +11,4 @@ resources:
   - headlamp/argocd.yaml
   - immich/argocd.yaml
   - crafty/argocd.yaml
+  - mas/argocd.yaml
