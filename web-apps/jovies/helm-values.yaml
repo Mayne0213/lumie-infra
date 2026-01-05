@@ -1,0 +1,63 @@
+# Jovies Web App Helm Values
+
+name: jovies
+
+image:
+  registry: ghcr.io
+  repository: mayne0213/jovies
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets: []
+
+replicaCount: 1
+containerPort: 3000
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: jovies.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.jovies.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: jovies-tls
+      hosts:
+        - jovies.kro.kr
+        - www.jovies.kro.kr
+
+resources:
+  requests:
+    memory: 40Mi
+    cpu: 5m
+  limits:
+    memory: 100Mi
+
+healthCheck:
+  enabled: true
+  path: /
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+env:
+  - name: NODE_ENV
+    value: production
+
+externalSecret:
+  enabled: false

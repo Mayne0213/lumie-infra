@@ -1,0 +1,55 @@
+# Joossam Dev Web App Helm Values
+
+name: joossam-dev
+
+image:
+  registry: ghcr.io
+  repository: mayne0213/joossam
+  tag: develop
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: ghcr-secret
+
+replicaCount: 1
+containerPort: 8000
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: dev.joossameng.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: joossam-dev-tls
+      hosts:
+        - dev.joossameng.kro.kr
+
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 20m
+  limits:
+    memory: 512Mi
+
+healthCheck:
+  enabled: true
+  path: /
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+externalSecret:
+  enabled: false

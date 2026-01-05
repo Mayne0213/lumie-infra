@@ -10,7 +10,13 @@ spec:
   sources:
   - repoURL: https://github.com/K3S-HOME/web-apps.git
     targetRevision: main
-    path: todo
+    path: charts/web-app
+    helm:
+      valueFiles:
+      - $values/todo/helm-values.yaml
+  - repoURL: https://github.com/K3S-HOME/web-apps.git
+    targetRevision: main
+    ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: todo
