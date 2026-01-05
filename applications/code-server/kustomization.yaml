@@ -3,5 +3,4 @@ kind: Kustomization
 namespace: code-server
 resources:
 - vault/code-server-password.yaml
-- rbac.yaml
-- ingress.yaml
+- manifests/rbac.yaml
