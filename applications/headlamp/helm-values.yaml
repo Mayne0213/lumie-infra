@@ -50,3 +50,5 @@ config:
     externalSecret:
       enabled: true
       name: headlamp-oidc
+  extraArgs:
+    - -oidc-skip-tls-verify
