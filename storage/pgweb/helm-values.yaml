@@ -1,0 +1,76 @@
+# pgweb - bjw-s/app-template values
+# PostgreSQL Web UI
+
+controllers:
+  main:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      main:
+        image:
+          repository: sosedoff/pgweb
+          tag: "0.17.0"
+        args:
+          - "--bind=0.0.0.0"
+          - "--listen=8081"
+        env:
+          DATABASE_URL:
+            valueFrom:
+              secretKeyRef:
+                name: pgweb-password
+                key: database-url
+        resources:
+          requests:
+            cpu: 5m
+            memory: 64Mi
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8081
+              initialDelaySeconds: 10
+              periodSeconds: 10
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 8081
+              initialDelaySeconds: 5
+              periodSeconds: 5
+
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 80
+        targetPort: 8081
+
+ingress:
+  main:
+    enabled: true
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
+    hosts:
+      - host: pgweb0213.kro.kr
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+      - host: www.pgweb0213.kro.kr
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - secretName: pgweb-tls
+        hosts:
+          - pgweb0213.kro.kr
+          - www.pgweb0213.kro.kr
