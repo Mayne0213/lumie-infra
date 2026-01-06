@@ -1,9 +1,20 @@
 # Authelia Helm Values
 # Chart: https://charts.authelia.com
 
-# Ingress - disabled, using separate ingress.yaml
+# Ingress configuration
 ingress:
-  enabled: false
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  tls:
+    enabled: true
+    secret: authelia-tls
+  traefikCRD:
+    enabled: false
+  subdomain: auth0213
+  host: ~
+  hostOverride: auth0213.kro.kr
 
 # Pod configuration
 pod:
