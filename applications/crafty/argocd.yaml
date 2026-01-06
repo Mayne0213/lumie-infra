@@ -8,9 +8,9 @@ metadata:
 spec:
   project: default
   sources:
-  - repoURL: https://bjw-s-labs.github.io/helm-charts
-    chart: app-template
-    targetRevision: 3.6.1
+  - repoURL: https://drewburr-labs.github.io/helm-charts
+    chart: craftycontroller
+    targetRevision: 0.1.7
     helm:
       valueFiles:
       - $values/crafty/helm-values.yaml

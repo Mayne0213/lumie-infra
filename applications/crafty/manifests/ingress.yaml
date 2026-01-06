@@ -10,7 +10,7 @@ spec:
     - match: Host(`crafty0213.kro.kr`)
       kind: Rule
       services:
-        - name: crafty
+        - name: crafty-https
           port: 8443
           scheme: https
           serversTransport: crafty-insecure
