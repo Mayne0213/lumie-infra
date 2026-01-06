@@ -8,6 +8,15 @@ metadata:
 spec:
   project: default
   sources:
+  - repoURL: https://bjw-s.github.io/helm-charts
+    chart: app-template
+    targetRevision: 3.6.1
+    helm:
+      valueFiles:
+      - $values/docusaurus/helm-values.yaml
+  - repoURL: https://github.com/K3S-HOME/applications.git
+    targetRevision: main
+    ref: values
   - repoURL: https://github.com/K3S-HOME/applications.git
     targetRevision: main
     path: docusaurus
@@ -18,11 +27,8 @@ spec:
     automated:
       prune: true
       selfHeal: true
-      allowEmpty: false
     syncOptions:
     - CreateNamespace=true
-    - PrunePropagationPolicy=foreground
-    - PruneLast=true
     retry:
       limit: 5
       backoff:
@@ -32,15 +38,3 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
-  revisionHistoryLimit: 10
-  ignoreDifferences:
-  - group: apps
-    kind: Deployment
-    jqPathExpressions:
-    - .metadata.annotations
-  - group: ''
-    kind: Service
-    name: docusaurus
-    namespace: docusaurus
-    jsonPointers:
-    - /spec/clusterIP

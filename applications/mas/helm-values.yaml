@@ -1,0 +1,102 @@
+# mas - bjw-s/app-template values
+# Multi-Agent System
+
+defaultPodOptions:
+  hostPID: true
+  imagePullSecrets:
+    - name: ghcr-secret
+
+serviceAccount:
+  create: false
+  name: mas
+
+controllers:
+  main:
+    strategy: RollingUpdate
+    rollingUpdate:
+      unavailable: 0
+      surge: 1
+    revisionHistoryLimit: 3
+    containers:
+      main:
+        image:
+          repository: ghcr.io/mayne0213/mas
+          tag: latest
+          pullPolicy: Always
+        securityContext:
+          privileged: true
+        env:
+          ANTHROPIC_API_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: mas-api-keys
+                key: anthropic-api-key
+          POSTGRES_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: postgresql-password
+                key: password
+          CHAINLIT_DATABASE_URL: "postgresql://bluemayne:$(POSTGRES_PASSWORD)@postgresql-rw.postgresql.svc.cluster.local:5432/mas"
+          DATABASE_URL: "postgresql://bluemayne:$(POSTGRES_PASSWORD)@postgresql-rw.postgresql.svc.cluster.local:5432/mas"
+          POSTGRES_HOST: "postgresql-rw.postgresql.svc.cluster.local"
+          POSTGRES_PORT: "5432"
+          POSTGRES_USER: "bluemayne"
+          REDIS_URL: "redis://redis:6379/0"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            memory: 1Gi
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 8000
+              initialDelaySeconds: 30
+              periodSeconds: 10
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 8000
+              initialDelaySeconds: 10
+              periodSeconds: 5
+
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8000
+
+ingress:
+  main:
+    enabled: true
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
+    hosts:
+      - host: mas0213.kro.kr
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+      - host: www.mas0213.kro.kr
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - secretName: mas-tls
+        hosts:
+          - mas0213.kro.kr
+          - www.mas0213.kro.kr

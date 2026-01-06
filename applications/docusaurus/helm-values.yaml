@@ -1,0 +1,104 @@
+# docusaurus - bjw-s/app-template values
+# Documentation site with build-time static generation
+
+controllers:
+  main:
+    annotations:
+      docusaurus/source-hash: "2024-12-30-v1"
+    initContainers:
+      build-docusaurus:
+        image:
+          repository: node
+          tag: 18-alpine
+        command:
+          - sh
+          - -c
+          - |
+            apk add --no-cache git
+            echo "Cloning repository..."
+            git clone https://github.com/K3S-HOME/applications.git /tmp/repo
+            cd /tmp/repo/docusaurus/asset
+            echo "Installing dependencies..."
+            npm install --legacy-peer-deps
+            echo "Building Docusaurus site..."
+            npm run build
+            echo "Copying build output..."
+            cp -r build/. /build/
+            echo "Build complete!"
+    containers:
+      main:
+        image:
+          repository: nginx
+          tag: alpine
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 80
+              initialDelaySeconds: 10
+              periodSeconds: 10
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 80
+              initialDelaySeconds: 5
+              periodSeconds: 5
+
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 80
+
+ingress:
+  main:
+    enabled: true
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: docusaurus0213.kro.kr
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - secretName: docusaurus-tls
+        hosts:
+          - docusaurus0213.kro.kr
+
+persistence:
+  build-output:
+    enabled: true
+    type: emptyDir
+    globalMounts:
+      - path: /build
+    advancedMounts:
+      main:
+        build-docusaurus:
+          - path: /build
+        main:
+          - path: /usr/share/nginx/html
+  nginx-config:
+    enabled: true
+    type: configMap
+    name: nginx-config
+    advancedMounts:
+      main:
+        main:
+          - path: /etc/nginx/conf.d/default.conf
+            subPath: default.conf
