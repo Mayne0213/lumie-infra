@@ -1,8 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- storage-class.yaml
-- persistent-volumes.yaml
 - vault/minio-root-password.yaml
-- ingress.yaml
-- console-deployment.yaml
+- manifests/storage-class.yaml
+- manifests/persistent-volumes.yaml
+- manifests/console-deployment.yaml
+- manifests/console-ingress.yaml
