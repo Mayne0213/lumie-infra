@@ -32,7 +32,10 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - kubernetes0213.kro.kr
+    - host: kubernetes0213.kro.kr
+      paths:
+        - path: /
+          type: ImplementationSpecific
   tls:
     - secretName: headlamp-tls
       hosts:
