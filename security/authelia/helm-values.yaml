@@ -131,7 +131,7 @@ configMap:
             - profile
             - email
             - groups
-          token_endpoint_auth_method: client_secret_post
+          token_endpoint_auth_method: client_secret_basic
         - client_id: vault
           client_name: Vault
           client_secret:
