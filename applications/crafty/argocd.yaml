@@ -8,6 +8,15 @@ metadata:
 spec:
   project: default
   sources:
+  - repoURL: https://bjw-s.github.io/helm-charts
+    chart: app-template
+    targetRevision: 3.6.1
+    helm:
+      valueFiles:
+      - $values/crafty/helm-values.yaml
+  - repoURL: https://github.com/K3S-HOME/applications.git
+    targetRevision: main
+    ref: values
   - repoURL: https://github.com/K3S-HOME/applications.git
     targetRevision: main
     path: crafty

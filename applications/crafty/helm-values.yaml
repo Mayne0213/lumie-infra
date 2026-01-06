@@ -1,0 +1,67 @@
+# crafty - bjw-s/app-template values
+# Minecraft server manager
+
+defaultPodOptions:
+  securityContext:
+    fsGroup: 0
+
+controllers:
+  main:
+    strategy: Recreate
+    initContainers:
+      init-permissions:
+        image:
+          repository: busybox
+          tag: latest
+        command:
+          - sh
+          - -c
+          - "chown -R 1000:0 /crafty && chmod -R g+rwX /crafty"
+        securityContext:
+          runAsUser: 0
+    containers:
+      main:
+        image:
+          repository: registry.gitlab.com/crafty-controller/crafty-4
+          tag: latest
+        env:
+          TZ: Asia/Seoul
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            memory: 2Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+
+service:
+  main:
+    controller: main
+    ports:
+      https:
+        port: 8443
+      dynmap:
+        port: 8123
+
+persistence:
+  servers:
+    enabled: true
+    type: persistentVolumeClaim
+    existingClaim: crafty-servers
+    advancedMounts:
+      main:
+        init-permissions:
+          - path: /crafty/servers
+        main:
+          - path: /crafty/servers
+  config:
+    enabled: true
+    type: persistentVolumeClaim
+    existingClaim: crafty-config
+    advancedMounts:
+      main:
+        init-permissions:
+          - path: /crafty/app/config
+        main:
+          - path: /crafty/app/config

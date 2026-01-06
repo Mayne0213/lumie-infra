@@ -1,0 +1,93 @@
+# homer - bjw-s/app-template values
+# Dashboard for self-hosted services
+
+controllers:
+  main:
+    initContainers:
+      copy-homer-files:
+        image:
+          repository: b4bz/homer
+          tag: latest
+        command:
+          - sh
+          - -c
+          - |
+            cp -r /www/* /tmp/www/
+      copy-assets:
+        image:
+          repository: alpine/git
+          tag: latest
+        command:
+          - sh
+          - -c
+          - |
+            git clone --depth 1 --branch main https://github.com/K3S-HOME/applications.git /tmp/repo
+            rm -rf /www/assets
+            cp -r /tmp/repo/homer/assets /www/assets
+            cp /config/config.yml /www/assets/config.yml
+            chmod -R 755 /www/assets
+            chown -R 1000:65533 /www/assets
+    containers:
+      main:
+        image:
+          repository: b4bz/homer
+          tag: latest
+          pullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 5m
+            memory: 64Mi
+
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 80
+        targetPort: 8080
+
+ingress:
+  main:
+    enabled: true
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: mayne.kro.kr
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+      - host: www.mayne.kro.kr
+        paths:
+          - path: /
+            service:
+              identifier: main
+              port: http
+    tls:
+      - secretName: homer-tls
+        hosts:
+          - mayne.kro.kr
+          - www.mayne.kro.kr
+
+persistence:
+  www:
+    enabled: true
+    type: emptyDir
+    advancedMounts:
+      main:
+        copy-homer-files:
+          - path: /tmp/www
+        copy-assets:
+          - path: /www
+        main:
+          - path: /www
+  config:
+    enabled: true
+    type: configMap
+    name: homer-config
+    advancedMounts:
+      main:
+        copy-assets:
+          - path: /config
