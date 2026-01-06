@@ -8,7 +8,8 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app.kubernetes.io/name: crafty
+    app.kubernetes.io/name: craftycontroller
+    app.kubernetes.io/instance: crafty
   ports:
   - name: bedrock
     port: 19132

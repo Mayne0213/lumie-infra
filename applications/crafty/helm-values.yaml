@@ -1,67 +1,78 @@
-# crafty - bjw-s/app-template values
-# Minecraft server manager
+# craftycontroller Helm chart values
+# Minecraft server manager - https://craftycontrol.com/
 
-defaultPodOptions:
-  securityContext:
-    fsGroup: 0
+fullnameOverride: crafty
 
-controllers:
-  main:
-    strategy: Recreate
-    initContainers:
-      init-permissions:
-        image:
-          repository: busybox
-          tag: latest
-        command:
-          - sh
-          - -c
-          - "chown -R 1000:0 /crafty && chmod -R g+rwX /crafty"
-        securityContext:
-          runAsUser: 0
-    containers:
-      main:
-        image:
-          repository: registry.gitlab.com/crafty-controller/crafty-4
-          tag: latest
-        env:
-          TZ: Asia/Seoul
-        resources:
-          requests:
-            cpu: 250m
-            memory: 512Mi
-          limits:
-            memory: 2Gi
-        securityContext:
-          allowPrivilegeEscalation: false
+image:
+  repository: registry.gitlab.com/crafty-controller/crafty-4
+  tag: latest
+  pullPolicy: Always
 
-service:
-  main:
-    controller: main
-    ports:
-      https:
-        port: 8443
-      dynmap:
-        port: 8123
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    memory: 2Gi
 
+# Disable default probes (Crafty HTTPS needs time to initialize)
+livenessProbe:
+  initialDelaySeconds: 60
+  httpGet:
+    path: /
+    port: https
+    scheme: HTTPS
+readinessProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  failureThreshold: 30
+  httpGet:
+    path: /
+    port: https
+    scheme: HTTPS
+
+# Use existing PVCs (don't create new ones by omitting requests)
 persistence:
-  servers:
+  crafty-app-config:
+    enabled: false  # Using additionalVolumes for existing PVC
+  crafty-servers:
     enabled: true
-    type: persistentVolumeClaim
-    existingClaim: crafty-servers
-    advancedMounts:
-      main:
-        init-permissions:
-          - path: /crafty/servers
-        main:
-          - path: /crafty/servers
-  config:
-    enabled: true
-    type: persistentVolumeClaim
-    existingClaim: crafty-config
-    advancedMounts:
-      main:
-        init-permissions:
-          - path: /crafty/app/config
-        main:
-          - path: /crafty/app/config
+    # No requests = don't create PVC, use existing one
+
+# Mount existing crafty-config PVC
+additionalVolumes:
+  - name: crafty-config
+    persistentVolumeClaim:
+      claimName: crafty-config
+
+additionalVolumeMounts:
+  - name: crafty-config
+    mountPath: /crafty/app/config
+
+# Services
+services:
+  https:
+    type: ClusterIP
+    ports:
+      - name: https
+        port: 8443
+        protocol: TCP
+      - name: dynmap
+        port: 8123
+        protocol: TCP
+  # Minecraft service defined in manifests/minecraft-service.yaml (LoadBalancer)
+  minecraft:
+    type: ClusterIP
+    ports:
+      - name: minecraft
+        port: 25565
+        protocol: TCP
+
+# Security context
+podSecurityContext:
+  fsGroup: 0
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 0
