@@ -36,5 +36,6 @@ concurrent: 3
 # 로그 레벨
 logLevel: info
 
-# CRD 자동 설치
-installCRDs: true
+# CRD 자동 설치 비활성화 (annotation 크기 제한 문제 회피)
+# CRD는 이미 설치되어 있으며, 업그레이드 시 수동으로 적용 필요
+installCRDs: false
