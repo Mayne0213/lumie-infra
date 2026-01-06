@@ -4,12 +4,7 @@ kind: Kustomization
 namespace: postgresql
 
 resources:
-  # Vault External Secrets
-  - vault/app-user-secret.yaml
-  - vault/superuser-secret.yaml
-  # - vault/backup-s3-secret.yaml  # Disabled - using Velero instead
-
-  # StorageClass with Retain policy
+  - manifests/secret.yaml
   - manifests/storageclass.yaml
 
   # CNPG Cluster
