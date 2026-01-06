@@ -5,3 +5,4 @@ resources:
 - manifests/config.yaml
 - manifests/middleware.yaml
 - manifests/rbac.yaml
+- manifests/ingress.yaml
