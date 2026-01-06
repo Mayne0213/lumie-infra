@@ -85,8 +85,6 @@ persistence:
   build-output:
     enabled: true
     type: emptyDir
-    globalMounts:
-      - path: /build
     advancedMounts:
       main:
         build-docusaurus:
