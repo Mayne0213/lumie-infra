@@ -1,0 +1,128 @@
+# Zot Registry using bjw-s/app-template
+# ARM64 container registry for on-premise CI/CD
+
+controllers:
+  zot:
+    type: statefulset
+    strategy: RollingUpdate
+    containers:
+      zot:
+        image:
+          repository: ghcr.io/project-zot/zot-linux-arm64
+          tag: v2.1.13
+          pullPolicy: IfNotPresent
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 5000
+              initialDelaySeconds: 5
+              periodSeconds: 10
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 5000
+              initialDelaySeconds: 5
+              periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+    pod:
+      tolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoExecute"
+
+service:
+  zot:
+    controller: zot
+    ports:
+      http:
+        port: 5000
+
+ingress:
+  zot:
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+    - host: zot0213.kro.kr
+      paths:
+      - path: /
+        pathType: Prefix
+        service:
+          identifier: zot
+          port: http
+    tls:
+    - secretName: zot-tls
+      hosts:
+      - zot0213.kro.kr
+
+persistence:
+  data:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 50Gi
+    storageClass: local-path
+    globalMounts:
+    - path: /var/lib/registry
+  config:
+    type: configMap
+    name: zot-config
+    globalMounts:
+    - path: /etc/zot/config.json
+      subPath: config.json
+      readOnly: true
+  htpasswd:
+    type: secret
+    name: zot-htpasswd
+    globalMounts:
+    - path: /etc/zot/htpasswd
+      subPath: htpasswd
+      readOnly: true
+
+configMaps:
+  config:
+    data:
+      config.json: |
+        {
+          "storage": {
+            "rootDirectory": "/var/lib/registry",
+            "gc": true,
+            "gcDelay": "1h",
+            "gcInterval": "24h"
+          },
+          "http": {
+            "address": "0.0.0.0",
+            "port": "5000",
+            "auth": {
+              "htpasswd": {
+                "path": "/etc/zot/htpasswd"
+              }
+            }
+          },
+          "log": {
+            "level": "info"
+          },
+          "extensions": {
+            "metrics": {
+              "enable": true,
+              "prometheus": {
+                "path": "/metrics"
+              }
+            },
+            "search": {
+              "enable": true
+            },
+            "ui": {
+              "enable": true
+            }
+          }
+        }
