@@ -7,12 +7,11 @@ dashboard:
   replicaCount: 1
 
   resources:
-    limits:
-      cpu: null
-      memory: 256Mi
     requests:
-      cpu: 25m
-      memory: 128Mi
+      cpu: 15m
+      memory: 100Mi
+    limits:
+      memory: 150Mi
 
   service:
     type: ClusterIP
@@ -39,12 +38,11 @@ controller:
   enabled: true
 
   resources:
-    limits:
-      cpu: null
-      memory: 256Mi
     requests:
-      cpu: 25m
-      memory: 128Mi
+      cpu: 15m
+      memory: 100Mi
+    limits:
+      memory: 150Mi
 
   # Enable VPA recommendations for all namespaces
   # Set to false to only monitor namespaces with the label: goldilocks.fairwinds.com/enabled=true

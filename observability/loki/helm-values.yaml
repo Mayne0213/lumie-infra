@@ -43,8 +43,10 @@ singleBinary:
     storageClass: local-path
   resources:
     requests:
-      cpu: 15m  # Reduced from 50m based on actual usage (10m)
-      memory: 128Mi
+      cpu: 23m
+      memory: 462Mi
+    limits:
+      memory: 462Mi
 
 # Disable components not needed in single binary mode
 backend:

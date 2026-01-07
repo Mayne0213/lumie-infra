@@ -13,10 +13,10 @@ persistence:
 
 resources:
   requests:
-    cpu: 50m
-    memory: 128Mi
+    cpu: 15m
+    memory: 200Mi
   limits:
-    memory: 256Mi
+    memory: 300Mi
 
 livenessProbe:
   enabled: true
