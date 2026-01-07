@@ -1,0 +1,125 @@
+# Gitea Helm Chart Values
+# Self-contained deployment with SQLite and local-path storage
+
+# =============================================================================
+# DISABLE ALL EXTERNAL DEPENDENCIES
+# =============================================================================
+postgresql-ha:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+valkey-cluster:
+  enabled: false
+
+valkey:
+  enabled: false
+
+# =============================================================================
+# PERSISTENCE - local-path StorageClass
+# =============================================================================
+persistence:
+  enabled: true
+  create: true
+  mount: true
+  size: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  storageClass: local-path
+  annotations:
+    helm.sh/resource-policy: keep
+
+# =============================================================================
+# ADMIN USER
+# =============================================================================
+gitea:
+  admin:
+    existingSecret: gitea-admin-secret
+    username: gitea_admin
+    email: admin@gitea.local
+    passwordMode: keepUpdated
+
+  # Gitea configuration (app.ini)
+  config:
+    APP_NAME: Gitea - K3S-HOME
+
+    server:
+      DOMAIN: gitea0213.kro.kr
+      ROOT_URL: https://gitea0213.kro.kr
+      HTTP_PORT: 3000
+      SSH_DOMAIN: gitea0213.kro.kr
+      SSH_PORT: 22
+      SSH_LISTEN_PORT: 2222
+      LFS_START_SERVER: true
+
+    database:
+      DB_TYPE: sqlite3
+      PATH: /data/gitea/gitea.db
+      SQLITE_TIMEOUT: 500
+      SQLITE_JOURNAL_MODE: WAL
+
+    session:
+      PROVIDER: memory
+
+    cache:
+      ADAPTER: memory
+
+    queue:
+      TYPE: level
+
+    security:
+      INSTALL_LOCK: true
+
+    service:
+      DISABLE_REGISTRATION: false
+      REQUIRE_SIGNIN_VIEW: false
+      DEFAULT_KEEP_EMAIL_PRIVATE: true
+
+    log:
+      MODE: console
+      LEVEL: info
+
+# =============================================================================
+# INGRESS
+# =============================================================================
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+  - host: gitea0213.kro.kr
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - secretName: gitea-tls
+    hosts:
+    - gitea0213.kro.kr
+
+# =============================================================================
+# RESOURCES
+# =============================================================================
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+# =============================================================================
+# POD CONFIGURATION
+# =============================================================================
+tolerations:
+- key: node-role.kubernetes.io/master
+  operator: Exists
+  effect: NoExecute
+
+# =============================================================================
+# SSH SERVICE
+# =============================================================================
+service:
+  ssh:
+    type: ClusterIP
+    port: 22
