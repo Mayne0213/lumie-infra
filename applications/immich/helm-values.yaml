@@ -61,7 +61,6 @@ server:
               cpu: 15m
               memory: 512Mi
             limits:
-              cpu: 45m
               memory: 768Mi
           probes:
             startup:
@@ -102,7 +101,6 @@ machine-learning:
               cpu: 15m
               memory: 1Gi
             limits:
-              cpu: 45m
               memory: 1536Mi
           probes:
             startup:
