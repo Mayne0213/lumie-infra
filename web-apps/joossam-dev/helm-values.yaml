@@ -36,10 +36,11 @@ ingress:
 
 resources:
   requests:
-    memory: 256Mi
-    cpu: 20m
+    memory: 160Mi
+    cpu: 15m
   limits:
-    memory: 512Mi
+    memory: 160Mi
+    cpu: 23m
 
 healthCheck:
   enabled: true
