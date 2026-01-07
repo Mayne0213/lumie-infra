@@ -9,3 +9,7 @@ metadata:
 data:
   # Run ArgoCD server in insecure mode (let ingress handle TLS)
   server.insecure: "true"
+
+  # Disable periodic app resync (rely on webhook + self-heal only)
+  # Default is 180s, setting to 0 disables periodic resync
+  controller.app.resync: "0"
