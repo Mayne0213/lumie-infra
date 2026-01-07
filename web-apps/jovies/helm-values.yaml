@@ -3,12 +3,13 @@
 name: jovies
 
 image:
-  registry: ghcr.io
-  repository: mayne0213/jovies
-  tag: latest
+  registry: zot0213.kro.kr
+  repository: jovies
+  tag: main
   pullPolicy: Always
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 replicaCount: 1
 containerPort: 3000
