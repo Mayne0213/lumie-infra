@@ -18,6 +18,7 @@ resources:
     cpu: 49m
     memory: 263Mi
   limits:
+    cpu: null  # Disable chart default (1 core)
     memory: 263Mi
 
 # Falco configuration
