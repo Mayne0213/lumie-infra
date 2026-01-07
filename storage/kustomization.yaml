@@ -5,6 +5,7 @@ resources:
   - application.yaml
   # Storage systems
   - minio/argocd.yaml
+  - zot/argocd.yaml
   # PostgreSQL databases
   - postgresql/argocd/postgresql.yaml
   - postgresql-dev/argocd.yaml
