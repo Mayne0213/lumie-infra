@@ -38,7 +38,7 @@ controllers:
             cpu: 15m
             memory: 100Mi
           limits:
-            cpu: 23m
+            cpu: 45m
             memory: 150Mi
 
 service:

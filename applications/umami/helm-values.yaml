@@ -42,7 +42,7 @@ resources:
     cpu: 15m
     memory: 384Mi
   limits:
-    cpu: 23m
+    cpu: 45m
     memory: 576Mi
 
 replicaCount: 1
