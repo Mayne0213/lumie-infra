@@ -9,6 +9,14 @@ spec:
     deployment:
       replicas: 3
 
+    # Resource limits
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        memory: 192Mi
+
     # Pod Anti-Affinity - 가능하면 각 노드에 분산 배치 (soft)
     affinity:
       podAntiAffinity:
