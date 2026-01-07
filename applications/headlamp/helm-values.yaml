@@ -21,10 +21,11 @@ service:
 
 resources:
   requests:
-    cpu: 10m
-    memory: 64Mi
+    cpu: 15m
+    memory: 100Mi
   limits:
-    memory: 128Mi
+    cpu: 23m
+    memory: 150Mi
 
 ingress:
   enabled: true

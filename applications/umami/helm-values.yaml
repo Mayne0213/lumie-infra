@@ -39,8 +39,11 @@ service:
 
 resources:
   requests:
-    cpu: 5m  # Reduced from 30m based on actual usage (1m)
-    memory: 256Mi
+    cpu: 15m
+    memory: 384Mi
+  limits:
+    cpu: 23m
+    memory: 576Mi
 
 replicaCount: 1
 

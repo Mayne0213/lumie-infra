@@ -10,10 +10,11 @@ image:
 
 resources:
   requests:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 35m
+    memory: 128Mi
   limits:
-    memory: 2Gi
+    cpu: 53m
+    memory: 192Mi
 
 # Disable default probes (Crafty HTTPS needs time to initialize)
 livenessProbe:
