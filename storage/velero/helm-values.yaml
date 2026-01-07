@@ -16,8 +16,7 @@ resources:
     cpu: 50m
     memory: 128Mi
   limits:
-    # cpu: removed to prevent throttling
-    memory: 512Mi
+    memory: 192Mi
 
 # Init containers for plugins
 initContainers:

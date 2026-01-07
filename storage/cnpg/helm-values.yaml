@@ -13,11 +13,10 @@ replicaCount: 1
 # Resource requests for operator
 resources:
   requests:
-    cpu: 5m  # Reduced from 100m based on actual usage (2m)
+    cpu: 15m
     memory: 128Mi
   limits:
-    # cpu: removed to prevent throttling
-    memory: 512Mi
+    memory: 192Mi
 
 # RBAC
 rbac:

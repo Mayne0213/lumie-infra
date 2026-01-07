@@ -21,8 +21,10 @@ controllers:
                 key: database-url
         resources:
           requests:
-            cpu: 5m
-            memory: 64Mi
+            cpu: 15m
+            memory: 100Mi
+          limits:
+            memory: 150Mi
         probes:
           liveness:
             enabled: true
