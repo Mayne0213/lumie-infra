@@ -52,7 +52,7 @@ Use component names as scope:
 |------------|------------|
 | **applications** | code-server, crafty, docusaurus, headlamp, homer, immich, mas, umami |
 | **observability** | alertmanager, goldilocks, grafana, karma, loki, prometheus, promtail, uptime-kuma |
-| **platform** | argocd, cert-manager, coredns, traefik |
+| **platform** | argocd, cert-manager, coredns, descheduler, traefik |
 | **security** | authelia, external-secrets, falco, trivy, vault |
 | **storage** | cnpg, minio, pgweb, postgresql, velero, zot |
 | **web-apps** | jaejadle, joossam, jotion, jovies, mas, portfolio, todo |
