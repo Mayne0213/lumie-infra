@@ -72,12 +72,20 @@ extraVars:
     value: "coder:\\w~ "
 
 # Health checks
+startupProbe:
+  enabled: true
+  httpGet:
+    path: /healthz
+    port: 8080
+  periodSeconds: 10
+  failureThreshold: 30
+
 livenessProbe:
   enabled: true
   httpGet:
     path: /healthz
     port: 8080
-  initialDelaySeconds: 30
+  initialDelaySeconds: 0
   periodSeconds: 10
 
 readinessProbe:
@@ -85,5 +93,5 @@ readinessProbe:
   httpGet:
     path: /healthz
     port: 8080
-  initialDelaySeconds: 10
+  initialDelaySeconds: 0
   periodSeconds: 5
