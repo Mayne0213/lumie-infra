@@ -43,8 +43,11 @@ service:
 # Resource limits
 resources:
   requests:
-    cpu: 5m  # Reduced from 50m based on actual usage (1m)
-    memory: 128Mi  # Reduced from 1Gi - actual usage ~105Mi
+    cpu: 15m
+    memory: 512Mi
+  limits:
+    cpu: 23m
+    memory: 768Mi
 
 # Security context
 securityContext:

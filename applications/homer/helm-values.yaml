@@ -35,8 +35,11 @@ controllers:
           pullPolicy: IfNotPresent
         resources:
           requests:
-            cpu: 5m
-            memory: 64Mi
+            cpu: 15m
+            memory: 100Mi
+          limits:
+            cpu: 23m
+            memory: 150Mi
 
 service:
   main:

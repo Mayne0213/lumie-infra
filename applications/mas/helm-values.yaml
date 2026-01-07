@@ -44,10 +44,11 @@ controllers:
           REDIS_URL: "redis://redis:6379/0"
         resources:
           requests:
-            cpu: 100m
-            memory: 256Mi
+            cpu: 15m
+            memory: 150Mi
           limits:
-            memory: 1Gi
+            cpu: 23m
+            memory: 225Mi
         probes:
           liveness:
             enabled: true
