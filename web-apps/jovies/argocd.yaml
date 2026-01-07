@@ -5,6 +5,10 @@ metadata:
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: jovies=zot0213.kro.kr/jovies:main
+    argocd-image-updater.argoproj.io/jovies.update-strategy: digest
+    argocd-image-updater.argoproj.io/jovies.pull-secret: pullsecret:argocd/zot-registry-credentials
 spec:
   project: default
   sources:
@@ -38,4 +42,5 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
+        zot-registry: enabled
   revisionHistoryLimit: 10
