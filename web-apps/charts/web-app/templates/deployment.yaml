@@ -60,6 +60,14 @@ spec:
               port: {{ .Values.containerPort }}
             initialDelaySeconds: {{ .Values.healthCheck.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.healthCheck.readinessProbe.periodSeconds }}
+          {{- if .Values.healthCheck.startupProbe }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.healthCheck.path }}
+              port: {{ .Values.containerPort }}
+            periodSeconds: {{ .Values.healthCheck.startupProbe.periodSeconds | default 10 }}
+            failureThreshold: {{ .Values.healthCheck.startupProbe.failureThreshold | default 30 }}
+          {{- end }}
           {{- end }}
       restartPolicy: Always
       {{- with .Values.nodeSelector }}

@@ -45,11 +45,14 @@ resources:
 healthCheck:
   enabled: true
   path: /
+  startupProbe:
+    periodSeconds: 10
+    failureThreshold: 30
   livenessProbe:
-    initialDelaySeconds: 30
+    initialDelaySeconds: 0
     periodSeconds: 10
   readinessProbe:
-    initialDelaySeconds: 5
+    initialDelaySeconds: 0
     periodSeconds: 5
 
 envFrom:
