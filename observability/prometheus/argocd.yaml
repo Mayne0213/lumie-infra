@@ -35,6 +35,7 @@ spec:
     kind: ServiceMonitor
     jqPathExpressions:
     - .spec.endpoints[].metricRelabelings
+    - .spec.endpoints[].relabelings
   syncPolicy:
     automated:
       prune: true
