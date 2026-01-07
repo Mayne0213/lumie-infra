@@ -6,10 +6,8 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
   annotations:
-    argocd-image-updater.argoproj.io/image-list: jovies=zot0213.kro.kr/jovies:main
+    argocd-image-updater.argoproj.io/image-list: jovies=ghcr.io/mayne0213/jovies:latest
     argocd-image-updater.argoproj.io/jovies.update-strategy: digest
-    argocd-image-updater.argoproj.io/jovies.platforms: linux/arm64/v8
-    argocd-image-updater.argoproj.io/jovies.pull-secret: pullsecret:argocd/zot-registry-credentials
     argocd-image-updater.argoproj.io/write-back-method: argocd
     argocd-image-updater.argoproj.io/jovies.helm.image-tag: image.tag
 spec:
@@ -45,5 +43,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
-        zot-registry: enabled
   revisionHistoryLimit: 10
