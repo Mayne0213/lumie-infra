@@ -63,6 +63,16 @@ server:
             limits:
               cpu: 23m
               memory: 768Mi
+          probes:
+            startup:
+              enabled: true
+              custom: true
+              spec:
+                httpGet:
+                  path: /api/server-info/ping
+                  port: 2283
+                periodSeconds: 10
+                failureThreshold: 30
   ingress:
     main:
       enabled: true
@@ -90,10 +100,20 @@ machine-learning:
           resources:
             requests:
               cpu: 15m
-              memory: 2Gi
+              memory: 1Gi
             limits:
               cpu: 23m
-              memory: 3Gi
+              memory: 1536Mi
+          probes:
+            startup:
+              enabled: true
+              custom: true
+              spec:
+                httpGet:
+                  path: /ping
+                  port: 3003
+                periodSeconds: 10
+                failureThreshold: 30
   persistence:
     cache:
       enabled: false

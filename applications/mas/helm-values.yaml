@@ -50,6 +50,15 @@ controllers:
             cpu: 23m
             memory: 225Mi
         probes:
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 8000
+              periodSeconds: 10
+              failureThreshold: 30
           liveness:
             enabled: true
             custom: true
@@ -57,7 +66,7 @@ controllers:
               httpGet:
                 path: /
                 port: 8000
-              initialDelaySeconds: 30
+              initialDelaySeconds: 0
               periodSeconds: 10
           readiness:
             enabled: true
@@ -66,7 +75,7 @@ controllers:
               httpGet:
                 path: /
                 port: 8000
-              initialDelaySeconds: 10
+              initialDelaySeconds: 0
               periodSeconds: 5
 
 service:

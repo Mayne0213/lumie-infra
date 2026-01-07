@@ -16,17 +16,26 @@ resources:
     cpu: 53m
     memory: 192Mi
 
-# Disable default probes (Crafty HTTPS needs time to initialize)
-livenessProbe:
-  initialDelaySeconds: 60
+# Health checks with startupProbe for slow initialization
+startupProbe:
   httpGet:
     path: /
     port: https
     scheme: HTTPS
-readinessProbe:
-  initialDelaySeconds: 60
   periodSeconds: 10
   failureThreshold: 30
+
+livenessProbe:
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  httpGet:
+    path: /
+    port: https
+    scheme: HTTPS
+
+readinessProbe:
+  initialDelaySeconds: 0
+  periodSeconds: 10
   httpGet:
     path: /
     port: https
