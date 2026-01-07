@@ -7,4 +7,3 @@ resources:
   - vault/argocd.yaml
   - external-secrets/argocd.yaml
   - falco/argocd.yaml
-  - trivy/argocd.yaml
