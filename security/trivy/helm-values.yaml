@@ -12,10 +12,10 @@ operator:
   # Operator 리소스
   resources:
     requests:
-      cpu: 10m
-      memory: 128Mi
+      cpu: 50m
+      memory: 256Mi
     limits:
-      memory: 512Mi  # Prevent OOM
+      memory: 384Mi
 
   # 스캔 설정
   scanJobTimeout: 10m
@@ -58,10 +58,9 @@ trivy:
   resources:
     requests:
       cpu: 50m
-      memory: 128Mi
+      memory: 256Mi
     limits:
-      cpu: null  # Remove CPU limit to prevent throttling (chart default is 500m)
-      memory: 768Mi  # Increased from 500M to prevent OOM during scans
+      memory: 384Mi
 
 # 스캔 작업 설정
 trivyOperator:

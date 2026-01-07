@@ -10,10 +10,10 @@ pod:
   replicas: 1
   resources:
     requests:
-      cpu: 25m
+      cpu: 15m
       memory: 256Mi
     limits:
-      memory: 512Mi
+      memory: 384Mi
   extraVolumes:
     - name: users-database
       configMap:
