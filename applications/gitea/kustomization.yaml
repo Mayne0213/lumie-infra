@@ -1,4 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-# Secret is created manually via kubectl
-resources: []
+resources:
+- redirect.yaml
+namespace: gitea
