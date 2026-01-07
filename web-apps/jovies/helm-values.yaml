@@ -5,7 +5,7 @@ name: jovies
 image:
   registry: ghcr.io
   repository: mayne0213/jovies
-  # tag is managed by ArgoCD Image Updater
+  tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
 
 replicaCount: 1
