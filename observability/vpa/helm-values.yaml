@@ -7,12 +7,11 @@ recommender:
   replicaCount: 1
 
   resources:
-    limits:
-      cpu: null
-      memory: 1Gi
     requests:
-      cpu: 50m
-      memory: 512Mi
+      cpu: 15m
+      memory: 128Mi
+    limits:
+      memory: 192Mi
 
 # Updater - applies recommended resource requests to pods
 # Disabled because we're using updateMode: Off (recommendations only)

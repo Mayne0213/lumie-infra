@@ -53,11 +53,11 @@ prometheus:
               storage: 5Gi
 
     resources:
-      limits:
-        memory: 1Gi           # limit 추가 (무제한 증가 방지)
       requests:
         cpu: 200m
-        memory: 512Mi         # 256Mi → 512Mi (실제 사용량 반영)
+        memory: 512Mi
+      limits:
+        memory: 768Mi
     
     # ServiceMonitor 자동 발견 - 모든 ServiceMonitor 선택
     serviceMonitorSelectorNilUsesHelmValues: false

@@ -32,8 +32,10 @@ defaultVolumeMounts:
 # Resources
 resources:
   requests:
-    cpu: 25m  # Reduced from 50m based on actual usage (8-17m)
-    memory: 64Mi
+    cpu: 23m
+    memory: 182Mi
+  limits:
+    memory: 182Mi
 
 # Tolerations to run on all nodes including master
 tolerations:

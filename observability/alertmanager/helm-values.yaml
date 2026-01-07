@@ -10,8 +10,10 @@ persistence:
 
 resources:
   requests:
-    cpu: 10m
-    memory: 32Mi
+    cpu: 15m
+    memory: 100Mi
+  limits:
+    memory: 150Mi
 
 # Disable default config - use secret instead
 config:
