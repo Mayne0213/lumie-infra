@@ -45,7 +45,6 @@ resources:
     cpu: 15m
   limits:
     memory: 150Mi
-    cpu: 23m
 
 healthCheck:
   enabled: true
