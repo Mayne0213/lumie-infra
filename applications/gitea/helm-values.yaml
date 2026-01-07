@@ -45,10 +45,10 @@ gitea:
     APP_NAME: Gitea - K3S-HOME
 
     server:
-      DOMAIN: gitea0213.kro.kr
-      ROOT_URL: https://gitea0213.kro.kr
+      DOMAIN: github0213.com
+      ROOT_URL: https://github0213.com
       HTTP_PORT: 3000
-      SSH_DOMAIN: gitea0213.kro.kr
+      SSH_DOMAIN: github0213.com
       SSH_PORT: 22
       SSH_LISTEN_PORT: 2222
       LFS_START_SERVER: true
@@ -89,14 +89,14 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-  - host: gitea0213.kro.kr
+  - host: github0213.com
     paths:
     - path: /
       pathType: Prefix
   tls:
   - secretName: gitea-tls
     hosts:
-    - gitea0213.kro.kr
+    - github0213.com
 
 # =============================================================================
 # RESOURCES
