@@ -8,7 +8,7 @@ metadata:
   annotations:
     argocd-image-updater.argoproj.io/image-list: jovies=zot0213.kro.kr/jovies:main
     argocd-image-updater.argoproj.io/jovies.update-strategy: digest
-    argocd-image-updater.argoproj.io/jovies.ignore-platforms: "true"
+    argocd-image-updater.argoproj.io/jovies.platforms: linux/arm64/v8
     argocd-image-updater.argoproj.io/jovies.pull-secret: pullsecret:argocd/zot-registry-credentials
     argocd-image-updater.argoproj.io/write-back-method: argocd
     argocd-image-updater.argoproj.io/jovies.helm.image-name: image.repository
