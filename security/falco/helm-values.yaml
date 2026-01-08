@@ -121,7 +121,7 @@ grafanaDashboard:
 falcosidekick:
   enabled: true
   fullfqdn: false
-  replicaCount: 1
+  replicaCount: 2
 
   resources:
     requests:
@@ -153,6 +153,17 @@ falcosidekick:
   # Falcosidekick Web UI - disabled, using Grafana dashboard instead
   webui:
     enabled: false
+
+  # Affinity - Soft Anti-Affinity to spread pods across nodes
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: falcosidekick
+            topologyKey: kubernetes.io/hostname
 
 # RBAC
 rbac:

@@ -1,6 +1,9 @@
 # External Secrets Operator Helm Values
 # Chart: https://github.com/external-secrets/external-secrets
 
+# Replica count
+replicaCount: 2
+
 # 리소스 제한
 resources:
   requests:
@@ -12,6 +15,7 @@ resources:
 
 # Webhook 설정
 webhook:
+  replicaCount: 2
   resources:
     requests:
       cpu: 2m  # Reduced from 10m based on actual usage (1m)
@@ -22,6 +26,7 @@ webhook:
 
 # CertController 설정
 certController:
+  replicaCount: 2
   resources:
     requests:
       cpu: 2m  # Reduced from 10m based on actual usage (1m)
@@ -39,3 +44,36 @@ logLevel: info
 # CRD 자동 설치 비활성화 (annotation 크기 제한 문제 회피)
 # CRD는 이미 설치되어 있으며, 업그레이드 시 수동으로 적용 필요
 installCRDs: false
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: external-secrets
+          topologyKey: kubernetes.io/hostname
+
+webhook:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: external-secrets-webhook
+            topologyKey: kubernetes.io/hostname
+
+certController:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: external-secrets-cert-controller
+            topologyKey: kubernetes.io/hostname

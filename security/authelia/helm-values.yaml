@@ -7,7 +7,7 @@ ingress:
 
 # Pod configuration
 pod:
-  replicas: 1
+  replicas: 2
   resources:
     requests:
       cpu: 15m
@@ -168,3 +168,15 @@ secret:
   existingSecret: authelia-secrets
 
 # No persistence needed - using PostgreSQL
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+pod:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: authelia
+            topologyKey: kubernetes.io/hostname
