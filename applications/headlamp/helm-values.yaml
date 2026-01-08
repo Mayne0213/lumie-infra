@@ -1,6 +1,6 @@
 # Headlamp Helm Values
 
-replicaCount: 1
+replicaCount: 2
 
 image:
   registry: ghcr.io
@@ -52,3 +52,14 @@ config:
       name: headlamp-oidc
   extraArgs:
     - -oidc-skip-tls-verify
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: headlamp
+          topologyKey: kubernetes.io/hostname
