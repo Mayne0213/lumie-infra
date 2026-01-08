@@ -13,15 +13,14 @@ recommender:
     limits:
       memory: 192Mi
 
-  affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                app: vpa-recommender
-            topologyKey: kubernetes.io/hostname
+  # Schedule on master node
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
+
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      operator: Exists
+      effect: NoExecute
 
 # Updater - applies recommended resource requests to pods
 # Disabled because we're using updateMode: Off (recommendations only)

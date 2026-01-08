@@ -14,6 +14,15 @@ resources:
   limits:
     memory: 150Mi
 
+# Schedule on master node
+nodeSelector:
+  node-role.kubernetes.io/master: ""
+
+tolerations:
+  - key: node-role.kubernetes.io/master
+    operator: Exists
+    effect: NoExecute
+
 service:
   type: ClusterIP
   clusterIP: None

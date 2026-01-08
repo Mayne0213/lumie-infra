@@ -47,7 +47,7 @@ dashboard:
 # Controller configuration
 controller:
   enabled: true
-  replicaCount: 2
+  replicaCount: 1
 
   resources:
     requests:
@@ -59,6 +59,15 @@ controller:
   # Enable VPA recommendations for all namespaces
   # Set to false to only monitor namespaces with the label: goldilocks.fairwinds.com/enabled=true
   enableCostRecommendations: true
+
+  # Schedule on master node
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
+
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      operator: Exists
+      effect: NoExecute
 
 # VPA configuration (should already be installed)
 vpa:
