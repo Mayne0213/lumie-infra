@@ -32,13 +32,11 @@ spec:
     namespace: velero
   syncPolicy:
     automated:
-      prune: true
+      prune: false  # Disabled: Backup/Restore/ServerStatusRequest are dynamic
       selfHeal: true
       allowEmpty: false
     syncOptions:
     - CreateNamespace=true
-    - PrunePropagationPolicy=foreground
-    - PruneLast=true
     - RespectIgnoreDifferences=true
     retry:
       limit: 5
@@ -71,7 +69,7 @@ spec:
           tag: latest
           pullPolicy: IfNotPresent
 
-        replicaCount: 2
+        replicaCount: 1
 
         resources:
           requests:
@@ -88,15 +86,16 @@ spec:
           - name: BASIC_AUTH_ENABLED
             value: "false"
 
-        affinity:
-          podAntiAffinity:
-            preferredDuringSchedulingIgnoredDuringExecution:
-              - weight: 100
-                podAffinityTerm:
-                  labelSelector:
-                    matchLabels:
-                      app: velero-ui
-                  topologyKey: kubernetes.io/hostname
+        # Run on master node with velero controller
+        nodeSelector:
+          node-role.kubernetes.io/control-plane: "true"
+
+        tolerations:
+          - key: "node-role.kubernetes.io/control-plane"
+            operator: "Exists"
+            effect: "NoSchedule"
+
+        affinity: {}
         envFrom: []
 
         podSecurityContext:
@@ -132,13 +131,11 @@ spec:
     namespace: velero
   syncPolicy:
     automated:
-      prune: true
+      prune: false  # Disabled: Same namespace as velero
       selfHeal: true
       allowEmpty: false
     syncOptions:
     - CreateNamespace=true
-    - PrunePropagationPolicy=foreground
-    - PruneLast=true
     retry:
       limit: 5
       backoff:
