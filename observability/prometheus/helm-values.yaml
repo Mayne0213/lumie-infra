@@ -170,6 +170,10 @@ kubeStateMetrics:
 # 기본 ServiceMonitors
 defaultRules:
   create: true
+  # 비활성화할 개별 alert rule
+  disabled:
+    KubeCPUOvercommit: true
+    KubeMemoryOvercommit: true
   rules:
     alertmanager: true
     etcd: false
