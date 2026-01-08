@@ -94,7 +94,7 @@ ingress:
     - path: /
       pathType: Prefix
   tls:
-  - secretName: gitea-tls
+  - secretName: github-tls
     hosts:
     - github0213.com
 
