@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: thanos
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  - repoURL: https://charts.bitnami.com/bitnami
+    chart: thanos
+    targetRevision: 17.3.1
+    helm:
+      valueFiles:
+      - $values/thanos/helm-values.yaml
+  - repoURL: https://github.com/K3S-HOME/observability.git
+    targetRevision: main
+    ref: values
+  - repoURL: https://github.com/K3S-HOME/observability.git
+    targetRevision: main
+    path: thanos/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: thanos
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+        minio-s3: enabled
+  revisionHistoryLimit: 10
