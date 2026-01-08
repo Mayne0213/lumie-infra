@@ -113,3 +113,7 @@ affinity:
       - weight: 100
         podAffinityTerm:
           topologyKey: kubernetes.io/hostname
+
+# ResourceQuota - Disabled by default (set to false to remove existing quotas)
+resourceQuota:
+  enabled: false
