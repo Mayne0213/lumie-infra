@@ -65,7 +65,7 @@ spec:
           repository: ghcr.io/prymitive/karma
           tag: v0.122
 
-        replicaCount: 1
+        replicaCount: 2
 
         resources:
           requests:
@@ -81,6 +81,16 @@ spec:
         env:
           - name: ALERTMANAGER_URI
             value: "http://alertmanager.alertmanager.svc.cluster.local:9093"
+
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app: karma
+                  topologyKey: kubernetes.io/hostname
 
         livenessProbe:
           httpGet:
