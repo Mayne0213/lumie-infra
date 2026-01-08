@@ -10,6 +10,9 @@ image:
   tag: v1.17.1
   pullPolicy: IfNotPresent
 
+# Replica count for HA
+replicaCount: 2
+
 # Resource requests
 resources:
   requests:
@@ -107,5 +110,13 @@ nodeSelector: {}
 # Tolerations (optional)
 tolerations: []
 
-# Affinity (optional)
-affinity: {}
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: velero
+          topologyKey: kubernetes.io/hostname
