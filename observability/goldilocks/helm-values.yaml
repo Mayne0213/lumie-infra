@@ -60,14 +60,14 @@ controller:
   # Set to false to only monitor namespaces with the label: goldilocks.fairwinds.com/enabled=true
   enableCostRecommendations: true
 
-  # Schedule on master node
+  # Schedule on control-plane node
   nodeSelector:
-    node-role.kubernetes.io/master: "true"
+    node-role.kubernetes.io/control-plane: "true"
 
   tolerations:
-    - key: node-role.kubernetes.io/master
+    - key: node-role.kubernetes.io/control-plane
       operator: Exists
-      effect: NoExecute
+      effect: NoSchedule
 
 # VPA configuration (should already be installed)
 vpa:

@@ -13,14 +13,14 @@ recommender:
     limits:
       memory: 192Mi
 
-  # Schedule on master node
+  # Schedule on control-plane node
   nodeSelector:
-    node-role.kubernetes.io/master: "true"
+    node-role.kubernetes.io/control-plane: "true"
 
   tolerations:
-    - key: node-role.kubernetes.io/master
+    - key: node-role.kubernetes.io/control-plane
       operator: Exists
-      effect: NoExecute
+      effect: NoSchedule
 
 # Updater - applies recommended resource requests to pods
 # Disabled because we're using updateMode: Off (recommendations only)
