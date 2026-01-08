@@ -7,7 +7,6 @@ ingress:
 
 # Pod configuration
 pod:
-  replicas: 2
   resources:
     requests:
       cpu: 15m
@@ -169,14 +168,8 @@ secret:
 
 # No persistence needed - using PostgreSQL
 
-# Affinity - Soft Anti-Affinity to spread pods across nodes
-pod:
-  affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: authelia
-            topologyKey: kubernetes.io/hostname
+# Note: Authelia Helm chart does not support affinity configuration
+# in values.yaml due to strict schema validation (beta chart).
+# Replica count is set to 2 for HA, but soft anti-affinity cannot
+# be configured via Helm values. Consider using post-render hooks
+# or manual patching if node distribution is critical.

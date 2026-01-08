@@ -45,18 +45,17 @@ logLevel: info
 # CRD는 이미 설치되어 있으며, 업그레이드 시 수동으로 적용 필요
 installCRDs: false
 
-# Affinity - Soft Anti-Affinity to spread pods across nodes
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: external-secrets
-          topologyKey: kubernetes.io/hostname
-
+# Webhook 설정
 webhook:
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 2m  # Reduced from 10m based on actual usage (1m)
+      memory: 32Mi
+    limits:
+      # cpu: removed to prevent throttling
+      memory: 128Mi
+  # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -67,7 +66,17 @@ webhook:
                 app.kubernetes.io/name: external-secrets-webhook
             topologyKey: kubernetes.io/hostname
 
+# CertController 설정
 certController:
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 2m  # Reduced from 10m based on actual usage (1m)
+      memory: 32Mi
+    limits:
+      # cpu: removed to prevent throttling
+      memory: 128Mi
+  # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -77,3 +86,14 @@ certController:
               matchLabels:
                 app.kubernetes.io/name: external-secrets-cert-controller
             topologyKey: kubernetes.io/hostname
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: external-secrets
+          topologyKey: kubernetes.io/hostname
