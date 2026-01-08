@@ -4,7 +4,7 @@
 controllers:
   zot:
     type: deployment
-    replicas: 1
+    replicas: 2
     strategy: RollingUpdate
     containers:
       zot:
@@ -39,6 +39,15 @@ controllers:
           limits:
             memory: 256Mi
     pod:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: zot
+              topologyKey: kubernetes.io/hostname
       tolerations:
       - key: "node-role.kubernetes.io/master"
         operator: "Exists"
