@@ -12,6 +12,6 @@ data:
         disabled: false
         displayname: "Admin"
         email: "bluemayne0213@icloud.com"
-        password: "$argon2id$v=19$m=65536,t=3,p=4$PHApThq3PclXyjhly4bAwA$ZdC+5EEshnK/MDsQb2fUfpujG3ujcFM7APmqrMgXjsE"
+        password: "$argon2id$v=19$m=65536,t=3,p=4$zrwIup8+ZsjtznkT05P7Vw$Y8Baat3CKXIGVaOemdLQRBuai1gv78Q12yCUd3yRf2U"
         groups:
           - admins
