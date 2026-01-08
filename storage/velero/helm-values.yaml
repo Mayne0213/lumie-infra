@@ -10,8 +10,8 @@ image:
   tag: v1.17.1
   pullPolicy: IfNotPresent
 
-# Replica count for HA
-replicaCount: 2
+# Replica count (Velero does not support multiple replicas)
+replicaCount: 1
 
 # Resource requests (VPA recommendation: 11m CPU)
 resources:
@@ -103,19 +103,15 @@ serviceAccount:
 rbac:
   create: true
 
-# Node selector (optional)
-nodeSelector: {}
+# Node selector - Run on master node for stability
+nodeSelector:
+  node-role.kubernetes.io/master: "true"
 
-# Tolerations (optional)
-tolerations: []
+# Tolerations - Allow scheduling on master node
+tolerations:
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
+    effect: "NoExecute"
 
-# Affinity - Soft Anti-Affinity to spread pods across nodes
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: velero
-          topologyKey: kubernetes.io/hostname
+# Affinity (disabled - single replica on master)
+affinity: {}
