@@ -62,7 +62,7 @@ controller:
 
   # Schedule on master node
   nodeSelector:
-    node-role.kubernetes.io/master: ""
+    node-role.kubernetes.io/master: "true"
 
   tolerations:
     - key: node-role.kubernetes.io/master
