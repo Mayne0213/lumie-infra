@@ -68,9 +68,9 @@ spec:
   affinity:
     podAntiAffinityType: preferred
     tolerations:
-      - key: "node-role.kubernetes.io/master"
+      - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
-        effect: "NoExecute"
+        effect: "NoSchedule"
 
   # Enable superuser access
   enableSuperuserAccess: true

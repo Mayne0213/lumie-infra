@@ -103,15 +103,15 @@ serviceAccount:
 rbac:
   create: true
 
-# Node selector - Run on master node for stability
+# Node selector - Run on control-plane node for stability
 nodeSelector:
-  node-role.kubernetes.io/master: "true"
+  node-role.kubernetes.io/control-plane: "true"
 
-# Tolerations - Allow scheduling on master node
+# Tolerations - Allow scheduling on control-plane node
 tolerations:
-  - key: "node-role.kubernetes.io/master"
+  - key: "node-role.kubernetes.io/control-plane"
     operator: "Exists"
-    effect: "NoExecute"
+    effect: "NoSchedule"
 
 # Affinity (disabled - single replica on master)
 affinity: {}

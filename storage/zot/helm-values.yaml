@@ -49,9 +49,9 @@ controllers:
                   app.kubernetes.io/name: zot
               topologyKey: kubernetes.io/hostname
       tolerations:
-      - key: "node-role.kubernetes.io/master"
+      - key: "node-role.kubernetes.io/control-plane"
         operator: "Exists"
-        effect: "NoExecute"
+        effect: "NoSchedule"
 
 service:
   zot:
