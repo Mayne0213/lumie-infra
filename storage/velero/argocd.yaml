@@ -75,7 +75,7 @@ spec:
 
         resources:
           requests:
-            cpu: 30m
+            cpu: 15m  # VPA recommendation
             memory: 128Mi
           limits:
             memory: 256Mi
