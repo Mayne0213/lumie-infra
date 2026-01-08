@@ -7,6 +7,11 @@
 # - Store Gateway: reads historical data from MinIO
 # - Compactor: compacts and downsamples data in MinIO
 
+# Allow non-Bitnami images (quay.io/thanos/thanos)
+global:
+  security:
+    allowInsecureImages: true
+
 # Use quay.io image to avoid Docker Hub rate limits
 image:
   registry: quay.io
@@ -23,6 +28,14 @@ existingObjstoreSecret: thanos-objstore-secret
 query:
   enabled: true
   replicaCount: 1
+
+  # Run on master node for stability
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: "true"
 
   # Deduplicate metrics from multiple Prometheus replicas
   dnsDiscovery:
@@ -58,6 +71,14 @@ storegateway:
   enabled: true
   replicaCount: 1
 
+  # Run on master node for stability
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: "true"
+
   resources:
     requests:
       cpu: 15m
@@ -75,6 +96,14 @@ storegateway:
 # =============================================================================
 compactor:
   enabled: true
+
+  # Run on master node for stability
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: "true"
 
   # Retention settings
   retentionResolutionRaw: 7d      # Keep raw data for 7 days

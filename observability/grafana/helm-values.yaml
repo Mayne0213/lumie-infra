@@ -54,11 +54,19 @@ datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
+    - name: Thanos
+      type: prometheus
+      access: proxy
+      url: http://thanos-query.thanos.svc.cluster.local:9090
+      isDefault: true
+      editable: true
+      jsonData:
+        timeInterval: "60s"
     - name: Prometheus
       type: prometheus
       access: proxy
       url: http://prometheus-kube-prometheus-prometheus.prometheus.svc.cluster.local:9090
-      isDefault: true
+      isDefault: false
       editable: true
     - name: Loki
       type: loki
