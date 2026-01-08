@@ -51,7 +51,7 @@ Use component names as scope:
 | Repository | Components |
 |------------|------------|
 | **applications** | code-server, crafty, docusaurus, headlamp, homer, immich, mas, umami |
-| **observability** | alertmanager, goldilocks, grafana, karma, loki, prometheus, promtail, uptime-kuma |
+| **observability** | alertmanager, goldilocks, grafana, karma, loki, prometheus, promtail, thanos |
 | **platform** | argocd, cert-manager, coredns, descheduler, traefik |
 | **security** | authelia, external-secrets, falco, trivy, vault |
 | **storage** | cnpg, minio, pgweb, postgresql, velero, zot |
