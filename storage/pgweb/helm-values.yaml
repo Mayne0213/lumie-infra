@@ -15,7 +15,7 @@ controllers:
           - "--bind=0.0.0.0"
           - "--listen=8081"
         env:
-          DATABASE_URL:
+          PGWEB_DATABASE_URL:
             valueFrom:
               secretKeyRef:
                 name: pgweb-password
