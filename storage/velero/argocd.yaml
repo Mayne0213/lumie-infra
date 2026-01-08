@@ -71,7 +71,7 @@ spec:
           tag: latest
           pullPolicy: IfNotPresent
 
-        replicaCount: 1
+        replicaCount: 2
 
         resources:
           requests:
@@ -87,6 +87,16 @@ spec:
         env:
           - name: BASIC_AUTH_ENABLED
             value: "false"
+
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app: velero-ui
+                  topologyKey: kubernetes.io/hostname
         envFrom: []
 
         podSecurityContext:

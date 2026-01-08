@@ -8,7 +8,7 @@ image:
   pullPolicy: IfNotPresent
 
 # Replica count for operator
-replicaCount: 1
+replicaCount: 2
 
 # Resource requests for operator
 resources:
@@ -67,8 +67,16 @@ nodeSelector: {}
 # Tolerations
 tolerations: []
 
-# Affinity
-affinity: {}
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudnative-pg
+          topologyKey: kubernetes.io/hostname
 
 # Security context
 securityContext:
