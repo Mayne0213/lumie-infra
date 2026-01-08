@@ -72,11 +72,11 @@ server:
     type: ClusterIP
     port: 8200
 
-  # Tolerations for master node
+  # Tolerations for control-plane node
   tolerations:
-    - key: "node-role.kubernetes.io/master"
+    - key: "node-role.kubernetes.io/control-plane"
       operator: "Exists"
-      effect: "NoExecute"
+      effect: "NoSchedule"
 
 # UI 활성화
 ui:
