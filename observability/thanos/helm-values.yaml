@@ -7,6 +7,12 @@
 # - Store Gateway: reads historical data from MinIO
 # - Compactor: compacts and downsamples data in MinIO
 
+# Use quay.io image to avoid Docker Hub rate limits
+image:
+  registry: quay.io
+  repository: thanos/thanos
+  tag: v0.37.2
+
 # Object storage configuration (MinIO S3)
 # Uses secret created by ExternalSecret
 existingObjstoreSecret: thanos-objstore-secret
@@ -24,9 +30,8 @@ query:
     sidecarsService: prometheus-kube-prometheus-thanos-discovery
     sidecarsNamespace: prometheus
 
-  # Store endpoints for historical data
-  stores:
-    - dnssrv+_grpc._tcp.thanos-storegateway.thanos.svc.cluster.local
+  # Store endpoints - chart automatically adds storegateway
+  # No need to specify manually
 
   # Deduplication settings
   extraFlags:
