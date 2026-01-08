@@ -32,6 +32,17 @@ dashboard:
       - secretName: goldilocks-dashboard-tls
         hosts:
           - goldilocks0213.kro.kr
+  
+  # Affinity - Soft Anti-Affinity to spread pods across nodes
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: goldilocks
+            topologyKey: kubernetes.io/hostname
 
 # Controller configuration
 controller:
@@ -52,15 +63,3 @@ controller:
 vpa:
   # Set to false since we're installing VPA separately
   enabled: false
-
-# Affinity - Soft Anti-Affinity to spread pods across nodes
-dashboard:
-  affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: goldilocks
-            topologyKey: kubernetes.io/hostname
