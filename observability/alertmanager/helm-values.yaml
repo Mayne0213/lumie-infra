@@ -3,6 +3,19 @@
 
 fullnameOverride: alertmanager
 
+replicaCount: 2
+
+# Soft anti-affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: alertmanager
+          topologyKey: kubernetes.io/hostname
+
 persistence:
   enabled: true
   size: 1Gi
