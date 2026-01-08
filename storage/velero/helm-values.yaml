@@ -43,6 +43,11 @@ nodeAgent:
       memory: 256Mi
     limits:
       memory: 1Gi
+  # Run on all nodes including control-plane for full backup coverage
+  tolerations:
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
 
 # Configuration for backup storage
 configuration:
