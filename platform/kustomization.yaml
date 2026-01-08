@@ -12,3 +12,6 @@ resources:
 
   # ArgoCD self-management Application
   - argocd/argocd.yaml
+
+  # Web Apps (App of Apps)
+  - web-apps/argocd.yaml
