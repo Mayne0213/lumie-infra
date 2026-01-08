@@ -1,9 +1,10 @@
 # Zot Registry using bjw-s/app-template
-# ARM64 container registry for on-premise CI/CD
+# ARM64 container registry with S3 (MinIO) storage backend
 
 controllers:
   zot:
-    type: statefulset
+    type: deployment
+    replicas: 1
     strategy: RollingUpdate
     containers:
       zot:
@@ -11,6 +12,9 @@ controllers:
           repository: ghcr.io/project-zot/zot-linux-arm64
           tag: v2.1.13
           pullPolicy: IfNotPresent
+        envFrom:
+        - secretRef:
+            name: minio-s3-credentials
         probes:
           liveness:
             enabled: true
@@ -33,7 +37,7 @@ controllers:
             cpu: 15m
             memory: 128Mi
           limits:
-            memory: 192Mi
+            memory: 256Mi
     pod:
       tolerations:
       - key: "node-role.kubernetes.io/master"
@@ -66,13 +70,6 @@ ingress:
       - zot0213.kro.kr
 
 persistence:
-  data:
-    type: persistentVolumeClaim
-    accessMode: ReadWriteOnce
-    size: 50Gi
-    storageClass: local-path
-    globalMounts:
-    - path: /var/lib/registry
   config:
     type: configMap
     name: zot-config
@@ -94,10 +91,19 @@ configMaps:
       config.json: |
         {
           "storage": {
-            "rootDirectory": "/var/lib/registry",
+            "rootDirectory": "/tmp/zot",
+            "dedupe": false,
             "gc": true,
             "gcDelay": "1h",
-            "gcInterval": "24h"
+            "gcInterval": "24h",
+            "storageDriver": {
+              "name": "s3",
+              "regionendpoint": "http://minio.minio.svc.cluster.local:9000",
+              "region": "us-east-1",
+              "bucket": "zot",
+              "secure": false,
+              "skipverify": true
+            }
           },
           "http": {
             "address": "0.0.0.0",
