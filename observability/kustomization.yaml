@@ -11,5 +11,4 @@ resources:
   - node-exporter/argocd.yaml
   - kube-state-metrics/argocd.yaml
   - goldilocks/argocd.yaml
-  - uptime-kuma/argocd.yaml
   - vpa/argocd.yaml
