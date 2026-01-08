@@ -3,7 +3,7 @@
 
 controllers:
   main:
-    replicaCount: 2
+    replicas: 2
     annotations:
       reloader.stakater.com/auto: "true"
     containers:
@@ -44,15 +44,16 @@ controllers:
               initialDelaySeconds: 5
               periodSeconds: 5
     # Affinity - Soft Anti-Affinity to spread pods across nodes
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: pgweb
-              topologyKey: kubernetes.io/hostname
+    pod:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: pgweb
+                topologyKey: kubernetes.io/hostname
 
 service:
   main:
