@@ -1,22 +1,35 @@
 # Loki Helm Values
 # Chart: https://grafana.github.io/helm-charts
-# Simple single binary deployment
+# Single binary deployment with S3 (MinIO) storage
 
 loki:
-  # Use filesystem storage (simple setup)
+  # Use S3 storage (MinIO)
   storage:
-    type: filesystem
-  
-  # Single binary mode for simplicity
+    type: s3
+    s3:
+      endpoint: http://minio.minio.svc.cluster.local:9000
+      region: us-east-1
+      bucketNames:
+        chunks: loki
+        ruler: loki
+        admin: loki
+      s3ForcePathStyle: true
+      insecure: true
+    bucketNames:
+      chunks: loki
+      ruler: loki
+      admin: loki
+
+  # Single binary mode with 2 replicas
   commonConfig:
-    replication_factor: 1
-  
+    replication_factor: 2
+
   # Schema config
   schemaConfig:
     configs:
       - from: "2024-01-01"
         store: tsdb
-        object_store: filesystem
+        object_store: s3
         schema: v13
         index:
           prefix: index_
@@ -36,19 +49,33 @@ loki:
 deploymentMode: SingleBinary
 
 singleBinary:
-  replicas: 1
-  # Note: Single Binary mode cannot run more than 1 replica without object storage backend
+  replicas: 2
   persistence:
-    enabled: true
-    size: 5Gi  # Reduced from 10Gi to save storage
-    storageClass: local-path
+    enabled: false
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: loki
+          topologyKey: kubernetes.io/hostname
+  extraEnvFrom:
+    - secretRef:
+        name: minio-s3-credentials
+  extraVolumes:
+    - name: loki-data
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: loki-data
+      mountPath: /var/loki
   resources:
     requests:
       cpu: 23m
       memory: 462Mi
     limits:
       memory: 462Mi
-  # Note: Affinity not needed for single replica
 
 # Disable components not needed in single binary mode
 backend:

@@ -47,6 +47,7 @@ dashboard:
 # Controller configuration
 controller:
   enabled: true
+  replicaCount: 2
 
   resources:
     requests:

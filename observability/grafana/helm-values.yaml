@@ -3,6 +3,18 @@
 
 fullnameOverride: grafana
 
+replicas: 2
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: grafana
+        topologyKey: kubernetes.io/hostname
+
 admin:
   user: bluemayne
   # Password is managed via SealedSecret: grafana-admin-password
@@ -11,9 +23,21 @@ admin:
   passwordKey: admin-password
 
 persistence:
-  enabled: true
-  size: 2Gi
-  storageClassName: local-path
+  enabled: false
+
+# PostgreSQL database - use existing bluemayne superuser
+env:
+  GF_DATABASE_TYPE: postgres
+  GF_DATABASE_HOST: postgresql-rw.postgresql.svc.cluster.local:5432
+  GF_DATABASE_NAME: grafana
+  GF_DATABASE_USER: bluemayne
+  GF_DATABASE_SSL_MODE: disable
+
+envValueFrom:
+  GF_DATABASE_PASSWORD:
+    secretKeyRef:
+      name: grafana-db-password
+      key: password
 
 initChownData:
   enabled: false
