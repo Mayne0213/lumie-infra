@@ -1,0 +1,117 @@
+# Thanos Helm Values
+# Chart: https://github.com/bitnami/charts/tree/main/bitnami/thanos
+#
+# Architecture:
+# - Prometheus (prometheus namespace) + Sidecar → uploads to MinIO
+# - Query: queries Sidecar + Store Gateway, deduplicates data
+# - Store Gateway: reads historical data from MinIO
+# - Compactor: compacts and downsamples data in MinIO
+
+# Object storage configuration (MinIO S3)
+# Uses secret created by ExternalSecret
+existingObjstoreSecret: thanos-objstore-secret
+
+# =============================================================================
+# Query - Main query endpoint (Grafana connects here)
+# =============================================================================
+query:
+  enabled: true
+  replicaCount: 1
+
+  # Deduplicate metrics from multiple Prometheus replicas
+  dnsDiscovery:
+    enabled: true
+    sidecarsService: prometheus-kube-prometheus-thanos-discovery
+    sidecarsNamespace: prometheus
+
+  # Store endpoints for historical data
+  stores:
+    - dnssrv+_grpc._tcp.thanos-storegateway.thanos.svc.cluster.local
+
+  # Deduplication settings
+  extraFlags:
+    - --query.replica-label=prometheus_replica
+    - --query.auto-downsampling
+
+  resources:
+    requests:
+      cpu: 15m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+# =============================================================================
+# Query Frontend - Caching layer for Query (optional, disabled for small cluster)
+# =============================================================================
+queryFrontend:
+  enabled: false
+
+# =============================================================================
+# Store Gateway - Reads historical data from S3
+# =============================================================================
+storegateway:
+  enabled: true
+  replicaCount: 1
+
+  resources:
+    requests:
+      cpu: 15m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+
+  persistence:
+    enabled: true
+    storageClass: local-path
+    size: 2Gi
+
+# =============================================================================
+# Compactor - Compacts and downsamples data in S3
+# =============================================================================
+compactor:
+  enabled: true
+
+  # Retention settings
+  retentionResolutionRaw: 7d      # Keep raw data for 7 days
+  retentionResolution5m: 30d      # Keep 5m downsampled for 30 days
+  retentionResolution1h: 90d      # Keep 1h downsampled for 90 days
+
+  resources:
+    requests:
+      cpu: 15m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+
+  persistence:
+    enabled: true
+    storageClass: local-path
+    size: 2Gi
+
+# =============================================================================
+# Ruler - Alerting rules evaluation (disabled, using Prometheus rules)
+# =============================================================================
+ruler:
+  enabled: false
+
+# =============================================================================
+# Receive - Remote write endpoint (disabled, using Sidecar)
+# =============================================================================
+receive:
+  enabled: false
+
+# =============================================================================
+# Sidecar - Disabled here, enabled in Prometheus helm-values
+# =============================================================================
+# The sidecar is deployed alongside Prometheus via kube-prometheus-stack
+
+# =============================================================================
+# Metrics
+# =============================================================================
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: thanos
+    labels:
+      release: prometheus

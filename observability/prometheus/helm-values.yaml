@@ -37,11 +37,40 @@ kubelet:
 # Prometheus
 prometheus:
   enabled: true
-  
+
+  # Thanos Sidecar - for long-term storage and HA
+  thanosService:
+    enabled: true
+  thanosServiceMonitor:
+    enabled: true
+
   prometheusSpec:
+    # HA: 2 replicas on different worker nodes
+    replicas: 2
+    replicaExternalLabelName: prometheus_replica
+
+    # Pod anti-affinity for HA
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: prometheus
+              topologyKey: kubernetes.io/hostname
+
     scrapeInterval: 60s       # 30s → 60s (메모리 절감)
     evaluationInterval: 60s   # 30s → 60s
-    retention: 3d             # 7d → 3d (메모리 절감)
+    retention: 3d             # Local retention (S3 has longer retention via Thanos)
+
+    # Thanos Sidecar configuration
+    thanos:
+      image: quay.io/thanos/thanos:v0.37.2
+      objectStorageConfig:
+        existingSecret:
+          name: thanos-objstore-secret
+          key: objstore.yml
 
     storageSpec:
       volumeClaimTemplate:

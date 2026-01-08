@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - application.yaml
   - prometheus/argocd.yaml
+  - thanos/argocd.yaml
   - alertmanager/argocd.yaml
   - grafana/argocd.yaml
   - loki/argocd.yaml
