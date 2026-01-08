@@ -4,7 +4,7 @@
 # Recommender - recommends resource requests based on historical usage
 recommender:
   enabled: true
-  replicaCount: 2
+  replicaCount: 1
 
   resources:
     requests:
@@ -12,6 +12,16 @@ recommender:
       memory: 128Mi
     limits:
       memory: 192Mi
+
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app: vpa-recommender
+            topologyKey: kubernetes.io/hostname
 
 # Updater - applies recommended resource requests to pods
 # Disabled because we're using updateMode: Off (recommendations only)
@@ -22,18 +32,3 @@ updater:
 # Disabled because we're using updateMode: Off (recommendations only)
 admissionController:
   enabled: false
-
-# Optional: Configure default VPA behavior
-# metrics-server should be installed in the cluster
-
-# Affinity - Soft Anti-Affinity to spread pods across nodes
-recommender:
-  affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                app: vpa-recommender
-            topologyKey: kubernetes.io/hostname
