@@ -95,14 +95,20 @@ chunksCache:
 resultsCache:
   enabled: false
 
+# Loki Canary - top level config
+lokiCanary:
+  enabled: true
+  tolerations:
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+
 # Monitoring
 monitoring:
   selfMonitoring:
     enabled: false
     grafanaAgent:
       installOperator: false
-  lokiCanary:
-    enabled: false
   serviceMonitor:
     enabled: true
     interval: 60s
