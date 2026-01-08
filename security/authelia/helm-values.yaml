@@ -67,6 +67,12 @@ configMap:
     cookies:
       - domain: kro.kr
         subdomain: auth0213
+    redis:
+      enabled: true
+      host: authelia-redis.authelia.svc.cluster.local
+      port: 6379
+      password:
+        disabled: true
 
   # Storage - PostgreSQL (CNPG cluster)
   storage:
@@ -144,6 +150,20 @@ configMap:
 # Secret configuration - use existing secret from Vault
 secret:
   existingSecret: authelia-secrets
+
+# Redis for session storage (HA)
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false
+  master:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 128Mi
 
 # No persistence needed - using PostgreSQL
 
