@@ -13,10 +13,10 @@ image:
 # Replica count for HA
 replicaCount: 2
 
-# Resource requests
+# Resource requests (VPA recommendation: 11m CPU)
 resources:
   requests:
-    cpu: 50m
+    cpu: 11m
     memory: 128Mi
   limits:
     memory: 192Mi
@@ -39,10 +39,9 @@ nodeAgent:
   privileged: false
   resources:
     requests:
-      cpu: 30m  # Reduced to 30m to fit on mayne-worker-2 (99% CPU usage)
+      cpu: 15m  # VPA recommendation: 15m
       memory: 256Mi
     limits:
-      # cpu: removed to prevent throttling
       memory: 1Gi
 
 # Configuration for backup storage
