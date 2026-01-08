@@ -177,15 +177,9 @@ serviceAccount:
 # Node selector to run on all nodes
 nodeSelector: {}
 
-# Tolerations to run on all nodes including masters
+# Tolerations to run on all nodes including control-plane
 tolerations:
   - effect: NoSchedule
-    key: node-role.kubernetes.io/master
-  - effect: NoExecute
-    key: node-role.kubernetes.io/master
-  - effect: NoSchedule
-    key: node-role.kubernetes.io/control-plane
-  - effect: NoExecute
     key: node-role.kubernetes.io/control-plane
 
 # Run as DaemonSet on all nodes
