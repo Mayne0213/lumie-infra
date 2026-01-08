@@ -3,6 +3,7 @@
 
 controllers:
   main:
+    replicas: 2
     initContainers:
       copy-homer-files:
         image:
@@ -39,6 +40,17 @@ controllers:
             memory: 100Mi
           limits:
             memory: 150Mi
+    pod:
+      # Affinity - Soft Anti-Affinity to spread pods across nodes
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: homer
+                topologyKey: kubernetes.io/hostname
 
 service:
   main:

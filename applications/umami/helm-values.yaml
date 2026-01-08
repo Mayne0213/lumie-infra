@@ -44,7 +44,7 @@ resources:
   limits:
     memory: 576Mi
 
-replicaCount: 1
+replicaCount: 2
 
 # Autoscaling
 autoscaling:
@@ -77,3 +77,14 @@ readinessProbe:
     port: 3000
   initialDelaySeconds: 0
   periodSeconds: 5
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: umami
+          topologyKey: kubernetes.io/hostname

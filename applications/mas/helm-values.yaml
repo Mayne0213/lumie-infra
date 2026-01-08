@@ -12,6 +12,7 @@ serviceAccount:
 
 controllers:
   main:
+    replicas: 2
     strategy: RollingUpdate
     rollingUpdate:
       unavailable: 0
@@ -76,6 +77,17 @@ controllers:
                 port: 8000
               initialDelaySeconds: 0
               periodSeconds: 5
+    pod:
+      # Affinity - Soft Anti-Affinity to spread pods across nodes
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: mas
+                topologyKey: kubernetes.io/hostname
 
 service:
   main:

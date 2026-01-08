@@ -3,6 +3,7 @@
 
 controllers:
   main:
+    replicas: 2
     annotations:
       docusaurus/source-hash: "2024-12-30-v1"
     initContainers:
@@ -55,6 +56,17 @@ controllers:
                 port: 80
               initialDelaySeconds: 5
               periodSeconds: 5
+    pod:
+      # Affinity - Soft Anti-Affinity to spread pods across nodes
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: docusaurus
+                topologyKey: kubernetes.io/hostname
 
 service:
   main:
