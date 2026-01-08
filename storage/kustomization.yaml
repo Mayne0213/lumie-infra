@@ -8,7 +8,6 @@ resources:
   - zot/argocd.yaml
   # PostgreSQL databases
   - postgresql/argocd/postgresql.yaml
-  - postgresql-dev/argocd.yaml
   # Database tools
   - pgweb/argocd.yaml
   # Operators
