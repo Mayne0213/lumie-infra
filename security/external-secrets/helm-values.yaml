@@ -11,7 +11,7 @@ resources:
     memory: 64Mi
   limits:
     # cpu: removed to prevent throttling
-    memory: 256Mi
+    memory: 64Mi
 
 # Webhook 설정
 webhook:
@@ -22,7 +22,7 @@ webhook:
       memory: 32Mi
     limits:
       # cpu: removed to prevent throttling
-      memory: 128Mi
+      memory: 32Mi
 
 # CertController 설정
 certController:
@@ -33,7 +33,7 @@ certController:
       memory: 32Mi
     limits:
       # cpu: removed to prevent throttling
-      memory: 128Mi
+      memory: 32Mi
 
 # 동시 실행 제한
 concurrent: 3
@@ -54,7 +54,7 @@ webhook:
       memory: 32Mi
     limits:
       # cpu: removed to prevent throttling
-      memory: 128Mi
+      memory: 32Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
@@ -75,7 +75,7 @@ certController:
       memory: 32Mi
     limits:
       # cpu: removed to prevent throttling
-      memory: 128Mi
+      memory: 32Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:

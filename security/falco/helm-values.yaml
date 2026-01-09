@@ -128,7 +128,7 @@ falcosidekick:
       cpu: 10m
       memory: 128Mi
     limits:
-      memory: 512Mi  # Increased to prevent OOM
+      memory: 128Mi
 
   config:
     # Output to stdout/logs
