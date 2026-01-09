@@ -112,7 +112,7 @@ prometheus:
       - job_name: 'argocd-metrics'
         static_configs:
           - targets:
-            - 'argocd-metrics.argocd.svc.cluster.local:8082'
+            - 'argocd-application-controller-metrics.argocd.svc.cluster.local:8082'
             labels:
               service: argocd-controller
           - targets:
@@ -120,7 +120,7 @@ prometheus:
             labels:
               service: argocd-server
           - targets:
-            - 'argocd-repo-server.argocd.svc.cluster.local:8084'
+            - 'argocd-repo-server-metrics.argocd.svc.cluster.local:8084'
             labels:
               service: argocd-repo
 
