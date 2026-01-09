@@ -20,9 +20,9 @@ loki:
       ruler: loki
       admin: loki
 
-  # Single binary mode with 2 replicas
+  # Single binary mode with 1 replica
   commonConfig:
-    replication_factor: 2
+    replication_factor: 1
 
   # Schema config
   schemaConfig:
@@ -49,18 +49,16 @@ loki:
 deploymentMode: SingleBinary
 
 singleBinary:
-  replicas: 2
+  replicas: 1
   persistence:
     enabled: false
-  affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: loki
-          topologyKey: kubernetes.io/hostname
+  # Run on master node for stability (consistent with Thanos/Tempo)
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: "true"
   extraEnvFrom:
     - secretRef:
         name: minio-s3-credentials
