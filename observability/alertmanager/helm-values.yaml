@@ -16,10 +16,18 @@ affinity:
               app.kubernetes.io/name: alertmanager
           topologyKey: kubernetes.io/hostname
 
+# Use emptyDir instead of PVC (alert state is temporary)
 persistence:
-  enabled: true
-  size: 1Gi
-  storageClass: local-path
+  enabled: false
+
+extraVolumes:
+  - name: storage
+    emptyDir:
+      sizeLimit: 500Mi
+
+extraVolumeMounts:
+  - name: storage
+    mountPath: /alertmanager
 
 resources:
   requests:
