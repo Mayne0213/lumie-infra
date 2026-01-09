@@ -84,9 +84,9 @@ prometheus:
     resources:
       requests:
         cpu: 50m
-        memory: 512Mi
+        memory: 768Mi
       limits:
-        memory: 512Mi
+        memory: 768Mi
     
     # ServiceMonitor 자동 발견 - 모든 ServiceMonitor 선택
     serviceMonitorSelectorNilUsesHelmValues: false
