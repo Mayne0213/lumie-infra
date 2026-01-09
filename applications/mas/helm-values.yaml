@@ -48,7 +48,7 @@ controllers:
             cpu: 15m
             memory: 150Mi
           limits:
-            memory: 225Mi
+            memory: 150Mi
         probes:
           startup:
             enabled: true
