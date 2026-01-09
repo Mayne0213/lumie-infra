@@ -4,7 +4,7 @@
 controllers:
   zot:
     type: deployment
-    replicas: 2
+    replicas: 1
     strategy: RollingUpdate
     containers:
       zot:
@@ -38,17 +38,6 @@ controllers:
             memory: 128Mi
           limits:
             memory: 128Mi
-    pod:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: zot
-              topologyKey: kubernetes.io/hostname
-
 service:
   zot:
     controller: zot
@@ -143,12 +132,7 @@ configMaps:
                   }
                 }
               },
-              "sessionKeysFile": "/etc/zot/session-keys.json",
-              "sessionDriver": {
-                "name": "redis",
-                "url": "redis://authelia-redis-master.authelia.svc.cluster.local:6379",
-                "keyprefix": "zot"
-              }
+              "sessionKeysFile": "/etc/zot/session-keys.json"
             }
           },
           "log": {
