@@ -117,9 +117,9 @@ repoServer:
   resources:
     requests:
       cpu: 15m
-      memory: 640Mi
+      memory: 960Mi
     limits:
-      memory: 640Mi
+      memory: 960Mi
 
 # =============================================================================
 # REDIS (Deployment)
