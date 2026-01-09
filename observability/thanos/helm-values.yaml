@@ -56,7 +56,7 @@ query:
       cpu: 15m
       memory: 128Mi
     limits:
-      memory: 256Mi
+      memory: 128Mi
 
 # =============================================================================
 # Query Frontend - Caching layer for Query (optional, disabled for small cluster)
@@ -84,7 +84,7 @@ storegateway:
       cpu: 15m
       memory: 128Mi
     limits:
-      memory: 512Mi
+      memory: 128Mi
 
   persistence:
     enabled: true
@@ -115,7 +115,7 @@ compactor:
       cpu: 15m
       memory: 128Mi
     limits:
-      memory: 512Mi
+      memory: 128Mi
 
   persistence:
     enabled: true

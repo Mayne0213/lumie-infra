@@ -12,7 +12,7 @@ resources:
     cpu: 15m
     memory: 100Mi
   limits:
-    memory: 150Mi
+    memory: 100Mi
 
 # Schedule on control-plane node
 nodeSelector:

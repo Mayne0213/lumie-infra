@@ -86,7 +86,7 @@ prometheus:
         cpu: 50m
         memory: 512Mi
       limits:
-        memory: 768Mi
+        memory: 512Mi
     
     # ServiceMonitor 자동 발견 - 모든 ServiceMonitor 선택
     serviceMonitorSelectorNilUsesHelmValues: false

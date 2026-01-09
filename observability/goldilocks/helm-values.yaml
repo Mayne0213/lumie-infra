@@ -11,7 +11,7 @@ dashboard:
       cpu: 15m
       memory: 100Mi
     limits:
-      memory: 150Mi
+      memory: 100Mi
 
   service:
     type: ClusterIP
@@ -54,7 +54,7 @@ controller:
       cpu: 15m
       memory: 100Mi
     limits:
-      memory: 150Mi
+      memory: 100Mi
 
   # Enable VPA recommendations for all namespaces
   # Set to false to only monitor namespaces with the label: goldilocks.fairwinds.com/enabled=true

@@ -28,7 +28,7 @@ resources:
     cpu: 25m
     memory: 64Mi
   limits:
-    memory: 256Mi
+    memory: 64Mi
 
 # =============================================================================
 # Tolerations (run on all nodes including master)
