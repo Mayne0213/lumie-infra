@@ -7,8 +7,11 @@ ingress:
 
 # Pod configuration
 pod:
-  kind: Deployment
-  replicas: 1
+  kind: DaemonSet
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
   resources:
     requests:
       cpu: 15m
@@ -69,6 +72,13 @@ configMap:
     cookies:
       - domain: kro.kr
         subdomain: auth0213
+    redis:
+      enabled: true
+      deploy: true
+      host: authelia-redis-master.authelia.svc.cluster.local
+      port: 6379
+      password:
+        disabled: true
 
   # Storage - PostgreSQL (CNPG cluster)
   storage:
@@ -147,10 +157,20 @@ configMap:
 secret:
   existingSecret: authelia-secrets
 
-# No persistence needed - using PostgreSQL
+# Redis for session storage (HA)
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: false
+  image:
+    tag: latest
+  master:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 128Mi
 
-# Note: Authelia Helm chart does not support affinity configuration
-# in values.yaml due to strict schema validation (beta chart).
-# Replica count is set to 2 for HA, but soft anti-affinity cannot
-# be configured via Helm values. Consider using post-render hooks
-# or manual patching if node distribution is critical.
+# No persistence needed - using PostgreSQL
