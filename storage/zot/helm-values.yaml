@@ -89,6 +89,13 @@ persistence:
     - path: /etc/zot/htpasswd
       subPath: htpasswd
       readOnly: true
+  oidc-credentials:
+    type: secret
+    name: zot-oidc-credentials
+    globalMounts:
+    - path: /etc/zot/oidc-credentials.json
+      subPath: credentials.json
+      readOnly: true
 
 configMaps:
   config:
@@ -117,6 +124,17 @@ configMaps:
             "auth": {
               "htpasswd": {
                 "path": "/etc/zot/htpasswd"
+              },
+              "openid": {
+                "providers": {
+                  "oidc": {
+                    "name": "Authelia",
+                    "issuer": "https://auth0213.kro.kr",
+                    "clientid": "zot",
+                    "scopes": ["openid", "profile", "email"],
+                    "credentialsFile": "/etc/zot/oidc-credentials.json"
+                  }
+                }
               },
               "sessionDriver": {
                 "name": "redis",
