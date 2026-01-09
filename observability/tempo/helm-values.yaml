@@ -1,0 +1,103 @@
+# Tempo Helm Values
+# Chart: https://github.com/grafana/helm-charts/tree/main/charts/tempo
+#
+# Architecture:
+# - Single binary (monolithic) mode for small clusters
+# - MinIO S3 for trace storage
+# - OTLP receiver for OpenTelemetry data
+# - Integrates with Grafana for trace visualization
+
+# Run on master node for stability
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+nodeSelector:
+  node-role.kubernetes.io/control-plane: "true"
+
+# =============================================================================
+# Resource Limits (optimized for small cluster)
+# =============================================================================
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 512Mi
+
+# =============================================================================
+# Tempo Configuration
+# =============================================================================
+tempo:
+  # Receivers - protocols Tempo accepts
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+
+  # Retention settings
+  retention: 72h  # Keep traces for 3 days
+
+  # Backend storage (MinIO S3)
+  # Uses environment variable expansion
+  storage:
+    trace:
+      backend: s3
+      s3:
+        bucket: tempo
+        endpoint: minio.minio.svc.cluster.local:9000
+        access_key: ${S3_ACCESS_KEY}
+        secret_key: ${S3_SECRET_KEY}
+        insecure: true
+
+  # Query settings
+  querier:
+    frontend_worker:
+      frontend_address: ""
+
+  # Metrics generator for trace-derived metrics
+  metricsGenerator:
+    enabled: true
+    remoteWriteUrl: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
+
+  # Enable environment variable expansion in config
+  extraArgs:
+    config.expand-env: "true"
+
+  # Environment variables from secret for S3 credentials
+  extraEnv:
+    - name: S3_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: tempo-s3-secret
+          key: S3_ACCESS_KEY
+    - name: S3_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: tempo-s3-secret
+          key: S3_SECRET_KEY
+
+# =============================================================================
+# Persistence (local cache)
+# =============================================================================
+persistence:
+  enabled: true
+  storageClassName: local-path
+  size: 2Gi
+
+# =============================================================================
+# Service
+# =============================================================================
+service:
+  type: ClusterIP
+
+# =============================================================================
+# ServiceMonitor for Prometheus
+# =============================================================================
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: prometheus

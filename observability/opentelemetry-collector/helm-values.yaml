@@ -1,0 +1,200 @@
+# OpenTelemetry Collector Helm Values
+# Chart: https://github.com/open-telemetry/opentelemetry-helm-charts
+#
+# Architecture:
+# - DaemonSet mode: one collector per node for efficient data collection
+# - OTLP receiver for traces, metrics, and logs
+# - Exports to: Tempo (traces), Prometheus (metrics), Loki (logs)
+#
+# Pipeline:
+#   Applications → OTel Collector → Tempo/Prometheus/Loki → Grafana
+
+# =============================================================================
+# Image Configuration
+# =============================================================================
+image:
+  repository: otel/opentelemetry-collector-contrib
+
+# =============================================================================
+# Deployment Mode
+# =============================================================================
+mode: daemonset
+
+# =============================================================================
+# Resource Limits (optimized for small cluster)
+# =============================================================================
+resources:
+  requests:
+    cpu: 25m
+    memory: 64Mi
+  limits:
+    memory: 256Mi
+
+# =============================================================================
+# Tolerations (run on all nodes including master)
+# =============================================================================
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+
+# =============================================================================
+# Ports
+# =============================================================================
+ports:
+  otlp:
+    enabled: true
+    containerPort: 4317
+    servicePort: 4317
+    hostPort: 4317
+    protocol: TCP
+  otlp-http:
+    enabled: true
+    containerPort: 4318
+    servicePort: 4318
+    hostPort: 4318
+    protocol: TCP
+  metrics:
+    enabled: true
+    containerPort: 8888
+    servicePort: 8888
+    protocol: TCP
+
+# =============================================================================
+# OpenTelemetry Collector Configuration
+# =============================================================================
+config:
+  # Receivers - what data the collector accepts
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+
+  # Processors - how data is transformed
+  processors:
+    # Batch processor for efficient exports
+    batch:
+      timeout: 10s
+      send_batch_size: 1024
+      send_batch_max_size: 2048
+
+    # Memory limiter to prevent OOM
+    memory_limiter:
+      check_interval: 5s
+      limit_mib: 200
+      spike_limit_mib: 50
+
+    # Add Kubernetes metadata
+    k8sattributes:
+      extract:
+        metadata:
+          - k8s.namespace.name
+          - k8s.deployment.name
+          - k8s.pod.name
+          - k8s.node.name
+      passthrough: false
+      pod_association:
+        - sources:
+            - from: resource_attribute
+              name: k8s.pod.ip
+        - sources:
+            - from: resource_attribute
+              name: k8s.pod.uid
+        - sources:
+            - from: connection
+
+    # Resource detection
+    resourcedetection:
+      detectors: [env, system]
+      timeout: 5s
+      override: false
+
+  # Exporters - where data goes
+  exporters:
+    # Tempo for traces
+    otlp/tempo:
+      endpoint: tempo.tempo.svc.cluster.local:4317
+      tls:
+        insecure: true
+
+    # Prometheus remote write for metrics
+    prometheusremotewrite:
+      endpoint: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
+      tls:
+        insecure: true
+
+    # Loki for logs
+    loki:
+      endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
+      default_labels_enabled:
+        exporter: true
+        level: true
+
+    # Debug exporter (for troubleshooting)
+    debug:
+      verbosity: basic
+
+  # Extensions
+  extensions:
+    health_check:
+      endpoint: 0.0.0.0:13133
+
+  # Service pipelines
+  service:
+    extensions: [health_check]
+    pipelines:
+      # Traces pipeline
+      traces:
+        receivers: [otlp]
+        processors: [memory_limiter, k8sattributes, resourcedetection, batch]
+        exporters: [otlp/tempo]
+
+      # Metrics pipeline
+      metrics:
+        receivers: [otlp]
+        processors: [memory_limiter, k8sattributes, resourcedetection, batch]
+        exporters: [prometheusremotewrite]
+
+      # Logs pipeline
+      logs:
+        receivers: [otlp]
+        processors: [memory_limiter, k8sattributes, resourcedetection, batch]
+        exporters: [loki]
+
+# =============================================================================
+# Service Account
+# =============================================================================
+serviceAccount:
+  create: true
+
+# =============================================================================
+# RBAC for k8sattributes processor
+# =============================================================================
+clusterRole:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: ["pods", "namespaces", "nodes"]
+      verbs: ["get", "watch", "list"]
+    - apiGroups: ["apps"]
+      resources: ["replicasets", "deployments"]
+      verbs: ["get", "watch", "list"]
+
+# =============================================================================
+# ServiceMonitor for Prometheus
+# =============================================================================
+serviceMonitor:
+  enabled: true
+  metricsEndpoints:
+    - port: metrics
+  extraLabels:
+    release: prometheus
+
+# =============================================================================
+# Pod Monitor for self-monitoring
+# =============================================================================
+podMonitor:
+  enabled: false

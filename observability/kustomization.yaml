@@ -2,12 +2,17 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  # Self-reference for App of Apps pattern
+  - application.yaml
+
   - prometheus/argocd.yaml
   - thanos/argocd.yaml
   - alertmanager/argocd.yaml
   - grafana/argocd.yaml
   - loki/argocd.yaml
   - promtail/argocd.yaml
+  - tempo/argocd.yaml
+  - opentelemetry-collector/argocd.yaml
   - node-exporter/argocd.yaml
   - kube-state-metrics/argocd.yaml
   - goldilocks/argocd.yaml
