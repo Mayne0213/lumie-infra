@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
 - manifests/servicemonitor.yaml
 - manifests/secret.yaml
+- manifests/oom-alert-rule.yaml
