@@ -54,6 +54,11 @@ environment:
   MINIO_API_CORS_ALLOW_ORIGIN: "*"
   MINIO_BROWSER_REDIRECT_URL: "https://minio.minio0213.kro.kr"
   MINIO_PROMETHEUS_AUTH_TYPE: "public"
+  # CPU optimization - disable unused workers
+  MINIO_API_REPLICATION_MAX_WORKERS: "1"
+  MINIO_API_REPLICATION_MAX_LRG_WORKERS: "1"
+  MINIO_API_TRANSITION_WORKERS: "1"
+  MINIO_SCANNER_SPEED: "slow"
 
 # API Ingress (S3 endpoint)
 ingress:
