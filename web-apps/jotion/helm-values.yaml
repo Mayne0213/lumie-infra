@@ -46,18 +46,23 @@ resources:
   limits:
     memory: 128Mi
 
-healthCheck:
-  enabled: true
-  path: /api/health
-  startupProbe:
-    periodSeconds: 10
-    failureThreshold: 30
-  livenessProbe:
-    initialDelaySeconds: 0
-    periodSeconds: 10
-  readinessProbe:
-    initialDelaySeconds: 0
-    periodSeconds: 5
+livenessProbe:
+  httpGet:
+    path: /home
+    port: 3000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /home
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 1
+  failureThreshold: 3
 
 env:
   - name: NODE_ENV
