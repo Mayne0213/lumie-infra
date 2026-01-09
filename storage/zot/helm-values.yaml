@@ -117,6 +117,11 @@ configMaps:
             "auth": {
               "htpasswd": {
                 "path": "/etc/zot/htpasswd"
+              },
+              "sessionDriver": {
+                "name": "redis",
+                "url": "redis://authelia-redis-master.authelia.svc.cluster.local:6379",
+                "keyprefix": "zot"
               }
             }
           },
