@@ -122,6 +122,12 @@ configMap:
           use: 'sig'
           key:
             path: /secrets/jwks.pem
+      claims_policies:
+        default:
+          id_token:
+            - name
+            - preferred_username
+            - email
       cors:
         endpoints:
           - authorization
@@ -137,13 +143,13 @@ configMap:
             path: /secrets/HEADLAMP_CLIENT_SECRET
           public: false
           authorization_policy: one_factor
+          claims_policy: default
           redirect_uris:
             - https://kubernetes0213.kro.kr/oidc-callback
           scopes:
             - openid
             - profile
             - email
-            - groups
           token_endpoint_auth_method: client_secret_basic
         - client_id: vault
           client_name: Vault
@@ -158,7 +164,6 @@ configMap:
             - openid
             - profile
             - email
-            - groups
           token_endpoint_auth_method: client_secret_post
 
 # Secret configuration - use existing secret from Vault
