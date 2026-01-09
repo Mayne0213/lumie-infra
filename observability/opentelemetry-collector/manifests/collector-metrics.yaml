@@ -1,0 +1,147 @@
+# OpenTelemetry Collector for Metrics
+# Deployment mode with Target Allocator (consistent-hashing)
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-metrics
+  namespace: opentelemetry
+spec:
+  mode: deployment
+  replicas: 2
+  image: otel/opentelemetry-collector-contrib:0.113.0
+  serviceAccount: otel-collector
+
+  # Target Allocator - distributes scrape targets across collector replicas
+  targetAllocator:
+    enabled: true
+    serviceAccount: otel-collector-targetallocator
+    image: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator:0.113.0
+    allocationStrategy: consistent-hashing
+    filterStrategy: relabel-config
+    prometheusCR:
+      enabled: true
+      serviceMonitorSelector: {}
+      podMonitorSelector: {}
+      scrapeInterval: 30s
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 128Mi
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+
+  ports:
+    - name: otlp-grpc
+      port: 4317
+      protocol: TCP
+      targetPort: 4317
+    - name: otlp-http
+      port: 4318
+      protocol: TCP
+      targetPort: 4318
+    - name: metrics
+      port: 8888
+      protocol: TCP
+      targetPort: 8888
+
+  env:
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    - name: K8S_POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: K8S_POD_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+
+      # Prometheus receiver with Target Allocator
+      prometheus:
+        config:
+          global:
+            scrape_interval: 60s
+          scrape_configs:
+            - job_name: otel-metrics-self
+              scrape_interval: 60s
+              static_configs:
+                - targets: ['${env:K8S_POD_IP}:8888']
+        target_allocator:
+          endpoint: http://otel-metrics-targetallocator:80
+          interval: 30s
+          collector_id: ${env:K8S_POD_NAME}
+
+    processors:
+      batch:
+        timeout: 10s
+        send_batch_size: 1024
+        send_batch_max_size: 2048
+
+      memory_limiter:
+        check_interval: 5s
+        limit_mib: 400
+        spike_limit_mib: 100
+
+      k8sattributes:
+        extract:
+          metadata:
+            - k8s.namespace.name
+            - k8s.deployment.name
+            - k8s.pod.name
+            - k8s.node.name
+        passthrough: false
+        pod_association:
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.ip
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.uid
+          - sources:
+              - from: connection
+
+      resourcedetection:
+        detectors: [env, system]
+        timeout: 5s
+        override: false
+
+    exporters:
+      prometheusremotewrite:
+        endpoint: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
+        tls:
+          insecure: true
+        external_labels:
+          otel_collector: ${env:K8S_POD_NAME}
+
+      debug:
+        verbosity: basic
+
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:13133
+
+    service:
+      extensions: [health_check]
+      pipelines:
+        metrics:
+          receivers: [otlp, prometheus]
+          processors: [memory_limiter, k8sattributes, resourcedetection, batch]
+          exporters: [prometheusremotewrite]

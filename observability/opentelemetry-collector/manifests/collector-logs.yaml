@@ -1,41 +1,14 @@
-# OpenTelemetry Collector with Target Allocator
-# Managed by OpenTelemetry Operator
-#
-# Architecture:
-# - DaemonSet mode: one collector per node for log collection
-# - Target Allocator (consistent-hashing): distributes scrape targets across collectors
-# - Filelog receiver for container logs
-# - Prometheus receiver with Target Allocator for metrics (replaces Prometheus scraping)
-# - Exports to: Tempo (traces), Prometheus (metrics), Loki (logs)
+# OpenTelemetry Collector for Logs and Traces
+# DaemonSet mode - runs on every node for log collection
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: otel-collector
+  name: otel-logs
   namespace: opentelemetry
 spec:
   mode: daemonset
   image: otel/opentelemetry-collector-contrib:0.113.0
   serviceAccount: otel-collector
-
-  # Target Allocator - distributes Prometheus scrape targets across collectors
-  # per-node strategy: each collector scrapes targets on its own node
-  targetAllocator:
-    enabled: true
-    serviceAccount: otel-collector-targetallocator
-    image: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator:0.113.0
-    allocationStrategy: per-node
-    filterStrategy: relabel-config
-    prometheusCR:
-      enabled: true
-      serviceMonitorSelector: {}
-      podMonitorSelector: {}
-      scrapeInterval: 30s
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        memory: 128Mi
 
   resources:
     requests:
@@ -107,7 +80,7 @@ spec:
         include:
           - /var/log/pods/*/*/*.log
         exclude:
-          - /var/log/pods/opentelemetry_otel-collector*/*/*.log
+          - /var/log/pods/opentelemetry_otel-*/*/*.log
         start_at: end
         include_file_path: true
         include_file_name: false
@@ -160,21 +133,6 @@ spec:
             from: attributes.log
             to: body
 
-      # Prometheus receiver - uses Target Allocator for ServiceMonitor/PodMonitor discovery
-      prometheus:
-        config:
-          global:
-            scrape_interval: 60s
-          scrape_configs:
-            - job_name: otel-collector
-              scrape_interval: 60s
-              static_configs:
-                - targets: ['${env:K8S_POD_IP}:8888']
-        target_allocator:
-          endpoint: http://otel-collector-targetallocator:80
-          interval: 30s
-          collector_id: ${env:K8S_POD_NAME}
-
     processors:
       batch:
         timeout: 10s
@@ -215,13 +173,6 @@ spec:
         tls:
           insecure: true
 
-      prometheusremotewrite:
-        endpoint: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
-        tls:
-          insecure: true
-        external_labels:
-          otel_collector: ${env:K8S_POD_NAME}
-
       loki:
         endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
         default_labels_enabled:
@@ -242,11 +193,6 @@ spec:
           receivers: [otlp]
           processors: [memory_limiter, k8sattributes, resourcedetection, batch]
           exporters: [otlp/tempo]
-
-        metrics:
-          receivers: [otlp, prometheus]
-          processors: [memory_limiter, k8sattributes, resourcedetection, batch]
-          exporters: [prometheusremotewrite]
 
         logs:
           receivers: [otlp, filelog]
