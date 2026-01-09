@@ -2446,7 +2446,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(increase(container_oom_events_total{cluster=\"$cluster\"}[$__rate_interval])) by (namespace) > 0 or vector(0)",
+          "expr": "count by (namespace) (kube_pod_container_status_last_terminated_reason{cluster=\"$cluster\", reason=\"OOMKilled\"} == 1) or vector(0)",
           "interval": "",
           "legendFormat": "{{ namespace }}",
           "range": true,
