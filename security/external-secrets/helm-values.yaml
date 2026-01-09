@@ -8,10 +8,10 @@ replicaCount: 2
 resources:
   requests:
     cpu: 5m  # Reduced from 20m based on actual usage (1m)
-    memory: 64Mi
+    memory: 128Mi
   limits:
     # cpu: removed to prevent throttling
-    memory: 64Mi
+    memory: 128Mi
 
 # 동시 실행 제한
 concurrent: 3
@@ -29,10 +29,10 @@ webhook:
   resources:
     requests:
       cpu: 2m  # Reduced from 10m based on actual usage (1m)
-      memory: 64Mi
+      memory: 128Mi
     limits:
       # cpu: removed to prevent throttling
-      memory: 64Mi
+      memory: 128Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
