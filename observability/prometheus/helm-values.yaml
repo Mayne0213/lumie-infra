@@ -203,6 +203,7 @@ defaultRules:
   disabled:
     KubeCPUOvercommit: true
     KubeMemoryOvercommit: true
+    PrometheusDuplicateTimestamps: true
   rules:
     alertmanager: true
     etcd: false
