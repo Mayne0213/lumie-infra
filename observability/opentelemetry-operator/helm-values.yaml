@@ -25,6 +25,9 @@ manager:
     requests:
       cpu: 10m
       memory: 256Mi
+  # ServiceMonitor configuration
+  serviceMonitor:
+    enabled: false  # Disable ServiceMonitor creation to prevent conflicts
 
 # Admission webhooks (uses cert-manager self-signed CA)
 admissionWebhooks:
