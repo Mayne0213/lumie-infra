@@ -3395,15 +3395,15 @@
     "list": [
       {
         "current": {
-          "text": "",
-          "value": ""
+          "text": "Thanos",
+          "value": "Thanos"
         },
         "includeAll": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
-        "regex": "",
+        "regex": "/Thanos/",
         "type": "datasource"
       },
       {
