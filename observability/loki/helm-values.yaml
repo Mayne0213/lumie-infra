@@ -1,35 +1,23 @@
 # Loki Helm Values
 # Chart: https://grafana.github.io/helm-charts
-# Single binary deployment with S3 (MinIO) storage
+# Single binary deployment with local filesystem storage
 
 loki:
-  # Use S3 storage (MinIO)
+  # Use filesystem storage (local-path PVC)
   storage:
-    type: s3
-    s3:
-      endpoint: http://minio.minio.svc.cluster.local:9000
-      region: us-east-1
-      bucketNames:
-        chunks: loki
-        ruler: loki
-        admin: loki
-      s3ForcePathStyle: true
-      insecure: true
-    bucketNames:
-      chunks: loki
-      ruler: loki
-      admin: loki
+    type: filesystem
 
   # Single binary mode with 1 replica
   commonConfig:
     replication_factor: 1
+    path_prefix: /var/loki
 
-  # Schema config
+  # Schema config - filesystem backend
   schemaConfig:
     configs:
       - from: "2024-01-01"
         store: tsdb
-        object_store: s3
+        object_store: filesystem
         schema: v13
         index:
           prefix: index_
@@ -51,23 +39,16 @@ deploymentMode: SingleBinary
 singleBinary:
   replicas: 1
   persistence:
-    enabled: false
-  # Run on master node for stability (consistent with Thanos/Tempo)
+    enabled: true
+    storageClass: local-path
+    size: 10Gi
+  # Run on master node for stability
   tolerations:
     - key: node-role.kubernetes.io/control-plane
       operator: Exists
       effect: NoSchedule
   nodeSelector:
     node-role.kubernetes.io/control-plane: "true"
-  extraEnvFrom:
-    - secretRef:
-        name: minio-s3-credentials
-  extraVolumes:
-    - name: loki-data
-      emptyDir: {}
-  extraVolumeMounts:
-    - name: loki-data
-      mountPath: /var/loki
   resources:
     requests:
       cpu: 23m
