@@ -5,21 +5,24 @@ metadata:
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: docusaurus=ghcr.io/mayne0213/docusaurus:latest
+    argocd-image-updater.argoproj.io/docusaurus.update-strategy: digest
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/github-creds
+    argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/docusaurus.helm.image-tag: image.tag
 spec:
   project: default
   sources:
-  - repoURL: https://bjw-s-labs.github.io/helm-charts
-    chart: app-template
-    targetRevision: 3.6.1
+  - repoURL: https://github.com/K3S-HOME/web-apps.git
+    targetRevision: main
+    path: charts/web-app
     helm:
       valueFiles:
       - $values/docusaurus/helm-values.yaml
   - repoURL: https://github.com/K3S-HOME/applications.git
     targetRevision: main
     ref: values
-  - repoURL: https://github.com/K3S-HOME/applications.git
-    targetRevision: main
-    path: docusaurus
   destination:
     server: https://kubernetes.default.svc
     namespace: docusaurus
@@ -27,8 +30,11 @@ spec:
     automated:
       prune: true
       selfHeal: true
+      allowEmpty: false
     syncOptions:
     - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
     retry:
       limit: 5
       backoff:
@@ -38,3 +44,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
+  revisionHistoryLimit: 10
