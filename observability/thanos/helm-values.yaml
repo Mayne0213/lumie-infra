@@ -113,9 +113,9 @@ compactor:
   resources:
     requests:
       cpu: 15m
-      memory: 128Mi
+      memory: 256Mi
     limits:
-      memory: 128Mi
+      memory: 256Mi
 
   persistence:
     enabled: true
