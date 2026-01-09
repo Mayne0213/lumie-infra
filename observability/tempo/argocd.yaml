@@ -17,9 +17,6 @@ spec:
   - repoURL: https://github.com/K3S-HOME/observability.git
     targetRevision: main
     ref: values
-  - repoURL: https://github.com/K3S-HOME/observability.git
-    targetRevision: main
-    path: tempo/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: tempo
