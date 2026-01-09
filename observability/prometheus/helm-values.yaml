@@ -84,9 +84,9 @@ prometheus:
     resources:
       requests:
         cpu: 50m
-        memory: 768Mi
+        memory: 1536Mi
       limits:
-        memory: 768Mi
+        memory: 1536Mi
     
     # ServiceMonitor selector - disable direct scraping (OTel handles it)
     # Set to non-existent label to effectively disable
