@@ -30,6 +30,8 @@ pod:
             path: HEADLAMP_CLIENT_SECRET
           - key: VAULT_CLIENT_SECRET
             path: VAULT_CLIENT_SECRET
+          - key: ZOT_CLIENT_SECRET
+            path: ZOT_CLIENT_SECRET
           - key: identity_providers.oidc.jwks.key
             path: jwks.pem
   extraVolumeMounts:
@@ -44,6 +46,10 @@ pod:
     - name: oidc-secrets
       mountPath: /secrets/VAULT_CLIENT_SECRET
       subPath: VAULT_CLIENT_SECRET
+      readOnly: true
+    - name: oidc-secrets
+      mountPath: /secrets/ZOT_CLIENT_SECRET
+      subPath: ZOT_CLIENT_SECRET
       readOnly: true
     - name: oidc-secrets
       mountPath: /secrets/jwks.pem
@@ -160,6 +166,20 @@ configMap:
           redirect_uris:
             - https://vault0213.kro.kr/ui/vault/auth/oidc/oidc/callback
             - http://localhost:8250/oidc/callback
+          scopes:
+            - openid
+            - profile
+            - email
+          token_endpoint_auth_method: client_secret_post
+        - client_id: zot
+          client_name: Zot Registry
+          client_secret:
+            path: /secrets/ZOT_CLIENT_SECRET
+          public: false
+          authorization_policy: one_factor
+          claims_policy: default
+          redirect_uris:
+            - https://zot0213.kro.kr/zot/auth/callback/oidc
           scopes:
             - openid
             - profile

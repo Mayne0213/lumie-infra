@@ -50,10 +50,10 @@ certController:
   resources:
     requests:
       cpu: 2m  # Reduced from 10m based on actual usage (1m)
-      memory: 128Mi
+      memory: 256Mi
     limits:
       # cpu: removed to prevent throttling
-      memory: 128Mi
+      memory: 256Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
