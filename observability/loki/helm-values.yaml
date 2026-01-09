@@ -51,7 +51,8 @@ singleBinary:
     enabled: false
   extraVolumes:
     - name: data
-      emptyDir: {}
+      emptyDir:
+        sizeLimit: 2Gi
   extraVolumeMounts:
     - name: data
       mountPath: /var/loki

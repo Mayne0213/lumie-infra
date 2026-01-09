@@ -90,7 +90,8 @@ persistence:
 # emptyDir volume for WAL
 extraVolumes:
   - name: tempo-data
-    emptyDir: {}
+    emptyDir:
+      sizeLimit: 2Gi
 
 # =============================================================================
 # Service
