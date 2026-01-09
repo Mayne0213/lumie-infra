@@ -16,7 +16,7 @@ resources:
     cpu: 10m
     memory: 64Mi
   limits:
-    memory: 256Mi
+    memory: 64Mi
 
 # Tolerations for control-plane node
 tolerations:

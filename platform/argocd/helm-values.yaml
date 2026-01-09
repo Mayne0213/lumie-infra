@@ -72,7 +72,7 @@ controller:
       cpu: 126m
       memory: 1700Mi
     limits:
-      memory: 2500Mi
+      memory: 1700Mi
 
 # =============================================================================
 # API SERVER (Deployment)
@@ -101,7 +101,7 @@ server:
       cpu: 15m
       memory: 138Mi
     limits:
-      memory: 207Mi
+      memory: 138Mi
 
 # =============================================================================
 # REPO SERVER (Deployment)
@@ -119,7 +119,7 @@ repoServer:
       cpu: 15m
       memory: 640Mi
     limits:
-      memory: 960Mi
+      memory: 640Mi
 
 # =============================================================================
 # REDIS (Deployment)
@@ -130,7 +130,7 @@ redis:
       cpu: 15m
       memory: 100Mi
     limits:
-      memory: 150Mi
+      memory: 100Mi
 
 # =============================================================================
 # DEX (OIDC) - Disabled (using Authelia instead)
