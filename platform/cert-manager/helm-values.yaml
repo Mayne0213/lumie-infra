@@ -66,5 +66,5 @@ affinity:
 prometheus:
   enabled: true
   servicemonitor:
-    enabled: true  # Enable ServiceMonitor for Prometheus scraping
+    enabled: false
 

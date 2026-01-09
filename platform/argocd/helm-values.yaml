@@ -54,6 +54,8 @@ controller:
     service:
       enabled: true
       servicePort: 8082
+    serviceMonitor:
+      enabled: true
 
   # Memory optimization environment variables
   env:
@@ -84,6 +86,8 @@ server:
     service:
       enabled: true
       servicePort: 8083
+    serviceMonitor:
+      enabled: true
 
   # Main Ingress with Authelia middleware
   ingress:
@@ -113,6 +117,8 @@ repoServer:
     service:
       enabled: true
       servicePort: 8084
+    serviceMonitor:
+      enabled: true
 
   resources:
     requests:
