@@ -62,15 +62,12 @@ prometheus:
 
     scrapeInterval: 60s       # 30s → 60s (메모리 절감)
     evaluationInterval: 60s   # 30s → 60s
-    retention: 3d             # Local retention (S3 has longer retention via Thanos)
+    retention: 3d             # Local retention only (no S3 upload)
 
-    # Thanos Sidecar configuration
+    # Thanos Sidecar configuration (query only, no S3 upload)
     thanos:
       image: quay.io/thanos/thanos:v0.37.2
-      objectStorageConfig:
-        existingSecret:
-          name: thanos-objstore-secret
-          key: objstore.yml
+      # objectStorageConfig removed - no upload to MinIO, local storage only
 
     storageSpec:
       volumeClaimTemplate:

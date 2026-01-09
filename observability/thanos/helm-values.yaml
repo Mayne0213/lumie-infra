@@ -65,62 +65,16 @@ queryFrontend:
   enabled: false
 
 # =============================================================================
-# Store Gateway - Reads historical data from S3
+# Store Gateway - Reads historical data from S3 (DISABLED - using local storage only)
 # =============================================================================
 storegateway:
-  enabled: true
-  replicaCount: 1
-
-  # Run on master node for stability
-  tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      operator: Exists
-      effect: NoSchedule
-  nodeSelector:
-    node-role.kubernetes.io/control-plane: "true"
-
-  resources:
-    requests:
-      cpu: 15m
-      memory: 128Mi
-    limits:
-      memory: 128Mi
-
-  persistence:
-    enabled: true
-    storageClass: local-path
-    size: 2Gi
+  enabled: false
 
 # =============================================================================
-# Compactor - Compacts and downsamples data in S3
+# Compactor - Compacts and downsamples data in S3 (DISABLED - using local storage only)
 # =============================================================================
 compactor:
-  enabled: true
-
-  # Run on master node for stability
-  tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      operator: Exists
-      effect: NoSchedule
-  nodeSelector:
-    node-role.kubernetes.io/control-plane: "true"
-
-  # Retention settings
-  retentionResolutionRaw: 7d      # Keep raw data for 7 days
-  retentionResolution5m: 30d      # Keep 5m downsampled for 30 days
-  retentionResolution1h: 90d      # Keep 1h downsampled for 90 days
-
-  resources:
-    requests:
-      cpu: 15m
-      memory: 256Mi
-    limits:
-      memory: 256Mi
-
-  persistence:
-    enabled: true
-    storageClass: local-path
-    size: 2Gi
+  enabled: false
 
 # =============================================================================
 # Ruler - Alerting rules evaluation (disabled, using Prometheus rules)
