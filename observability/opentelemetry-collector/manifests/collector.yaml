@@ -1,14 +1,24 @@
-# OpenTelemetry Collector for Logs and Traces
-# DaemonSet mode - runs on every node for log collection
+# OpenTelemetry Collector with Target Allocator
+# Managed by OpenTelemetry Operator
+#
+# Architecture:
+# - DaemonSet mode: one collector per node for log collection
+# - Target Allocator: distributes scrape targets across collectors
+# - Filelog receiver for container logs
+# - Prometheus receiver with Target Allocator for metrics
+# - Exports to: Tempo (traces), Prometheus (metrics), Loki (logs)
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: otel-logs
+  name: otel-collector
   namespace: opentelemetry
 spec:
   mode: daemonset
   image: otel/opentelemetry-collector-contrib:0.113.0
   serviceAccount: otel-collector
+
+  # Target Allocator disabled - metrics collected by Prometheus directly
+  # OTel handles logs (filelog) and traces (otlp) only
 
   resources:
     requests:
@@ -80,7 +90,7 @@ spec:
         include:
           - /var/log/pods/*/*/*.log
         exclude:
-          - /var/log/pods/opentelemetry_otel-*/*/*.log
+          - /var/log/pods/opentelemetry_otel-collector*/*/*.log
         start_at: end
         include_file_path: true
         include_file_name: false
@@ -133,6 +143,15 @@ spec:
             from: attributes.log
             to: body
 
+      # Prometheus receiver - self metrics only
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: otel-collector
+              scrape_interval: 60s
+              static_configs:
+                - targets: ['${env:K8S_POD_IP}:8888']
+
     processors:
       batch:
         timeout: 10s
@@ -173,6 +192,13 @@ spec:
         tls:
           insecure: true
 
+      prometheusremotewrite:
+        endpoint: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
+        tls:
+          insecure: true
+        external_labels:
+          otel_collector: ${env:K8S_POD_NAME}
+
       loki:
         endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
         default_labels_enabled:
@@ -193,6 +219,11 @@ spec:
           receivers: [otlp]
           processors: [memory_limiter, k8sattributes, resourcedetection, batch]
           exporters: [otlp/tempo]
+
+        metrics:
+          receivers: [otlp, prometheus]
+          processors: [memory_limiter, k8sattributes, resourcedetection, batch]
+          exporters: [prometheusremotewrite]
 
         logs:
           receivers: [otlp, filelog]

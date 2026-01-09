@@ -48,9 +48,8 @@ prometheus:
     # Enable remote write receiver for OTel Collector
     enableRemoteWriteReceiver: true
 
-    # Single replica due to cluster resource constraints
-    # Thanos provides HA query capability
-    replicas: 1
+    # HA: 2 replicas on different worker nodes
+    replicas: 2
     replicaExternalLabelName: prometheus_replica
 
     # Pod anti-affinity for HA
@@ -68,10 +67,6 @@ prometheus:
     evaluationInterval: 60s   # 30s → 60s
     retention: 3d             # Local retention only (no S3 upload)
 
-    # Allow out-of-order samples from OTel collectors
-    tsdb:
-      outOfOrderTimeWindow: 5m
-
     # Thanos Sidecar configuration (query only, no S3 upload)
     thanos:
       image: quay.io/thanos/thanos:v0.37.2
@@ -85,20 +80,15 @@ prometheus:
     resources:
       requests:
         cpu: 50m
-        memory: 1536Mi
+        memory: 768Mi
       limits:
-        memory: 1536Mi
+        memory: 768Mi
     
-    # ServiceMonitor selector - disable direct scraping (OTel handles it)
-    # Set to non-existent label to effectively disable
+    # ServiceMonitor selector - scrape all ServiceMonitors
     serviceMonitorSelectorNilUsesHelmValues: false
-    serviceMonitorSelector:
-      matchLabels:
-        prometheus-scrape: "direct"  # No ServiceMonitors have this label
+    serviceMonitorSelector: {}
     podMonitorSelectorNilUsesHelmValues: false
-    podMonitorSelector:
-      matchLabels:
-        prometheus-scrape: "direct"  # No PodMonitors have this label
+    podMonitorSelector: {}
     probeSelectorNilUsesHelmValues: false
     ruleSelector: {}
     
