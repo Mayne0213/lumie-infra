@@ -3,10 +3,13 @@
 name: docusaurus
 
 image:
-  registry: ghcr.io
-  repository: mayne0213/docusaurus
+  registry: zot0213.kro.kr
+  repository: docusaurus
   tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
+
+imagePullSecrets:
+  - name: zot-secret
 
 replicaCount: 2
 containerPort: 80  # nginx

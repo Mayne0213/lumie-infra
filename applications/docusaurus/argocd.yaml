@@ -6,8 +6,9 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
   annotations:
-    argocd-image-updater.argoproj.io/image-list: docusaurus=ghcr.io/mayne0213/docusaurus:latest
+    argocd-image-updater.argoproj.io/image-list: docusaurus=zot0213.kro.kr/docusaurus:latest
     argocd-image-updater.argoproj.io/docusaurus.update-strategy: digest
+    argocd-image-updater.argoproj.io/docusaurus.pull-secret: pullsecret:argocd/zot-creds
     argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/github-creds
     argocd-image-updater.argoproj.io/git-branch: main
     argocd-image-updater.argoproj.io/docusaurus.helm.image-tag: image.tag
