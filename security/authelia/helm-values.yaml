@@ -89,9 +89,21 @@ configMap:
       username: bluemayne
       timeout: 5s
 
+  # Network definitions for access control
+  definitions:
+    network:
+      internal:
+        - 10.42.0.0/16
+        - 10.43.0.0/16
+
   # Access control rules
   access_control:
     default_policy: one_factor
+    rules:
+      - domain: '*.kro.kr'
+        networks:
+          - internal
+        policy: bypass
 
   # Notifier - filesystem (no email)
   notifier:
