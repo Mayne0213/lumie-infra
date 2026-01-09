@@ -8,9 +8,9 @@ data:
     # Authelia Users Database
     # Generate password hash: docker run --rm authelia/authelia:latest authelia crypto hash generate argon2
     users:
-      admin:
+      bluemayne:
         disabled: false
-        displayname: "Admin"
+        displayname: "Bluemayne"
         email: "bluemayne0213@icloud.com"
         password: "$argon2id$v=19$m=65536,t=3,p=4$zrwIup8+ZsjtznkT05P7Vw$Y8Baat3CKXIGVaOemdLQRBuai1gv78Q12yCUd3yRf2U"
         groups:

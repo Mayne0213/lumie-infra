@@ -99,11 +99,7 @@ configMap:
   # Access control rules
   access_control:
     default_policy: one_factor
-    rules:
-      - domain: '*.kro.kr'
-        networks:
-          - internal
-        policy: bypass
+    rules: []
 
   # Notifier - filesystem (no email)
   notifier:
