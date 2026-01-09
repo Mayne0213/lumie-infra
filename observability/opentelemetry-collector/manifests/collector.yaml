@@ -3,9 +3,9 @@
 #
 # Architecture:
 # - DaemonSet mode: one collector per node for log collection
-# - Target Allocator: distributes scrape targets across collectors
+# - Target Allocator (consistent-hashing): distributes scrape targets across collectors
 # - Filelog receiver for container logs
-# - Prometheus receiver with Target Allocator for metrics
+# - Prometheus receiver with Target Allocator for metrics (replaces Prometheus scraping)
 # - Exports to: Tempo (traces), Prometheus (metrics), Loki (logs)
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
@@ -17,8 +17,25 @@ spec:
   image: otel/opentelemetry-collector-contrib:0.113.0
   serviceAccount: otel-collector
 
-  # Target Allocator disabled - metrics collected by Prometheus directly
-  # OTel handles logs (filelog) and traces (otlp) only
+  # Target Allocator - distributes Prometheus scrape targets across collectors
+  # per-node strategy: each collector scrapes targets on its own node
+  targetAllocator:
+    enabled: true
+    serviceAccount: otel-collector-targetallocator
+    image: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator:0.113.0
+    allocationStrategy: per-node
+    filterStrategy: relabel-config
+    prometheusCR:
+      enabled: true
+      serviceMonitorSelector: {}
+      podMonitorSelector: {}
+      scrapeInterval: 30s
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 128Mi
 
   resources:
     requests:
@@ -143,14 +160,20 @@ spec:
             from: attributes.log
             to: body
 
-      # Prometheus receiver - self metrics only
+      # Prometheus receiver - uses Target Allocator for ServiceMonitor/PodMonitor discovery
       prometheus:
         config:
+          global:
+            scrape_interval: 60s
           scrape_configs:
             - job_name: otel-collector
               scrape_interval: 60s
               static_configs:
                 - targets: ['${env:K8S_POD_IP}:8888']
+        target_allocator:
+          endpoint: http://otel-collector-targetallocator:80
+          interval: 30s
+          collector_id: ${env:K8S_POD_NAME}
 
     processors:
       batch:
