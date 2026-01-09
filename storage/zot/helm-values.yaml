@@ -96,6 +96,13 @@ persistence:
     - path: /etc/zot/oidc-credentials.json
       subPath: credentials.json
       readOnly: true
+  session-keys:
+    type: secret
+    name: zot-session-keys
+    globalMounts:
+    - path: /etc/zot/session-keys.json
+      subPath: session-keys.json
+      readOnly: true
 
 configMaps:
   config:
@@ -136,6 +143,7 @@ configMaps:
                   }
                 }
               },
+              "sessionKeysFile": "/etc/zot/session-keys.json",
               "sessionDriver": {
                 "name": "redis",
                 "url": "redis://authelia-redis-master.authelia.svc.cluster.local:6379",

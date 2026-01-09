@@ -110,7 +110,7 @@ tolerations:
 # Prometheus metrics
 metrics:
   serviceMonitor:
-    enabled: false
+    enabled: true  # Enable ServiceMonitor for Prometheus scraping
 
 # Disable post-install job by setting all triggers to empty
 # Job is created if any of: buckets, users, policies, customCommands, svcaccts exist
