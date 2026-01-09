@@ -1,23 +1,31 @@
 # Loki Helm Values
 # Chart: https://grafana.github.io/helm-charts
-# Single binary deployment with local filesystem storage
+# Single binary deployment with S3 (MinIO) storage
 
 loki:
-  # Use filesystem storage (local-path PVC)
+  # Use S3 storage (MinIO)
   storage:
-    type: filesystem
+    type: s3
+    s3:
+      endpoint: minio.minio.svc.cluster.local:9000
+      s3ForcePathStyle: true
+      insecure: true
+    bucketNames:
+      chunks: loki
+      ruler: loki
+      admin: loki
 
   # Single binary mode with 1 replica
   commonConfig:
     replication_factor: 1
     path_prefix: /var/loki
 
-  # Schema config - filesystem backend
+  # Schema config - S3 backend
   schemaConfig:
     configs:
       - from: "2024-01-01"
         store: tsdb
-        object_store: filesystem
+        object_store: s3
         schema: v13
         index:
           prefix: index_
@@ -55,6 +63,18 @@ singleBinary:
       memory: 462Mi
     limits:
       memory: 462Mi
+  # MinIO S3 credentials from secret
+  extraEnv:
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: minio-s3-credentials
+          key: AWS_ACCESS_KEY_ID
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: minio-s3-credentials
+          key: AWS_SECRET_ACCESS_KEY
 
 # Disable components not needed in single binary mode
 backend:
