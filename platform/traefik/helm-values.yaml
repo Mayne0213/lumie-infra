@@ -5,9 +5,9 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
-    # 3 replicas for HA
+    # DaemonSet for HA - runs on every node
     deployment:
-      replicas: 3
+      kind: DaemonSet
 
     # Resource limits
     resources:
