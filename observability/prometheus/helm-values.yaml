@@ -84,11 +84,16 @@ prometheus:
       limits:
         memory: 768Mi
     
-    # ServiceMonitor selector - scrape all ServiceMonitors
+    # ServiceMonitor selector - disable direct scraping (OTel handles it)
+    # Set to non-existent label to effectively disable
     serviceMonitorSelectorNilUsesHelmValues: false
-    serviceMonitorSelector: {}
+    serviceMonitorSelector:
+      matchLabels:
+        prometheus-scrape: "direct"  # No ServiceMonitors have this label
     podMonitorSelectorNilUsesHelmValues: false
-    podMonitorSelector: {}
+    podMonitorSelector:
+      matchLabels:
+        prometheus-scrape: "direct"  # No PodMonitors have this label
     probeSelectorNilUsesHelmValues: false
     ruleSelector: {}
     
