@@ -17,3 +17,4 @@ resources:
   - kube-state-metrics/argocd.yaml
   - goldilocks/argocd.yaml
   - vpa/argocd.yaml
+  - blackbox-exporter/argocd.yaml
