@@ -10,8 +10,9 @@ resources:
   - alertmanager/argocd.yaml
   - grafana/argocd.yaml
   - loki/argocd.yaml
-  - promtail/argocd.yaml
+  # promtail removed - OTel filelog receiver handles log collection
   - tempo/argocd.yaml
+  - opentelemetry-operator/argocd.yaml
   - opentelemetry-collector/argocd.yaml
   - node-exporter/argocd.yaml
   - kube-state-metrics/argocd.yaml

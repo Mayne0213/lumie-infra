@@ -45,6 +45,9 @@ prometheus:
     enabled: true
 
   prometheusSpec:
+    # Enable remote write receiver for OTel Collector
+    enableRemoteWriteReceiver: true
+
     # HA: 2 replicas on different worker nodes
     replicas: 2
     replicaExternalLabelName: prometheus_replica
@@ -81,7 +84,7 @@ prometheus:
       limits:
         memory: 768Mi
     
-    # ServiceMonitor 자동 발견 - 모든 ServiceMonitor 선택
+    # ServiceMonitor selector - scrape all ServiceMonitors
     serviceMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelector: {}
     podMonitorSelectorNilUsesHelmValues: false
@@ -100,69 +103,9 @@ prometheus:
     externalLabels:
       cluster: "mayne-cluster"
 
-    additionalScrapeConfigs:
-      # ArgoCD metrics
-      - job_name: 'argocd-metrics'
-        static_configs:
-          - targets:
-            - 'argocd-application-controller-metrics.argocd.svc.cluster.local:8082'
-            labels:
-              service: argocd-controller
-          - targets:
-            - 'argocd-server-metrics.argocd.svc.cluster.local:8083'
-            labels:
-              service: argocd-server
-          - targets:
-            - 'argocd-repo-server-metrics.argocd.svc.cluster.local:8084'
-            labels:
-              service: argocd-repo
-
-      # Cert-Manager
-      - job_name: 'cert-manager'
-        static_configs:
-          - targets:
-            - 'cert-manager.cert-manager.svc.cluster.local:9402'
-
-      # MinIO
-      - job_name: 'minio-cluster'
-        static_configs:
-          - targets:
-            - 'minio.minio.svc.cluster.local:9000'
-        metrics_path: /minio/v2/metrics/cluster
-        scheme: http
-
-      - job_name: 'minio-node'
-        static_configs:
-          - targets:
-            - 'minio.minio.svc.cluster.local:9000'
-        metrics_path: /minio/v2/metrics/node
-        scheme: http
-
-      # Ingress NGINX
-      - job_name: 'ingress-nginx'
-        kubernetes_sd_configs:
-          - role: pod
-            namespaces:
-              names:
-                - ingress-nginx
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
-            action: keep
-            regex: ingress-nginx
-          - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_component]
-            action: keep
-            regex: controller
-          - source_labels: [__address__]
-            action: replace
-            regex: ([^:]+)(?::\d+)?
-            replacement: $1:10254
-            target_label: __address__
-          - source_labels: [__meta_kubernetes_pod_name]
-            action: replace
-            target_label: pod
-          - source_labels: [__meta_kubernetes_namespace]
-            action: replace
-            target_label: namespace
+    # additionalScrapeConfigs removed - OTel handles scraping now
+    # Targets moved to OTel prometheus receiver kubernetes-pods job
+    additionalScrapeConfigs: []
 
 # API Server 메트릭 수집 비활성화 (메모리 절감: ~37k series)
 kubeApiServer:
