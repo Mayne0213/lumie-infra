@@ -3,7 +3,7 @@
 #
 # Architecture:
 # - Single binary (monolithic) mode for small clusters
-# - Local filesystem for trace storage
+# - S3 (MinIO) for trace storage
 # - OTLP receiver for OpenTelemetry data
 # - Integrates with Grafana for trace visualization
 
@@ -41,12 +41,15 @@ tempo:
   # Retention settings
   retention: 72h  # Keep traces for 3 days
 
-  # Backend storage (local filesystem)
+  # Backend storage (S3/MinIO)
   storage:
     trace:
-      backend: local
-      local:
-        path: /var/tempo/traces
+      backend: s3
+      s3:
+        bucket: tempo
+        endpoint: minio.minio.svc.cluster.local:9000
+        insecure: true
+        forcepathstyle: true
       wal:
         path: /var/tempo/wal
 
@@ -60,13 +63,34 @@ tempo:
     enabled: true
     remoteWriteUrl: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
 
+  # MinIO S3 credentials
+  extraEnv:
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: minio-s3-credentials
+          key: AWS_ACCESS_KEY_ID
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: minio-s3-credentials
+          key: AWS_SECRET_ACCESS_KEY
+
+  # Additional volume mounts for WAL
+  extraVolumeMounts:
+    - name: tempo-data
+      mountPath: /var/tempo
+
 # =============================================================================
-# Persistence (local-path PVC)
+# Persistence - Disabled (use emptyDir for WAL, data in MinIO)
 # =============================================================================
 persistence:
-  enabled: true
-  storageClassName: local-path
-  size: 5Gi
+  enabled: false
+
+# emptyDir volume for WAL
+extraVolumes:
+  - name: tempo-data
+    emptyDir: {}
 
 # =============================================================================
 # Service

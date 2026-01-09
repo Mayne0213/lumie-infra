@@ -46,10 +46,15 @@ deploymentMode: SingleBinary
 
 singleBinary:
   replicas: 1
+  # Disable PVC - use emptyDir for WAL (data stored in MinIO)
   persistence:
-    enabled: true
-    storageClass: local-path
-    size: 10Gi
+    enabled: false
+  extraVolumes:
+    - name: data
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: data
+      mountPath: /var/loki
   # Run on master node for stability
   tolerations:
     - key: node-role.kubernetes.io/control-plane
