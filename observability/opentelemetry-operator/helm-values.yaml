@@ -23,7 +23,7 @@ manager:
       memory: 256Mi
     requests:
       cpu: 10m
-      memory: 64Mi
+      memory: 256Mi
 
 # Admission webhooks (uses cert-manager self-signed CA)
 admissionWebhooks:
@@ -38,7 +38,7 @@ kubeRBACProxy:
       memory: 64Mi
     requests:
       cpu: 5m
-      memory: 32Mi
+      memory: 64Mi
 
 # Schedule on master node
 tolerations:
