@@ -17,17 +17,9 @@ affinity:
           topologyKey: kubernetes.io/hostname
 
 # Use emptyDir instead of PVC (alert state is temporary)
+# Chart automatically uses emptyDir when persistence is disabled
 persistence:
   enabled: false
-
-extraVolumes:
-  - name: storage
-    emptyDir:
-      sizeLimit: 500Mi
-
-extraVolumeMounts:
-  - name: storage
-    mountPath: /alertmanager
 
 resources:
   requests:
