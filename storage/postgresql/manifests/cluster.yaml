@@ -21,7 +21,7 @@ spec:
       memory: "256Mi"
       cpu: "30m"
     limits:
-      memory: "384Mi"
+      memory: "256Mi"
 
   # PostgreSQL configuration
   postgresql:
