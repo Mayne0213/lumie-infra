@@ -67,6 +67,10 @@ prometheus:
     evaluationInterval: 60s   # 30s → 60s
     retention: 3d             # Local retention only (no S3 upload)
 
+    # Allow out-of-order samples from OTel collectors
+    tsdb:
+      outOfOrderTimeWindow: 5m
+
     # Thanos Sidecar configuration (query only, no S3 upload)
     thanos:
       image: quay.io/thanos/thanos:v0.37.2
