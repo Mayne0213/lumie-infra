@@ -38,7 +38,6 @@
   "annotations": {
     "list": [
       {
-        "$$hashKey": "object:75",
         "builtIn": 1,
         "datasource": "-- Grafana --",
         "enable": true,
@@ -50,14 +49,12 @@
     ]
   },
   "description": "Log Viewer Dashboard for Loki",
-  "editable": false,
+  "editable": true,
   "gnetId": 13639,
   "graphTooltip": 0,
   "id": 7,
-  "iteration": 1608932746420,
   "links": [
     {
-      "$$hashKey": "object:59",
       "icon": "bolt",
       "includeVars": true,
       "keepTime": true,
@@ -65,10 +62,9 @@
       "targetBlank": true,
       "title": "View In Explore",
       "type": "link",
-      "url": "/explore?orgId=1&left=[\"now-1h\",\"now\",\"Loki\",{\"expr\":\"{job=\\\"$app\\\"}\"},{\"ui\":[true,true,true,\"none\"]}]"
+      "url": "/explore?orgId=1&left=[\"now-1h\",\"now\",\"Loki\",{\"expr\":\"{k8s_namespace_name=\\\"$namespace\\\", k8s_container_name=\\\"$container\\\"}\"},{\"ui\":[true,true,true,\"none\"]}]"
     },
     {
-      "$$hashKey": "object:61",
       "icon": "external link",
       "tags": [],
       "targetBlank": true,
@@ -124,7 +120,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(count_over_time({job=\"$app\"} |= \"$search\" [$__interval]))",
+          "expr": "sum(count_over_time({k8s_namespace_name=\"$namespace\", k8s_container_name=~\"$container\"} |= \"$search\" [$__interval]))",
           "legendFormat": "",
           "refId": "A"
         }
@@ -149,7 +145,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:168",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -158,7 +153,6 @@
           "show": false
         },
         {
-          "$$hashKey": "object:169",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -196,7 +190,7 @@
       },
       "targets": [
         {
-          "expr": "{job=\"$app\"} |= \"$search\" | logfmt",
+          "expr": "{k8s_namespace_name=\"$namespace\", k8s_container_name=~\"$container\"} |= \"$search\"",
           "hide": false,
           "legendFormat": "",
           "refId": "A"
@@ -216,26 +210,38 @@
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {},
         "datasource": "Loki",
-        "definition": "label_values(job)",
+        "definition": "label_values(k8s_namespace_name)",
         "hide": 0,
         "includeAll": false,
-        "label": "App",
+        "label": "Namespace",
         "multi": false,
-        "name": "app",
+        "name": "namespace",
         "options": [],
-        "query": "label_values(job)",
+        "query": "label_values(k8s_namespace_name)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {},
+        "datasource": "Loki",
+        "definition": "label_values({k8s_namespace_name=\"$namespace\"}, k8s_container_name)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Container",
+        "multi": false,
+        "name": "container",
+        "options": [],
+        "query": "label_values({k8s_namespace_name=\"$namespace\"}, k8s_container_name)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
       },
       {
         "current": {
@@ -244,7 +250,7 @@
           "value": ""
         },
         "hide": 0,
-        "label": "String Match",
+        "label": "Search",
         "name": "search",
         "options": [
           {
@@ -280,5 +286,5 @@
   "timezone": "",
   "title": "Logs",
   "uid": "sadlil-loki-apps-dashboard",
-  "version": 1
+  "version": 2
 }
