@@ -39,3 +39,12 @@ kubeRBACProxy:
     requests:
       cpu: 5m
       memory: 32Mi
+
+# Schedule on master node
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+
+nodeSelector:
+  node-role.kubernetes.io/control-plane: "true"
