@@ -46,7 +46,7 @@ resources:
     cpu: 15m
     memory: 512Mi
   limits:
-    memory: 768Mi
+    memory: 512Mi
 
 # Security context
 securityContext:

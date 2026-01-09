@@ -39,7 +39,7 @@ controllers:
             cpu: 15m
             memory: 100Mi
           limits:
-            memory: 150Mi
+            memory: 100Mi
     pod:
       # Affinity - Soft Anti-Affinity to spread pods across nodes
       affinity:
