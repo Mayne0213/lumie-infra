@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
 spec:
   project: default
   source:
@@ -16,9 +18,8 @@ spec:
     namespace: tekton-pipelines
   syncPolicy:
     automated:
-      prune: true
+      prune: false
       selfHeal: true
-      allowEmpty: false
     syncOptions:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
