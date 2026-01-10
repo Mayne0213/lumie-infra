@@ -11,7 +11,7 @@ image:
 # No imagePullSecrets needed (public or already configured)
 imagePullSecrets: []
 
-replicaCount: 2
+replicaCount: 1
 containerPort: 3000
 
 service:
