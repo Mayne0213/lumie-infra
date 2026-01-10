@@ -70,7 +70,7 @@ prometheus:
     # Enable remote write receiver for OTel Collector
     enableRemoteWriteReceiver: true
 
-    # Single replica (HA removed for resource optimization)
+    # Single replica
     replicas: 1
     replicaExternalLabelName: prometheus_replica
 

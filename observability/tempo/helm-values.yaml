@@ -10,6 +10,20 @@
 # Medium priority for observability
 priorityClassName: medium-priority
 
+# HA with 2 replicas
+replicas: 2
+
+# Soft anti-affinity for HA
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: tempo
+          topologyKey: kubernetes.io/hostname
+
 # =============================================================================
 # Resource Limits (optimized for small cluster)
 # =============================================================================

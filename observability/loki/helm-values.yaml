@@ -45,10 +45,20 @@ loki:
 deploymentMode: SingleBinary
 
 singleBinary:
-  replicas: 1
+  replicas: 2
   # Disable PVC - use emptyDir for WAL (data stored in MinIO)
   persistence:
     enabled: false
+  # Soft anti-affinity for HA
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: loki
+            topologyKey: kubernetes.io/hostname
   extraVolumes:
     - name: data
       emptyDir:
