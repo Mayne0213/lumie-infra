@@ -8,13 +8,13 @@ metadata:
 spec:
   project: default
   sources:
-  - repoURL: https://github.com/K3S-HOME/web-apps.git
+  - repoURL: https://github0213.com/K3S-HOME/web-apps.git
     targetRevision: main
     path: charts/web-app
     helm:
       valueFiles:
       - $values/jaejadle/helm-values.yaml
-  - repoURL: https://github.com/K3S-HOME/web-apps.git
+  - repoURL: https://github0213.com/K3S-HOME/web-apps.git
     targetRevision: main
     ref: values
   destination:
