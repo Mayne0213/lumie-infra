@@ -74,9 +74,9 @@ spec:
         resources:
           requests:
             cpu: 15m  # VPA recommendation
-            memory: 128Mi
+            memory: 256Mi
           limits:
-            memory: 128Mi
+            memory: 256Mi
 
         service:
           type: ClusterIP
