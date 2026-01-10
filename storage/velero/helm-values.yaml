@@ -81,7 +81,8 @@ configuration:
   # This prevents status updates that trigger ArgoCD refreshes
   storeValidationFrequency: 0s
 
-  # Note: backup-sync is enabled to show backups in velero-ui
+  # Disable backup-sync (user only uses manual backups)
+  backupSyncPeriod: 0s
 
 # Credentials for S3 access (from Vault via External Secrets)
 credentials:
