@@ -5,7 +5,6 @@ resources:
   # Self-reference for App of Apps pattern
   - application.yaml
 
-  - gitea/argocd.yaml
   - homer/argocd.yaml
   - docusaurus/argocd.yaml
   - code-server/argocd.yaml
