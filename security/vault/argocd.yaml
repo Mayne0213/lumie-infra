@@ -14,10 +14,10 @@ spec:
     helm:
       valueFiles:
       - $values/vault/helm-values.yaml
-  - repoURL: https://github.com/K3S-HOME/security.git
+  - repoURL: https://github0213.com/K3S-HOME/security.git
     targetRevision: main
     ref: values
-  - repoURL: https://github.com/K3S-HOME/security.git
+  - repoURL: https://github0213.com/K3S-HOME/security.git
     targetRevision: main
     path: vault
   destination:

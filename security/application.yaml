@@ -9,7 +9,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/K3S-HOME/security.git
+    repoURL: https://github0213.com/K3S-HOME/security.git
     targetRevision: main
     path: .
 
