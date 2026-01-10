@@ -70,10 +70,10 @@ singleBinary:
   priorityClassName: medium-priority
   resources:
     requests:
-      cpu: 23m
-      memory: 462Mi
+      cpu: 63m
+      memory: 363Mi
     limits:
-      memory: 462Mi
+      memory: 363Mi
   # MinIO S3 credentials from secret
   extraEnv:
     - name: AWS_ACCESS_KEY_ID

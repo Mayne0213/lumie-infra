@@ -49,9 +49,9 @@ query:
   resources:
     requests:
       cpu: 15m
-      memory: 128Mi
+      memory: 283Mi
     limits:
-      memory: 128Mi
+      memory: 283Mi
 
 # =============================================================================
 # Query Frontend - Caching layer for Query (optional, disabled for small cluster)
