@@ -1,39 +1,31 @@
 # Loki Helm Values
 # Chart: https://grafana.github.io/helm-charts
-# Single binary deployment with S3 (MinIO) storage
+# Single binary deployment with local filesystem storage (emptyDir)
 
 loki:
-  # Use S3 storage (MinIO)
+  # Use local filesystem storage (emptyDir)
   storage:
-    type: s3
-    s3:
-      endpoint: minio.minio.svc.cluster.local:9000
-      s3ForcePathStyle: true
-      insecure: true
-    bucketNames:
-      chunks: loki
-      ruler: loki
-      admin: loki
+    type: filesystem
 
   # Single binary mode with 1 replica
   commonConfig:
     replication_factor: 1
     path_prefix: /var/loki
 
-  # Schema config - S3 backend
+  # Schema config - filesystem backend
   schemaConfig:
     configs:
       - from: "2024-01-01"
         store: tsdb
-        object_store: s3
+        object_store: filesystem
         schema: v13
         index:
           prefix: index_
           period: 24h
 
-  # Limits
+  # Limits - reduced retention for local storage
   limits_config:
-    retention_period: 168h  # 7 days
+    retention_period: 72h  # 3 days (reduced for emptyDir)
     ingestion_rate_mb: 10
     ingestion_burst_size_mb: 20
     max_streams_per_user: 10000
@@ -46,7 +38,7 @@ deploymentMode: SingleBinary
 
 singleBinary:
   replicas: 1
-  # Disable PVC - use emptyDir for WAL (data stored in MinIO)
+  # Disable PVC - use emptyDir for all data
   persistence:
     enabled: false
   # Soft anti-affinity for HA
@@ -62,7 +54,7 @@ singleBinary:
   extraVolumes:
     - name: data
       emptyDir:
-        sizeLimit: 2Gi
+        sizeLimit: 5Gi
   extraVolumeMounts:
     - name: data
       mountPath: /var/loki
@@ -74,18 +66,6 @@ singleBinary:
       memory: 363Mi
     limits:
       memory: 363Mi
-  # MinIO S3 credentials from secret
-  extraEnv:
-    - name: AWS_ACCESS_KEY_ID
-      valueFrom:
-        secretKeyRef:
-          name: minio-s3-credentials
-          key: AWS_ACCESS_KEY_ID
-    - name: AWS_SECRET_ACCESS_KEY
-      valueFrom:
-        secretKeyRef:
-          name: minio-s3-credentials
-          key: AWS_SECRET_ACCESS_KEY
 
 # Disable components not needed in single binary mode
 backend:
@@ -105,7 +85,7 @@ chunksCache:
 resultsCache:
   enabled: false
 
-# Loki Canary - disabled to reduce MinIO load
+# Loki Canary - disabled
 lokiCanary:
   enabled: false
 

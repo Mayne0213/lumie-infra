@@ -3,26 +3,15 @@
 #
 # Architecture:
 # - Single binary (monolithic) mode for small clusters
-# - S3 (MinIO) for trace storage
+# - Local filesystem (emptyDir) for trace storage
 # - OTLP receiver for OpenTelemetry data
 # - Integrates with Grafana for trace visualization
 
 # Medium priority for observability
 priorityClassName: medium-priority
 
-# Single replica (HA disabled to reduce MinIO load)
+# Single replica
 replicas: 1
-
-# Soft anti-affinity for HA
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: tempo
-          topologyKey: kubernetes.io/hostname
 
 # =============================================================================
 # Resource Limits (optimized for small cluster)
@@ -48,17 +37,14 @@ tempo:
           endpoint: 0.0.0.0:4318
 
   # Retention settings
-  retention: 72h  # Keep traces for 3 days
+  retention: 24h  # Keep traces for 1 day (reduced for local storage)
 
-  # Backend storage (S3/MinIO)
+  # Backend storage (local filesystem)
   storage:
     trace:
-      backend: s3
-      s3:
-        bucket: tempo
-        endpoint: minio.minio.svc.cluster.local:9000
-        insecure: true
-        forcepathstyle: true
+      backend: local
+      local:
+        path: /var/tempo/traces
       wal:
         path: /var/tempo/wal
 
@@ -72,35 +58,22 @@ tempo:
     enabled: true
     remoteWriteUrl: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
 
-  # MinIO S3 credentials
-  extraEnv:
-    - name: AWS_ACCESS_KEY_ID
-      valueFrom:
-        secretKeyRef:
-          name: minio-s3-credentials
-          key: AWS_ACCESS_KEY_ID
-    - name: AWS_SECRET_ACCESS_KEY
-      valueFrom:
-        secretKeyRef:
-          name: minio-s3-credentials
-          key: AWS_SECRET_ACCESS_KEY
-
-  # Additional volume mounts for WAL
+  # Additional volume mounts
   extraVolumeMounts:
     - name: tempo-data
       mountPath: /var/tempo
 
 # =============================================================================
-# Persistence - Disabled (use emptyDir for WAL, data in MinIO)
+# Persistence - Disabled (use emptyDir)
 # =============================================================================
 persistence:
   enabled: false
 
-# emptyDir volume for WAL
+# emptyDir volume for all data
 extraVolumes:
   - name: tempo-data
     emptyDir:
-      sizeLimit: 2Gi
+      sizeLimit: 5Gi
 
 # =============================================================================
 # Service
