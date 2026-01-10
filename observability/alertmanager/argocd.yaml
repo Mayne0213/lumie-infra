@@ -65,7 +65,7 @@ spec:
           repository: ghcr.io/prymitive/karma
           tag: v0.122
 
-        replicaCount: 2
+        replicaCount: 1
 
         resources:
           requests:
