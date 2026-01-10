@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   # Secrets
   - secrets/zot-registry-secret.yaml
-  - secrets/github-credentials.yaml
+  - secrets/gitea-credentials.yaml
   # Tasks
   - tasks/git-clone.yaml
   - tasks/buildah-build-push.yaml

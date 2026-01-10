@@ -19,6 +19,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: el-github-listener
+                name: el-gitea-listener
                 port:
                   number: 8080

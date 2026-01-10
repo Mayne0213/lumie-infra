@@ -1,19 +1,19 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: github-listener
+  name: gitea-listener
   namespace: tekton-pipelines
 spec:
   serviceAccountName: tekton-triggers-sa
   triggers:
-    - name: github-push-nextjs
+    - name: gitea-push-nextjs
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: github-webhook-secret
+                secretName: gitea-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -32,17 +32,17 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['jovies', 'jotion', 'jaejadle', 'portfolio', 'todo']"
       bindings:
-        - ref: github-push-binding
+        - ref: gitea-push-binding
       template:
         ref: nextjs-build-template
-    - name: github-push-fastapi
+    - name: gitea-push-fastapi
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: github-webhook-secret
+                secretName: gitea-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -61,7 +61,7 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['joossam', 'mas']"
       bindings:
-        - ref: github-push-binding
+        - ref: gitea-push-binding
       template:
         ref: fastapi-build-template
   resources:
