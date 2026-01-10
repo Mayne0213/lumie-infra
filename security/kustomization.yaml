@@ -5,6 +5,7 @@ resources:
   # Self-reference for App of Apps pattern
   - application.yaml
 
+  - cert-manager/argocd.yaml
   - authelia/argocd.yaml
   - vault/argocd.yaml
   - external-secrets/argocd.yaml
