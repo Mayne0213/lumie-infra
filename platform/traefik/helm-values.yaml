@@ -28,11 +28,6 @@ spec:
                   app.kubernetes.io/name: traefik
               topologyKey: kubernetes.io/hostname
 
-    # Control-plane 노드에도 배치 허용
-    tolerations:
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
-
     # Traefik Dashboard 활성화
     dashboard:
       enabled: true
@@ -55,11 +50,6 @@ spec:
       traefik:
         expose:
           default: true
-
-    # svclb tolerations for control-plane node
-    service:
-      annotations:
-        svccontroller.k3s.cattle.io/tolerations: '[{"key":"node-role.kubernetes.io/control-plane","operator":"Exists","effect":"NoSchedule"}]'
 
     # Prometheus metrics
     metrics:
