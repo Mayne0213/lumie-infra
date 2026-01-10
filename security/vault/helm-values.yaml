@@ -72,11 +72,14 @@ server:
     type: ClusterIP
     port: 8200
 
-  # Tolerations for control-plane node
+  # Tolerations for control-plane node (keep for 3-replica HA)
   tolerations:
     - key: "node-role.kubernetes.io/control-plane"
       operator: "Exists"
       effect: "NoSchedule"
+
+  # High priority for critical secrets management
+  priorityClassName: high-priority
 
 # UI 활성화
 ui:
