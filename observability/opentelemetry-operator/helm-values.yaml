@@ -1,6 +1,10 @@
 # OpenTelemetry Operator Helm Values
 # Chart: https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-operator
 
+# Disable top-level ServiceMonitor to prevent "already exists" error on operator restart
+serviceMonitor:
+  enabled: false
+
 # Manager (Operator) configuration
 manager:
   collectorImage:
