@@ -101,11 +101,8 @@ affinity:
                   - minio
           topologyKey: kubernetes.io/hostname
 
-# Tolerations for control-plane node (minio-0 runs on control-plane)
-tolerations:
-  - key: "node-role.kubernetes.io/control-plane"
-    operator: "Exists"
-    effect: "NoSchedule"
+# High priority for critical storage infrastructure
+priorityClassName: high-priority
 
 # Prometheus metrics
 metrics:
