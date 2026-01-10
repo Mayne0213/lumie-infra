@@ -3,10 +3,13 @@
 name: jovies
 
 image:
-  registry: ghcr.io
-  repository: mayne0213/jovies
+  registry: zot0213.kro.kr
+  repository: jovies
   tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
+
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 replicaCount: 1
 containerPort: 3000
