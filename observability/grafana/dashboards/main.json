@@ -1987,14 +1987,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_cfs_throttled_seconds_total{image!=\"\", cluster=\"$cluster\"}[$__rate_interval])) by (namespace) > 0 or vector(0)",
+          "expr": "sum(rate(container_pressure_cpu_waiting_seconds_total{pod!=\"\", cluster=\"$cluster\"}[$__rate_interval])) by (namespace) > 0.1",
           "interval": "$resolution",
           "legendFormat": "{{ namespace }}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "CPU Throttled seconds by namespace",
+      "title": "CPU Pressure (waiting) by namespace",
       "type": "timeseries"
     },
     {
@@ -2099,14 +2099,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(node_cpu_core_throttles_total{cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])) by (instance) or vector(0)",
+          "expr": "sum(rate(node_pressure_cpu_waiting_seconds_total{cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])) by (instance) > 0.1",
           "interval": "$resolution",
           "legendFormat": "{{ instance }}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "CPU Core Throttled by instance",
+      "title": "Node CPU Pressure (waiting) by instance",
       "type": "timeseries"
     },
     {
