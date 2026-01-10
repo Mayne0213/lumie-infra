@@ -2227,23 +2227,26 @@
         "defaults": {
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "orange",
-                "value": 70
+                "value": 50
               },
               {
                 "color": "red",
-                "value": 85
+                "value": 80
               }
             ]
           },
-          "unit": "s",
-          "unitScale": true
+          "unit": "percent",
+          "decimals": 1,
+          "min": 0,
+          "max": 100
         },
         "overrides": []
       },
@@ -2255,9 +2258,10 @@
       },
       "id": 77,
       "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -2265,9 +2269,7 @@
           "fields": "",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
+        "textMode": "auto"
       },
       "pluginVersion": "10.3.1",
       "targets": [
@@ -2278,15 +2280,15 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "rate(minio_node_process_cpu_total_seconds{job=~\"$scrape_jobs\"}[5m])",
+          "expr": "rate(minio_node_process_cpu_total_seconds{job=\"minio\"}[5m]) * 100",
           "interval": "",
           "legendFormat": "{{server}}",
-          "range": true,
+          "instant": true,
           "refId": "A"
         }
       ],
       "title": "CPU Usage",
-      "type": "gauge"
+      "type": "stat"
     },
     {
       "datasource": {
