@@ -10,8 +10,8 @@
 # Medium priority for observability
 priorityClassName: medium-priority
 
-# HA with 2 replicas
-replicas: 2
+# Single replica (HA disabled to reduce MinIO load)
+replicas: 1
 
 # Soft anti-affinity for HA
 affinity:
