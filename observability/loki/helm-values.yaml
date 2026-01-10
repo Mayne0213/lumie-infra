@@ -56,13 +56,8 @@ singleBinary:
   extraVolumeMounts:
     - name: data
       mountPath: /var/loki
-  # Run on master node for stability
-  tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      operator: Exists
-      effect: NoSchedule
-  nodeSelector:
-    node-role.kubernetes.io/control-plane: "true"
+  # Medium priority for observability
+  priorityClassName: medium-priority
   resources:
     requests:
       cpu: 23m

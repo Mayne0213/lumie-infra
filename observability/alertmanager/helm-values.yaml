@@ -3,7 +3,7 @@
 
 fullnameOverride: alertmanager
 
-replicaCount: 2
+replicaCount: 1
 
 # Soft anti-affinity to spread pods across nodes
 affinity:

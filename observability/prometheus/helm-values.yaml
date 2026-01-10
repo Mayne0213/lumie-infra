@@ -70,9 +70,12 @@ prometheus:
     # Enable remote write receiver for OTel Collector
     enableRemoteWriteReceiver: true
 
-    # HA: 2 replicas on different worker nodes
-    replicas: 2
+    # Single replica (HA removed for resource optimization)
+    replicas: 1
     replicaExternalLabelName: prometheus_replica
+
+    # Medium priority for observability
+    priorityClassName: medium-priority
 
     # Pod anti-affinity for HA
     affinity:
