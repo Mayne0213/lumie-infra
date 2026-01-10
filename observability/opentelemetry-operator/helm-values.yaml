@@ -20,7 +20,6 @@ manager:
       repository: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-go
   resources:
     limits:
-      cpu: null  # Disable chart default CPU limits
       memory: 256Mi
     requests:
       cpu: 10m
@@ -39,7 +38,6 @@ kubeRBACProxy:
   enabled: true
   resources:
     limits:
-      cpu: null  # Disable chart default CPU limits
       memory: 64Mi
     requests:
       cpu: 5m
