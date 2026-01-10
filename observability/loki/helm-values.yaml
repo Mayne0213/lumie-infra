@@ -45,7 +45,7 @@ loki:
 deploymentMode: SingleBinary
 
 singleBinary:
-  replicas: 2
+  replicas: 1
   # Disable PVC - use emptyDir for WAL (data stored in MinIO)
   persistence:
     enabled: false
