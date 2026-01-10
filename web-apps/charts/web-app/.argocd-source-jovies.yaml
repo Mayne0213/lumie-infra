@@ -4,5 +4,5 @@ helm:
     value: zot0213.kro.kr/jovies
     forcestring: true
   - name: image.tag
-    value: latest@sha256:79eab5ba2ba07e9069ebeb720273032b296da9d239a267253daedd7eed01f3b4
+    value: latest@sha256:e6c3f34071ff611056d192e61811b6cf1bc2bf97c6c0748ce1559a4a2ec4a4d7
     forcestring: true
