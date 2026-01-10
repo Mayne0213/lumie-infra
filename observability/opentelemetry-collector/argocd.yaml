@@ -10,7 +10,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/K3S-HOME/observability.git
+    repoURL: https://github0213.com/K3S-HOME/observability.git
     targetRevision: main
     path: opentelemetry-collector/manifests
   destination:

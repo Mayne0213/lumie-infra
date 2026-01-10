@@ -12,7 +12,7 @@ spec:
     helm:
       valueFiles:
       - $values/loki/helm-values.yaml
-  - repoURL: https://github.com/K3S-HOME/observability.git
+  - repoURL: https://github0213.com/K3S-HOME/observability.git
     targetRevision: main
     ref: values
   destination:
