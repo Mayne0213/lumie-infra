@@ -3,6 +3,9 @@ kind: Kustomization
 resources:
   # ArgoCD Application (self-managed via Helm chart)
   - argocd.yaml
+  # ArgoCD Image Updater Application
+  - image-updater.yaml
   # Additional manifests (applied alongside Helm chart)
   - manifests/namespace.yaml
   - manifests/webhook-ingress.yaml
+  - manifests/image-updater-secret.yaml
