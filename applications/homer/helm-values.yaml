@@ -22,7 +22,7 @@ controllers:
           - sh
           - -c
           - |
-            git clone --depth 1 --branch main https://github.com/K3S-HOME/applications.git /tmp/repo
+            git clone --depth 1 --branch main https://github0213.com/K3S-HOME/applications.git /tmp/repo
             rm -rf /www/assets
             cp -r /tmp/repo/homer/assets /www/assets
             cp /config/config.yml /www/assets/config.yml

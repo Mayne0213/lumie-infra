@@ -9,7 +9,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/K3S-HOME/applications.git
+    repoURL: https://github0213.com/K3S-HOME/applications.git
     targetRevision: main
     path: .
 

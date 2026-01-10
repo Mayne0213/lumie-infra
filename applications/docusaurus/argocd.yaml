@@ -9,19 +9,19 @@ metadata:
     argocd-image-updater.argoproj.io/image-list: docusaurus=zot0213.kro.kr/docusaurus:latest
     argocd-image-updater.argoproj.io/docusaurus.update-strategy: digest
     argocd-image-updater.argoproj.io/docusaurus.pull-secret: pullsecret:argocd/zot-creds
-    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/github-creds
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitea-creds
     argocd-image-updater.argoproj.io/git-branch: main
     argocd-image-updater.argoproj.io/docusaurus.helm.image-tag: image.tag
 spec:
   project: default
   sources:
-  - repoURL: https://github.com/K3S-HOME/web-apps.git
+  - repoURL: https://github0213.com/K3S-HOME/web-apps.git
     targetRevision: main
     path: charts/web-app
     helm:
       valueFiles:
       - $values/docusaurus/helm-values.yaml
-  - repoURL: https://github.com/K3S-HOME/applications.git
+  - repoURL: https://github0213.com/K3S-HOME/applications.git
     targetRevision: main
     ref: values
   destination:
