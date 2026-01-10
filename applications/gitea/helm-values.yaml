@@ -111,6 +111,9 @@ resources:
 # =============================================================================
 # POD CONFIGURATION
 # =============================================================================
+strategy:
+  type: Recreate
+
 tolerations:
 - key: node-role.kubernetes.io/control-plane
   operator: Exists
