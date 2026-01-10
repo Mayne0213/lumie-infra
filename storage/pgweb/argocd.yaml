@@ -14,10 +14,10 @@ spec:
     helm:
       valueFiles:
       - $values/pgweb/helm-values.yaml
-  - repoURL: https://github.com/K3S-HOME/storage.git
+  - repoURL: https://github0213.com/K3S-HOME/storage.git
     targetRevision: main
     ref: values
-  - repoURL: https://github.com/K3S-HOME/storage.git
+  - repoURL: https://github0213.com/K3S-HOME/storage.git
     targetRevision: main
     path: pgweb
   destination:
