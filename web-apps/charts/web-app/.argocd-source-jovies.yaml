@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/mayne0213/jovies
     forcestring: true
   - name: image.tag
-    value: latest@sha256:1c877a6fc7aa0f78b492ba380746c3c153834f744b7cdce6953c8e72f34e19bd
+    value: latest@sha256:9385a63f3d18b741f4263d906c7aebeb9af2f6d0b5fc0046065c7c90127e34ff
     forcestring: true
