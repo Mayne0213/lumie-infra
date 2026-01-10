@@ -11,7 +11,7 @@ image:
 imagePullSecrets:
   - name: zot-secret
 
-replicaCount: 2
+replicaCount: 1
 containerPort: 80  # nginx
 
 service:

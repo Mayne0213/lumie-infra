@@ -44,7 +44,7 @@ resources:
   limits:
     memory: 384Mi
 
-replicaCount: 2
+replicaCount: 1
 
 # Autoscaling
 autoscaling:
