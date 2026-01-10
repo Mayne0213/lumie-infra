@@ -105,13 +105,9 @@ chunksCache:
 resultsCache:
   enabled: false
 
-# Loki Canary - top level config
+# Loki Canary - disabled to reduce MinIO load
 lokiCanary:
-  enabled: true
-  tolerations:
-    - key: "node-role.kubernetes.io/control-plane"
-      operator: "Exists"
-      effect: "NoSchedule"
+  enabled: false
 
 # Monitoring
 monitoring:
