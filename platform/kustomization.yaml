@@ -6,7 +6,6 @@ resources:
   - application.yaml
 
   # Core infrastructure
-  - cert-manager/argocd.yaml
   - traefik/argocd.yaml
   - argocd/argocd.yaml
   - argocd/image-updater.yaml
