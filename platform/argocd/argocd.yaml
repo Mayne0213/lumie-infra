@@ -53,3 +53,16 @@ spec:
       name: argocd-initial-admin-secret
       jsonPointers:
         - /data
+    - group: external-secrets.io
+      kind: ExternalSecret
+      jsonPointers:
+        - /spec/data/0/remoteRef/conversionStrategy
+        - /spec/data/0/remoteRef/decodingStrategy
+        - /spec/data/0/remoteRef/metadataPolicy
+        - /spec/data/1/remoteRef/conversionStrategy
+        - /spec/data/1/remoteRef/decodingStrategy
+        - /spec/data/1/remoteRef/metadataPolicy
+    - group: monitoring.coreos.com
+      kind: ServiceMonitor
+      jsonPointers:
+        - /spec/endpoints/0/metricRelabelings
