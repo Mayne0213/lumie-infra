@@ -2227,24 +2227,22 @@
         "defaults": {
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "orange",
-                "value": 50
+                "value": 70
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 85
               }
             ]
           },
           "unit": "percent",
-          "decimals": 1,
           "min": 0,
           "max": 100
         },
@@ -2258,10 +2256,9 @@
       },
       "id": 77,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -2269,7 +2266,9 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
       "pluginVersion": "10.3.1",
       "targets": [
@@ -2283,12 +2282,12 @@
           "expr": "rate(minio_node_process_cpu_total_seconds{job=\"minio\"}[5m]) * 100",
           "interval": "",
           "legendFormat": "{{server}}",
-          "instant": true,
+          "range": true,
           "refId": "A"
         }
       ],
       "title": "CPU Usage",
-      "type": "stat"
+      "type": "gauge"
     },
     {
       "datasource": {
