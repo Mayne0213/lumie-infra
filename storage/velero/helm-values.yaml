@@ -17,9 +17,9 @@ replicaCount: 1
 resources:
   requests:
     cpu: 11m
-    memory: 128Mi
+    memory: 75Mi
   limits:
-    memory: 128Mi
+    memory: 75Mi
 
 # Init containers for plugins
 initContainers:
@@ -39,10 +39,10 @@ nodeAgent:
   privileged: false
   resources:
     requests:
-      cpu: 15m  # VPA recommendation: 15m
-      memory: 256Mi
+      cpu: 15m
+      memory: 100Mi
     limits:
-      memory: 256Mi
+      memory: 100Mi
   # Run on all nodes including control-plane for full backup coverage
   tolerations:
     - key: "node-role.kubernetes.io/control-plane"

@@ -35,10 +35,10 @@ rootPasswordSecretKey: root-password
 # Resources
 resources:
   requests:
-    memory: 263Mi
+    memory: 175Mi
     cpu: 15m
   limits:
-    memory: 263Mi
+    memory: 175Mi
 
 # Service
 service:
