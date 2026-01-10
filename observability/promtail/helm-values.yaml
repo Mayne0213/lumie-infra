@@ -37,12 +37,6 @@ resources:
   limits:
     memory: 182Mi
 
-# Tolerations to run on all nodes including control-plane
-tolerations:
-  - key: node-role.kubernetes.io/control-plane
-    operator: Exists
-    effect: NoSchedule
-
 # ServiceMonitor disabled
 serviceMonitor:
   enabled: false

@@ -33,14 +33,6 @@ resources:
     memory: 512Mi
 
 # =============================================================================
-# Tolerations (run on all nodes including master)
-# =============================================================================
-tolerations:
-  - key: node-role.kubernetes.io/control-plane
-    operator: Exists
-    effect: NoSchedule
-
-# =============================================================================
 # Extra Volumes for Log Collection
 # =============================================================================
 extraVolumes:

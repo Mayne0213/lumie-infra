@@ -1,10 +1,6 @@
 # OpenTelemetry Operator Helm Values
 # Chart: https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-operator
 
-# Disable top-level ServiceMonitor to prevent "already exists" error on operator restart
-serviceMonitor:
-  enabled: false
-
 # Manager (Operator) configuration
 manager:
   collectorImage:
@@ -49,11 +45,3 @@ kubeRBACProxy:
       cpu: 5m
       memory: 64Mi
 
-# Schedule on master node
-tolerations:
-  - key: node-role.kubernetes.io/control-plane
-    operator: Exists
-    effect: NoSchedule
-
-nodeSelector:
-  node-role.kubernetes.io/control-plane: "true"

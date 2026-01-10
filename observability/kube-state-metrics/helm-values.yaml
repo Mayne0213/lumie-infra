@@ -14,15 +14,6 @@ resources:
   limits:
     memory: 105Mi
 
-# Schedule on control-plane node
-nodeSelector:
-  node-role.kubernetes.io/control-plane: "true"
-
-tolerations:
-  - key: node-role.kubernetes.io/control-plane
-    operator: Exists
-    effect: NoSchedule
-
 service:
   type: ClusterIP
   clusterIP: None
