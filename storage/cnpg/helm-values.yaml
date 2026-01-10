@@ -67,6 +67,9 @@ nodeSelector: {}
 # Tolerations
 tolerations: []
 
+# High priority for critical database operator
+priorityClassName: high-priority
+
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:
   podAntiAffinity:
