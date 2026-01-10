@@ -58,7 +58,7 @@ environment:
   MINIO_API_REPLICATION_MAX_WORKERS: "1"
   MINIO_API_REPLICATION_MAX_LRG_WORKERS: "1"
   MINIO_API_TRANSITION_WORKERS: "1"
-  MINIO_SCANNER_SPEED: "slow"
+  MINIO_SCANNER_SPEED: "slowest"
 
 # API Ingress (S3 endpoint)
 ingress:
@@ -107,7 +107,12 @@ priorityClassName: high-priority
 # Prometheus metrics
 metrics:
   serviceMonitor:
-    enabled: true  # Enable ServiceMonitor for Prometheus scraping
+    enabled: true
+    includeNode: true
+    additionalLabels:
+      release: prometheus
+    interval: 30s
+    scrapeTimeout: 10s
 
 # Disable post-install job by setting all triggers to empty
 # Job is created if any of: buckets, users, policies, customCommands, svcaccts exist
