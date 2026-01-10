@@ -15,7 +15,7 @@ imagePullSecrets:
   - name: ghcr-secret
 
 # Replicas
-replicaCount: 2
+replicaCount: 1
 
 # Container port
 containerPort: 3000
