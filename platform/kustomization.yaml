@@ -11,3 +11,4 @@ resources:
   - traefik/argocd.yaml
   - argocd-image-updater/argocd.yaml
   - argocd/argocd.yaml
+  - gitea/argocd.yaml
