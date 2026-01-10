@@ -73,14 +73,12 @@ spec:
                 port:
                   number: 3000
 ---
-# Protected Ingress - Dashboard (Authelia SSO required)
+# Protected Ingress - Dashboard
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: umami-ingress
   namespace: umami
-  annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
 spec:
   ingressClassName: traefik
   tls:
