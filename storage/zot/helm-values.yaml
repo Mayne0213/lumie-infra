@@ -35,9 +35,9 @@ controllers:
         resources:
           requests:
             cpu: 15m
-            memory: 128Mi
+            memory: 121Mi
           limits:
-            memory: 128Mi
+            memory: 121Mi
 service:
   zot:
     controller: zot
