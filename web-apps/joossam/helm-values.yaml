@@ -36,10 +36,10 @@ ingress:
 
 resources:
   requests:
-    memory: 105Mi
-    cpu: 15m
+    memory: 256Mi
+    cpu: 100m
   limits:
-    memory: 105Mi
+    memory: 512Mi
 
 healthCheck:
   enabled: true
@@ -50,9 +50,11 @@ healthCheck:
   livenessProbe:
     initialDelaySeconds: 0
     periodSeconds: 10
+    timeoutSeconds: 5
   readinessProbe:
     initialDelaySeconds: 0
     periodSeconds: 5
+    timeoutSeconds: 5
 
 externalSecret:
   enabled: false
