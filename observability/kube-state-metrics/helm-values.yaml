@@ -10,9 +10,9 @@ fullnameOverride: kube-state-metrics
 resources:
   requests:
     cpu: 15m
-    memory: 100Mi
+    memory: 105Mi
   limits:
-    memory: 100Mi
+    memory: 105Mi
 
 # Schedule on control-plane node
 nodeSelector:

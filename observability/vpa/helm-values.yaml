@@ -9,9 +9,9 @@ recommender:
   resources:
     requests:
       cpu: 15m
-      memory: 128Mi
+      memory: 100Mi
     limits:
-      memory: 128Mi
+      memory: 100Mi
 
   # Schedule on control-plane node
   nodeSelector:
