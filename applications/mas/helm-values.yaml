@@ -12,7 +12,7 @@ serviceAccount:
 
 controllers:
   main:
-    replicas: 2
+    replicas: 1
     strategy: RollingUpdate
     rollingUpdate:
       unavailable: 0
