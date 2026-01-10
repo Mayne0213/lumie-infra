@@ -86,15 +86,6 @@ spec:
           - name: BASIC_AUTH_ENABLED
             value: "false"
 
-        # Run on master node with velero controller
-        nodeSelector:
-          node-role.kubernetes.io/control-plane: "true"
-
-        tolerations:
-          - key: "node-role.kubernetes.io/control-plane"
-            operator: "Exists"
-            effect: "NoSchedule"
-
         affinity: {}
         envFrom: []
 

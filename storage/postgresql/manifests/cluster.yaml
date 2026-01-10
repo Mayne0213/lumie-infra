@@ -67,10 +67,6 @@ spec:
   # Affinity to spread replicas across nodes (soft - prefer different nodes)
   affinity:
     podAntiAffinityType: preferred
-    tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
 
   # Enable superuser access
   enableSuperuserAccess: true
