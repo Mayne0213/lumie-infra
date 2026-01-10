@@ -1,8 +1,8 @@
 helm:
   parameters:
   - name: image.name
-    value: ghcr.io/mayne0213/jovies
+    value: zot0213.kro.kr/jovies
     forcestring: true
   - name: image.tag
-    value: latest@sha256:740eaaf4ce4ae649e6f1b7e3e76606d29230b456d8fe360905cf6f4ad4dbd99f
+    value: latest@sha256:79eab5ba2ba07e9069ebeb720273032b296da9d239a267253daedd7eed01f3b4
     forcestring: true
