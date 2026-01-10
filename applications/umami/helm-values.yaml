@@ -27,7 +27,24 @@ envFrom:
       name: umami-password
 
 ingress:
-  enabled: false  # Will use our main ingress
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: umami0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.umami0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: umami-tls
+      hosts:
+        - umami0213.kro.kr
+        - www.umami0213.kro.kr
 
 service:
   type: ClusterIP
