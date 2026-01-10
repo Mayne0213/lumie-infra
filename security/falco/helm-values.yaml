@@ -121,7 +121,7 @@ grafanaDashboard:
 falcosidekick:
   enabled: true
   fullfqdn: false
-  replicaCount: 2
+  replicaCount: 1
 
   resources:
     requests:
