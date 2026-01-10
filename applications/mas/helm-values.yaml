@@ -46,9 +46,9 @@ controllers:
         resources:
           requests:
             cpu: 15m
-            memory: 150Mi
+            memory: 175Mi
           limits:
-            memory: 150Mi
+            memory: 175Mi
         probes:
           startup:
             enabled: true
