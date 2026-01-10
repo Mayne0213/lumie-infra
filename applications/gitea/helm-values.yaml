@@ -116,6 +116,11 @@ tolerations:
   operator: Exists
   effect: NoSchedule
 
+nodeSelector:
+  node-role.kubernetes.io/control-plane: "true"
+
+priorityClassName: high-priority
+
 # =============================================================================
 # SSH SERVICE
 # =============================================================================
