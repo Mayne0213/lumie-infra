@@ -61,13 +61,13 @@ controller:
   args:
     appResyncPeriod: "0"
 
-  # Resource settings (from VPA recommendations)
+  # Resource settings (20% increase from original)
   resources:
     requests:
       cpu: 126m
-      memory: 1700Mi
+      memory: 2040Mi
     limits:
-      memory: 1700Mi
+      memory: 2040Mi
 
 # =============================================================================
 # API SERVER (Deployment)
@@ -92,13 +92,13 @@ server:
       traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
     tls: true
 
-  # Resource settings
+  # Resource settings (20% increase from original)
   resources:
     requests:
       cpu: 15m
-      memory: 138Mi
+      memory: 166Mi
     limits:
-      memory: 138Mi
+      memory: 166Mi
 
 # =============================================================================
 # REPO SERVER (Deployment)
@@ -116,9 +116,9 @@ repoServer:
   resources:
     requests:
       cpu: 15m
-      memory: 1536Mi
+      memory: 1843Mi
     limits:
-      memory: 1536Mi
+      memory: 1843Mi
 
 # =============================================================================
 # REDIS (Deployment)
