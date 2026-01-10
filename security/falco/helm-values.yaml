@@ -16,10 +16,10 @@ image:
 resources:
   requests:
     cpu: 49m
-    memory: 263Mi
+    memory: 283Mi
   limits:
     cpu: null  # Disable chart default (1 core)
-    memory: 263Mi
+    memory: 283Mi
 
 # Falco configuration
 falco:
@@ -125,10 +125,10 @@ falcosidekick:
 
   resources:
     requests:
-      cpu: 10m
-      memory: 128Mi
+      cpu: 15m
+      memory: 100Mi
     limits:
-      memory: 128Mi
+      memory: 100Mi
 
   config:
     # Output to stdout/logs

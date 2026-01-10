@@ -46,10 +46,10 @@ server:
   # 리소스 제한
   resources:
     requests:
-      cpu: 35m
-      memory: 263Mi
+      cpu: 49m
+      memory: 175Mi
     limits:
-      memory: 263Mi
+      memory: 175Mi
 
   # Ingress 설정
   ingress:

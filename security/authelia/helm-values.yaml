@@ -15,9 +15,9 @@ pod:
   resources:
     requests:
       cpu: 15m
-      memory: 256Mi
+      memory: 194Mi
     limits:
-      memory: 256Mi
+      memory: 194Mi
   extraVolumes:
     - name: users-database
       configMap:
@@ -201,9 +201,9 @@ redis:
   master:
     resources:
       requests:
-        cpu: 10m
-        memory: 64Mi
+        cpu: 23m
+        memory: 100Mi
       limits:
-        memory: 64Mi
+        memory: 100Mi
 
 # No persistence needed - using PostgreSQL
