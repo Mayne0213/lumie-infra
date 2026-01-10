@@ -21,10 +21,10 @@ manager:
   resources:
     limits:
       cpu: null  # Disable chart default CPU limits
-      memory: 75Mi
+      memory: 256Mi
     requests:
-      cpu: 11m
-      memory: 75Mi
+      cpu: 10m
+      memory: 256Mi
   # ServiceMonitor configuration
   serviceMonitor:
     enabled: false  # Disable ServiceMonitor creation to prevent conflicts
