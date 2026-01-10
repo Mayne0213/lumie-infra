@@ -2,7 +2,7 @@
 # Chart: https://github.com/external-secrets/external-secrets
 
 # Replica count
-replicaCount: 2
+replicaCount: 1
 
 # 리소스 제한
 resources:
@@ -25,7 +25,7 @@ installCRDs: false
 
 # Webhook 설정
 webhook:
-  replicaCount: 2
+  replicaCount: 1
   resources:
     requests:
       cpu: 2m  # Reduced from 10m based on actual usage (1m)
@@ -46,7 +46,7 @@ webhook:
 
 # CertController 설정
 certController:
-  replicaCount: 2
+  replicaCount: 1
   resources:
     requests:
       cpu: 2m  # Reduced from 10m based on actual usage (1m)
