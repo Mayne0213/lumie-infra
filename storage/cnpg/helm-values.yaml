@@ -8,7 +8,7 @@ image:
   pullPolicy: IfNotPresent
 
 # Replica count for operator
-replicaCount: 2
+replicaCount: 1
 
 # Resource requests for operator
 resources:
