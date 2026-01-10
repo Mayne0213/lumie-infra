@@ -8,5 +8,4 @@ resources:
   # Additional manifests (applied alongside Helm chart)
   - manifests/namespace.yaml
   - manifests/webhook-ingress.yaml
-  - manifests/image-updater-secret.yaml
   - manifests/priority-classes.yaml

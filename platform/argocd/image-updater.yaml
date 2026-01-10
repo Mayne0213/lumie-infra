@@ -15,6 +15,9 @@ spec:
     - repoURL: https://github.com/K3S-HOME/platform.git
       targetRevision: main
       ref: values
+    - repoURL: https://github.com/K3S-HOME/platform.git
+      targetRevision: main
+      path: argocd/image-updater-manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
