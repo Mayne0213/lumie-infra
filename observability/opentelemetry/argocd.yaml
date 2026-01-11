@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: opentelemetry-collector
+  name: opentelemetry
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -15,7 +15,7 @@ spec:
     targetRevision: 0.108.0
     helm:
       valueFiles:
-      - $values/opentelemetry-collector/helm-values.yaml
+      - $values/opentelemetry/helm-values.yaml
   - repoURL: https://github0213.com/K3S-HOME/observability.git
     targetRevision: main
     ref: values
