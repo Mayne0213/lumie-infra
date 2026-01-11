@@ -80,7 +80,7 @@ externalSecret:
   data:
     - secretKey: database-url
       remoteRef:
-        key: todo
+        key: web-apps/todo
         property: DATABASE_URL
 
 # Affinity - Soft Anti-Affinity to spread pods across nodes

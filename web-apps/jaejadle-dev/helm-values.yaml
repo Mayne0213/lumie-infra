@@ -70,35 +70,35 @@ externalSecret:
   data:
     - secretKey: DATABASE_URL
       remoteRef:
-        key: jaejadle-dev
+        key: web-apps/jaejadle-dev
         property: DATABASE_URL
     - secretKey: JWT_SECRET
       remoteRef:
-        key: jaejadle-dev
+        key: web-apps/jaejadle-dev
         property: JWT_SECRET
     - secretKey: AWS_ACCESS_KEY_ID
       remoteRef:
-        key: jaejadle-dev
+        key: web-apps/jaejadle-dev
         property: AWS_ACCESS_KEY_ID
     - secretKey: AWS_SECRET_ACCESS_KEY
       remoteRef:
-        key: jaejadle-dev
+        key: web-apps/jaejadle-dev
         property: AWS_SECRET_ACCESS_KEY
     - secretKey: AWS_S3_BUCKET_NAME
       remoteRef:
-        key: jaejadle-dev
+        key: web-apps/jaejadle-dev
         property: AWS_S3_BUCKET_NAME
     - secretKey: AWS_S3_ENDPOINT
       remoteRef:
-        key: jaejadle-dev
+        key: web-apps/jaejadle-dev
         property: AWS_S3_ENDPOINT
     - secretKey: AWS_REGION
       remoteRef:
-        key: jaejadle-dev
+        key: web-apps/jaejadle-dev
         property: AWS_REGION
     - secretKey: CODE
       remoteRef:
-        key: jaejadle-dev
+        key: web-apps/jaejadle-dev
         property: CODE
 
 # Affinity - Soft Anti-Affinity to spread pods across nodes
