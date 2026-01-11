@@ -3,13 +3,13 @@
 name: jaejadle-dev
 
 image:
-  registry: ghcr.io
-  repository: mayne0213/jaejadle
-  tag: develop
+  registry: zot0213.kro.kr
+  repository: jaejadle-dev
+  tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
 
 imagePullSecrets:
-  - name: ghcr-secret
+  - name: zot-registry-credentials
 
 replicaCount: 1
 containerPort: 3000

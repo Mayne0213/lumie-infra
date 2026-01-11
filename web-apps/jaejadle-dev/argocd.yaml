@@ -5,6 +5,14 @@ metadata:
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: jaejadle-dev=zot0213.kro.kr/jaejadle-dev:latest
+    argocd-image-updater.argoproj.io/jaejadle-dev.update-strategy: digest
+    argocd-image-updater.argoproj.io/jaejadle-dev.platforms: linux/arm64/v8
+    argocd-image-updater.argoproj.io/jaejadle-dev.pull-secret: pullsecret:argocd/zot-registry-credentials
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitea-creds
+    argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/jaejadle-dev.helm.image-tag: image.tag
 spec:
   project: default
   sources:
@@ -38,4 +46,5 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
+        zot-registry: 'enabled'
   revisionHistoryLimit: 10
