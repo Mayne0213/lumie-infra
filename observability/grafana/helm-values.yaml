@@ -39,13 +39,12 @@ podSecurityContext:
   fsGroup: 472
   fsGroupChangePolicy: "Always"
 
-# Resource settings (VPA lowerBound/upperBound)
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
     cpu: 22m
     memory: 144Mi
   limits:
-    cpu: 24m
     memory: 242Mi
 
 service:

@@ -5,13 +5,12 @@ fullnameOverride: blackbox-exporter
 
 replicas: 1
 
-# Resource settings (VPA lowerBound/upperBound)
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
     cpu: 15m
     memory: 100Mi
   limits:
-    cpu: 32m
     memory: 100Mi
 
 config:

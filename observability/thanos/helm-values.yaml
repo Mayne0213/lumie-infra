@@ -46,13 +46,12 @@ query:
     - --query.replica-label=prometheus_replica
     - --query.auto-downsampling
 
-  # Resource settings (VPA lowerBound/target)
+  # Resource settings (no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
       memory: 100Mi
     limits:
-      cpu: 15m
       memory: 126Mi
 
 # =============================================================================

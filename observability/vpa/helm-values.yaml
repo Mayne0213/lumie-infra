@@ -6,13 +6,12 @@ recommender:
   enabled: true
   replicaCount: 1
 
-  # Resource settings (VPA lowerBound/upperBound)
+  # Resource settings (no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
       memory: 100Mi
     limits:
-      cpu: 15m
       memory: 100Mi
 
 # Updater - applies recommended resource requests to pods

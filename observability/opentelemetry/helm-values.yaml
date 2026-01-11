@@ -28,14 +28,13 @@ image:
 mode: daemonset
 
 # =============================================================================
-# Resource Limits (VPA lowerBound/upperBound, mem limit capped at 1024Mi)
+# Resource Limits (no CPU limit for stability, mem limit capped at 1024Mi)
 # =============================================================================
 resources:
   requests:
     cpu: 34m
     memory: 142Mi
   limits:
-    cpu: 410m
     memory: 1024Mi
 
 # =============================================================================
