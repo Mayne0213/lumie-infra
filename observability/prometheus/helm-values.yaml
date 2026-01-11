@@ -112,9 +112,9 @@ prometheus:
     resources:
       requests:
         cpu: 50m
-        memory: 768Mi
+        memory: 1Gi
       limits:
-        memory: 768Mi
+        memory: 1Gi
     
     # ServiceMonitor selector - scrape all ServiceMonitors
     serviceMonitorSelectorNilUsesHelmValues: false
