@@ -6,13 +6,12 @@ dashboard:
   enabled: true
   replicaCount: 1
 
-  # Resource settings (VPA lowerBound/upperBound)
+  # Resource settings (no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
       memory: 100Mi
     limits:
-      cpu: 15m
       memory: 100Mi
 
   service:
@@ -51,13 +50,12 @@ controller:
   enabled: true
   replicaCount: 1
 
-  # Resource settings (VPA lowerBound/upperBound)
+  # Resource settings (no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
       memory: 100Mi
     limits:
-      cpu: 25m
       memory: 100Mi
 
   # Enable VPA recommendations for all namespaces

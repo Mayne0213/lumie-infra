@@ -21,13 +21,12 @@ affinity:
 persistence:
   enabled: false
 
-# Resource settings (VPA lowerBound/target)
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
     cpu: 15m
     memory: 100Mi
   limits:
-    cpu: 15m
     memory: 100Mi
 
 # Disable default config - use secret instead

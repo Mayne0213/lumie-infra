@@ -14,13 +14,12 @@ prometheusOperator:
   enabled: true
   # CRD 생성 비활성화
   createCustomResource: false
-  # Resource settings (VPA lowerBound/upperBound)
+  # Resource settings (no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
       memory: 100Mi
     limits:
-      cpu: 15m
       memory: 100Mi
 
 # Kubelet ServiceMonitor with cluster label
