@@ -14,19 +14,16 @@ priorityClassName: medium-priority
 replicas: 1
 
 # =============================================================================
-# Resource Limits (optimized for small cluster)
-# =============================================================================
-resources:
-  requests:
-    cpu: 15m
-    memory: 100Mi
-  limits:
-    memory: 100Mi
-
-# =============================================================================
 # Tempo Configuration
 # =============================================================================
 tempo:
+  # Resource Limits (optimized for small cluster)
+  resources:
+    requests:
+      cpu: 15m
+      memory: 100Mi
+    limits:
+      memory: 100Mi
   # Receivers - protocols Tempo accepts
   receivers:
     otlp:
