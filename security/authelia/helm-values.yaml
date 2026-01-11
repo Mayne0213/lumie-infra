@@ -8,12 +8,14 @@ ingress:
 # Pod configuration
 pod:
   kind: DaemonSet
+  # Resource settings (VPA lowerBound/target)
   resources:
     requests:
       cpu: 15m
-      memory: 194Mi
+      memory: 100Mi
     limits:
-      memory: 194Mi
+      cpu: 15m
+      memory: 144Mi
   extraVolumes:
     - name: users-database
       configMap:
@@ -195,11 +197,13 @@ redis:
   image:
     tag: latest
   master:
+    # Resource settings (VPA lowerBound/upperBound)
     resources:
       requests:
-        cpu: 23m
+        cpu: 22m
         memory: 100Mi
       limits:
+        cpu: 32m
         memory: 100Mi
 
 # No persistence needed - using PostgreSQL

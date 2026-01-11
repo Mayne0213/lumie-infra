@@ -6,21 +6,25 @@ installCRDs: true
 
 replicaCount: 1
 
+# Resource settings (VPA lowerBound/upperBound)
 resources:
   requests:
-    cpu: 23m
-    memory: 115Mi
+    cpu: 15m
+    memory: 100Mi
   limits:
-    memory: 115Mi
+    cpu: 15m
+    memory: 100Mi
 
 webhook:
   replicaCount: 1
+  # Resource settings (VPA lowerBound/upperBound)
   resources:
     requests:
-      cpu: 23m
-      memory: 115Mi
+      cpu: 15m
+      memory: 100Mi
     limits:
-      memory: 115Mi
+      cpu: 15m
+      memory: 100Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
@@ -34,12 +38,14 @@ webhook:
 
 cainjector:
   replicaCount: 1
+  # Resource settings (VPA lowerBound/target)
   resources:
     requests:
-      cpu: 23m
-      memory: 230Mi
+      cpu: 15m
+      memory: 126Mi
     limits:
-      memory: 230Mi
+      cpu: 15m
+      memory: 248Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:

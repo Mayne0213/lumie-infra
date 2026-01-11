@@ -4,13 +4,14 @@
 # Replica count
 replicaCount: 1
 
-# 리소스 제한 (20% increase from original)
+# Resource settings (VPA lowerBound/target)
 resources:
   requests:
-    cpu: 5m
-    memory: 154Mi
+    cpu: 15m
+    memory: 100Mi
   limits:
-    memory: 154Mi
+    cpu: 15m
+    memory: 109Mi
 
 # 동시 실행 제한
 concurrent: 3
@@ -25,12 +26,14 @@ installCRDs: false
 # Webhook 설정
 webhook:
   replicaCount: 1
+  # Resource settings (VPA lowerBound/upperBound)
   resources:
     requests:
-      cpu: 2m
-      memory: 154Mi
+      cpu: 15m
+      memory: 100Mi
     limits:
-      memory: 154Mi
+      cpu: 15m
+      memory: 100Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
@@ -45,12 +48,14 @@ webhook:
 # CertController 설정
 certController:
   replicaCount: 1
+  # Resource settings (VPA lowerBound/target)
   resources:
     requests:
-      cpu: 2m
-      memory: 307Mi
+      cpu: 15m
+      memory: 144Mi
     limits:
-      memory: 307Mi
+      cpu: 15m
+      memory: 297Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
