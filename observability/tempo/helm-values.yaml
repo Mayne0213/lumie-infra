@@ -17,13 +17,14 @@ replicas: 1
 # Tempo Configuration
 # =============================================================================
 tempo:
-  # Resource Limits (optimized for small cluster)
+  # Resource settings (VPA lowerBound/target)
   resources:
     requests:
       cpu: 15m
       memory: 100Mi
     limits:
-      memory: 100Mi
+      cpu: 15m
+      memory: 109Mi
   # Receivers - protocols Tempo accepts
   receivers:
     otlp:

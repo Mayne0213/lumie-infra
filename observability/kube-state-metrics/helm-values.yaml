@@ -7,12 +7,14 @@ fullnameOverride: kube-state-metrics
 # Note: kube-state-metrics는 stateless이지만, 여러 replica는 동일한 메트릭을 중복 생성하므로
 # 단일 replica로 실행하는 것이 권장됩니다.
 
+# Resource settings (VPA lowerBound/upperBound)
 resources:
   requests:
     cpu: 15m
-    memory: 105Mi
+    memory: 100Mi
   limits:
-    memory: 105Mi
+    cpu: 15m
+    memory: 100Mi
 
 service:
   type: ClusterIP
