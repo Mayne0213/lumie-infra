@@ -34,12 +34,13 @@ ingress:
       hosts:
         - joossameng.kro.kr
 
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
-    memory: 256Mi
-    cpu: 100m
+    cpu: 15m
+    memory: 109Mi
   limits:
-    memory: 512Mi
+    memory: 351Mi
 
 healthCheck:
   enabled: true

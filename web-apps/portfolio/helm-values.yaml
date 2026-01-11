@@ -38,12 +38,13 @@ ingress:
         - minjo0213.kro.kr
         - www.minjo0213.kro.kr
 
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
-    memory: 156Mi
-    cpu: 23m
+    cpu: 15m
+    memory: 100Mi
   limits:
-    memory: 156Mi
+    memory: 109Mi
 
 healthCheck:
   enabled: true

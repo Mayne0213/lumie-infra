@@ -34,10 +34,11 @@ ingress:
       hosts:
         - dev.jaejadle.kro.kr
 
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
-    memory: 100Mi
     cpu: 15m
+    memory: 100Mi
   limits:
     memory: 100Mi
 

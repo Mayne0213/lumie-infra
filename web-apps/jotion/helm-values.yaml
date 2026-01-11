@@ -39,12 +39,13 @@ ingress:
         - jotion0213.kro.kr
         - www.jotion0213.kro.kr
 
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
-    memory: 128Mi
     cpu: 15m
+    memory: 109Mi
   limits:
-    memory: 128Mi
+    memory: 169Mi
 
 livenessProbe:
   httpGet:
