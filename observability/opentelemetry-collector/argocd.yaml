@@ -9,10 +9,16 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   project: default
-  source:
-    repoURL: https://github0213.com/K3S-HOME/observability.git
+  sources:
+  - repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
+    chart: opentelemetry-collector
+    targetRevision: 0.108.0
+    helm:
+      valueFiles:
+      - $values/opentelemetry-collector/helm-values.yaml
+  - repoURL: https://github0213.com/K3S-HOME/observability.git
     targetRevision: main
-    path: opentelemetry-collector/manifests
+    ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: opentelemetry
