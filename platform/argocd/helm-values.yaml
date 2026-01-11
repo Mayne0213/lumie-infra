@@ -69,15 +69,6 @@ controller:
     limits:
       memory: 1861Mi
 
-  # Schedule on master node
-  nodeSelector:
-    node-role.kubernetes.io/control-plane: "true"
-
-  tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      operator: Exists
-      effect: NoSchedule
-
 # =============================================================================
 # API SERVER (Deployment)
 # =============================================================================
