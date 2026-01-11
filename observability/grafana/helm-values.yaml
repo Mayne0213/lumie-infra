@@ -42,9 +42,9 @@ podSecurityContext:
 resources:
   requests:
     cpu: 23m
-    memory: 175Mi
+    memory: 256Mi
   limits:
-    memory: 175Mi
+    memory: 256Mi
 
 service:
   type: ClusterIP
