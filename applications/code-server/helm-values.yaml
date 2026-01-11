@@ -40,14 +40,13 @@ service:
   type: ClusterIP
   port: 8080
 
-# Resource settings (VPA lowerBound/target)
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
     cpu: 15m
     memory: 225Mi
   limits:
-    cpu: 15m
-    memory: 225Mi
+    memory: 302Mi
 
 # Security context
 securityContext:

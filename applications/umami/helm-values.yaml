@@ -50,14 +50,13 @@ service:
   type: ClusterIP
   port: 3000
 
-# Resource settings (VPA lowerBound/upperBound)
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
     cpu: 15m
     memory: 271Mi
   limits:
-    cpu: 15m
-    memory: 433Mi
+    memory: 600Mi
 
 replicaCount: 1
 
