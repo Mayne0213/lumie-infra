@@ -80,6 +80,11 @@ datasources:
       editable: true
       jsonData:
         implementation: prometheus
+    - name: Tempo
+      type: tempo
+      access: proxy
+      url: http://tempo.tempo.svc.cluster.local:3100
+      editable: true
 
 # Dashboards are manually imported via Grafana UI
 # JSON files stored in dashboards/ directory for reference
