@@ -13,13 +13,13 @@ image:
 # Replica count (Velero does not support multiple replicas)
 replicaCount: 1
 
-# Resource requests (VPA recommendation: 11m CPU)
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
-    cpu: 11m
-    memory: 75Mi
+    cpu: 10m
+    memory: 50Mi
   limits:
-    memory: 75Mi
+    memory: 50Mi
 
 # Init containers for plugins
 initContainers:
@@ -37,6 +37,7 @@ deployNodeAgent: true
 nodeAgent:
   podVolumePath: /var/lib/kubelet/pods
   privileged: false
+  # Resource settings (no CPU limit for stability)
   resources:
     requests:
       cpu: 15m

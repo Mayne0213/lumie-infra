@@ -32,13 +32,13 @@ existingSecret: minio-root-password
 rootUserSecretKey: root-user
 rootPasswordSecretKey: root-password
 
-# Resources
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
-    memory: 175Mi
-    cpu: 15m
+    cpu: 48m
+    memory: 126Mi
   limits:
-    memory: 175Mi
+    memory: 183Mi
 
 # Service
 service:

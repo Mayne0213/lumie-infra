@@ -20,6 +20,7 @@ controllers:
               secretKeyRef:
                 name: pgweb-password
                 key: database-url
+        # Resource settings (no CPU limit for stability)
         resources:
           requests:
             cpu: 15m

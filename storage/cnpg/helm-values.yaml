@@ -10,13 +10,13 @@ image:
 # Replica count for operator
 replicaCount: 1
 
-# Resource requests for operator
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
     cpu: 15m
-    memory: 121Mi
+    memory: 100Mi
   limits:
-    memory: 121Mi
+    memory: 100Mi
 
 # RBAC
 rbac:
