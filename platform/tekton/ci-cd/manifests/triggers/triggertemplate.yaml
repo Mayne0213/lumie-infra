@@ -56,6 +56,61 @@ spec:
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
+  name: nextjs-dev-build-template
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+    - name: git-revision
+      description: Git commit SHA
+    - name: git-branch
+      description: Git branch name
+    - name: repo-name
+      description: Repository name
+    - name: repo-full-name
+      description: Full repository name (org/repo)
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: $(tt.params.repo-name)-dev-build-
+        namespace: tekton-pipelines
+        labels:
+          tekton.dev/pipeline: nextjs-build-deploy
+          app: $(tt.params.repo-name)-dev
+          branch: $(tt.params.git-branch)
+      spec:
+        timeouts:
+          pipeline: 30m
+        pipelineRef:
+          name: nextjs-build-deploy
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-branch)
+          - name: app-name
+            value: $(tt.params.repo-name)-dev
+          - name: context-dir
+            value: ./nextjs
+        workspaces:
+          - name: shared-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                storageClassName: local-path
+                resources:
+                  requests:
+                    storage: 1Gi
+          - name: docker-credentials
+            secret:
+              secretName: zot-registry-credentials
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
   name: fastapi-build-template
   namespace: tekton-pipelines
 spec:
@@ -92,6 +147,61 @@ spec:
             value: $(tt.params.git-branch)
           - name: app-name
             value: $(tt.params.repo-name)
+          - name: context-dir
+            value: ./fastapi
+        workspaces:
+          - name: shared-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                storageClassName: local-path
+                resources:
+                  requests:
+                    storage: 1Gi
+          - name: docker-credentials
+            secret:
+              secretName: zot-registry-credentials
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: fastapi-dev-build-template
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+    - name: git-revision
+      description: Git commit SHA
+    - name: git-branch
+      description: Git branch name
+    - name: repo-name
+      description: Repository name
+    - name: repo-full-name
+      description: Full repository name (org/repo)
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: $(tt.params.repo-name)-dev-build-
+        namespace: tekton-pipelines
+        labels:
+          tekton.dev/pipeline: fastapi-build-deploy
+          app: $(tt.params.repo-name)-dev
+          branch: $(tt.params.git-branch)
+      spec:
+        timeouts:
+          pipeline: 30m
+        pipelineRef:
+          name: fastapi-build-deploy
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-branch)
+          - name: app-name
+            value: $(tt.params.repo-name)-dev
           - name: context-dir
             value: ./fastapi
         workspaces:

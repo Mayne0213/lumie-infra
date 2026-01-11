@@ -64,6 +64,65 @@ spec:
         - ref: gitea-push-binding
       template:
         ref: fastapi-build-template
+    # Develop branch triggers for -dev deployments
+    - name: gitea-push-nextjs-dev
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: gitea-webhook-secret
+                secretKey: webhook-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/develop')"
+            - name: "overlays"
+              value:
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.repository.name in ['jaejadle']"
+      bindings:
+        - ref: gitea-push-binding
+      template:
+        ref: nextjs-dev-build-template
+    - name: gitea-push-fastapi-dev
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: gitea-webhook-secret
+                secretKey: webhook-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/develop')"
+            - name: "overlays"
+              value:
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.repository.name in ['joossam']"
+      bindings:
+        - ref: gitea-push-binding
+      template:
+        ref: fastapi-dev-build-template
   resources:
     kubernetesResource:
       spec:
