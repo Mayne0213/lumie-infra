@@ -4,13 +4,12 @@
 # Replica count
 replicaCount: 1
 
-# Resource settings (VPA lowerBound/target)
+# Resource settings (no CPU limit for stability)
 resources:
   requests:
     cpu: 15m
     memory: 100Mi
   limits:
-    cpu: 15m
     memory: 109Mi
 
 # 동시 실행 제한
@@ -26,13 +25,12 @@ installCRDs: false
 # Webhook 설정
 webhook:
   replicaCount: 1
-  # Resource settings (VPA lowerBound/upperBound)
+  # Resource settings (no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
       memory: 100Mi
     limits:
-      cpu: 15m
       memory: 100Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
@@ -48,13 +46,12 @@ webhook:
 # CertController 설정
 certController:
   replicaCount: 1
-  # Resource settings (VPA lowerBound/target)
+  # Resource settings (no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
       memory: 144Mi
     limits:
-      cpu: 15m
       memory: 297Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
