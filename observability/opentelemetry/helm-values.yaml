@@ -12,6 +12,11 @@
 #   Applications → OTel Collector → Tempo/Prometheus/Loki → Grafana
 
 # =============================================================================
+# Name Override
+# =============================================================================
+fullnameOverride: otel-collector
+
+# =============================================================================
 # Image Configuration
 # =============================================================================
 image:
@@ -23,14 +28,14 @@ image:
 mode: daemonset
 
 # =============================================================================
-# Resource Limits (increased for log + metrics collection)
+# Resource Limits (based on VPA recommendation)
 # =============================================================================
 resources:
   requests:
-    cpu: 50m
-    memory: 512Mi
+    cpu: 25m
+    memory: 400Mi
   limits:
-    memory: 512Mi
+    memory: 400Mi
 
 # =============================================================================
 # Environment Variables
