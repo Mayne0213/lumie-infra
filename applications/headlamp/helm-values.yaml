@@ -19,11 +19,13 @@ service:
   type: ClusterIP
   port: 80
 
+# Resource settings (VPA lowerBound/target)
 resources:
   requests:
     cpu: 15m
     memory: 100Mi
   limits:
+    cpu: 15m
     memory: 100Mi
 
 ingress:
