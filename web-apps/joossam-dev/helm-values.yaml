@@ -3,13 +3,13 @@
 name: joossam-dev
 
 image:
-  registry: ghcr.io
-  repository: mayne0213/joossam
-  tag: develop
+  registry: zot0213.kro.kr
+  repository: joossam-dev
+  tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
 
 imagePullSecrets:
-  - name: ghcr-secret
+  - name: zot-registry-credentials
 
 replicaCount: 1
 containerPort: 8000
