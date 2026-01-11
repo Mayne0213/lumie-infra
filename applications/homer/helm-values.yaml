@@ -34,13 +34,12 @@ controllers:
           repository: b4bz/homer
           tag: latest
           pullPolicy: IfNotPresent
-        # Resource settings (VPA lowerBound/upperBound)
+        # Resource settings (no CPU limit for stability)
         resources:
           requests:
             cpu: 10m
             memory: 50Mi
           limits:
-            cpu: 12m
             memory: 50Mi
     pod:
       # Affinity - Soft Anti-Affinity to spread pods across nodes

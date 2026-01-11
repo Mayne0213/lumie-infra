@@ -43,13 +43,12 @@ controllers:
           POSTGRES_PORT: "5432"
           POSTGRES_USER: "bluemayne"
           REDIS_URL: "redis://redis:6379/0"
-        # Resource settings (VPA lowerBound/target)
+        # Resource settings (no CPU limit for stability)
         resources:
           requests:
             cpu: 15m
             memory: 144Mi
           limits:
-            cpu: 15m
             memory: 203Mi
         probes:
           startup:
