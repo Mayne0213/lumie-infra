@@ -6,11 +6,13 @@ fullnameOverride: node-exporter
 hostNetwork: true
 hostPID: true
 
+# Resource settings (VPA lowerBound/upperBound)
 resources:
   requests:
     cpu: 15m
     memory: 100Mi
   limits:
+    cpu: 15m
     memory: 100Mi
 
 service:

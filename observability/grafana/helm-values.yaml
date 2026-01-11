@@ -39,12 +39,14 @@ podSecurityContext:
   fsGroup: 472
   fsGroupChangePolicy: "Always"
 
+# Resource settings (VPA lowerBound/upperBound)
 resources:
   requests:
-    cpu: 23m
-    memory: 256Mi
+    cpu: 22m
+    memory: 144Mi
   limits:
-    memory: 256Mi
+    cpu: 24m
+    memory: 242Mi
 
 service:
   type: ClusterIP

@@ -28,14 +28,15 @@ image:
 mode: daemonset
 
 # =============================================================================
-# Resource Limits (based on VPA recommendation)
+# Resource Limits (VPA lowerBound/upperBound, mem limit capped at 1024Mi)
 # =============================================================================
 resources:
   requests:
-    cpu: 25m
-    memory: 400Mi
+    cpu: 34m
+    memory: 142Mi
   limits:
-    memory: 400Mi
+    cpu: 410m
+    memory: 1024Mi
 
 # =============================================================================
 # Environment Variables
