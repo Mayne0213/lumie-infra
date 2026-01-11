@@ -34,12 +34,14 @@ ingress:
       hosts:
         - docusaurus0213.kro.kr
 
+# Resource settings (VPA lowerBound/upperBound)
 resources:
   requests:
-    memory: 100Mi
-    cpu: 15m
+    cpu: 10m
+    memory: 50Mi
   limits:
-    memory: 100Mi
+    cpu: 16m
+    memory: 50Mi
 
 healthCheck:
   enabled: true
