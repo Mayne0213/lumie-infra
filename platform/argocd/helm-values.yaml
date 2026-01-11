@@ -130,6 +130,14 @@ repoServer:
     limits:
       memory: 1310Mi
 
+  # Probe settings (increase timeout for stability under load)
+  livenessProbe:
+    enabled: true
+    timeoutSeconds: 5
+  readinessProbe:
+    enabled: true
+    timeoutSeconds: 5
+
 # =============================================================================
 # REDIS (Deployment)
 # =============================================================================
