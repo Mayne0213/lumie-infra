@@ -41,4 +41,5 @@ spec:
       labels:
         pod-security.kubernetes.io/enforce: privileged
         pod-security.kubernetes.io/warn: privileged
+        goldilocks.fairwinds.com/enabled: 'true'
   revisionHistoryLimit: 10

@@ -38,4 +38,7 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
   revisionHistoryLimit: 10

@@ -41,6 +41,9 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
   # Ignore differences for self-managed resources
   ignoreDifferences:
     - group: ""
