@@ -10,7 +10,6 @@ resources:
   - argocd/argocd.yaml
   - argocd/image-updater.yaml
   - gitea/argocd.yaml
-  - gitea-runner/argocd.yaml
 
   # Tekton CI/CD Platform
   - tekton/pipeline/argocd.yaml
