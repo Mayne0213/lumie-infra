@@ -1,9 +1,12 @@
 fullnameOverride: code-server
 
 image:
-  repository: codercom/code-server
+  repository: zot.zot.svc.cluster.local:5000/applications/code-server
   tag: 4.104.2
   pullPolicy: Always
+
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 # Persistence configuration for workspace data
 persistence:
@@ -11,10 +14,6 @@ persistence:
   accessMode: ReadWriteOnce
   size: 5Gi
   storageClassName: local-path-retain
-
-# Use existing secret for password
-existingSecret: code-server-password
-existingSecretKey: password
 
 ingress:
   enabled: true
