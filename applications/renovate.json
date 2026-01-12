@@ -1,8 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
   "customManagers": [
     {
       "customType": "regex",
@@ -14,13 +12,37 @@
       "registryUrlTemplate": "oci://{{registryUrl}}"
     }
   ],
-  "kubernetes": {
-    "fileMatch": ["\\.yaml$"]
-  },
-  "helmv3": {
-    "fileMatch": ["helm-values\\.yaml$"]
-  },
-  "argocd": {
-    "fileMatch": ["argocd\\.yaml$"]
-  }
+  "packageRules": [
+    {
+      "description": "Homer -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/applications/homer"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "b4bz/homer"
+    },
+    {
+      "description": "Alpine/git -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/applications/alpine-git"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "alpine/git"
+    },
+    {
+      "description": "Code-server -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/applications/code-server"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "codercom/code-server"
+    },
+    {
+      "description": "Headlamp -> GHCR에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/applications/headlamp"],
+      "registryUrls": ["https://ghcr.io"],
+      "replacementName": "headlamp-k8s/headlamp"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "automerge": false
+    }
+  ],
+  "kubernetes": {"fileMatch": ["\\.yaml$"]},
+  "helmv3": {"fileMatch": ["helm-values\\.yaml$"]},
+  "argocd": {"fileMatch": ["argocd\\.yaml$"]}
 }

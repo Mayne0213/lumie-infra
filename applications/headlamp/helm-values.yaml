@@ -3,10 +3,13 @@
 replicaCount: 1
 
 image:
-  registry: ghcr.io
-  repository: headlamp-k8s/headlamp
-  tag: ""
+  registry: zot.zot.svc.cluster.local:5000
+  repository: applications/headlamp
+  tag: v0.27.0
   pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 serviceAccount:
   create: true
