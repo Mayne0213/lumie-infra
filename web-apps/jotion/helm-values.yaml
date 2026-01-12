@@ -85,7 +85,7 @@ externalSecret:
     deletionPolicy: Retain
     template:
       data:
-        database-url: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/jotion"
+        database-url: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/JotionDB"
   data:
     - secretKey: DB_HOST
       remoteRef:

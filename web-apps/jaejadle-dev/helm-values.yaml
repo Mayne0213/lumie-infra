@@ -70,7 +70,7 @@ externalSecret:
     deletionPolicy: Retain
     template:
       data:
-        DATABASE_URL: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/jaejadle_dev"
+        DATABASE_URL: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/JaejadleDevDB"
         JWT_SECRET: "{{ .JWT_SECRET }}"
         AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
         AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
