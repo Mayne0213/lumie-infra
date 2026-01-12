@@ -32,6 +32,9 @@ spec:
     providers:
       kubernetesCRD:
         allowCrossNamespace: true
+      kubernetesIngress:
+        ingressEndpoint:
+          ip: "10.0.0.55"
 
     # Service - ClusterIP (HAProxy handles external traffic)
     service:
