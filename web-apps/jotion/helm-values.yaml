@@ -83,11 +83,26 @@ externalSecret:
   target:
     creationPolicy: Owner
     deletionPolicy: Retain
+    template:
+      data:
+        database-url: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/jotion"
   data:
-    - secretKey: database-url
+    - secretKey: DB_HOST
       remoteRef:
-        key: web-apps/jotion
-        property: DATABASE_URL
+        key: storage/postgresql
+        property: DB_HOST
+    - secretKey: DB_PORT
+      remoteRef:
+        key: storage/postgresql
+        property: DB_PORT
+    - secretKey: DB_USER
+      remoteRef:
+        key: storage/postgresql
+        property: DB_USER
+    - secretKey: DB_PASSWORD
+      remoteRef:
+        key: storage/postgresql
+        property: PASSWORD
 
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:

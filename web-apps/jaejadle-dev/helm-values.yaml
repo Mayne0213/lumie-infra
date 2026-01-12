@@ -68,11 +68,35 @@ externalSecret:
   target:
     creationPolicy: Owner
     deletionPolicy: Retain
+    template:
+      data:
+        DATABASE_URL: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/jaejadle_dev"
+        JWT_SECRET: "{{ .JWT_SECRET }}"
+        AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
+        AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
+        AWS_S3_BUCKET_NAME: "{{ .AWS_S3_BUCKET_NAME }}"
+        AWS_S3_ENDPOINT: "{{ .AWS_S3_ENDPOINT }}"
+        AWS_REGION: "{{ .AWS_REGION }}"
+        CODE: "{{ .CODE }}"
   data:
-    - secretKey: DATABASE_URL
+    # PostgreSQL credentials (centralized)
+    - secretKey: DB_HOST
       remoteRef:
-        key: web-apps/jaejadle-dev
-        property: DATABASE_URL
+        key: storage/postgresql
+        property: DB_HOST
+    - secretKey: DB_PORT
+      remoteRef:
+        key: storage/postgresql
+        property: DB_PORT
+    - secretKey: DB_USER
+      remoteRef:
+        key: storage/postgresql
+        property: DB_USER
+    - secretKey: DB_PASSWORD
+      remoteRef:
+        key: storage/postgresql
+        property: PASSWORD
+    # App-specific secrets
     - secretKey: JWT_SECRET
       remoteRef:
         key: web-apps/jaejadle-dev
