@@ -22,6 +22,11 @@ configs:
     # Ignore resource status field differences
     resource.compareoptions: |
       ignoreResourceStatusField: all
+    # Custom health check for Ingress (ADDRESS not required with HAProxy)
+    resource.customizations.health.networking.k8s.io_Ingress: |
+      hs = {}
+      hs.status = "Healthy"
+      return hs
 
   # argocd-cmd-params-cm
   params:
