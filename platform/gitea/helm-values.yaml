@@ -135,3 +135,17 @@ service:
   ssh:
     type: ClusterIP
     port: 22
+
+# =============================================================================
+# CUSTOM FILES (robots.txt)
+# =============================================================================
+extraVolumes:
+- name: robots
+  configMap:
+    name: gitea-robots
+
+extraVolumeMounts:
+- name: robots
+  mountPath: /data/gitea/public/robots.txt
+  subPath: robots.txt
+  readOnly: true
