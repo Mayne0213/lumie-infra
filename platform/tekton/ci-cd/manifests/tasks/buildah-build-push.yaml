@@ -38,7 +38,7 @@ spec:
       description: Full URL of pushed image with digest
   steps:
     - name: build-and-push
-      image: quay.io/buildah/stable:v1.33
+      image: zot.zot.svc.cluster.local:5000/platform/buildah:v1.33
       securityContext:
         privileged: true
       workingDir: $(workspaces.source.path)

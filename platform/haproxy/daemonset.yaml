@@ -16,9 +16,11 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
+      imagePullSecrets:
+        - name: zot-registry-credentials
       containers:
         - name: haproxy
-          image: haproxy:3.0-alpine
+          image: zot.zot.svc.cluster.local:5000/platform/haproxy:3.0-alpine
           securityContext:
             runAsUser: 0
             capabilities:

@@ -1,8 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
   "customManagers": [
     {
       "customType": "regex",
@@ -14,13 +12,31 @@
       "registryUrlTemplate": "oci://{{registryUrl}}"
     }
   ],
-  "kubernetes": {
-    "fileMatch": ["\\.yaml$"]
-  },
-  "helmv3": {
-    "fileMatch": ["helm-values\\.yaml$"]
-  },
-  "argocd": {
-    "fileMatch": ["argocd\\.yaml$"]
-  }
+  "packageRules": [
+    {
+      "description": "HAProxy -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/platform/haproxy"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "library/haproxy"
+    },
+    {
+      "description": "Buildah -> Quay.io에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/platform/buildah"],
+      "registryUrls": ["https://quay.io"],
+      "replacementName": "buildah/stable"
+    },
+    {
+      "description": "Alpine/git -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/platform/alpine-git"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "alpine/git"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "automerge": false
+    }
+  ],
+  "kubernetes": {"fileMatch": ["\\.yaml$"]},
+  "helmv3": {"fileMatch": ["helm-values\\.yaml$"]},
+  "argocd": {"fileMatch": ["argocd\\.yaml$"]}
 }

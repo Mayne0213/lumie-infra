@@ -33,7 +33,7 @@ spec:
       description: The precise URL that was fetched by this Task.
   steps:
     - name: clone
-      image: alpine/git:latest
+      image: zot.zot.svc.cluster.local:5000/platform/alpine-git:v2.47.1
       script: |
         #!/bin/sh
         set -ex
