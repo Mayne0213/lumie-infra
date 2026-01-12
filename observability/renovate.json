@@ -1,8 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
   "customManagers": [
     {
       "customType": "regex",
@@ -14,13 +12,31 @@
       "registryUrlTemplate": "oci://{{registryUrl}}"
     }
   ],
-  "kubernetes": {
-    "fileMatch": ["\\.yaml$"]
-  },
-  "helmv3": {
-    "fileMatch": ["helm-values\\.yaml$"]
-  },
-  "argocd": {
-    "fileMatch": ["argocd\\.yaml$"]
-  }
+  "packageRules": [
+    {
+      "description": "Thanos -> Quay.io에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/observability/thanos"],
+      "registryUrls": ["https://quay.io"],
+      "replacementName": "thanos/thanos"
+    },
+    {
+      "description": "OpenTelemetry -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/observability/opentelemetry-collector-contrib"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "otel/opentelemetry-collector-contrib"
+    },
+    {
+      "description": "Karma -> GHCR에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/observability/karma"],
+      "registryUrls": ["https://ghcr.io"],
+      "replacementName": "prymitive/karma"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "automerge": false
+    }
+  ],
+  "kubernetes": {"fileMatch": ["\\.yaml$"]},
+  "helmv3": {"fileMatch": ["helm-values\\.yaml$"]},
+  "argocd": {"fileMatch": ["argocd\\.yaml$"]}
 }

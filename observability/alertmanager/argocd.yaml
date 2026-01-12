@@ -62,8 +62,11 @@ spec:
         fullnameOverride: karma
 
         image:
-          repository: ghcr.io/prymitive/karma
+          repository: zot.zot.svc.cluster.local:5000/observability/karma
           tag: v0.122
+
+        imagePullSecrets:
+          - name: zot-registry-credentials
 
         replicaCount: 1
 

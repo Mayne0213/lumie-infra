@@ -101,7 +101,7 @@ prometheus:
 
     # Thanos Sidecar configuration (query only, no S3 upload)
     thanos:
-      image: quay.io/thanos/thanos:v0.37.2
+      image: zot.zot.svc.cluster.local:5000/observability/thanos:v0.37.2
       # objectStorageConfig removed - no upload to MinIO, local storage only
 
     # Use emptyDir instead of PVC (data is temporary, Thanos handles long-term)

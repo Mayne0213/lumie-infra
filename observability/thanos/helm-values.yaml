@@ -12,11 +12,14 @@ global:
   security:
     allowInsecureImages: true
 
-# Use quay.io image to avoid Docker Hub rate limits
+# Use internal Zot registry
 image:
-  registry: quay.io
-  repository: thanos/thanos
+  registry: zot.zot.svc.cluster.local:5000
+  repository: observability/thanos
   tag: v0.37.2
+
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 # Object storage configuration (MinIO S3)
 # Uses secret created by ExternalSecret
