@@ -45,16 +45,16 @@ spec:
           default: true
         proxyProtocol:
           trustedIPs:
-            - 10.42.0.0/16
-            - 10.43.0.0/16
+            - 10.0.0.0/8
+            - 127.0.0.1/32
       websecure:
         port: 443
         expose:
           default: true
         proxyProtocol:
           trustedIPs:
-            - 10.42.0.0/16
-            - 10.43.0.0/16
+            - 10.0.0.0/8
+            - 127.0.0.1/32
       traefik:
         expose:
           default: true
