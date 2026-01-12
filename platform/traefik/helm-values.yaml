@@ -39,6 +39,19 @@ spec:
         expose:
           default: true
 
+    # Access logs for debugging
+    logs:
+      access:
+        enabled: true
+        format: json
+        fields:
+          headers:
+            defaultMode: keep
+            names:
+              X-Forwarded-For: keep
+              X-Real-IP: keep
+              User-Agent: keep
+
     # Prometheus metrics
     metrics:
       prometheus:
