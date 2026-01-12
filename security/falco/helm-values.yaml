@@ -6,11 +6,14 @@ driver:
   enabled: true
   kind: modern_ebpf  # Uses modern eBPF features, no driver compilation needed
 
-# Image configuration - use Falco 0.40.0 for kernel 6.14 support
+# Image configuration - use internal Zot registry
 image:
-  registry: docker.io
-  repository: falcosecurity/falco
+  registry: zot.zot.svc.cluster.local:5000
+  repository: security/falco
   tag: 0.40.0
+
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 # Resource settings (no CPU limit for stability)
 resources:

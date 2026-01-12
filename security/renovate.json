@@ -1,8 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
   "customManagers": [
     {
       "customType": "regex",
@@ -14,13 +12,19 @@
       "registryUrlTemplate": "oci://{{registryUrl}}"
     }
   ],
-  "kubernetes": {
-    "fileMatch": ["\\.yaml$"]
-  },
-  "helmv3": {
-    "fileMatch": ["helm-values\\.yaml$"]
-  },
-  "argocd": {
-    "fileMatch": ["argocd\\.yaml$"]
-  }
+  "packageRules": [
+    {
+      "description": "Falco -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/security/falco"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "falcosecurity/falco"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "automerge": false
+    }
+  ],
+  "kubernetes": {"fileMatch": ["\\.yaml$"]},
+  "helmv3": {"fileMatch": ["helm-values\\.yaml$"]},
+  "argocd": {"fileMatch": ["argocd\\.yaml$"]}
 }
