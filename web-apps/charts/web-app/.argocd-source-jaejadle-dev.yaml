@@ -4,5 +4,5 @@ helm:
     value: zot0213.kro.kr/jaejadle-dev
     forcestring: true
   - name: image.tag
-    value: latest@sha256:b222570d45aafa375730d584f5265f4b255218e1c290acd5b56fdf61744a5027
+    value: latest@sha256:b44b27249af5be34797b8ed73c158812aaf881eb923a04d2cba0c82d56e3c10b
     forcestring: true
