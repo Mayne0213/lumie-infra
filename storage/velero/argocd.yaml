@@ -65,9 +65,12 @@ spec:
     helm:
       values: |
         image:
-          repository: otwld/velero-ui
-          tag: latest
+          repository: zot.zot.svc.cluster.local:5000/storage/velero-ui
+          tag: v0.10.1
           pullPolicy: IfNotPresent
+
+        imagePullSecrets:
+          - name: zot-registry-credentials
 
         replicaCount: 1
 

@@ -9,7 +9,7 @@ controllers:
     containers:
       main:
         image:
-          repository: sosedoff/pgweb
+          repository: zot.zot.svc.cluster.local:5000/storage/pgweb
           tag: "0.17.0"
         args:
           - "--bind=0.0.0.0"
@@ -46,6 +46,8 @@ controllers:
               periodSeconds: 5
     # Affinity - Soft Anti-Affinity to spread pods across nodes
     pod:
+      imagePullSecrets:
+        - name: zot-registry-credentials
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

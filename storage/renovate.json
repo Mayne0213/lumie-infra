@@ -1,8 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
   "customManagers": [
     {
       "customType": "regex",
@@ -14,13 +12,55 @@
       "registryUrlTemplate": "oci://{{registryUrl}}"
     }
   ],
-  "kubernetes": {
-    "fileMatch": ["\\.yaml$"]
-  },
-  "helmv3": {
-    "fileMatch": ["helm-values\\.yaml$"]
-  },
-  "argocd": {
-    "fileMatch": ["argocd\\.yaml$"]
-  }
+  "packageRules": [
+    {
+      "description": "MinIO -> Quay.io에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/storage/minio"],
+      "registryUrls": ["https://quay.io"],
+      "replacementName": "minio/minio"
+    },
+    {
+      "description": "CNPG -> GHCR에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/storage/cnpg"],
+      "registryUrls": ["https://ghcr.io"],
+      "replacementName": "cloudnative-pg/cloudnative-pg"
+    },
+    {
+      "description": "PgWeb -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/storage/pgweb"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "sosedoff/pgweb"
+    },
+    {
+      "description": "Velero -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/storage/velero"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "velero/velero"
+    },
+    {
+      "description": "Velero Plugin -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/storage/velero-plugin-aws"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "velero/velero-plugin-for-aws"
+    },
+    {
+      "description": "Velero UI -> Docker Hub에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/storage/velero-ui"],
+      "registryUrls": ["https://index.docker.io"],
+      "replacementName": "otwld/velero-ui"
+    },
+    {
+      "description": "MinIO Console -> GHCR에서 버전 체크",
+      "matchPackageNames": ["zot.zot.svc.cluster.local:5000/storage/minio-console"],
+      "registryUrls": ["https://ghcr.io"],
+      "replacementName": "georgmangold/console"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "automerge": false
+    }
+  ],
+  "kubernetes": {"fileMatch": ["\\.yaml$"]},
+  "helmv3": {"fileMatch": ["helm-values\\.yaml$"]},
+  "argocd": {"fileMatch": ["argocd\\.yaml$"]}
 }

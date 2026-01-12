@@ -4,11 +4,15 @@
 # Skip CRD upgrade job (avoids kubectl image dependency)
 upgradeCRDs: false
 
-# Image configuration
+# Image configuration (mirrored via Zot - internal cluster address)
 image:
-  repository: velero/velero
+  repository: zot.zot.svc.cluster.local:5000/storage/velero
   tag: v1.17.1
   pullPolicy: IfNotPresent
+
+# Pull from internal Zot registry
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 # Replica count (Velero does not support multiple replicas)
 replicaCount: 1
@@ -23,9 +27,9 @@ resources:
 
 # Init containers for plugins
 initContainers:
-  # AWS plugin for S3-compatible storage (Minio)
+  # AWS plugin for S3-compatible storage (Minio) - mirrored via Zot
   - name: velero-plugin-for-aws
-    image: velero/velero-plugin-for-aws:v1.13.1
+    image: zot.zot.svc.cluster.local:5000/storage/velero-plugin-aws:v1.13.1
     volumeMounts:
       - mountPath: /target
         name: plugins
