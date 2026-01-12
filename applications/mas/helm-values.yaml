@@ -32,16 +32,36 @@ controllers:
               secretKeyRef:
                 name: mas-api-keys
                 key: anthropic-api-key
+          DATABASE_URL:
+            valueFrom:
+              secretKeyRef:
+                name: mas-db-url
+                key: database-url
+          CHAINLIT_DATABASE_URL:
+            valueFrom:
+              secretKeyRef:
+                name: mas-db-url
+                key: database-url
+          POSTGRES_HOST:
+            valueFrom:
+              secretKeyRef:
+                name: mas-db-url
+                key: host
+          POSTGRES_PORT:
+            valueFrom:
+              secretKeyRef:
+                name: mas-db-url
+                key: port
+          POSTGRES_USER:
+            valueFrom:
+              secretKeyRef:
+                name: mas-db-url
+                key: user
           POSTGRES_PASSWORD:
             valueFrom:
               secretKeyRef:
-                name: postgresql-password
+                name: mas-db-url
                 key: password
-          CHAINLIT_DATABASE_URL: "postgresql://bluemayne:$(POSTGRES_PASSWORD)@postgresql-rw.postgresql.svc.cluster.local:5432/mas"
-          DATABASE_URL: "postgresql://bluemayne:$(POSTGRES_PASSWORD)@postgresql-rw.postgresql.svc.cluster.local:5432/mas"
-          POSTGRES_HOST: "postgresql-rw.postgresql.svc.cluster.local"
-          POSTGRES_PORT: "5432"
-          POSTGRES_USER: "bluemayne"
           REDIS_URL: "redis://redis:6379/0"
         # Resource settings (no CPU limit for stability)
         resources:
