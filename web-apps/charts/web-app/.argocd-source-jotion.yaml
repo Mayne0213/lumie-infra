@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.name
+    value: zot0213.kro.kr/web-apps/jotion
+    forcestring: true
+  - name: image.tag
+    value: latest@sha256:6595dc502a853fe9bbb90db8903baf2d9a8995b0f7c3a1619a7a52c0db9bae91
+    forcestring: true
