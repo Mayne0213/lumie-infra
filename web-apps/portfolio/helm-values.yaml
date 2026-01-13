@@ -3,12 +3,13 @@
 name: portfolio
 
 image:
-  registry: ghcr.io
-  repository: mayne0213/portfolio
-  tag: latest
+  registry: zot0213.kro.kr
+  repository: web-apps/portfolio
+  tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 replicaCount: 1
 containerPort: 3000

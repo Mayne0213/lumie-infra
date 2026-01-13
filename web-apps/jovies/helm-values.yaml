@@ -4,7 +4,7 @@ name: jovies
 
 image:
   registry: zot0213.kro.kr
-  repository: jovies
+  repository: web-apps/jovies
   tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
 

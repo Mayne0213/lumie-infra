@@ -5,6 +5,15 @@ metadata:
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: joossam=zot0213.kro.kr/web-apps/joossam:latest
+    argocd-image-updater.argoproj.io/joossam.update-strategy: digest
+    argocd-image-updater.argoproj.io/joossam.platforms: linux/arm64/v8
+    argocd-image-updater.argoproj.io/joossam.pull-secret: pullsecret:argocd/zot-registry-credentials
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitea-creds
+    argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/joossam.helm.image-tag: image.tag
+    argocd-image-updater.argoproj.io/git-commit-message: "CHORE(app): update {{ .AppName }} image"
 spec:
   project: default
   sources:
@@ -38,4 +47,5 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
+        zot-registry: 'enabled'
   revisionHistoryLimit: 10

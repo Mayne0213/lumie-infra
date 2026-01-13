@@ -4,7 +4,7 @@ name: jaejadle-dev
 
 image:
   registry: zot0213.kro.kr
-  repository: jaejadle-dev
+  repository: web-apps/jaejadle-dev
   tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
 

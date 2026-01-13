@@ -4,7 +4,7 @@ name: joossam-dev
 
 image:
   registry: zot0213.kro.kr
-  repository: joossam-dev
+  repository: web-apps/joossam-dev
   tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
 

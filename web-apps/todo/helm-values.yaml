@@ -3,13 +3,13 @@
 name: todo
 
 image:
-  registry: ghcr.io
-  repository: mayne0213/todo
-  tag: latest
+  registry: zot0213.kro.kr
+  repository: web-apps/todo
+  tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
 
-# No imagePullSecrets needed (public or already configured)
-imagePullSecrets: []
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 replicaCount: 1
 containerPort: 3000
