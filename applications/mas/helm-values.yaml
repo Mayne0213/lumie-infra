@@ -4,7 +4,7 @@
 defaultPodOptions:
   hostPID: true
   imagePullSecrets:
-    - name: ghcr-secret
+    - name: zot-registry-credentials
 
 serviceAccount:
   create: false
@@ -21,8 +21,8 @@ controllers:
     containers:
       main:
         image:
-          repository: ghcr.io/mayne0213/mas
-          tag: latest
+          repository: zot0213.kro.kr/web-apps/mas
+          tag: latest  # Updated by ArgoCD Image Updater
           pullPolicy: Always
         securityContext:
           privileged: true

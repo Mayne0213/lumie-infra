@@ -4,7 +4,7 @@ name: docusaurus
 
 image:
   registry: zot0213.kro.kr
-  repository: docusaurus
+  repository: web-apps/docusaurus
   tag: latest  # Updated by ArgoCD Image Updater
   pullPolicy: Always
 

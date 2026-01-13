@@ -5,6 +5,15 @@ metadata:
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: mas=zot0213.kro.kr/web-apps/mas:latest
+    argocd-image-updater.argoproj.io/mas.update-strategy: digest
+    argocd-image-updater.argoproj.io/mas.platforms: linux/arm64/v8
+    argocd-image-updater.argoproj.io/mas.pull-secret: pullsecret:argocd/zot-registry-credentials
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitea-creds
+    argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/mas.helm.image-tag: controllers.main.containers.main.image.tag
+    argocd-image-updater.argoproj.io/git-commit-message: "CHORE(app): update {{ .AppName }} image"
 spec:
   project: default
   sources:
@@ -38,3 +47,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
+        zot-registry: 'enabled'
