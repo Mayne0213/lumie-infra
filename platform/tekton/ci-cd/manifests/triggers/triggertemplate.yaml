@@ -97,7 +97,7 @@ spec:
           - name: app-name
             value: $(tt.params.repo-name)
           - name: context-dir
-            value: ./docusaurus
+            value: .
           - name: image-prefix
             value: web-apps/
         workspaces:
