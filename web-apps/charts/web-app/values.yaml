@@ -5,14 +5,14 @@ name: ""
 
 # Image configuration
 image:
-  registry: ghcr.io
-  repository: mayne0213/app
+  registry: zot0213.kro.kr
+  repository: web-apps/app
   tag: latest
   pullPolicy: Always
 
 # Image pull secrets
 imagePullSecrets:
-  - name: ghcr-secret
+  - name: zot-registry-credentials
 
 # Replicas
 replicaCount: 1
