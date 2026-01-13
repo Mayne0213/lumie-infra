@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.name
+    value: zot0213.kro.kr/web-apps/jaejadle
+    forcestring: true
+  - name: image.tag
+    value: latest@sha256:9aa7ec7f5d0b63bc7ec4c81f348cf79bb8d474fe2ec80e2977b3619895837485
+    forcestring: true
