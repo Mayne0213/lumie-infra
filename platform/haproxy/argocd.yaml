@@ -4,13 +4,19 @@ metadata:
   name: haproxy
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  source:
-    repoURL: https://github0213.com/K3S-HOME/platform.git
+  sources:
+  - repoURL: https://haproxytech.github.io/helm-charts
+    chart: haproxy
+    targetRevision: 1.27.0
+    helm:
+      valueFiles:
+      - $values/haproxy/helm-values.yaml
+  - repoURL: https://github0213.com/K3S-HOME/platform.git
     targetRevision: main
-    path: haproxy
+    ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: haproxy
@@ -20,9 +26,9 @@ spec:
       selfHeal: true
       allowEmpty: false
     syncOptions:
-      - CreateNamespace=true
-      - PrunePropagationPolicy=foreground
-      - PruneLast=true
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
     retry:
       limit: 5
       backoff:
