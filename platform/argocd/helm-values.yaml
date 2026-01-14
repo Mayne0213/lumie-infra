@@ -1,0 +1,172 @@
+# ArgoCD Helm Chart Values
+# Chart: https://argoproj.github.io/argo-helm (argo-cd)
+# All custom settings from current cluster deployment
+
+# =============================================================================
+# GLOBAL SETTINGS
+# =============================================================================
+global:
+  # High priority for critical GitOps infrastructure
+  priorityClassName: high-priority
+
+# =============================================================================
+# CONFIGS (ConfigMaps)
+# =============================================================================
+configs:
+  # argocd-cm
+  cm:
+    # Authelia handles authentication, so allow anonymous access
+    users.anonymous.enabled: "true"
+    # Disable polling - webhook only
+    timeout.reconciliation: "0"
+    # Ignore resource status field differences
+    resource.compareoptions: |
+      ignoreResourceStatusField: all
+    # Custom health check for Ingress (ADDRESS not required with HAProxy)
+    resource.customizations.health.networking.k8s.io_Ingress: |
+      hs = {}
+      hs.status = "Healthy"
+      return hs
+
+  # argocd-cmd-params-cm
+  params:
+    # Ingress handles TLS, so run in insecure mode
+    server.insecure: "true"
+    # Disable periodic app resync (webhook + self-heal only)
+    controller.self.heal.timeout.seconds: "5"
+
+  # argocd-rbac-cm
+  rbac:
+    # Anonymous users get admin role (Authelia handles authentication)
+    policy.csv: |
+      g, , role:admin
+    policy.default: role:admin
+
+# =============================================================================
+# APPLICATION CONTROLLER (StatefulSet)
+# =============================================================================
+controller:
+  # Metrics for Prometheus
+  metrics:
+    enabled: true
+    service:
+      enabled: true
+      servicePort: 8082
+    serviceMonitor:
+      enabled: true
+
+  # Memory optimization environment variables
+  env:
+    - name: GOMEMLIMIT
+      value: "800MiB"
+    - name: GOGC
+      value: "50"
+
+  # Disable periodic app resync
+  args:
+    appResyncPeriod: "0"
+
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 22m
+      memory: 1388Mi
+    limits:
+      memory: 1861Mi
+
+# =============================================================================
+# API SERVER (Deployment)
+# =============================================================================
+server:
+  # Metrics for Prometheus
+  metrics:
+    enabled: true
+    service:
+      enabled: true
+      servicePort: 8083
+    serviceMonitor:
+      enabled: true
+
+  # Main Ingress with Authelia middleware
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    hostname: argocd0213.kro.kr
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
+    tls: true
+
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 15m
+      memory: 163Mi
+    limits:
+      memory: 218Mi
+
+# =============================================================================
+# REPO SERVER (Deployment)
+# =============================================================================
+repoServer:
+  # Metrics for Prometheus
+  metrics:
+    enabled: true
+    service:
+      enabled: true
+      servicePort: 8084
+    serviceMonitor:
+      enabled: true
+
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 15m
+      memory: 225Mi
+    limits:
+      memory: 1310Mi
+
+  # Probe settings (increase timeout for stability under load)
+  livenessProbe:
+    enabled: true
+    timeoutSeconds: 5
+  readinessProbe:
+    enabled: true
+    timeoutSeconds: 5
+
+# =============================================================================
+# REDIS (Deployment)
+# =============================================================================
+redis:
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 15m
+      memory: 100Mi
+    limits:
+      memory: 100Mi
+
+# =============================================================================
+# DEX (OIDC) - Disabled (using Authelia instead)
+# =============================================================================
+dex:
+  enabled: false
+
+# =============================================================================
+# APPLICATIONSET CONTROLLER - Disabled (not used)
+# =============================================================================
+applicationSet:
+  enabled: false
+
+# =============================================================================
+# NOTIFICATIONS CONTROLLER - Disabled (not used)
+# =============================================================================
+notifications:
+  enabled: false
+
+# =============================================================================
+# CRDs
+# =============================================================================
+crds:
+  install: true
+  keep: true

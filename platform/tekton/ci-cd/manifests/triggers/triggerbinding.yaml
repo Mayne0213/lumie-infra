@@ -1,0 +1,17 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: gitea-push-binding
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: git-url
+      value: $(body.repository.clone_url)
+    - name: git-revision
+      value: $(body.after)
+    - name: git-branch
+      value: $(extensions.branch_name)
+    - name: repo-name
+      value: $(body.repository.name)
+    - name: repo-full-name
+      value: $(body.repository.full_name)

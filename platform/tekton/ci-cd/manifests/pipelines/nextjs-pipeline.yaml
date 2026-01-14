@@ -1,0 +1,71 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: nextjs-build-deploy
+  namespace: tekton-pipelines
+spec:
+  description: Build Next.js app and push to Zot registry
+  params:
+    - name: git-url
+      description: Git repository URL
+      type: string
+    - name: git-revision
+      description: Git revision (branch/tag/sha)
+      type: string
+      default: main
+    - name: app-name
+      description: Application name
+      type: string
+    - name: context-dir
+      description: Docker build context directory
+      type: string
+      default: ./nextjs
+    - name: build-args
+      description: Build arguments (key=value format, one per line)
+      type: string
+      default: ""
+    - name: image-prefix
+      description: Image path prefix (e.g., web-apps/)
+      type: string
+      default: ""
+  workspaces:
+    - name: shared-workspace
+      description: Shared workspace for all tasks
+    - name: docker-credentials
+      description: Docker registry credentials
+  tasks:
+    - name: clone
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+        - name: deleteExisting
+          value: "true"
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+
+    - name: build-push
+      taskRef:
+        name: buildah-build-push
+      runAfter:
+        - clone
+      params:
+        - name: IMAGE
+          value: zot0213.kro.kr/$(params.image-prefix)$(params.app-name)
+        - name: TAG
+          value: $(params.git-revision)
+        - name: DOCKERFILE
+          value: ./Dockerfile
+        - name: CONTEXT
+          value: $(params.context-dir)
+        - name: BUILD_ARGS
+          value: $(params.build-args)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: dockerconfig
+          workspace: docker-credentials

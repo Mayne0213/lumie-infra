@@ -1,0 +1,70 @@
+# Traefik Middleware for GitHub redirect
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-to-github
+  namespace: gitea
+spec:
+  redirectRegex:
+    regex: ".*"
+    replacement: "https://github.com/mayne0213"
+    permanent: true
+---
+# IngressRoute for HTTPS
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: gitea-redirect-https
+  namespace: gitea
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`gitea0213.kro.kr`) || Host(`www.gitea0213.kro.kr`)
+      kind: Rule
+      middlewares:
+        - name: redirect-to-github
+      services:
+        - name: noop@internal
+          kind: TraefikService
+  tls:
+    secretName: gitea-tls
+    domains:
+      - main: gitea0213.kro.kr
+        sans:
+          - www.gitea0213.kro.kr
+---
+# IngressRoute for HTTP (redirect to HTTPS first, then to GitHub)
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: gitea-redirect-http
+  namespace: gitea
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`gitea0213.kro.kr`) || Host(`www.gitea0213.kro.kr`)
+      kind: Rule
+      middlewares:
+        - name: redirect-to-github
+      services:
+        - name: noop@internal
+          kind: TraefikService
+---
+# Certificate for TLS
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gitea-certificate
+  namespace: gitea
+spec:
+  secretName: gitea-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - gitea0213.kro.kr
+    - www.gitea0213.kro.kr
