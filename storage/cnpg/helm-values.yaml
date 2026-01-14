@@ -1,0 +1,98 @@
+# CloudNativePG Operator Helm Values
+# Chart: https://github.com/cloudnative-pg/charts
+
+# Operator image (mirrored via Zot - internal cluster address)
+image:
+  repository: zot.zot.svc.cluster.local:5000/storage/cnpg
+  tag: 1.25.1
+  pullPolicy: IfNotPresent
+
+# Pull from internal Zot registry
+imagePullSecrets:
+  - name: zot-registry-credentials
+
+# Replica count for operator
+replicaCount: 1
+
+# Resource settings (no CPU limit for stability)
+resources:
+  requests:
+    cpu: 15m
+    memory: 100Mi
+  limits:
+    memory: 100Mi
+
+# RBAC
+rbac:
+  create: true
+
+# Service Account
+serviceAccount:
+  create: true
+  name: cnpg-operator
+
+# Monitoring
+monitoring:
+  # Enable Prometheus PodMonitor
+  podMonitorEnabled: true
+
+  # Grafana Dashboard auto-creation disabled due to ConfigMap size limit
+  # Dashboard can be manually imported from Grafana.com (ID: 20417)
+  # https://grafana.com/grafana/dashboards/20417-cloudnativepg/
+  grafanaDashboard:
+    create: false
+
+# Webhook configuration
+webhook:
+  port: 9443
+  mutating:
+    create: true
+  validating:
+    create: true
+
+# Operator configuration
+config:
+  # Data checksums for PostgreSQL
+  data:
+    INHERITED_ANNOTATIONS: "cert-manager.io/*, argocd.argoproj.io/*"
+    INHERITED_LABELS: "app.kubernetes.io/*"
+
+    # Monitoring queries interval
+    MONITORING_QUERIES_CONFIGMAP: ""
+    MONITORING_QUERIES_SECRET: ""
+
+# CRD configuration
+crds:
+  create: true
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# High priority for critical database operator
+priorityClassName: high-priority
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudnative-pg
+          topologyKey: kubernetes.io/hostname
+
+# Security context
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 10001
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault

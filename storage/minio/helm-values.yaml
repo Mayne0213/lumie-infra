@@ -1,0 +1,127 @@
+# MinIO Helm Values
+# Chart: https://github.com/minio/minio/tree/master/helm/minio
+# Mode: Distributed with Erasure Coding (4 drives total)
+#
+# Disk allocation:
+# - master node: 2 x 50GB (minio-data1, minio-data2)
+# - worker-1: 1 x 50GB (minio-data1)
+# - worker-2: 1 x 50GB (minio-data1)
+# Total: 4 drives for erasure coding
+
+# MinIO image (mirrored via Zot - internal cluster address)
+image:
+  repository: zot.zot.svc.cluster.local:5000/storage/minio
+  tag: RELEASE.2025-09-07T16-13-09Z
+  pullPolicy: IfNotPresent
+
+# Pull from internal Zot registry
+imagePullSecrets:
+  - name: zot-registry-credentials
+
+# 4 replicas, 1 drive per replica = 4 drives total
+replicas: 4
+
+# Number of drives per node (each pod uses 1 drive)
+drivesPerNode: 1
+
+# Persistence - using dedicated 50GB disks
+persistence:
+  enabled: true
+  size: 45Gi
+  storageClass: minio-local
+
+# Root credentials from SealedSecret
+# Secret contains: root-user and root-password keys
+existingSecret: minio-root-password
+rootUserSecretKey: root-user
+rootPasswordSecretKey: root-password
+
+# Resource settings (no CPU limit for stability)
+resources:
+  requests:
+    cpu: 48m
+    memory: 126Mi
+  limits:
+    memory: 183Mi
+
+# Service
+service:
+  type: ClusterIP
+  port: 9000
+
+# Console service disabled - using custom console-deployment.yaml instead
+consoleService:
+  enabled: false
+
+# Environment variables
+environment:
+  MINIO_API_CORS_ALLOW_ORIGIN: "*"
+  MINIO_BROWSER_REDIRECT_URL: "https://minio.minio0213.kro.kr"
+  MINIO_PROMETHEUS_AUTH_TYPE: "public"
+  # CPU optimization - disable unused workers
+  MINIO_API_REPLICATION_MAX_WORKERS: "1"
+  MINIO_API_REPLICATION_MAX_LRG_WORKERS: "1"
+  MINIO_API_TRANSITION_WORKERS: "1"
+  MINIO_SCANNER_SPEED: "slowest"
+
+# API Ingress (S3 endpoint)
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - s3.minio0213.kro.kr
+  tls:
+    - secretName: minio-api-tls
+      hosts:
+        - s3.minio0213.kro.kr
+
+# Console Ingress disabled (using custom console-deployment in manifests/)
+consoleIngress:
+  enabled: false
+
+# Disable Kubernetes service links to prevent MINIO_SERVICE_PORT conflict
+# This prevents Kubernetes from injecting service-related environment variables
+enableServiceLinks: false
+
+# Pod annotations for Velero backup exclusion
+# Exclude PVC data from backup (prevent circular backup of velero-backups bucket)
+# MinIO resources (StatefulSet, Service, etc.) will still be backed up
+podAnnotations:
+  backup.velero.io/backup-volumes-excludes: export
+
+# Use soft anti-affinity since worker-1 needs 2 pods (has 2 disks)
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - minio
+          topologyKey: kubernetes.io/hostname
+
+# High priority for critical storage infrastructure
+priorityClassName: high-priority
+
+# Prometheus metrics
+metrics:
+  serviceMonitor:
+    enabled: true
+    includeNode: true
+    additionalLabels:
+      release: prometheus
+    interval: 30s
+    scrapeTimeout: 10s
+
+# Disable post-install job by setting all triggers to empty
+# Job is created if any of: buckets, users, policies, customCommands, svcaccts exist
+buckets: []
+users: []
+policies: []
+customCommands: []
+svcaccts: []
