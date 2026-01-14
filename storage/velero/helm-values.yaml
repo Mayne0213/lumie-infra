@@ -1,0 +1,110 @@
+# Velero Helm Values
+# Chart: https://github.com/vmware-tanzu/helm-charts/tree/main/charts/velero
+
+# Skip CRD upgrade job (avoids kubectl image dependency)
+upgradeCRDs: false
+
+# Image configuration (mirrored via Zot - internal cluster address)
+image:
+  repository: zot.zot.svc.cluster.local:5000/storage/velero
+  tag: v1.17.1
+  pullPolicy: IfNotPresent
+
+# Pull from internal Zot registry
+imagePullSecrets:
+  - name: zot-registry-credentials
+
+# Replica count (Velero does not support multiple replicas)
+replicaCount: 1
+
+# Resource settings (no CPU limit for stability)
+resources:
+  requests:
+    cpu: 10m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+# Init containers for plugins
+initContainers:
+  # AWS plugin for S3-compatible storage (Minio) - mirrored via Zot
+  - name: velero-plugin-for-aws
+    image: zot.zot.svc.cluster.local:5000/storage/velero-plugin-aws:v1.13.1
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+# Deploy node-agent for file-system backups
+deployNodeAgent: true
+
+# Node agent configuration
+nodeAgent:
+  podVolumePath: /var/lib/kubelet/pods
+  privileged: false
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 15m
+      memory: 100Mi
+    limits:
+      memory: 100Mi
+# Configuration for backup storage
+configuration:
+  # Use existing BackupStorageLocation and VolumeSnapshotLocation
+  backupStorageLocation:
+    - name: default
+      provider: aws
+      bucket: velero-backups
+      config:
+        region: minio
+        s3ForcePathStyle: "true"
+        s3Url: http://minio.minio.svc.cluster.local:9000
+        publicUrl: https://s3.minio0213.kro.kr
+
+  volumeSnapshotLocation:
+    - name: default
+      provider: aws
+      config:
+        region: minio
+
+  # Default backup retention
+  defaultBackupTTL: 168h  # 7 days (reduced for storage efficiency)
+
+  # Enable file-system backup by default for all PVs
+  defaultVolumesToFsBackup: true
+
+  # Restore only mode (for disaster recovery)
+  restoreOnlyMode: false
+
+  # Disable BackupStorageLocation validation (user only uses manual backups)
+  # This prevents status updates that trigger ArgoCD refreshes
+  storeValidationFrequency: 0s
+
+  # Disable backup-sync (user only uses manual backups)
+  backupSyncPeriod: 0s
+
+# Credentials for S3 access (from Vault via External Secrets)
+credentials:
+  useSecret: true
+  existingSecret: velero-s3-credentials
+  secretContents: {}
+
+# Metrics
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+  prometheusRule:
+    enabled: false
+
+# RBAC
+serviceAccount:
+  server:
+    create: true
+    name: velero
+
+rbac:
+  create: true
+
+# Affinity (disabled - single replica on master)
+affinity: {}

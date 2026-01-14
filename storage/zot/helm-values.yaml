@@ -1,0 +1,156 @@
+# Zot Registry using bjw-s/app-template
+# ARM64 container registry with S3 (MinIO) storage backend
+
+controllers:
+  zot:
+    type: deployment
+    replicas: 1
+    strategy: RollingUpdate
+    containers:
+      zot:
+        image:
+          repository: ghcr.io/project-zot/zot-linux-arm64
+          tag: v2.1.13
+          pullPolicy: IfNotPresent
+        envFrom:
+        - secretRef:
+            name: minio-s3-credentials
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 5000
+              initialDelaySeconds: 5
+              periodSeconds: 10
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 5000
+              initialDelaySeconds: 5
+              periodSeconds: 10
+        # Resource settings (no CPU limit for stability)
+        resources:
+          requests:
+            cpu: 15m
+            memory: 200Mi
+          limits:
+            memory: 512Mi
+service:
+  zot:
+    controller: zot
+    ports:
+      http:
+        port: 5000
+
+ingress:
+  zot:
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+    - host: zot0213.kro.kr
+      paths:
+      - path: /
+        pathType: Prefix
+        service:
+          identifier: zot
+          port: http
+    tls:
+    - secretName: zot-tls
+      hosts:
+      - zot0213.kro.kr
+
+persistence:
+  config:
+    type: configMap
+    name: zot-config
+    globalMounts:
+    - path: /etc/zot/config.json
+      subPath: config.json
+      readOnly: true
+  htpasswd:
+    type: secret
+    name: zot-htpasswd
+    globalMounts:
+    - path: /etc/zot/htpasswd
+      subPath: htpasswd
+      readOnly: true
+  oidc-credentials:
+    type: secret
+    name: zot-oidc-credentials
+    globalMounts:
+    - path: /etc/zot/oidc-credentials.json
+      subPath: credentials.json
+      readOnly: true
+  session-keys:
+    type: secret
+    name: zot-session-keys
+    globalMounts:
+    - path: /etc/zot/session-keys.json
+      subPath: session-keys.json
+      readOnly: true
+
+configMaps:
+  config:
+    data:
+      config.json: |
+        {
+          "storage": {
+            "rootDirectory": "/tmp/zot",
+            "dedupe": false,
+            "gc": true,
+            "gcDelay": "1h",
+            "gcInterval": "24h",
+            "storageDriver": {
+              "name": "s3",
+              "regionendpoint": "http://minio.minio.svc.cluster.local:9000",
+              "region": "us-east-1",
+              "bucket": "zot",
+              "secure": false,
+              "skipverify": true
+            }
+          },
+          "http": {
+            "address": "0.0.0.0",
+            "port": "5000",
+            "externalUrl": "https://zot0213.kro.kr",
+            "auth": {
+              "htpasswd": {
+                "path": "/etc/zot/htpasswd"
+              },
+              "openid": {
+                "providers": {
+                  "oidc": {
+                    "name": "Authelia",
+                    "issuer": "https://auth0213.kro.kr",
+                    "clientid": "zot",
+                    "scopes": ["openid", "profile", "email"],
+                    "credentialsFile": "/etc/zot/oidc-credentials.json"
+                  }
+                }
+              },
+              "sessionKeysFile": "/etc/zot/session-keys.json"
+            }
+          },
+          "log": {
+            "level": "info"
+          },
+          "extensions": {
+            "metrics": {
+              "enable": true,
+              "prometheus": {
+                "path": "/metrics"
+              }
+            },
+            "search": {
+              "enable": true
+            },
+            "ui": {
+              "enable": true
+            }
+          }
+        }

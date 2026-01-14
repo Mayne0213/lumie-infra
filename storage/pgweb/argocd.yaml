@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pgweb
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  - repoURL: https://bjw-s-labs.github.io/helm-charts
+    chart: app-template
+    targetRevision: 3.6.1
+    helm:
+      valueFiles:
+      - $values/pgweb/helm-values.yaml
+  - repoURL: https://github0213.com/K3S-HOME/storage.git
+    targetRevision: main
+    ref: values
+  - repoURL: https://github0213.com/K3S-HOME/storage.git
+    targetRevision: main
+    path: pgweb
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pgweb
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'

@@ -1,0 +1,142 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: velero
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  # Ignore BackupStorageLocation status changes (updated every 24s by velero)
+  ignoreDifferences:
+  - group: velero.io
+    kind: BackupStorageLocation
+    jsonPointers:
+    - /status
+  sources:
+  - repoURL: https://vmware-tanzu.github.io/helm-charts
+    chart: velero
+    targetRevision: 11.2.0
+    helm:
+      valueFiles:
+      - $values/velero/helm-values.yaml
+  - repoURL: https://github0213.com/K3S-HOME/storage.git
+    targetRevision: main
+    ref: values
+  - repoURL: https://github0213.com/K3S-HOME/storage.git
+    targetRevision: main
+    path: velero
+    kustomize: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: velero
+  syncPolicy:
+    automated:
+      prune: false  # Disabled: Backup/Restore/ServerStatusRequest are dynamic
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    - RespectIgnoreDifferences=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+  revisionHistoryLimit: 10
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: velero-ui
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://helm.otwld.com/
+    chart: velero-ui
+    targetRevision: '*'
+    helm:
+      values: |
+        image:
+          repository: zot.zot.svc.cluster.local:5000/storage/velero-ui
+          tag: v0.10.1
+          pullPolicy: IfNotPresent
+
+        imagePullSecrets:
+          - name: zot-registry-credentials
+
+        replicaCount: 1
+
+        resources:
+          requests:
+            cpu: 15m  # VPA recommendation
+            memory: 256Mi
+          limits:
+            memory: 256Mi
+
+        service:
+          type: ClusterIP
+          port: 3000
+
+        env:
+          - name: BASIC_AUTH_ENABLED
+            value: "false"
+
+        affinity: {}
+        envFrom: []
+
+        podSecurityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          fsGroup: 1000
+
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+
+        serviceAccount:
+          create: true
+          name: velero-ui
+
+        ingress:
+          enabled: true
+          className: traefik
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
+          hosts:
+            - host: velero0213.kro.kr
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - secretName: velero-ui-tls
+              hosts:
+                - velero0213.kro.kr
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: velero
+  syncPolicy:
+    automated:
+      prune: false  # Disabled: Same namespace as velero
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+  revisionHistoryLimit: 10
