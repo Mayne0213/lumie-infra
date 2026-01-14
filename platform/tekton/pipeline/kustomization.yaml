@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+
+patches:
+- target:
+    group: apiextensions.k8s.io
+    version: v1
+    kind: CustomResourceDefinition
+  patch: |-
+    - op: replace
+      path: /metadata/labels/app.kubernetes.io~1instance
+      value: tekton-pipeline
+- target:
+    version: v1
+    kind: Namespace
+    name: tekton-pipelines
+  patch: |-
+    - op: replace
+      path: /metadata/labels/pod-security.kubernetes.io~1enforce
+      value: privileged
+    - op: add
+      path: /metadata/labels/pod-security.kubernetes.io~1warn
+      value: privileged
+# Remove CPU limits for stability
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: tekton-pipelines-webhook
+  patch: |-
+    - op: remove
+      path: /spec/template/spec/containers/0/resources/limits/cpu
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: tekton-pipelines-remote-resolvers
+  patch: |-
+    - op: remove
+      path: /spec/template/spec/containers/0/resources/limits/cpu

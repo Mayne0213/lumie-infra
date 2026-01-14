@@ -1,0 +1,28 @@
+# High Priority (1000) - Critical infrastructure
+# ArgoCD, Gitea, CNPG, Vault, MinIO
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000
+globalDefault: false
+description: "High priority for critical infrastructure"
+---
+# Medium Priority (500) - Observability stack
+# Thanos, Prometheus, Loki, Tempo
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: medium-priority
+value: 500
+globalDefault: false
+description: "Medium priority for observability stack"
+---
+# Low Priority (100) - Everything else
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: low-priority
+value: 100
+globalDefault: true
+description: "Low priority for all other applications"

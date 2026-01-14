@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- https://infra.tekton.dev/tekton-releases/dashboard/latest/release-full.yaml
+- manifests/ingress.yaml
+
+patches:
+- target:
+    group: apiextensions.k8s.io
+    version: v1
+    kind: CustomResourceDefinition
+  patch: |-
+    - op: replace
+      path: /metadata/labels/app.kubernetes.io~1instance
+      value: tekton-dashboard

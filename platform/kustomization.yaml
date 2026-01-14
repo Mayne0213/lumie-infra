@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # Platform self-reference
+  - application.yaml
+
+  # Core infrastructure
+  - haproxy/argocd.yaml
+  - traefik/argocd.yaml
+  - argocd/argocd.yaml
+  - argocd/image-updater.yaml
+  - gitea/argocd.yaml
+
+  # Tekton CI/CD Platform
+  - tekton/pipeline/argocd.yaml
+  - tekton/triggers/argocd.yaml
+  - tekton/dashboard/argocd.yaml
+  - tekton/ci-cd/argocd.yaml

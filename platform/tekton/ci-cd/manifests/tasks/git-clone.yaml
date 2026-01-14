@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: git-clone
+  namespace: tekton-pipelines
+  labels:
+    app.kubernetes.io/version: "1.0"
+spec:
+  description: Clone a git repository using standard git
+  workspaces:
+    - name: output
+      description: The git repo will be cloned onto the volume backing this Workspace.
+  params:
+    - name: url
+      description: Repository URL to clone from.
+      type: string
+    - name: revision
+      description: Revision to checkout (branch, tag, sha, ref).
+      type: string
+      default: "main"
+    - name: depth
+      description: Perform a shallow clone, fetching only the most recent N commits.
+      type: string
+      default: "1"
+    - name: deleteExisting
+      description: Clean out the contents of the destination directory if it already exists.
+      type: string
+      default: "true"
+  results:
+    - name: commit
+      description: The precise commit SHA that was fetched by this Task.
+    - name: url
+      description: The precise URL that was fetched by this Task.
+  steps:
+    - name: clone
+      image: zot.zot.svc.cluster.local:5000/platform/alpine-git:v2.47.1
+      script: |
+        #!/bin/sh
+        set -ex
+
+        CHECKOUT_DIR="$(workspaces.output.path)"
+
+        if [ "$(params.deleteExisting)" = "true" ] && [ -d "${CHECKOUT_DIR}" ]; then
+          rm -rf "${CHECKOUT_DIR:?}/"* || true
+          rm -rf "${CHECKOUT_DIR}"/.[!.]* || true
+        fi
+
+        cd "${CHECKOUT_DIR}"
+
+        git clone --depth="$(params.depth)" --branch="$(params.revision)" \
+          "$(params.url)" .
+
+        RESULT_SHA="$(git rev-parse HEAD)"
+        printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
+        printf "%s" "$(params.url)" > "$(results.url.path)"
+
+        echo "Cloned $(params.url) at ${RESULT_SHA}"

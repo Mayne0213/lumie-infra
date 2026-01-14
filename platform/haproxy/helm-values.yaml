@@ -1,0 +1,113 @@
+# HAProxy Helm Chart Values
+# TCP proxy for PROXY Protocol forwarding to Traefik
+
+# =============================================================================
+# DEPLOYMENT KIND - DaemonSet for HA
+# =============================================================================
+kind: DaemonSet
+
+# =============================================================================
+# IMAGE - Zot Registry
+# =============================================================================
+image:
+  repository: zot.zot.svc.cluster.local:5000/platform/haproxy
+  tag: 3.0-alpine
+
+existingImagePullSecret: zot-registry-credentials
+
+# =============================================================================
+# DAEMONSET CONFIGURATION
+# =============================================================================
+daemonset:
+  useHostNetwork: true
+  useHostPort: true
+  hostPorts:
+    http: 80
+    https: 443
+
+# =============================================================================
+# DNS POLICY - Required for hostNetwork
+# =============================================================================
+dnsPolicy: ClusterFirstWithHostNet
+
+# =============================================================================
+# SECURITY CONTEXT
+# =============================================================================
+securityContext:
+  enabled: true
+  runAsUser: 0
+  runAsGroup: 0
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+    - ALL
+    add:
+    - NET_BIND_SERVICE
+
+# =============================================================================
+# RESOURCES
+# =============================================================================
+resources:
+  requests:
+    cpu: 25m
+    memory: 64Mi
+  limits:
+    memory: 64Mi
+
+# =============================================================================
+# HAPROXY CONFIGURATION
+# =============================================================================
+config: |
+  global
+      log stdout format raw local0
+      maxconn 4096
+
+  defaults
+      log global
+      option tcplog
+      timeout connect 10s
+      timeout client 30s
+      timeout server 30s
+
+  # HTTP frontend - PROXY Protocol to Traefik
+  frontend http_front
+      bind *:80
+      mode tcp
+      default_backend traefik_http
+
+  # HTTPS frontend - PROXY Protocol to Traefik
+  frontend https_front
+      bind *:443
+      mode tcp
+      default_backend traefik_https
+
+  # HTTP backend - send PROXY Protocol v2
+  backend traefik_http
+      mode tcp
+      balance roundrobin
+      server traefik traefik.kube-system.svc.cluster.local:80 send-proxy-v2 check
+
+  # HTTPS backend - send PROXY Protocol v2
+  backend traefik_https
+      mode tcp
+      balance roundrobin
+      server traefik traefik.kube-system.svc.cluster.local:443 send-proxy-v2 check
+
+# =============================================================================
+# CONTAINER PORTS (must match hostPorts)
+# =============================================================================
+containerPorts:
+  http: 80
+  https: 443
+
+# =============================================================================
+# SERVICE - Not needed (hostNetwork used)
+# =============================================================================
+service:
+  type: ClusterIP
+  additionalPorts: {}
+  rawAdditionalPorts: []
+  nodePorts: {}
+
+serviceAccount:
+  create: true

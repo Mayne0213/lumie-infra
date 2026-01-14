@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    # Sync early in the wave order
+    argocd.argoproj.io/sync-wave: "-10"
+spec:
+  project: default
+  sources:
+    # Source 1: ArgoCD Helm Chart
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argo-cd
+      targetRevision: 7.7.10
+      helm:
+        valueFiles:
+          - $values/argocd/helm-values.yaml
+    # Source 2: Helm values from Git repo
+    - repoURL: https://github.com/K3S-HOME/platform.git
+      targetRevision: main
+      ref: values
+    # Source 3: Additional manifests (Ingress, Namespace)
+    - repoURL: https://github.com/K3S-HOME/platform.git
+      targetRevision: main
+      path: argocd/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+  # Ignore differences for self-managed resources
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: argocd-secret
+      jsonPointers:
+        - /data
+    - group: ""
+      kind: Secret
+      name: argocd-initial-admin-secret
+      jsonPointers:
+        - /data
