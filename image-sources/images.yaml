@@ -1,0 +1,103 @@
+# Container Image Sources for Zot Registry Mirroring
+# Renovate will track these images and create PRs for new versions
+
+images:
+  # Storage
+  - name: minio
+    source: quay.io/minio/minio
+    tag: RELEASE.2025-09-07T16-13-09Z
+    dest: storage/minio
+
+  - name: cnpg
+    source: ghcr.io/cloudnative-pg/cloudnative-pg
+    tag: "1.25.1"
+    dest: storage/cnpg
+
+  - name: postgresql
+    source: ghcr.io/cloudnative-pg/postgresql
+    tag: "16.6"
+    dest: storage/postgresql
+
+  - name: pgweb
+    source: docker.io/sosedoff/pgweb
+    tag: "0.17.0"
+    dest: storage/pgweb
+
+  - name: velero
+    source: docker.io/velero/velero
+    tag: v1.17.1
+    dest: storage/velero
+
+  - name: velero-plugin-aws
+    source: docker.io/velero/velero-plugin-for-aws
+    tag: v1.13.1
+    dest: storage/velero-plugin-aws
+
+  - name: velero-ui
+    source: docker.io/otwld/velero-ui
+    tag: "0.10.1"
+    dest: storage/velero-ui
+
+  - name: minio-console
+    source: ghcr.io/georgmangold/console
+    tag: v1.9.1
+    dest: storage/minio-console
+
+  # Applications
+  - name: homer
+    source: docker.io/b4bz/homer
+    tag: v25.11.1
+    dest: applications/homer
+
+  - name: alpine-git
+    source: docker.io/alpine/git
+    tag: v2.47.1
+    dest: platform/alpine-git
+
+  - name: code-server
+    source: docker.io/codercom/code-server
+    tag: "4.104.2"
+    dest: applications/code-server
+
+  - name: headlamp
+    source: ghcr.io/headlamp-k8s/headlamp
+    tag: v0.39.0
+    dest: applications/headlamp
+
+  # Observability
+  - name: thanos
+    source: quay.io/thanos/thanos
+    tag: v0.37.2
+    dest: observability/thanos
+
+  - name: opentelemetry-collector-contrib
+    source: docker.io/otel/opentelemetry-collector-contrib
+    tag: "0.119.0"
+    dest: observability/opentelemetry-collector-contrib
+
+  - name: karma
+    source: ghcr.io/prymitive/karma
+    tag: v0.122
+    dest: observability/karma
+
+  # Platform
+  - name: haproxy
+    source: docker.io/library/haproxy
+    tag: 3.0-alpine
+    dest: platform/haproxy
+
+  - name: buildah
+    source: quay.io/buildah/stable
+    tag: v1.33
+    dest: platform/buildah
+
+  - name: nginx
+    source: docker.io/library/nginx
+    tag: alpine
+    dest: platform/nginx
+
+  # Security
+  - name: falco
+    source: docker.io/falcosecurity/falco
+    tag: "0.40.0"
+    dest: security/falco
