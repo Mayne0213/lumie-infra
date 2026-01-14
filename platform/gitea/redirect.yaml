@@ -7,7 +7,7 @@ metadata:
 spec:
   redirectRegex:
     regex: ".*"
-    replacement: "https://github.com/mayne0213"
+    replacement: "https://github0213.com/Mayne0213"
     permanent: true
 ---
 # IngressRoute for HTTPS
