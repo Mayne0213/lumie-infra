@@ -24,7 +24,7 @@ controllers:
           - |
             git clone --depth 1 --branch main https://github0213.com/Mayne0213/K3S-HOME.git /tmp/repo
             rm -rf /www/assets
-            cp -r /tmp/repo/homer/assets /www/assets
+            cp -r /tmp/repo/applications/homer/assets /www/assets
             cp /config/config.yml /www/assets/config.yml
             chmod -R 755 /www/assets
             chown -R 1000:65533 /www/assets
