@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: alertmanager
+  namespace: prometheus
+  labels:
+    release: prometheus
+spec:
+  endpoints:
+    - port: http
+      path: /metrics
+      scheme: http
+      interval: 60s
+      relabelings:
+        - targetLabel: cluster
+          replacement: "mayne-cluster"
+        # Drop alertmanager-headless to avoid duplicate metrics
+        - sourceLabels: [__meta_kubernetes_service_name]
+          regex: alertmanager-headless
+          action: drop
+  namespaceSelector:
+    matchNames:
+      - alertmanager
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: alertmanager
+      app.kubernetes.io/name: alertmanager

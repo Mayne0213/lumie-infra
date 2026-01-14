@@ -1,0 +1,45 @@
+# Kube State Metrics Helm Values
+# Chart: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics
+
+fullnameOverride: kube-state-metrics
+
+# replicaCount: 1 (default)
+# Note: kube-state-metrics는 stateless이지만, 여러 replica는 동일한 메트릭을 중복 생성하므로
+# 단일 replica로 실행하는 것이 권장됩니다.
+
+# Resource settings (no CPU limit for stability)
+resources:
+  requests:
+    cpu: 15m
+    memory: 100Mi
+  limits:
+    memory: 100Mi
+
+service:
+  type: ClusterIP
+  clusterIP: None
+
+# Prometheus ServiceMonitor 설정
+prometheus:
+  monitor:
+    enabled: true
+    additionalLabels:
+      release: prometheus
+    namespace: prometheus
+    relabelings:
+      - targetLabel: cluster
+        replacement: "mayne-cluster"
+    # exported_* 레이블을 표준 레이블로 복사하여 Grafana 대시보드 호환성 확보
+    metricRelabelings:
+      - sourceLabels: [exported_namespace]
+        targetLabel: namespace
+        regex: (.+)
+        replacement: ${1}
+      - sourceLabels: [exported_pod]
+        targetLabel: pod
+        regex: (.+)
+        replacement: ${1}
+      - sourceLabels: [exported_container]
+        targetLabel: container
+        regex: (.+)
+        replacement: ${1}

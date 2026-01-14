@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # Self-reference for App of Apps pattern
+  - application.yaml
+
+  - prometheus/argocd.yaml
+  - thanos/argocd.yaml
+  - alertmanager/argocd.yaml
+  - grafana/argocd.yaml
+  - loki/argocd.yaml
+  # promtail removed - OTel filelog receiver handles log collection
+  - tempo/argocd.yaml
+  - opentelemetry/argocd.yaml
+  - node-exporter/argocd.yaml
+  - kube-state-metrics/argocd.yaml
+  - goldilocks/argocd.yaml
+  - vpa/argocd.yaml
+  - blackbox-exporter/argocd.yaml

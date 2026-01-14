@@ -1,0 +1,203 @@
+# Kube-Prometheus-Stack Helm Values
+# Chart: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+# Includes: Prometheus Operator, Prometheus, Alertmanager, Grafana, and various exporters
+
+# Global settings
+fullnameOverride: ""
+
+# CRD 관리
+crds:
+  enabled: false  # CRD annotation 크기 문제로 비활성화 (CRD는 이미 설치됨)
+
+# Prometheus Operator
+prometheusOperator:
+  enabled: true
+  # CRD 생성 비활성화
+  createCustomResource: false
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 15m
+      memory: 100Mi
+    limits:
+      memory: 100Mi
+
+# Kubelet ServiceMonitor with cluster label
+kubelet:
+  enabled: true
+  serviceMonitor:
+    # cAdvisor metrics (container_memory_working_set_bytes 등)
+    cAdvisorRelabelings:
+      - targetLabel: cluster
+        replacement: "mayne-cluster"
+      - sourceLabels: [__metrics_path__]
+        targetLabel: metrics_path
+    # Override default drops to keep throttling metrics
+    cAdvisorMetricRelabelings:
+      # Drop unnecessary CPU metrics (but keep cfs_throttled_seconds_total)
+      - action: drop
+        regex: "container_cpu_(load_average_10s|system_seconds_total|user_seconds_total)"
+        sourceLabels: [__name__]
+      # Keep other default drops
+      - action: drop
+        regex: "container_fs_(io_current|io_time_seconds_total|io_time_weighted_seconds_total|reads_merged_total|sector_reads_total|sector_writes_total|writes_merged_total)"
+        sourceLabels: [__name__]
+      - action: drop
+        regex: "container_memory_(mapped_file|swap)"
+        sourceLabels: [__name__]
+      - action: drop
+        regex: "container_(file_descriptors|tasks_state|threads_max)"
+        sourceLabels: [__name__]
+      - action: drop
+        regex: "container_spec.*"
+        sourceLabels: [__name__]
+      - action: drop
+        regex: ".+;"
+        sourceLabels: [id, pod]
+    # Resource metrics
+    resourceRelabelings:
+      - targetLabel: cluster
+        replacement: "mayne-cluster"
+    # Probes metrics
+    probesRelabelings:
+      - targetLabel: cluster
+        replacement: "mayne-cluster"
+  
+# Prometheus
+prometheus:
+  enabled: true
+
+  # Thanos Sidecar - for long-term storage and HA
+  thanosService:
+    enabled: true
+  thanosServiceMonitor:
+    enabled: true
+
+  prometheusSpec:
+    # Enable remote write receiver for OTel Collector
+    enableRemoteWriteReceiver: true
+
+    # Single replica
+    replicas: 1
+    replicaExternalLabelName: prometheus_replica
+
+    # Medium priority for observability
+    priorityClassName: medium-priority
+
+    # Pod anti-affinity for HA
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: prometheus
+              topologyKey: kubernetes.io/hostname
+
+    scrapeInterval: 60s       # 30s → 60s (메모리 절감)
+    evaluationInterval: 60s   # 30s → 60s
+    retention: 3d             # Local retention only (no S3 upload)
+
+    # Thanos Sidecar configuration (query only, no S3 upload)
+    thanos:
+      image: zot.zot.svc.cluster.local:5000/observability/thanos:v0.37.2
+      # objectStorageConfig removed - no upload to MinIO, local storage only
+
+    # Use emptyDir instead of PVC (data is temporary, Thanos handles long-term)
+    storageSpec:
+      emptyDir:
+        sizeLimit: 5Gi
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 1Gi
+      limits:
+        memory: 1Gi
+    
+    # ServiceMonitor selector - scrape all ServiceMonitors
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelector: {}
+    probeSelectorNilUsesHelmValues: false
+    ruleSelector: {}
+    
+    # Alertmanager 설정
+    alertingEndpoints:
+      - name: alertmanager
+        namespace: alertmanager
+        port: http
+        scheme: http
+
+    # External labels added to all metrics
+    externalLabels:
+      cluster: "mayne-cluster"
+
+    # additionalScrapeConfigs removed - OTel handles scraping now
+    # Targets moved to OTel prometheus receiver kubernetes-pods job
+    additionalScrapeConfigs: []
+
+# API Server 메트릭 수집 비활성화 (메모리 절감: ~37k series)
+kubeApiServer:
+  enabled: false
+
+# etcd 메트릭 수집 비활성화 (메모리 절감: ~26k series)
+kubeEtcd:
+  enabled: false
+
+# Alertmanager (기존 alertmanager 사용)
+alertmanager:
+  enabled: false
+
+# Grafana (기존 grafana 사용)
+grafana:
+  enabled: false
+
+# Node Exporter (기존 node-exporter 사용)
+nodeExporter:
+  enabled: false
+  
+# Kube State Metrics (기존 kube-state-metrics 사용)
+# 별도로 배포된 kube-state-metrics가 자체 ServiceMonitor 생성
+kubeStateMetrics:
+  enabled: false
+
+# 기본 ServiceMonitors
+defaultRules:
+  create: true
+  # 비활성화할 개별 alert rule
+  disabled:
+    KubeCPUOvercommit: true
+    KubeMemoryOvercommit: true
+    PrometheusDuplicateTimestamps: true
+  rules:
+    alertmanager: true
+    etcd: false
+    configReloaders: true
+    general: true
+    k8s: true
+    kubeApiserverAvailability: true
+    kubeApiserverBurnrate: true
+    kubeApiserverHistogram: true
+    kubeApiserverSlos: true
+    kubeControllerManager: false
+    kubelet: true
+    kubeProxy: false
+    kubePrometheusGeneral: true
+    kubePrometheusNodeRecording: true
+    kubernetesApps: true
+    kubernetesResources: true
+    kubernetesStorage: true
+    kubernetesSystem: true
+    kubeSchedulerAlerting: false
+    kubeSchedulerRecording: false
+    kubeStateMetrics: true
+    network: true
+    node: true
+    nodeExporterAlerting: true
+    nodeExporterRecording: true
+    prometheus: true
+    prometheusOperator: true
+

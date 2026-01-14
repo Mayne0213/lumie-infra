@@ -1,0 +1,337 @@
+# OpenTelemetry Collector Helm Values
+# Chart: https://github.com/open-telemetry/opentelemetry-helm-charts
+#
+# Architecture:
+# - DaemonSet mode: one collector per node for efficient data collection
+# - OTLP receiver for traces, metrics, and logs
+# - Filelog receiver for container logs (replaces Promtail)
+# - Prometheus receiver for metrics scraping (replaces Prometheus scrape)
+# - Exports to: Tempo (traces), Prometheus (metrics), Loki (logs)
+#
+# Pipeline:
+#   Applications → OTel Collector → Tempo/Prometheus/Loki → Grafana
+
+# =============================================================================
+# Name Override
+# =============================================================================
+fullnameOverride: otel-collector
+
+# =============================================================================
+# Image Configuration
+# =============================================================================
+image:
+  repository: zot.zot.svc.cluster.local:5000/observability/opentelemetry-collector-contrib
+  tag: 0.119.0
+
+imagePullSecrets:
+  - name: zot-registry-credentials
+
+# =============================================================================
+# Deployment Mode
+# =============================================================================
+mode: daemonset
+
+# =============================================================================
+# Resource Limits (no CPU limit for stability, mem limit capped at 1024Mi)
+# =============================================================================
+resources:
+  requests:
+    cpu: 34m
+    memory: 142Mi
+  limits:
+    memory: 1024Mi
+
+# =============================================================================
+# Environment Variables
+# =============================================================================
+extraEnvs:
+  - name: K8S_NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
+  - name: K8S_POD_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name
+  - name: K8S_POD_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.podIP
+
+# =============================================================================
+# Extra Volumes for Log Collection
+# =============================================================================
+extraVolumes:
+  - name: varlogpods
+    hostPath:
+      path: /var/log/pods
+  - name: varlibdockercontainers
+    hostPath:
+      path: /var/lib/docker/containers
+
+extraVolumeMounts:
+  - name: varlogpods
+    mountPath: /var/log/pods
+    readOnly: true
+  - name: varlibdockercontainers
+    mountPath: /var/lib/docker/containers
+    readOnly: true
+
+# =============================================================================
+# Ports
+# =============================================================================
+ports:
+  otlp:
+    enabled: true
+    containerPort: 4317
+    servicePort: 4317
+    hostPort: 4317
+    protocol: TCP
+  otlp-http:
+    enabled: true
+    containerPort: 4318
+    servicePort: 4318
+    hostPort: 4318
+    protocol: TCP
+  metrics:
+    enabled: true
+    containerPort: 8888
+    servicePort: 8888
+    protocol: TCP
+
+# =============================================================================
+# OpenTelemetry Collector Configuration
+# =============================================================================
+config:
+  # ---------------------------------------------------------------------------
+  # Receivers - what data the collector accepts
+  # ---------------------------------------------------------------------------
+  receivers:
+    # OTLP receiver for application telemetry
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+
+    # Filelog receiver for container logs (replaces Promtail)
+    filelog:
+      include:
+        - /var/log/pods/*/*/*.log
+      exclude:
+        # Exclude collector's own logs to prevent feedback loop
+        - /var/log/pods/opentelemetry_opentelemetry-collector*/*/*.log
+      start_at: end
+      include_file_path: true
+      include_file_name: false
+      operators:
+        # Route based on log format
+        - type: router
+          id: get-format
+          routes:
+            - output: parser-docker
+              expr: 'body matches "^\\{"'
+            - output: parser-containerd
+              expr: 'body matches "^[^ Z]+Z"'
+          default: parser-containerd
+
+        # Docker JSON format parser
+        - type: json_parser
+          id: parser-docker
+          output: extract-metadata-from-filepath
+          timestamp:
+            parse_from: attributes.time
+            layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+
+        # Containerd/CRI format parser
+        - type: regex_parser
+          id: parser-containerd
+          regex: '^(?P<time>[^ ^Z]+Z) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+          output: extract-metadata-from-filepath
+          timestamp:
+            parse_from: attributes.time
+            layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+
+        # Extract metadata from file path
+        - type: regex_parser
+          id: extract-metadata-from-filepath
+          regex: '^.*\/(?P<namespace>[^_]+)_(?P<pod_name>[^_]+)_(?P<uid>[a-f0-9-]+)\/(?P<container_name>[^\/]+)\/.*$'
+          parse_from: attributes["log.file.path"]
+
+        # Move attributes to resource
+        - type: move
+          from: attributes.namespace
+          to: resource["k8s.namespace.name"]
+        - type: move
+          from: attributes.pod_name
+          to: resource["k8s.pod.name"]
+        - type: move
+          from: attributes.container_name
+          to: resource["k8s.container.name"]
+        - type: move
+          from: attributes.uid
+          to: resource["k8s.pod.uid"]
+        - type: move
+          from: attributes.stream
+          to: attributes["log.iostream"]
+        - type: move
+          from: attributes.log
+          to: body
+        # Loki label hints - tell Loki exporter which attributes to use as labels
+        - type: add
+          field: resource["loki.resource.labels"]
+          value: "k8s.namespace.name, k8s.pod.name, k8s.container.name, k8s.node.name"
+        - type: add
+          field: attributes["loki.attribute.labels"]
+          value: "log.iostream"
+
+    # Prometheus receiver - self metrics only
+    # Infrastructure metrics (node-exporter, kube-state-metrics) handled by Prometheus
+    prometheus:
+      config:
+        scrape_configs:
+          # OTel Collector self metrics only
+          - job_name: 'otel-collector'
+            scrape_interval: 60s
+            static_configs:
+              - targets: ['${env:K8S_POD_IP}:8888']
+
+  # ---------------------------------------------------------------------------
+  # Processors - how data is transformed
+  # ---------------------------------------------------------------------------
+  processors:
+    # Batch processor for efficient exports
+    batch:
+      timeout: 10s
+      send_batch_size: 1024
+      send_batch_max_size: 2048
+
+    # Memory limiter to prevent OOM
+    memory_limiter:
+      check_interval: 5s
+      limit_mib: 400
+      spike_limit_mib: 100
+
+    # Add Kubernetes metadata
+    k8sattributes:
+      extract:
+        metadata:
+          - k8s.namespace.name
+          - k8s.deployment.name
+          - k8s.pod.name
+          - k8s.node.name
+      passthrough: false
+      pod_association:
+        - sources:
+            - from: resource_attribute
+              name: k8s.pod.ip
+        - sources:
+            - from: resource_attribute
+              name: k8s.pod.uid
+        - sources:
+            - from: connection
+
+    # Resource detection
+    resourcedetection:
+      detectors: [env, system]
+      timeout: 5s
+      override: false
+
+  # ---------------------------------------------------------------------------
+  # Exporters - where data goes
+  # ---------------------------------------------------------------------------
+  exporters:
+    # Tempo for traces
+    otlp/tempo:
+      endpoint: tempo.tempo.svc.cluster.local:4317
+      tls:
+        insecure: true
+
+    # Prometheus remote write for metrics
+    prometheusremotewrite:
+      endpoint: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
+      tls:
+        insecure: true
+      external_labels:
+        otel_collector: ${env:K8S_POD_NAME}
+
+    # Loki for logs
+    loki:
+      endpoint: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
+      default_labels_enabled:
+        exporter: false
+        level: true
+
+    # Debug exporter (for troubleshooting)
+    debug:
+      verbosity: basic
+
+  # ---------------------------------------------------------------------------
+  # Extensions
+  # ---------------------------------------------------------------------------
+  extensions:
+    health_check:
+      endpoint: 0.0.0.0:13133
+
+  # ---------------------------------------------------------------------------
+  # Service pipelines
+  # ---------------------------------------------------------------------------
+  service:
+    extensions: [health_check]
+    pipelines:
+      # Traces pipeline
+      traces:
+        receivers: [otlp]
+        processors: [memory_limiter, k8sattributes, resourcedetection, batch]
+        exporters: [otlp/tempo]
+
+      # Metrics pipeline (OTLP + Prometheus scraping)
+      metrics:
+        receivers: [otlp, prometheus]
+        processors: [memory_limiter, k8sattributes, resourcedetection, batch]
+        exporters: [prometheusremotewrite]
+
+      # Logs pipeline (OTLP + Filelog)
+      logs:
+        receivers: [otlp, filelog]
+        processors: [memory_limiter, k8sattributes, resourcedetection, batch]
+        exporters: [loki]
+
+# =============================================================================
+# Service Account
+# =============================================================================
+serviceAccount:
+  create: true
+
+# =============================================================================
+# RBAC for k8sattributes processor and prometheus receiver
+# =============================================================================
+clusterRole:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: ["pods", "namespaces", "nodes", "endpoints", "services"]
+      verbs: ["get", "watch", "list"]
+    - apiGroups: ["apps"]
+      resources: ["replicasets", "deployments"]
+      verbs: ["get", "watch", "list"]
+    - apiGroups: ["discovery.k8s.io"]
+      resources: ["endpointslices"]
+      verbs: ["get", "watch", "list"]
+
+# =============================================================================
+# ServiceMonitor for Prometheus (keep for backward compatibility)
+# =============================================================================
+serviceMonitor:
+  enabled: true
+  metricsEndpoints:
+    - port: metrics
+  extraLabels:
+    release: prometheus
+
+# =============================================================================
+# Pod Monitor for self-monitoring
+# =============================================================================
+podMonitor:
+  enabled: false

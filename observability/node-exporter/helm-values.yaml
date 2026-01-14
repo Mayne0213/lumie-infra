@@ -1,0 +1,38 @@
+# Prometheus Node Exporter Helm Values
+# Chart: https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-node-exporter
+
+fullnameOverride: node-exporter
+
+hostNetwork: true
+hostPID: true
+
+# Resource settings (no CPU limit for stability)
+resources:
+  requests:
+    cpu: 15m
+    memory: 100Mi
+  limits:
+    memory: 100Mi
+
+service:
+  type: ClusterIP
+  clusterIP: None
+
+# Prometheus ServiceMonitor 설정
+prometheus:
+  monitor:
+    enabled: true
+    additionalLabels:
+      release: prometheus
+    namespace: prometheus
+    namespaceSelector:
+      matchNames:
+        - node-exporter
+    attachMetadata:
+      node: true
+    relabelings:
+      - targetLabel: cluster
+        replacement: "mayne-cluster"
+
+tolerations:
+  - operator: Exists

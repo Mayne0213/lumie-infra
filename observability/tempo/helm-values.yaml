@@ -1,0 +1,87 @@
+# Tempo Helm Values
+# Chart: https://github.com/grafana/helm-charts/tree/main/charts/tempo
+#
+# Architecture:
+# - Single binary (monolithic) mode for small clusters
+# - Local filesystem (emptyDir) for trace storage
+# - OTLP receiver for OpenTelemetry data
+# - Integrates with Grafana for trace visualization
+
+# Medium priority for observability
+priorityClassName: medium-priority
+
+# Single replica
+replicas: 1
+
+# =============================================================================
+# Tempo Configuration
+# =============================================================================
+tempo:
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 15m
+      memory: 100Mi
+    limits:
+      memory: 109Mi
+  # Receivers - protocols Tempo accepts
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+
+  # Retention settings
+  retention: 24h  # Keep traces for 1 day (reduced for local storage)
+
+  # Backend storage (local filesystem)
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces
+      wal:
+        path: /var/tempo/wal
+
+  # Query settings
+  querier:
+    frontend_worker:
+      frontend_address: ""
+
+  # Metrics generator for trace-derived metrics
+  metricsGenerator:
+    enabled: true
+    remoteWriteUrl: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
+
+  # Additional volume mounts
+  extraVolumeMounts:
+    - name: tempo-data
+      mountPath: /var/tempo
+
+# =============================================================================
+# Persistence - Disabled (use emptyDir)
+# =============================================================================
+persistence:
+  enabled: false
+
+# emptyDir volume for all data
+extraVolumes:
+  - name: tempo-data
+    emptyDir:
+      sizeLimit: 5Gi
+
+# =============================================================================
+# Service
+# =============================================================================
+service:
+  type: ClusterIP
+
+# =============================================================================
+# ServiceMonitor for Prometheus
+# =============================================================================
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: prometheus

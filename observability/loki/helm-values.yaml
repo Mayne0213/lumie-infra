@@ -1,0 +1,110 @@
+# Loki Helm Values
+# Chart: https://grafana.github.io/helm-charts
+# Single binary deployment with local filesystem storage (emptyDir)
+
+loki:
+  # Use local filesystem storage (emptyDir)
+  storage:
+    type: filesystem
+
+  # Single binary mode with 1 replica
+  commonConfig:
+    replication_factor: 1
+    path_prefix: /var/loki
+
+  # Schema config - filesystem backend
+  schemaConfig:
+    configs:
+      - from: "2024-01-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
+
+  # Limits - reduced retention for local storage
+  limits_config:
+    retention_period: 72h  # 3 days (reduced for emptyDir)
+    ingestion_rate_mb: 10
+    ingestion_burst_size_mb: 20
+    max_streams_per_user: 10000
+
+  # Auth disabled for simplicity
+  auth_enabled: false
+
+# Use single binary deployment (simpler)
+deploymentMode: SingleBinary
+
+singleBinary:
+  replicas: 1
+  # Disable PVC - use emptyDir for all data
+  persistence:
+    enabled: false
+  # Soft anti-affinity for HA
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: loki
+            topologyKey: kubernetes.io/hostname
+  extraVolumes:
+    - name: data
+      emptyDir:
+        sizeLimit: 5Gi
+  extraVolumeMounts:
+    - name: data
+      mountPath: /var/loki
+  # Medium priority for observability
+  priorityClassName: medium-priority
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 10m
+      memory: 225Mi
+    limits:
+      memory: 323Mi
+
+# Disable components not needed in single binary mode
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+
+# Gateway disabled (direct access)
+gateway:
+  enabled: false
+
+# Disable all caching (use simple mode)
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false
+
+# Loki Canary - disabled
+lokiCanary:
+  enabled: false
+
+# Monitoring
+monitoring:
+  selfMonitoring:
+    enabled: false
+    grafanaAgent:
+      installOperator: false
+  serviceMonitor:
+    enabled: true
+    interval: 60s
+    labels:
+      release: prometheus
+    relabelings:
+      - targetLabel: cluster
+        replacement: "mayne-cluster"
+
+# Test disabled
+test:
+  enabled: false

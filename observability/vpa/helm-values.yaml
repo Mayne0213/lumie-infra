@@ -1,0 +1,25 @@
+# VPA Helm Values
+# Reference: https://github.com/FairwindsOps/charts/tree/master/stable/vpa
+
+# Recommender - recommends resource requests based on historical usage
+recommender:
+  enabled: true
+  replicaCount: 1
+
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 15m
+      memory: 100Mi
+    limits:
+      memory: 100Mi
+
+# Updater - applies recommended resource requests to pods
+# Disabled because we're using updateMode: Off (recommendations only)
+updater:
+  enabled: false
+
+# Admission Controller - injects resource requests into new pods
+# Disabled because we're using updateMode: Off (recommendations only)
+admissionController:
+  enabled: false
