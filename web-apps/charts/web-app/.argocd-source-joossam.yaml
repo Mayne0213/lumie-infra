@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.name
+    value: zot0213.kro.kr/web-apps/joossam
+    forcestring: true
+  - name: image.tag
+    value: latest@sha256:403a827289cb38534d842a4bd8d2bc5a00f68a0467895c8e50ec461e3c125c84
+    forcestring: true

@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jaejadle
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: jaejadle=zot0213.kro.kr/web-apps/jaejadle:latest
+    argocd-image-updater.argoproj.io/jaejadle.update-strategy: digest
+    argocd-image-updater.argoproj.io/jaejadle.platforms: linux/arm64/v8
+    argocd-image-updater.argoproj.io/jaejadle.pull-secret: pullsecret:argocd/zot-registry-credentials
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitea-creds
+    argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/jaejadle.helm.image-tag: image.tag
+    argocd-image-updater.argoproj.io/git-commit-message: "CHORE(app): update {{ .AppName }} image"
+spec:
+  project: default
+  sources:
+  - repoURL: https://github0213.com/K3S-HOME/web-apps.git
+    targetRevision: main
+    path: charts/web-app
+    helm:
+      valueFiles:
+      - $values/jaejadle/helm-values.yaml
+  - repoURL: https://github0213.com/K3S-HOME/web-apps.git
+    targetRevision: main
+    ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jaejadle
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+        zot-registry: 'enabled'
+  revisionHistoryLimit: 10

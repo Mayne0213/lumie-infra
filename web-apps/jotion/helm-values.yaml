@@ -1,0 +1,113 @@
+# Jotion Web App Helm Values
+
+name: jotion
+
+image:
+  registry: zot0213.kro.kr
+  repository: web-apps/jotion
+  tag: latest  # Updated by ArgoCD Image Updater
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: zot-registry-credentials
+
+replicaCount: 1
+containerPort: 3000
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: jotion0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.jotion0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: jotion-tls
+      hosts:
+        - jotion0213.kro.kr
+        - www.jotion0213.kro.kr
+
+# Resource settings (no CPU limit for stability)
+resources:
+  requests:
+    cpu: 15m
+    memory: 109Mi
+  limits:
+    memory: 169Mi
+
+livenessProbe:
+  httpGet:
+    path: /home
+    port: 3000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /home
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 1
+  failureThreshold: 3
+
+env:
+  - name: NODE_ENV
+    value: production
+  - name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: jotion-secrets
+        key: database-url
+
+externalSecret:
+  enabled: true
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    template:
+      data:
+        database-url: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/JotionDB"
+  data:
+    - secretKey: DB_HOST
+      remoteRef:
+        key: storage/postgresql
+        property: DB_HOST
+    - secretKey: DB_PORT
+      remoteRef:
+        key: storage/postgresql
+        property: DB_PORT
+    - secretKey: DB_USER
+      remoteRef:
+        key: storage/postgresql
+        property: DB_USER
+    - secretKey: DB_PASSWORD
+      remoteRef:
+        key: storage/postgresql
+        property: PASSWORD
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: kubernetes.io/hostname

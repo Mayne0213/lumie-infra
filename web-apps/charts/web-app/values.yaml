@@ -1,0 +1,119 @@
+# Web App Helm Chart Default Values
+
+# Application name (used for labels, selectors, service names)
+name: ""
+
+# Image configuration
+image:
+  registry: zot0213.kro.kr
+  repository: web-apps/app
+  tag: latest
+  pullPolicy: Always
+
+# Image pull secrets
+imagePullSecrets:
+  - name: zot-registry-credentials
+
+# Replicas
+replicaCount: 1
+
+# Container port
+containerPort: 3000
+
+# Service configuration
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: app.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: app-tls
+      hosts:
+        - app.example.com
+
+# Resources
+resources:
+  requests:
+    memory: 80Mi
+    cpu: 20m
+  limits:
+    memory: 80Mi
+
+# Health checks
+healthCheck:
+  enabled: true
+  path: /
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+# Environment variables (plain)
+env: []
+# - name: NODE_ENV
+#   value: production
+
+# Environment variables from secrets
+envFrom: []
+# - secretRef:
+#     name: app-secrets
+
+# External Secrets configuration
+externalSecret:
+  enabled: false
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+  data: []
+  # - secretKey: DATABASE_URL
+  #   remoteRef:
+  #     key: myapp
+  #     property: DATABASE_URL
+
+# Deployment strategy
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+
+# Revision history
+revisionHistoryLimit: 3
+
+# Pod annotations
+podAnnotations: {}
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: kubernetes.io/hostname
+
+# ResourceQuota - Disabled by default (set to false to remove existing quotas)
+resourceQuota:
+  enabled: false

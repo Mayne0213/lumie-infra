@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.name
+    value: zot0213.kro.kr/web-apps/jovies
+    forcestring: true
+  - name: image.tag
+    value: latest@sha256:e93457473e32be9585dee8074d7505d81030839ddd7c06a1637bf0b472f7b44c
+    forcestring: true

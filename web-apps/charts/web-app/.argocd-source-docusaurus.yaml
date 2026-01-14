@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.name
+    value: zot0213.kro.kr/web-apps/docusaurus
+    forcestring: true
+  - name: image.tag
+    value: latest@sha256:0abe38de374c257b26e8dee91c6004bf1bb4c5522281a39042097c2b979df843
+    forcestring: true

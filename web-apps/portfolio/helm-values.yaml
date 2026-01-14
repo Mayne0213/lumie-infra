@@ -1,0 +1,78 @@
+# Portfolio Web App Helm Values
+
+name: portfolio
+
+image:
+  registry: zot0213.kro.kr
+  repository: web-apps/portfolio
+  tag: latest  # Updated by ArgoCD Image Updater
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: zot-registry-credentials
+
+replicaCount: 1
+containerPort: 3000
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: minjo0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.minjo0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: portfolio-tls
+      hosts:
+        - minjo0213.kro.kr
+        - www.minjo0213.kro.kr
+
+# Resource settings (no CPU limit for stability)
+resources:
+  requests:
+    cpu: 15m
+    memory: 100Mi
+  limits:
+    memory: 109Mi
+
+healthCheck:
+  enabled: true
+  path: /
+  startupProbe:
+    periodSeconds: 10
+    failureThreshold: 30
+  livenessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 5
+
+env:
+  - name: NODE_ENV
+    value: production
+  - name: PROMETHEUS_URL
+    value: http://prometheus.prometheus.svc.cluster.local:9090
+
+externalSecret:
+  enabled: false
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: kubernetes.io/hostname

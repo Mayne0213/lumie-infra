@@ -1,0 +1,135 @@
+# Jaejadle Web App Helm Values
+
+name: jaejadle
+
+image:
+  registry: zot0213.kro.kr
+  repository: web-apps/jaejadle
+  tag: latest  # Updated by ArgoCD Image Updater
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: zot-registry-credentials
+
+replicaCount: 1
+containerPort: 3000
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: jaejadle.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: jaejadle-tls
+      hosts:
+        - jaejadle.kro.kr
+
+# Resource settings (no CPU limit for stability)
+resources:
+  requests:
+    cpu: 15m
+    memory: 100Mi
+  limits:
+    memory: 109Mi
+
+healthCheck:
+  enabled: true
+  path: /
+  startupProbe:
+    periodSeconds: 10
+    failureThreshold: 30
+  livenessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 5
+
+envFrom:
+  - secretRef:
+      name: jaejadle-secrets
+
+externalSecret:
+  enabled: true
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    template:
+      data:
+        DATABASE_URL: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/JaejadleDB"
+        JWT_SECRET: "{{ .JWT_SECRET }}"
+        AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
+        AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
+        AWS_S3_BUCKET_NAME: "{{ .AWS_S3_BUCKET_NAME }}"
+        AWS_S3_ENDPOINT: "{{ .AWS_S3_ENDPOINT }}"
+        AWS_REGION: "{{ .AWS_REGION }}"
+        CODE: "{{ .CODE }}"
+  data:
+    # PostgreSQL credentials (centralized)
+    - secretKey: DB_HOST
+      remoteRef:
+        key: storage/postgresql
+        property: DB_HOST
+    - secretKey: DB_PORT
+      remoteRef:
+        key: storage/postgresql
+        property: DB_PORT
+    - secretKey: DB_USER
+      remoteRef:
+        key: storage/postgresql
+        property: DB_USER
+    - secretKey: DB_PASSWORD
+      remoteRef:
+        key: storage/postgresql
+        property: PASSWORD
+    # App-specific secrets
+    - secretKey: JWT_SECRET
+      remoteRef:
+        key: web-apps/jaejadle
+        property: JWT_SECRET
+    - secretKey: AWS_ACCESS_KEY_ID
+      remoteRef:
+        key: web-apps/jaejadle
+        property: AWS_ACCESS_KEY_ID
+    - secretKey: AWS_SECRET_ACCESS_KEY
+      remoteRef:
+        key: web-apps/jaejadle
+        property: AWS_SECRET_ACCESS_KEY
+    - secretKey: AWS_S3_BUCKET_NAME
+      remoteRef:
+        key: web-apps/jaejadle
+        property: AWS_S3_BUCKET_NAME
+    - secretKey: AWS_S3_ENDPOINT
+      remoteRef:
+        key: web-apps/jaejadle
+        property: AWS_S3_ENDPOINT
+    - secretKey: AWS_REGION
+      remoteRef:
+        key: web-apps/jaejadle
+        property: AWS_REGION
+    - secretKey: CODE
+      remoteRef:
+        key: web-apps/jaejadle
+        property: CODE
+
+# Affinity - Soft Anti-Affinity to spread pods across nodes
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: kubernetes.io/hostname
