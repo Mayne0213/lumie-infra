@@ -13,13 +13,13 @@ spec:
     path: ci/helm-chart
     helm:
       valueFiles:
-      - $values/code-server/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/applications.git
+      - $values/applications/code-server/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/applications.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: code-server
+    path: applications/code-server
   destination:
     server: https://kubernetes.default.svc
     namespace: code-server

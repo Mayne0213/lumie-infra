@@ -9,9 +9,9 @@ spec:
   project: default
 
   source:
-    repoURL: https://github0213.com/K3S-HOME/storage.git
+    repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: postgresql
+    path: storage/postgresql
 
   destination:
     server: https://kubernetes.default.svc

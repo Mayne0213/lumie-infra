@@ -20,11 +20,11 @@ spec:
     targetRevision: 1.2.1
     helm:
       valueFiles:
-      - $values/external-secrets/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/security.git
+      - $values/security/external-secrets/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/security.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     path: external-secrets/manifests
   destination:

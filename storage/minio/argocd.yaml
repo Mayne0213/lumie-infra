@@ -13,13 +13,13 @@ spec:
     targetRevision: 5.4.0
     helm:
       valueFiles:
-      - $values/minio/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/storage.git
+      - $values/storage/minio/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/storage.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: minio
+    path: storage/minio
   destination:
     server: https://kubernetes.default.svc
     namespace: minio

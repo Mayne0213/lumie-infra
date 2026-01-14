@@ -13,13 +13,13 @@ spec:
     targetRevision: 0.28.1
     helm:
       valueFiles:
-      - $values/vault/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/security.git
+      - $values/security/vault/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/security.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: vault
+    path: security/vault
   destination:
     server: https://kubernetes.default.svc
     namespace: vault

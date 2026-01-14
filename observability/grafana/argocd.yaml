@@ -13,13 +13,13 @@ spec:
     targetRevision: 10.4.3
     helm:
       valueFiles:
-      - $values/grafana/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/observability.git
+      - $values/observability/grafana/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/observability.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: grafana
+    path: observability/grafana
   destination:
     server: https://kubernetes.default.svc
     namespace: grafana

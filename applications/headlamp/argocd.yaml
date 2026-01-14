@@ -13,13 +13,13 @@ spec:
     targetRevision: 0.39.0
     helm:
       valueFiles:
-      - $values/headlamp/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/applications.git
+      - $values/applications/headlamp/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/applications.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: headlamp
+    path: applications/headlamp
   destination:
     server: https://kubernetes.default.svc
     namespace: headlamp

@@ -13,13 +13,13 @@ spec:
     targetRevision: 80.0.0
     helm:
       valueFiles:
-      - $values/prometheus/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/observability.git
+      - $values/observability/prometheus/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/observability.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: prometheus
+    path: observability/prometheus
   destination:
     server: https://kubernetes.default.svc
     namespace: prometheus

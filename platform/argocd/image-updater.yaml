@@ -11,13 +11,13 @@ spec:
       targetRevision: 0.11.0
       helm:
         valueFiles:
-          - $values/argocd/image-updater-values.yaml
-    - repoURL: https://github.com/K3S-HOME/platform.git
+          - $values/platform/argocd/image-updater-values.yaml
+    - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
       targetRevision: main
       ref: values
-    - repoURL: https://github.com/K3S-HOME/platform.git
+    - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
       targetRevision: main
-      path: argocd/image-updater-manifests
+      path: platform/argocd/image-updater-manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

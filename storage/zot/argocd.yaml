@@ -13,13 +13,13 @@ spec:
     targetRevision: 3.6.1
     helm:
       valueFiles:
-      - $values/zot/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/storage.git
+      - $values/storage/zot/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/storage.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: zot
+    path: storage/zot
   destination:
     server: https://kubernetes.default.svc
     namespace: zot

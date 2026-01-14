@@ -16,13 +16,13 @@ metadata:
 spec:
   project: default
   sources:
-  - repoURL: https://github0213.com/K3S-HOME/web-apps.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: charts/web-app
+    path: web-apps/charts/web-app
     helm:
       valueFiles:
-      - $values/docusaurus/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/applications.git
+      - $values/applications/docusaurus/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
   destination:

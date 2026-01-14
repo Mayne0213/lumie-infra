@@ -13,8 +13,8 @@ spec:
     targetRevision: 5.25.1
     helm:
       valueFiles:
-      - $values/kube-state-metrics/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/observability.git
+      - $values/observability/kube-state-metrics/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
   destination:

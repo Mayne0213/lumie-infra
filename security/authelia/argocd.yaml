@@ -13,13 +13,13 @@ spec:
     targetRevision: 0.10.*
     helm:
       valueFiles:
-      - $values/authelia/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/security.git
+      - $values/security/authelia/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/security.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: authelia
+    path: security/authelia
   destination:
     server: https://kubernetes.default.svc
     namespace: authelia
