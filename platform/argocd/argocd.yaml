@@ -23,7 +23,7 @@ spec:
     # Source 3: Additional manifests (Ingress, Namespace)
     - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
       targetRevision: main
-      path: argocd/manifests
+      path: platform/argocd/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

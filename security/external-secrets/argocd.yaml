@@ -26,7 +26,7 @@ spec:
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: external-secrets/manifests
+    path: security/external-secrets/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: external-secrets
