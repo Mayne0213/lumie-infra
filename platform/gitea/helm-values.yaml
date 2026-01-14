@@ -56,7 +56,7 @@ gitea:
     database:
       DB_TYPE: sqlite3
       PATH: /data/gitea/gitea.db
-      SQLITE_TIMEOUT: 500
+      SQLITE_TIMEOUT: 30000
       SQLITE_JOURNAL_MODE: WAL
 
     session:
