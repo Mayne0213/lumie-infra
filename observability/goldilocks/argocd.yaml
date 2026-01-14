@@ -13,13 +13,13 @@ spec:
     targetRevision: 8.0.2
     helm:
       valueFiles:
-      - $values/goldilocks/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/observability.git
+      - $values/observability/goldilocks/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/observability.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: goldilocks
+    path: observability/goldilocks
   destination:
     server: https://kubernetes.default.svc
     namespace: goldilocks

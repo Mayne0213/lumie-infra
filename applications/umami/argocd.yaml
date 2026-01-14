@@ -13,13 +13,13 @@ spec:
     targetRevision: 7.1.0
     helm:
       valueFiles:
-      - $values/umami/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/applications.git
+      - $values/applications/umami/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/applications.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: umami
+    path: applications/umami
   destination:
     server: https://kubernetes.default.svc
     namespace: umami

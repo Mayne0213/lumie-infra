@@ -8,9 +8,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github0213.com/K3S-HOME/platform.git
+    repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: tekton/pipeline
+    path: platform/tekton/pipeline
   destination:
     server: https://kubernetes.default.svc
     namespace: tekton-pipelines

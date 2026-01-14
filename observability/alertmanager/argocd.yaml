@@ -13,13 +13,13 @@ spec:
     targetRevision: 1.30.0
     helm:
       valueFiles:
-      - $values/alertmanager/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/observability.git
+      - $values/observability/alertmanager/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/observability.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: alertmanager
+    path: observability/alertmanager
     kustomize: {}
   destination:
     server: https://kubernetes.default.svc

@@ -15,13 +15,13 @@ spec:
       targetRevision: 7.7.10
       helm:
         valueFiles:
-          - $values/argocd/helm-values.yaml
+          - $values/platform/argocd/helm-values.yaml
     # Source 2: Helm values from Git repo
-    - repoURL: https://github.com/K3S-HOME/platform.git
+    - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
       targetRevision: main
       ref: values
     # Source 3: Additional manifests (Ingress, Namespace)
-    - repoURL: https://github.com/K3S-HOME/platform.git
+    - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
       targetRevision: main
       path: argocd/manifests
   destination:

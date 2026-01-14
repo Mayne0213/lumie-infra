@@ -11,9 +11,9 @@ spec:
   project: default
 
   source:
-    repoURL: https://github0213.com/K3S-HOME/web-apps.git
+    repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: .
+    path: web-apps
 
   destination:
     server: https://kubernetes.default.svc

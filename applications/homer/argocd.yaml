@@ -13,13 +13,13 @@ spec:
     targetRevision: 3.6.1
     helm:
       valueFiles:
-      - $values/homer/helm-values.yaml
-  - repoURL: https://github0213.com/K3S-HOME/applications.git
+      - $values/applications/homer/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/K3S-HOME/applications.git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: homer
+    path: applications/homer
   destination:
     server: https://kubernetes.default.svc
     namespace: homer
