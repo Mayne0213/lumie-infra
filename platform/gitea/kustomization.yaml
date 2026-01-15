@@ -3,4 +3,6 @@ kind: Kustomization
 resources:
 - redirect.yaml
 - robots-configmap.yaml
+patches:
+- path: velero-backup-patch.yaml
 namespace: gitea
