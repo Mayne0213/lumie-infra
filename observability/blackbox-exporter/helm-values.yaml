@@ -58,10 +58,10 @@ serviceMonitor:
   targets:
     # Infrastructure Services
     - name: argocd
-      url: https://argocd0213.kro.kr
+      url: https://argocd0213.kro.kr/healthz
       module: http_2xx
     - name: grafana
-      url: https://grafana0213.kro.kr
+      url: https://grafana0213.kro.kr/api/health
       module: http_2xx
     - name: vault
       url: https://vault0213.kro.kr
@@ -70,7 +70,7 @@ serviceMonitor:
       url: https://auth0213.kro.kr
       module: http_2xx
     - name: karma
-      url: https://karma0213.kro.kr
+      url: https://karma0213.kro.kr/health
       module: http_2xx
     - name: gitea
       url: https://github0213.com
@@ -79,16 +79,16 @@ serviceMonitor:
       url: https://minio0213.kro.kr
       module: http_2xx
     - name: velero-ui
-      url: https://velero0213.kro.kr
+      url: https://velero0213.kro.kr/health
       module: http_2xx
     - name: headlamp
       url: https://kubernetes0213.kro.kr
       module: http_2xx
     - name: goldilocks
-      url: https://goldilocks0213.kro.kr
+      url: https://goldilocks0213.kro.kr/healthz
       module: http_2xx
     - name: code-server
-      url: https://vscode0213.kro.kr
+      url: https://vscode0213.kro.kr/healthz
       module: http_2xx
     - name: pgweb
       url: https://pgweb0213.kro.kr
