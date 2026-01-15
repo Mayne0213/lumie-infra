@@ -85,19 +85,19 @@ externalSecret:
     - secretKey: DB_HOST
       remoteRef:
         key: storage/postgresql
-        property: DB_HOST
+        property: POSTGRES_HOST
     - secretKey: DB_PORT
       remoteRef:
         key: storage/postgresql
-        property: DB_PORT
+        property: POSTGRES_PORT
     - secretKey: DB_USER
       remoteRef:
         key: storage/postgresql
-        property: DB_USER
+        property: POSTGRES_USER
     - secretKey: DB_PASSWORD
       remoteRef:
         key: storage/postgresql
-        property: PASSWORD
+        property: POSTGRES_PASSWORD
 
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:

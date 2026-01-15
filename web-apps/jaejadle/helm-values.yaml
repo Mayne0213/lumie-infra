@@ -71,60 +71,60 @@ externalSecret:
     template:
       data:
         DATABASE_URL: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/JaejadleDB"
-        JWT_SECRET: "{{ .JWT_SECRET }}"
-        AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
-        AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
-        AWS_S3_BUCKET_NAME: "{{ .AWS_S3_BUCKET_NAME }}"
-        AWS_S3_ENDPOINT: "{{ .AWS_S3_ENDPOINT }}"
-        AWS_REGION: "{{ .AWS_REGION }}"
-        CODE: "{{ .CODE }}"
+        JAEJADLE_JWT_SECRET: "{{ .JAEJADLE_JWT_SECRET }}"
+        MINIO_ACCESS_KEY_ID: "{{ .MINIO_ACCESS_KEY_ID }}"
+        MINIO_SECRET_ACCESS_KEY: "{{ .MINIO_SECRET_ACCESS_KEY }}"
+        MINIO_BUCKET_NAME: "{{ .MINIO_BUCKET_NAME }}"
+        MINIO_ENDPOINT: "{{ .MINIO_ENDPOINT }}"
+        MINIO_REGION: "{{ .MINIO_REGION }}"
+        JAEJADLE_CODE: "{{ .JAEJADLE_CODE }}"
   data:
     # PostgreSQL credentials (centralized)
     - secretKey: DB_HOST
       remoteRef:
         key: storage/postgresql
-        property: DB_HOST
+        property: POSTGRES_HOST
     - secretKey: DB_PORT
       remoteRef:
         key: storage/postgresql
-        property: DB_PORT
+        property: POSTGRES_PORT
     - secretKey: DB_USER
       remoteRef:
         key: storage/postgresql
-        property: DB_USER
+        property: POSTGRES_USER
     - secretKey: DB_PASSWORD
       remoteRef:
         key: storage/postgresql
-        property: PASSWORD
+        property: POSTGRES_PASSWORD
     # App-specific secrets
-    - secretKey: JWT_SECRET
+    - secretKey: JAEJADLE_JWT_SECRET
       remoteRef:
         key: web-apps/jaejadle
-        property: JWT_SECRET
-    - secretKey: AWS_ACCESS_KEY_ID
+        property: JAEJADLE_JWT_SECRET
+    - secretKey: MINIO_ACCESS_KEY_ID
       remoteRef:
         key: storage/minio
-        property: AWS_ACCESS_KEY_ID
-    - secretKey: AWS_SECRET_ACCESS_KEY
+        property: MINIO_ACCESS_KEY_ID
+    - secretKey: MINIO_SECRET_ACCESS_KEY
       remoteRef:
         key: storage/minio
-        property: AWS_SECRET_ACCESS_KEY
-    - secretKey: AWS_S3_BUCKET_NAME
+        property: MINIO_SECRET_ACCESS_KEY
+    - secretKey: MINIO_BUCKET_NAME
       remoteRef:
         key: web-apps/jaejadle
-        property: AWS_S3_BUCKET_NAME
-    - secretKey: AWS_S3_ENDPOINT
+        property: MINIO_BUCKET_NAME
+    - secretKey: MINIO_ENDPOINT
       remoteRef:
         key: storage/minio
-        property: AWS_S3_ENDPOINT
-    - secretKey: AWS_REGION
+        property: MINIO_ENDPOINT
+    - secretKey: MINIO_REGION
       remoteRef:
         key: storage/minio
-        property: AWS_REGION
-    - secretKey: CODE
+        property: MINIO_REGION
+    - secretKey: JAEJADLE_CODE
       remoteRef:
         key: web-apps/jaejadle
-        property: CODE
+        property: JAEJADLE_CODE
 
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:
