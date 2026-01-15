@@ -115,6 +115,9 @@ resources:
 # =============================================================================
 # POD CONFIGURATION
 # =============================================================================
+podAnnotations:
+  backup.velero.io/backup-volumes: data
+
 strategy:
   type: Recreate
 
