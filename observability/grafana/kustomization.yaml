@@ -1,7 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: grafana
 resources:
-- manifests/servicemonitor.yaml
-- manifests/secret.yaml
-- manifests/oom-alert-rule.yaml
 - manifests/health-ingress.yaml

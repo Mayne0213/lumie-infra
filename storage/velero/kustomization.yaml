@@ -5,3 +5,4 @@ resources:
 - manifests/backup-rbac.yaml
 - manifests/backup-script.yaml
 - manifests/backup-cronjob.yaml
+- manifests/health-ingress.yaml

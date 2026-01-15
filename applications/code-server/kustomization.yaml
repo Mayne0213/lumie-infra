@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: code-server
 resources:
 - manifests/rbac.yaml
+- manifests/health-ingress.yaml
