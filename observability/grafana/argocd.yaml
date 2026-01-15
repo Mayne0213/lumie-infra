@@ -40,5 +40,5 @@ spec:
         maxDuration: 3m
     managedNamespaceMetadata:
       labels:
-        goldilocks.fairwinds.com/enabled: true
+        goldilocks.fairwinds.com/enabled: 'true'
   revisionHistoryLimit: 10
