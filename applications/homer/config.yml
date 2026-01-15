@@ -227,7 +227,7 @@ services:
         url: "https://pgweb0213.kro.kr"
         target: "_blank"
       - name: "Tekton"
-        logo: "/assets/icons/platform/tekton.svg"
+        logo: "/assets/icons/platform/tekton.webp"
         subtitle: "CI/CD Pipeline"
         tag: "platform"
         tagstyle: "is-info"
