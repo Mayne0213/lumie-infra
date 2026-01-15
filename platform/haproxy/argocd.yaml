@@ -17,6 +17,9 @@ spec:
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: platform/haproxy
   destination:
     server: https://kubernetes.default.svc
     namespace: haproxy
