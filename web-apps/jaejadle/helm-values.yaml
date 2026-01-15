@@ -103,11 +103,11 @@ externalSecret:
         property: JWT_SECRET
     - secretKey: AWS_ACCESS_KEY_ID
       remoteRef:
-        key: web-apps/jaejadle
+        key: storage/minio
         property: AWS_ACCESS_KEY_ID
     - secretKey: AWS_SECRET_ACCESS_KEY
       remoteRef:
-        key: web-apps/jaejadle
+        key: storage/minio
         property: AWS_SECRET_ACCESS_KEY
     - secretKey: AWS_S3_BUCKET_NAME
       remoteRef:
@@ -115,11 +115,11 @@ externalSecret:
         property: AWS_S3_BUCKET_NAME
     - secretKey: AWS_S3_ENDPOINT
       remoteRef:
-        key: web-apps/jaejadle
+        key: storage/minio
         property: AWS_S3_ENDPOINT
     - secretKey: AWS_REGION
       remoteRef:
-        key: web-apps/jaejadle
+        key: storage/minio
         property: AWS_REGION
     - secretKey: CODE
       remoteRef:
