@@ -4,4 +4,3 @@ namespace: mas
 resources:
 - manifests/rbac.yaml
 - manifests/external-secret.yaml
-- manifests/health-ingress.yaml
