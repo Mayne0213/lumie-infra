@@ -1,0 +1,67 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: tekton-cleanup
+  namespace: tekton-pipelines
+spec:
+  schedule: "0 */2 * * *"  # 매 2시간마다 실행
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 3600
+      template:
+        spec:
+          serviceAccountName: tekton-cleanup-sa
+          restartPolicy: OnFailure
+          containers:
+            - name: cleanup
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Cleaning up completed PipelineRuns and TaskRuns..."
+
+                  # 완료된 PipelineRuns 삭제 (1시간 이상 지난 것)
+                  kubectl get pipelineruns -n tekton-pipelines -o json | \
+                    jq -r '.items[] | select(.status.conditions[0].reason == "Succeeded" or .status.conditions[0].reason == "Failed") | select(.status.completionTime != null) | select((now - (.status.completionTime | fromdateiso8601)) > 3600) | .metadata.name' | \
+                    xargs -r kubectl delete pipelinerun -n tekton-pipelines
+
+                  # 완료된 TaskRuns 삭제 (1시간 이상 지난 것)
+                  kubectl get taskruns -n tekton-pipelines -o json | \
+                    jq -r '.items[] | select(.status.conditions[0].reason == "Succeeded" or .status.conditions[0].reason == "Failed") | select(.status.completionTime != null) | select((now - (.status.completionTime | fromdateiso8601)) > 3600) | .metadata.name' | \
+                    xargs -r kubectl delete taskrun -n tekton-pipelines
+
+                  echo "Cleanup completed!"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tekton-cleanup-sa
+  namespace: tekton-pipelines
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: tekton-cleanup-role
+  namespace: tekton-pipelines
+rules:
+  - apiGroups: ["tekton.dev"]
+    resources: ["pipelineruns", "taskruns"]
+    verbs: ["get", "list", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tekton-cleanup-rolebinding
+  namespace: tekton-pipelines
+subjects:
+  - kind: ServiceAccount
+    name: tekton-cleanup-sa
+    namespace: tekton-pipelines
+roleRef:
+  kind: Role
+  name: tekton-cleanup-role
+  apiGroup: rbac.authorization.k8s.io

@@ -13,3 +13,5 @@ resources:
   - pipelines/python-pipeline.yaml
   # Triggers
   - triggers/
+  # Cleanup CronJob
+  - cleanup/cronjob.yaml
