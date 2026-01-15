@@ -28,12 +28,20 @@ spec:
               # Install required tools
               apk add --no-cache curl gzip tar
 
+              # Detect architecture
+              ARCH=$(uname -m)
+              case $ARCH in
+                x86_64) ARCH="amd64" ;;
+                aarch64) ARCH="arm64" ;;
+              esac
+              echo "Detected architecture: $ARCH"
+
               # Install kubectl
-              curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${ARCH}/kubectl"
               chmod +x kubectl && mv kubectl /usr/local/bin/
 
               # Install mc (MinIO client)
-              curl -LO https://dl.min.io/client/mc/release/linux-amd64/mc
+              curl -LO "https://dl.min.io/client/mc/release/linux-${ARCH}/mc"
               chmod +x mc && mv mc /usr/local/bin/
 
               # Run backup script
