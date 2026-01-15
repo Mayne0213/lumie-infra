@@ -1,0 +1,88 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-job
+  namespace: velero
+spec:
+  # Every day at 3:00 AM KST (18:00 UTC previous day)
+  schedule: "0 18 * * *"
+  timeZone: "Asia/Seoul"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 1800  # 30 minutes timeout
+      template:
+        spec:
+          serviceAccountName: backup-job
+          restartPolicy: OnFailure
+          containers:
+          - name: backup
+            image: alpine:3.19
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # Install required tools
+              apk add --no-cache curl gzip tar
+
+              # Install kubectl
+              curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              chmod +x kubectl && mv kubectl /usr/local/bin/
+
+              # Install mc (MinIO client)
+              curl -LO https://dl.min.io/client/mc/release/linux-amd64/mc
+              chmod +x mc && mv mc /usr/local/bin/
+
+              # Run backup script
+              /scripts/backup.sh
+            env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: root-user
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: root-password
+            volumeMounts:
+            - name: backup-script
+              mountPath: /scripts
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+          volumes:
+          - name: backup-script
+            configMap:
+              name: backup-script
+              defaultMode: 0755
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: minio-credentials
+  namespace: velero
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: minio-credentials
+    creationPolicy: Owner
+  data:
+  - secretKey: root-user
+    remoteRef:
+      key: storage/minio
+      property: MINIO_ROOT_USER
+  - secretKey: root-password
+    remoteRef:
+      key: storage/minio
+      property: MINIO_ROOT_PASSWORD
