@@ -108,9 +108,9 @@ ingress:
 resources:
   requests:
     cpu: 15m
-    memory: 247Mi
+    memory: 256Mi
   limits:
-    memory: 333Mi
+    memory: 512Mi
 
 # =============================================================================
 # POD CONFIGURATION
