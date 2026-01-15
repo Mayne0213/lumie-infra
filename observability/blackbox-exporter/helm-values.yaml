@@ -37,6 +37,17 @@ config:
         preferred_ip_protocol: ip4
         tls_config:
           insecure_skip_verify: true
+    http_auth_ok:
+      prober: http
+      timeout: 10s
+      http:
+        valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+        valid_status_codes: [200, 301, 302, 303, 401]
+        method: GET
+        follow_redirects: false
+        preferred_ip_protocol: ip4
+        tls_config:
+          insecure_skip_verify: false
     tcp_connect:
       prober: tcp
       timeout: 5s
@@ -92,7 +103,7 @@ serviceMonitor:
       module: http_2xx
     - name: pgweb
       url: https://pgweb0213.kro.kr
-      module: http_2xx
+      module: http_auth_ok
     - name: zot
       url: https://zot0213.kro.kr
       module: http_2xx
@@ -121,7 +132,7 @@ serviceMonitor:
       module: http_2xx
     - name: mas
       url: https://mas0213.kro.kr
-      module: http_2xx
+      module: http_auth_ok
     - name: jaejadle
       url: https://jaejadle.kro.kr
       module: http_2xx
