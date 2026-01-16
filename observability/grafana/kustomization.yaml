@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: grafana
 resources:
 - manifests/health-ingress.yaml
+- manifests/embed-ingress.yaml
