@@ -40,7 +40,6 @@ falco:
 
   # Rate limiting - reduce duplicate alerts
   outputs_rate: 1        # Max 1 alert per second per rule
-  outputs_max_burst: 10  # Allow burst of 10 alerts
 
   # Rules configuration - disable default rules for better performance
   rules_files:
@@ -56,6 +55,16 @@ customRules:
   custom-rules.yaml: |-
     # Custom Falco Rules for your cluster
     # Optimized to reduce noise from trivy, postgres, minio, vault, etc.
+
+    # Required macros (from default rules)
+    - macro: spawned_process
+      condition: (evt.type in (execve, execveat) and evt.dir=<)
+
+    - macro: open_read
+      condition: (evt.type in (open,openat,openat2) and evt.is_open_read=true and fd.typechar='f' and fd.num>=0)
+
+    - macro: container
+      condition: (container.id != host)
 
     # Macro for known safe processes
     - macro: known_safe_processes
