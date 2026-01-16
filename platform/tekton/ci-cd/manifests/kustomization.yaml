@@ -5,8 +5,7 @@ resources:
   # Secrets
   - secrets/gitea-credentials.yaml
   # Tasks
-  - tasks/git-clone.yaml
-  - tasks/buildah-build-push.yaml
+  - tasks/kaniko-clone-build.yaml
   # Pipelines
   - pipelines/nextjs-pipeline.yaml
   - pipelines/fastapi-pipeline.yaml

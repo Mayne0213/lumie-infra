@@ -44,14 +44,7 @@ spec:
             value: web-apps/
         workspaces:
           - name: shared-workspace
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                storageClassName: local-path
-                resources:
-                  requests:
-                    storage: 1Gi
+            emptyDir: {}
           - name: docker-credentials
             secret:
               secretName: zot-registry-credentials
@@ -102,14 +95,7 @@ spec:
             value: web-apps/
         workspaces:
           - name: shared-workspace
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                storageClassName: local-path
-                resources:
-                  requests:
-                    storage: 1Gi
+            emptyDir: {}
           - name: docker-credentials
             secret:
               secretName: zot-registry-credentials
@@ -160,14 +146,7 @@ spec:
             value: web-apps/
         workspaces:
           - name: shared-workspace
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                storageClassName: local-path
-                resources:
-                  requests:
-                    storage: 1Gi
+            emptyDir: {}
           - name: docker-credentials
             secret:
               secretName: zot-registry-credentials
@@ -218,14 +197,7 @@ spec:
             value: web-apps/
         workspaces:
           - name: shared-workspace
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                storageClassName: local-path
-                resources:
-                  requests:
-                    storage: 1Gi
+            emptyDir: {}
           - name: docker-credentials
             secret:
               secretName: zot-registry-credentials
@@ -276,14 +248,7 @@ spec:
             value: web-apps/
         workspaces:
           - name: shared-workspace
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                storageClassName: local-path
-                resources:
-                  requests:
-                    storage: 1Gi
+            emptyDir: {}
           - name: docker-credentials
             secret:
               secretName: zot-registry-credentials
@@ -334,14 +299,7 @@ spec:
             value: web-apps/
         workspaces:
           - name: shared-workspace
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                storageClassName: local-path
-                resources:
-                  requests:
-                    storage: 1Gi
+            emptyDir: {}
           - name: docker-credentials
             secret:
               secretName: zot-registry-credentials
