@@ -4,8 +4,8 @@ metadata:
   name: backup-job
   namespace: velero
 spec:
-  # Every day at 3:00 AM KST (18:00 UTC previous day)
-  schedule: "0 18 * * *"
+  # Every day at 3:00 AM KST
+  schedule: "0 3 * * *"
   timeZone: "Asia/Seoul"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
