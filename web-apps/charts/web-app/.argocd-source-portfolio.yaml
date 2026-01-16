@@ -4,5 +4,5 @@ helm:
     value: zot0213.kro.kr/web-apps/portfolio
     forcestring: true
   - name: image.tag
-    value: latest@sha256:5ba5f8ed86937c586a6455cd8cb63bc9e7a404848af3367f452b6abe4e0171f5
+    value: latest@sha256:257079592d807ef68a97891bd99e9bceb119244768b3bdc450c6fe0b0ed40ad4
     forcestring: true
