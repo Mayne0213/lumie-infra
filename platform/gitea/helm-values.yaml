@@ -84,6 +84,19 @@ gitea:
       ENABLED: true
       DEFAULT_ACTIONS_URL: github
 
+    openid:
+      ENABLE_OPENID_SIGNIN: false
+      ENABLE_OPENID_SIGNUP: false
+
+  oauth:
+    - name: authelia
+      provider: openidConnect
+      existingSecret: gitea-oidc-secret
+      autoDiscoverUrl: https://auth0213.kro.kr/.well-known/openid-configuration
+      scopes: openid profile email
+      groupClaimName: groups
+      adminGroup: admins
+
 # =============================================================================
 # INGRESS
 # =============================================================================

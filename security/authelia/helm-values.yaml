@@ -29,6 +29,8 @@ pod:
             path: VAULT_CLIENT_SECRET
           - key: ZOT_CLIENT_SECRET
             path: ZOT_CLIENT_SECRET
+          - key: GITEA_CLIENT_SECRET
+            path: GITEA_CLIENT_SECRET
           - key: identity_providers.oidc.jwks.key
             path: jwks.pem
   extraVolumeMounts:
@@ -47,6 +49,10 @@ pod:
     - name: oidc-secrets
       mountPath: /secrets/ZOT_CLIENT_SECRET
       subPath: ZOT_CLIENT_SECRET
+      readOnly: true
+    - name: oidc-secrets
+      mountPath: /secrets/GITEA_CLIENT_SECRET
+      subPath: GITEA_CLIENT_SECRET
       readOnly: true
     - name: oidc-secrets
       mountPath: /secrets/jwks.pem
@@ -182,6 +188,20 @@ configMap:
             - profile
             - email
           token_endpoint_auth_method: client_secret_post
+        - client_id: gitea
+          client_name: Gitea
+          client_secret:
+            path: /secrets/GITEA_CLIENT_SECRET
+          public: false
+          authorization_policy: one_factor
+          claims_policy: default
+          redirect_uris:
+            - https://github0213.com/user/oauth2/authelia/callback
+          scopes:
+            - openid
+            - profile
+            - email
+          token_endpoint_auth_method: client_secret_basic
 
 # Secret configuration - use existing secret from Vault
 secret:
