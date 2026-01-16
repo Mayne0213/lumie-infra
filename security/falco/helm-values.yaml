@@ -42,11 +42,11 @@ falco:
   outputs_rate: 1        # Max 1 alert per second per rule
   outputs_max_burst: 10  # Allow burst of 10 alerts
 
-  # Rules configuration
+  # Rules configuration - disable default rules for better performance
   rules_files:
-    - /etc/falco/falco_rules.yaml
+    # - /etc/falco/falco_rules.yaml  # Disabled: 25 rules, high CPU usage
     - /etc/falco/falco_rules.local.yaml
-    - /etc/falco/rules.d
+    - /etc/falco/rules.d  # Custom rules only
 
   # Load default rules
   load_plugins: []
