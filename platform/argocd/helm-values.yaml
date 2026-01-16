@@ -46,6 +46,14 @@ configs:
 # APPLICATION CONTROLLER (StatefulSet)
 # =============================================================================
 controller:
+  # Schedule on master node to balance cluster load
+  nodeSelector:
+    node-role.kubernetes.io/control-plane: "true"
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: PreferNoSchedule
+
   # Metrics for Prometheus
   metrics:
     enabled: true
