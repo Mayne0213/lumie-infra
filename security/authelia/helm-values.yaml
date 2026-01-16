@@ -108,7 +108,12 @@ configMap:
   # Access control rules
   access_control:
     default_policy: one_factor
-    rules: []
+    rules:
+      # Bypass Grafana embed panels for portfolio site
+      - domain: grafana0213.kro.kr
+        resources:
+          - '^/d-solo/.*'
+        policy: bypass
 
   # Notifier - filesystem (no email)
   notifier:
