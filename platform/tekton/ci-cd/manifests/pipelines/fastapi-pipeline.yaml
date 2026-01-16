@@ -30,34 +30,22 @@ spec:
     - name: docker-credentials
       description: Docker registry credentials
   tasks:
-    - name: clone
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: $(params.git-url)
-        - name: revision
-          value: $(params.git-revision)
-        - name: deleteExisting
-          value: "true"
-      workspaces:
-        - name: output
-          workspace: shared-workspace
-
     - name: build-push
       taskRef:
-        name: buildah-build-push
-      runAfter:
-        - clone
+        name: kaniko-clone-build
       params:
+        - name: GIT_URL
+          value: $(params.git-url)
+        - name: GIT_REVISION
+          value: $(params.git-revision)
         - name: IMAGE
           value: zot0213.kro.kr/$(params.image-prefix)$(params.app-name)
         - name: TAG
           value: $(params.git-revision)
-        - name: DOCKERFILE
-          value: ./Dockerfile
         - name: CONTEXT
           value: $(params.context-dir)
+        - name: DOCKERFILE
+          value: Dockerfile
       workspaces:
         - name: source
           workspace: shared-workspace
