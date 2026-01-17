@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.name
+    value: zot0213.kro.kr/web-apps/poolc-frontend
+    forcestring: true
+  - name: image.tag
+    value: latest@sha256:603175eef55c2f168a42e5620acd34e7109c82982fe5e6c0440da842f04c5960
+    forcestring: true
