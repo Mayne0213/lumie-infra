@@ -90,7 +90,7 @@ externalSecret:
         MINIO_REGION: "{{ .minioRegion }}"
         MINIO_BUCKET: "poolc"
         # Defaults for optional services
-        FILE_DIR: "/tmp"
+        FILE_DIR: "/tmp/"
         EMAIL_ADDRESS: ""
         EMAIL_PASSWORD: ""
         NAVER_BOOK_API_URL: ""
