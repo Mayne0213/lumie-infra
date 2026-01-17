@@ -348,6 +348,9 @@ spec:
             value: .
           - name: image-prefix
             value: web-apps/
+          - name: build-args
+            value:
+              - "--build-arg=VITE_API_BASE_URL=https://api.poolc0213.kro.kr"
         workspaces:
           - name: shared-workspace
             emptyDir: {}

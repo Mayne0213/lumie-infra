@@ -24,6 +24,10 @@ spec:
       description: Image path prefix (e.g., web-apps/)
       type: string
       default: ""
+    - name: build-args
+      description: Docker build arguments
+      type: array
+      default: []
   workspaces:
     - name: shared-workspace
       description: Shared workspace for all tasks
@@ -46,6 +50,8 @@ spec:
           value: $(params.context-dir)
         - name: DOCKERFILE
           value: Dockerfile
+        - name: BUILD_ARGS
+          value: $(params.build-args[*])
       workspaces:
         - name: source
           workspace: shared-workspace

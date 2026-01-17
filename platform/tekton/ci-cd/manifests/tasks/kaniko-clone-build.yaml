@@ -28,6 +28,10 @@ spec:
       description: Dockerfile path relative to context
       type: string
       default: Dockerfile
+    - name: BUILD_ARGS
+      description: Docker build arguments (e.g., --build-arg KEY=VALUE)
+      type: array
+      default: []
   workspaces:
     - name: source
       description: Workspace for git clone and build
@@ -89,6 +93,7 @@ spec:
         - --cache=false
         - --snapshot-mode=redo
         - --use-new-run
+        - $(params.BUILD_ARGS[*])
       volumeMounts:
         - name: kaniko-docker
           mountPath: /kaniko/.docker
