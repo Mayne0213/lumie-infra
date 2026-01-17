@@ -78,7 +78,7 @@ externalSecret:
         SPRING_DATASOURCE_URL: "jdbc:postgresql://{{ .pgHost }}:{{ .pgPort }}/PoolcDB"
         SPRING_DATASOURCE_USERNAME: "{{ .pgUser }}"
         SPRING_DATASOURCE_PASSWORD: "{{ .pgPassword }}"
-        JWT_SECRET: "{{ .jwtSecret }}"
+        PROJECT_NAME_HERE_SECRET_KEY: "{{ .jwtSecret }}"
   data:
     # From shared PostgreSQL secret
     - secretKey: pgHost
