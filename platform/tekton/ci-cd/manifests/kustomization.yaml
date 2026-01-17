@@ -10,6 +10,8 @@ resources:
   - pipelines/nextjs-pipeline.yaml
   - pipelines/fastapi-pipeline.yaml
   - pipelines/python-pipeline.yaml
+  - pipelines/react-pipeline.yaml
+  - pipelines/springboot-pipeline.yaml
   # Triggers
   - triggers/
   # Cleanup CronJob

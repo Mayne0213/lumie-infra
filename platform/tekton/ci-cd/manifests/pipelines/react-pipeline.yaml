@@ -1,0 +1,53 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: react-build-deploy
+  namespace: tekton-pipelines
+spec:
+  description: Build React app and push to Zot registry
+  params:
+    - name: git-url
+      description: Git repository URL
+      type: string
+    - name: git-revision
+      description: Git revision (branch/tag/sha)
+      type: string
+      default: main
+    - name: app-name
+      description: Application name
+      type: string
+    - name: context-dir
+      description: Docker build context directory
+      type: string
+      default: .
+    - name: image-prefix
+      description: Image path prefix (e.g., web-apps/)
+      type: string
+      default: ""
+  workspaces:
+    - name: shared-workspace
+      description: Shared workspace for all tasks
+    - name: docker-credentials
+      description: Docker registry credentials
+  tasks:
+    - name: build-push
+      taskRef:
+        name: kaniko-clone-build
+      params:
+        - name: GIT_URL
+          value: $(params.git-url)
+        - name: GIT_REVISION
+          value: $(params.git-revision)
+        - name: IMAGE
+          value: zot0213.kro.kr/$(params.image-prefix)$(params.app-name)
+        - name: TAG
+          value: $(params.git-revision)
+        - name: CONTEXT
+          value: $(params.context-dir)
+        - name: DOCKERFILE
+          value: Dockerfile
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: dockerconfig
+          workspace: docker-credentials

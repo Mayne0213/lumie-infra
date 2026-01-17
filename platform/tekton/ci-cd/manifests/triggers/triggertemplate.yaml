@@ -303,3 +303,105 @@ spec:
           - name: docker-credentials
             secret:
               secretName: zot-registry-credentials
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: poolc-frontend-build-template
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+    - name: git-revision
+      description: Git commit SHA
+    - name: git-branch
+      description: Git branch name
+    - name: repo-name
+      description: Repository name
+    - name: repo-full-name
+      description: Full repository name (org/repo)
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: poolc-frontend-build-
+        namespace: tekton-pipelines
+        labels:
+          tekton.dev/pipeline: react-build-deploy
+          app: poolc-frontend
+          branch: $(tt.params.git-branch)
+      spec:
+        timeouts:
+          pipeline: 30m
+        pipelineRef:
+          name: react-build-deploy
+        onSuccessfulCompletion: delete
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-branch)
+          - name: app-name
+            value: poolc-frontend
+          - name: context-dir
+            value: .
+          - name: image-prefix
+            value: web-apps/
+        workspaces:
+          - name: shared-workspace
+            emptyDir: {}
+          - name: docker-credentials
+            secret:
+              secretName: zot-registry-credentials
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: poolc-backend-build-template
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+    - name: git-revision
+      description: Git commit SHA
+    - name: git-branch
+      description: Git branch name
+    - name: repo-name
+      description: Repository name
+    - name: repo-full-name
+      description: Full repository name (org/repo)
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: poolc-backend-build-
+        namespace: tekton-pipelines
+        labels:
+          tekton.dev/pipeline: springboot-build-deploy
+          app: poolc-backend
+          branch: $(tt.params.git-branch)
+      spec:
+        timeouts:
+          pipeline: 30m
+        pipelineRef:
+          name: springboot-build-deploy
+        onSuccessfulCompletion: delete
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-branch)
+          - name: app-name
+            value: poolc-backend
+          - name: context-dir
+            value: .
+          - name: image-prefix
+            value: web-apps/
+        workspaces:
+          - name: shared-workspace
+            emptyDir: {}
+          - name: docker-credentials
+            secret:
+              secretName: zot-registry-credentials

@@ -181,6 +181,64 @@ spec:
         - ref: gitea-push-binding
       template:
         ref: fastapi-dev-build-template
+    - name: gitea-push-poolc-frontend
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: gitea-webhook-secret
+                secretKey: webhook-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/main')"
+            - name: "overlays"
+              value:
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.repository.name in ['PoolC-frontend']"
+      bindings:
+        - ref: gitea-push-binding
+      template:
+        ref: poolc-frontend-build-template
+    - name: gitea-push-poolc-backend
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: gitea-webhook-secret
+                secretKey: webhook-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/main')"
+            - name: "overlays"
+              value:
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.repository.name in ['PoolC-backend']"
+      bindings:
+        - ref: gitea-push-binding
+      template:
+        ref: poolc-backend-build-template
   resources:
     kubernetesResource:
       spec:
