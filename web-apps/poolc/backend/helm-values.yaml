@@ -43,7 +43,7 @@ resources:
 
 healthCheck:
   enabled: true
-  path: /  # No actuator, use root path
+  path: /v2/api-docs  # Swagger endpoint
   startupProbe:
     periodSeconds: 10
     failureThreshold: 30
