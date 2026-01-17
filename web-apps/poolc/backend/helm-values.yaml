@@ -43,7 +43,7 @@ resources:
 
 healthCheck:
   enabled: true
-  path: /actuator/health  # Spring Boot Actuator
+  path: /  # No actuator, use root path
   startupProbe:
     periodSeconds: 10
     failureThreshold: 30
