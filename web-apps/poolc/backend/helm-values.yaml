@@ -1,0 +1,115 @@
+# PoolC Backend (Spring Boot) Helm Values
+
+name: poolc-backend
+
+image:
+  registry: zot0213.kro.kr
+  repository: web-apps/poolc-backend
+  tag: latest  # Updated by ArgoCD Image Updater
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: zot-registry-credentials
+
+replicaCount: 1
+containerPort: 8080
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: api.poolc0213.kro.kr
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: poolc-api-tls
+      hosts:
+        - api.poolc0213.kro.kr
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+healthCheck:
+  enabled: true
+  path: /actuator/health  # Spring Boot Actuator
+  startupProbe:
+    periodSeconds: 10
+    failureThreshold: 30
+  livenessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+  readinessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    timeoutSeconds: 5
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: "prod"
+  - name: JAVA_OPTS
+    value: "-Xmx384m -Xms256m"
+
+# External Secret for sensitive data (DB credentials, JWT secret, etc.)
+externalSecret:
+  enabled: true
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    template:
+      engineVersion: v2
+      data:
+        SPRING_DATASOURCE_URL: "jdbc:postgresql://{{ .pgHost }}:{{ .pgPort }}/PoolcDB"
+        SPRING_DATASOURCE_USERNAME: "{{ .pgUser }}"
+        SPRING_DATASOURCE_PASSWORD: "{{ .pgPassword }}"
+        JWT_SECRET: "{{ .jwtSecret }}"
+  data:
+    # From shared PostgreSQL secret
+    - secretKey: pgHost
+      remoteRef:
+        key: storage/postgresql
+        property: POSTGRES_HOST
+    - secretKey: pgPort
+      remoteRef:
+        key: storage/postgresql
+        property: POSTGRES_PORT
+    - secretKey: pgUser
+      remoteRef:
+        key: storage/postgresql
+        property: POSTGRES_USER
+    - secretKey: pgPassword
+      remoteRef:
+        key: storage/postgresql
+        property: POSTGRES_PASSWORD
+    # From shared JWT secret
+    - secretKey: jwtSecret
+      remoteRef:
+        key: web-apps/jwt
+        property: JWT_SECRET
+
+envFrom:
+  - secretRef:
+      name: poolc-backend-secret
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: kubernetes.io/hostname
