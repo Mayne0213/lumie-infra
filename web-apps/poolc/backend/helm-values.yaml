@@ -75,10 +75,22 @@ externalSecret:
     template:
       engineVersion: v2
       data:
-        SPRING_DATASOURCE_URL: "jdbc:postgresql://{{ .pgHost }}:{{ .pgPort }}/PoolcDB"
-        SPRING_DATASOURCE_USERNAME: "{{ .pgUser }}"
-        SPRING_DATASOURCE_PASSWORD: "{{ .pgPassword }}"
+        # Database
+        DB_HOST: "{{ .pgHost }}:{{ .pgPort }}"
+        DB_NAME: "PoolcDB"
+        DB_USER_NAME: "{{ .pgUser }}"
+        DB_PASSWORD: "{{ .pgPassword }}"
+        # JWT
         PROJECT_NAME_HERE_SECRET_KEY: "{{ .jwtSecret }}"
+        EXPIRE_LENGTH_IN_MILLISECONDS: "3600000"
+        # Defaults for optional services
+        FILE_DIR: "/tmp"
+        EMAIL_ADDRESS: ""
+        EMAIL_PASSWORD: ""
+        NAVER_BOOK_API_URL: ""
+        NAVER_BOOK_CLIENT_ID: ""
+        NAVER_BOOK_CLIENT_SECRET: ""
+        KUBERNETES_API_KEY: ""
   data:
     # From shared PostgreSQL secret
     - secretKey: pgHost
