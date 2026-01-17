@@ -83,6 +83,12 @@ externalSecret:
         # JWT
         PROJECT_NAME_HERE_SECRET_KEY: "{{ .jwtSecret }}"
         EXPIRE_LENGTH_IN_MILLISECONDS: "3600000"
+        # MinIO (S3-compatible storage)
+        MINIO_ENDPOINT: "{{ .minioEndpoint }}"
+        MINIO_ACCESS_KEY: "{{ .minioAccessKey }}"
+        MINIO_SECRET_KEY: "{{ .minioSecretKey }}"
+        MINIO_REGION: "{{ .minioRegion }}"
+        MINIO_BUCKET: "poolc"
         # Defaults for optional services
         FILE_DIR: "/tmp"
         EMAIL_ADDRESS: ""
@@ -114,6 +120,23 @@ externalSecret:
       remoteRef:
         key: web-apps/jwt
         property: JWT_SECRET
+    # From MinIO secret
+    - secretKey: minioEndpoint
+      remoteRef:
+        key: storage/minio
+        property: MINIO_ENDPOINT
+    - secretKey: minioAccessKey
+      remoteRef:
+        key: storage/minio
+        property: MINIO_ACCESS_KEY_ID
+    - secretKey: minioSecretKey
+      remoteRef:
+        key: storage/minio
+        property: MINIO_SECRET_ACCESS_KEY
+    - secretKey: minioRegion
+      remoteRef:
+        key: storage/minio
+        property: MINIO_REGION
 
 envFrom:
   - secretRef:
