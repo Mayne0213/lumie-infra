@@ -1,0 +1,103 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: git-update-values
+  namespace: tekton-pipelines
+spec:
+  description: Update helm values file with new image digest and push to git
+  params:
+    - name: GIT_REPO_URL
+      description: Git repository URL to update (K3S-HOME)
+      type: string
+      default: "https://github0213.com/Mayne0213/K3S-HOME.git"
+    - name: GIT_BRANCH
+      description: Git branch to update
+      type: string
+      default: main
+    - name: VALUES_FILE_PATH
+      description: Path to helm values file (e.g., web-apps/poolc-dev/helm-values-backend.yaml)
+      type: string
+    - name: IMAGE_DIGEST
+      description: New image digest to set
+      type: string
+    - name: APP_NAME
+      description: Application name for commit message
+      type: string
+  workspaces:
+    - name: source
+      description: Workspace for git operations
+    - name: git-credentials
+      description: Git credentials (username/password)
+  steps:
+    - name: update-and-push
+      image: docker.io/alpine:latest
+      env:
+        - name: GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: gitea-credentials
+              key: username
+        - name: GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gitea-credentials
+              key: password
+      script: |
+        #!/bin/sh
+        set -e
+
+        # Install dependencies
+        apk add --no-cache git yq
+
+        cd $(workspaces.source.path)
+
+        # Configure git
+        git config --global user.email "tekton@k3s-home.local"
+        git config --global user.name "Tekton CI"
+        git config --global credential.helper store
+
+        # Setup credentials
+        REPO_URL=$(echo "$(params.GIT_REPO_URL)" | sed "s|https://|https://${GIT_USERNAME}:${GIT_PASSWORD}@|")
+
+        # Clone repository
+        echo "Cloning $(params.GIT_REPO_URL)..."
+        git clone --depth=1 --branch=$(params.GIT_BRANCH) "$REPO_URL" k3s-home
+        cd k3s-home
+
+        # Update the values file
+        VALUES_FILE="$(params.VALUES_FILE_PATH)"
+        DIGEST="$(params.IMAGE_DIGEST)"
+
+        echo "Updating $VALUES_FILE with digest: $DIGEST"
+
+        if [ ! -f "$VALUES_FILE" ]; then
+          echo "ERROR: Values file not found: $VALUES_FILE"
+          exit 1
+        fi
+
+        # Update image.tag using yq
+        yq -i '.image.tag = "'"$DIGEST"'"' "$VALUES_FILE"
+
+        # Check if there are changes
+        if git diff --quiet "$VALUES_FILE"; then
+          echo "No changes detected, skipping commit"
+          exit 0
+        fi
+
+        # Show the change
+        echo "Changes:"
+        git diff "$VALUES_FILE"
+
+        # Commit and push
+        git add "$VALUES_FILE"
+        git commit -m "$(cat <<EOF
+        CHORE(app): update $(params.APP_NAME) image
+
+        - Update image digest to $DIGEST
+        EOF
+        )"
+
+        echo "Pushing to $(params.GIT_BRANCH)..."
+        git push origin $(params.GIT_BRANCH)
+
+        echo "Successfully updated $VALUES_FILE"

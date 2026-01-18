@@ -6,6 +6,7 @@ resources:
   - secrets/gitea-credentials.yaml
   # Tasks
   - tasks/kaniko-clone-build.yaml
+  - tasks/git-update-values.yaml
   # Pipelines
   - pipelines/nextjs-pipeline.yaml
   - pipelines/fastapi-pipeline.yaml

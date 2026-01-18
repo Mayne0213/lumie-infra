@@ -351,6 +351,10 @@ spec:
           - name: build-args
             value:
               - "--build-arg=VITE_API_BASE_URL=https://dev.poolc0213.kro.kr/api"
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: web-apps/poolc-dev/helm-values-frontend.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -402,6 +406,10 @@ spec:
             value: .
           - name: image-prefix
             value: web-apps/
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: web-apps/poolc-dev/helm-values-backend.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}

@@ -28,6 +28,15 @@ spec:
       description: Docker build arguments
       type: array
       default: []
+    # Optional: Values file update parameters
+    - name: values-file-path
+      description: Path to helm values file to update (optional)
+      type: string
+      default: ""
+    - name: update-values
+      description: Whether to update values file (true/false)
+      type: string
+      default: "false"
   workspaces:
     - name: shared-workspace
       description: Shared workspace for all tasks
@@ -57,3 +66,22 @@ spec:
           workspace: shared-workspace
         - name: dockerconfig
           workspace: docker-credentials
+    - name: update-values
+      runAfter:
+        - build-push
+      when:
+        - input: $(params.update-values)
+          operator: in
+          values: ["true"]
+      taskRef:
+        name: git-update-values
+      params:
+        - name: VALUES_FILE_PATH
+          value: $(params.values-file-path)
+        - name: IMAGE_DIGEST
+          value: $(tasks.build-push.results.IMAGE_DIGEST)
+        - name: APP_NAME
+          value: $(params.app-name)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
