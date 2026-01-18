@@ -41,6 +41,8 @@ spec:
   results:
     - name: IMAGE_DIGEST
       description: Digest of built image
+    - name: IMAGE_TAG
+      description: Short digest tag (first 12 chars)
     - name: COMMIT_SHA
       description: Git commit SHA
   steps:
@@ -97,6 +99,34 @@ spec:
       volumeMounts:
         - name: kaniko-docker
           mountPath: /kaniko/.docker
+    - name: tag-with-digest
+      image: gcr.io/go-containerregistry/crane:latest
+      env:
+        - name: IMAGE
+          value: $(params.IMAGE)
+      script: |
+        #!/bin/sh
+        set -e
+
+        # Read the digest from previous step
+        DIGEST=$(cat /tekton/results/IMAGE_DIGEST)
+        echo "Full digest: $DIGEST"
+
+        # Extract short tag (first 12 chars of hash)
+        SHORT_TAG=$(echo "$DIGEST" | sed 's/sha256://' | cut -c1-12)
+        echo "Short tag: $SHORT_TAG"
+
+        # Save short tag as result
+        echo -n "$SHORT_TAG" > /tekton/results/IMAGE_TAG
+
+        # Copy image from latest to short digest tag
+        echo "Tagging $IMAGE:latest as $IMAGE:$SHORT_TAG"
+        crane copy "$IMAGE:latest" "$IMAGE:$SHORT_TAG" --insecure
+
+        echo "Successfully tagged image with $SHORT_TAG"
+      volumeMounts:
+        - name: kaniko-docker
+          mountPath: /home/nonroot/.docker
   volumes:
     - name: kaniko-docker
       emptyDir: {}
