@@ -23,6 +23,10 @@ spec:
     - name: APP_NAME
       description: Application name for commit message
       type: string
+    - name: YQ_PATH
+      description: yq path for image tag (e.g., .image.tag or .controllers.main.containers.main.image.tag)
+      type: string
+      default: ".image.tag"
   workspaces:
     - name: source
       description: Workspace for git operations
@@ -73,8 +77,9 @@ spec:
           exit 1
         fi
 
-        # Update image.tag using yq
-        yq -i '.image.tag = "'"$IMAGE_TAG"'"' "$VALUES_FILE"
+        # Update image tag using yq with configurable path
+        YQ_PATH="$(params.YQ_PATH)"
+        yq -i "${YQ_PATH} = \"${IMAGE_TAG}\"" "$VALUES_FILE"
 
         # Check if there are changes
         if git diff --quiet "$VALUES_FILE"; then

@@ -33,6 +33,10 @@ spec:
       description: Whether to update values file (true/false)
       type: string
       default: "false"
+    - name: yq-path
+      description: yq path for image tag
+      type: string
+      default: ".image.tag"
   workspaces:
     - name: shared-workspace
       description: Shared workspace for all tasks
@@ -76,6 +80,8 @@ spec:
           value: $(tasks.build-push.results.IMAGE_TAG)
         - name: APP_NAME
           value: $(params.app-name)
+        - name: YQ_PATH
+          value: $(params.yq-path)
       workspaces:
         - name: source
           workspace: shared-workspace

@@ -266,6 +266,8 @@ spec:
             value: "true"
           - name: values-file-path
             value: applications/mas/helm-values.yaml
+          - name: yq-path
+            value: ".controllers.main.containers.main.image.tag"
         workspaces:
           - name: shared-workspace
             emptyDir: {}
