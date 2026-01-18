@@ -19,15 +19,14 @@ service:
   clusterIP: None
 
 # Prometheus ServiceMonitor 설정
+# ServiceMonitor를 node-exporter namespace에 생성하여 같은 namespace의 Service를 자동 발견
 prometheus:
   monitor:
     enabled: true
     additionalLabels:
       release: prometheus
-    namespace: prometheus
-    namespaceSelector:
-      matchNames:
-        - node-exporter
+    # ServiceMonitor가 Service와 같은 namespace에 있어야 함
+    namespace: ""
     attachMetadata:
       node: true
     relabelings:
