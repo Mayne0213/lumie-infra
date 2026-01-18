@@ -22,8 +22,9 @@ server:
     replicas: 3
     raft:
       enabled: false
-    # Empty config - actual config is in vault-config-secret
-    config: ""
+    # UI enabled - actual storage config is in vault-config-secret
+    config: |
+      ui = true
 
   # PVC 비활성화 (PostgreSQL 사용)
   dataStorage:
