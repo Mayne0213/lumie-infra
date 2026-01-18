@@ -92,12 +92,7 @@ spec:
 
         # Commit and push
         git add "$VALUES_FILE"
-        git commit -m "$(cat <<EOF
-CHORE(app): update $(params.APP_NAME) image
-
-- Update image tag to $SHORT_TAG
-EOF
-        )"
+        git commit -m "CHORE(app): update $(params.APP_NAME) image to $SHORT_TAG"
 
         echo "Pushing to $(params.GIT_BRANCH)..."
         git push origin $(params.GIT_BRANCH)
