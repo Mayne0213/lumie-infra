@@ -350,7 +350,7 @@ spec:
             value: web-apps/
           - name: build-args
             value:
-              - "--build-arg=VITE_API_BASE_URL=https://api.poolc0213.kro.kr"
+              - "--build-arg=VITE_API_BASE_URL=https://dev.poolc0213.kro.kr/api"
         workspaces:
           - name: shared-workspace
             emptyDir: {}

@@ -1,0 +1,69 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: poolc-dev
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # Image Updater - Backend
+    argocd-image-updater.argoproj.io/image-list: backend=zot0213.kro.kr/web-apps/poolc-backend:latest,frontend=zot0213.kro.kr/web-apps/poolc-frontend:latest
+    argocd-image-updater.argoproj.io/backend.update-strategy: digest
+    argocd-image-updater.argoproj.io/backend.platforms: linux/arm64/v8
+    argocd-image-updater.argoproj.io/backend.pull-secret: pullsecret:argocd/zot-registry-credentials
+    argocd-image-updater.argoproj.io/backend.helm.image-tag: image.tag
+    # Image Updater - Frontend
+    argocd-image-updater.argoproj.io/frontend.update-strategy: digest
+    argocd-image-updater.argoproj.io/frontend.platforms: linux/arm64/v8
+    argocd-image-updater.argoproj.io/frontend.pull-secret: pullsecret:argocd/zot-registry-credentials
+    argocd-image-updater.argoproj.io/frontend.helm.image-tag: image.tag
+    # Write-back configuration
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/gitea-creds
+    argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/git-commit-message: "CHORE(app): update {{ .AppName }} image"
+spec:
+  project: default
+  sources:
+  # Backend (Spring Boot)
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: web-apps/charts/web-app
+    helm:
+      releaseName: poolc-dev-backend
+      valueFiles:
+      - $values/web-apps/poolc-dev/helm-values-backend.yaml
+  # Frontend (React)
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: web-apps/charts/web-app
+    helm:
+      releaseName: poolc-dev-frontend
+      valueFiles:
+      - $values/web-apps/poolc-dev/helm-values-frontend.yaml
+  # Values reference
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: poolc-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+        zot-registry: 'enabled'
+  revisionHistoryLimit: 10

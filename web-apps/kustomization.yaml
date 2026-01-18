@@ -15,4 +15,4 @@ resources:
   - joossam-dev/argocd.yaml
   - poolc/frontend/argocd.yaml
   - poolc/backend/argocd.yaml
-  - poolc-dev/argocd-springboot.yaml
+  - poolc-dev/argocd.yaml
