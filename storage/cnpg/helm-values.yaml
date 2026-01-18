@@ -1,15 +1,14 @@
 # CloudNativePG Operator Helm Values
 # Chart: https://github.com/cloudnative-pg/charts
 
-# Operator image (via external Zot registry)
+# Operator image (external registry - temporary)
 image:
-  repository: zot0213.kro.kr/storage/cnpg
-  tag: 1.25.1
+  repository: ghcr.io/cloudnative-pg/cloudnative-pg
+  tag: "1.25.1"
   pullPolicy: IfNotPresent
 
-# Pull from Zot registry
-imagePullSecrets:
-  - name: zot-registry-credentials
+# No pull secrets needed for public registry
+imagePullSecrets: []
 
 # Replica count for operator
 replicaCount: 1
