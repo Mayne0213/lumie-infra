@@ -1,24 +1,19 @@
 # Jotion Web App Helm Values
 
 name: jotion
-
 image:
   registry: zot0213.kro.kr
   repository: web-apps/jotion
-  tag: latest  # Updated by ArgoCD Image Updater
+  tag: 2646b160 # Updated by ArgoCD Image Updater
   pullPolicy: Always
-
 imagePullSecrets:
   - name: zot-registry-credentials
-
 replicaCount: 1
 containerPort: 3000
-
 service:
   enabled: true
   type: ClusterIP
   port: 80
-
 ingress:
   enabled: true
   className: traefik
@@ -38,7 +33,6 @@ ingress:
       hosts:
         - jotion0213.kro.kr
         - www.jotion0213.kro.kr
-
 # Resource settings (no CPU limit for stability)
 resources:
   requests:
@@ -46,7 +40,6 @@ resources:
     memory: 109Mi
   limits:
     memory: 169Mi
-
 livenessProbe:
   httpGet:
     path: /home
@@ -55,7 +48,6 @@ livenessProbe:
   periodSeconds: 10
   timeoutSeconds: 1
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
     path: /home
@@ -64,7 +56,6 @@ readinessProbe:
   periodSeconds: 5
   timeoutSeconds: 1
   failureThreshold: 3
-
 env:
   - name: NODE_ENV
     value: production
@@ -73,7 +64,6 @@ env:
       secretKeyRef:
         name: jotion-secrets
         key: database-url
-
 externalSecret:
   enabled: true
   refreshInterval: 1h
@@ -103,7 +93,6 @@ externalSecret:
       remoteRef:
         key: storage/postgresql
         property: POSTGRES_PASSWORD
-
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:
   podAntiAffinity:
