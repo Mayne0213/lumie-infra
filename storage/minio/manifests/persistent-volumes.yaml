@@ -1,9 +1,9 @@
 ---
-# PV 1: k3s-worker-1 - /mnt/minio-data1
+# PV 1: mayne-vcn - /mnt/minio-data1
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: minio-pv-worker1-data1
+  name: minio-pv-mayne-vcn-data1
 spec:
   capacity:
     storage: 45Gi
@@ -21,13 +21,13 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - k3s-worker-1
+                - mayne-vcn
 ---
-# PV 2: k3s-worker-1 - /mnt/minio-data2
+# PV 2: mayne-vcn - /mnt/minio-data2
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: minio-pv-worker1-data2
+  name: minio-pv-mayne-vcn-data2
 spec:
   capacity:
     storage: 45Gi
@@ -45,13 +45,13 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - k3s-worker-1
+                - mayne-vcn
 ---
-# PV 3: k3s-worker-2 - /mnt/minio-data1
+# PV 3: mayne-worker-1 - /mnt/minio-data1
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: minio-pv-worker2-data1
+  name: minio-pv-mayne-worker1-data1
 spec:
   capacity:
     storage: 45Gi
@@ -69,13 +69,13 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - k3s-worker-2
+                - mayne-worker-1
 ---
-# PV 4: k3s-worker-2 - /mnt/minio-data2
+# PV 4: mayne-worker-2 - /mnt/minio-data1
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: minio-pv-worker2-data2
+  name: minio-pv-mayne-worker2-data1
 spec:
   capacity:
     storage: 45Gi
@@ -85,7 +85,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: minio-local
   local:
-    path: /mnt/minio-data2
+    path: /mnt/minio-data1
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -93,4 +93,4 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - k3s-worker-2
+                - mayne-worker-2
