@@ -1,24 +1,19 @@
 # Docusaurus Web App Helm Values
 
 name: docusaurus
-
 image:
   registry: zot0213.kro.kr
   repository: web-apps/docusaurus
-  tag: latest  # Updated by ArgoCD Image Updater
+  tag: 05a4692f # Updated by ArgoCD Image Updater
   pullPolicy: Always
-
 imagePullSecrets:
   - name: zot-secret
-
 replicaCount: 1
-containerPort: 80  # nginx
-
+containerPort: 80 # nginx
 service:
   enabled: true
   type: ClusterIP
   port: 80
-
 ingress:
   enabled: true
   className: traefik
@@ -33,7 +28,6 @@ ingress:
     - secretName: docusaurus-tls
       hosts:
         - docusaurus0213.kro.kr
-
 # Resource settings (no CPU limit for stability)
 resources:
   requests:
@@ -41,7 +35,6 @@ resources:
     memory: 50Mi
   limits:
     memory: 50Mi
-
 healthCheck:
   enabled: true
   path: /
@@ -54,12 +47,9 @@ healthCheck:
   readinessProbe:
     initialDelaySeconds: 0
     periodSeconds: 5
-
 env: []
-
 externalSecret:
   enabled: false
-
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:
   podAntiAffinity:
