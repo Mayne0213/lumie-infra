@@ -1,24 +1,19 @@
 # PoolC Dev Backend (Spring Boot) Helm Values
 
 name: poolc-dev-backend
-
 image:
   registry: zot0213.kro.kr
   repository: web-apps/poolc-backend
-  tag: latest  # Updated by ArgoCD Image Updater
+  tag: b5b212e0d009
   pullPolicy: Always
-
 imagePullSecrets:
   - name: zot-registry-credentials
-
 replicaCount: 1
 containerPort: 8080
-
 service:
   enabled: true
   type: ClusterIP
   port: 80
-
 ingress:
   enabled: true
   className: traefik
@@ -34,17 +29,15 @@ ingress:
     - secretName: poolc-dev-tls
       hosts:
         - dev.poolc0213.kro.kr
-
 resources:
   requests:
     cpu: 50m
     memory: 256Mi
   limits:
     memory: 512Mi
-
 healthCheck:
   enabled: true
-  path: /v2/api-docs  # Swagger endpoint
+  path: /v2/api-docs # Swagger endpoint
   startupProbe:
     periodSeconds: 10
     failureThreshold: 30
@@ -56,13 +49,11 @@ healthCheck:
     initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 5
-
 env:
   - name: SPRING_PROFILES_ACTIVE
     value: "prod"
   - name: JAVA_OPTS
     value: "-Xmx384m -Xms256m"
-
 # External Secret for sensitive data (DB credentials, JWT secret, etc.)
 externalSecret:
   enabled: true
@@ -138,18 +129,15 @@ externalSecret:
       remoteRef:
         key: storage/minio
         property: MINIO_REGION
-
 envFrom:
   - secretRef:
       name: poolc-dev-backend-secrets
-
 affinity:
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
       - weight: 100
         podAffinityTerm:
           topologyKey: kubernetes.io/hostname
-
 # Traefik Middleware for stripping /api prefix
 middleware:
   enabled: true
