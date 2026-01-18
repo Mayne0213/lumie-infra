@@ -42,7 +42,7 @@ spec:
     - name: IMAGE_DIGEST
       description: Digest of built image
     - name: IMAGE_TAG
-      description: Short digest tag (first 12 chars)
+      description: Image tag used for deployment
     - name: COMMIT_SHA
       description: Git commit SHA
   steps:
@@ -81,52 +81,43 @@ spec:
         - name: kaniko-docker
           mountPath: /kaniko/.docker
     - name: build-and-push
-      image: gcr.io/kaniko-project/executor:latest
+      image: gcr.io/kaniko-project/executor:debug
       env:
         - name: DOCKER_CONFIG
           value: /kaniko/.docker
-      args:
-        - --context=$(workspaces.source.path)/$(params.CONTEXT)
-        - --dockerfile=$(workspaces.source.path)/$(params.CONTEXT)/$(params.DOCKERFILE)
-        - --destination=$(params.IMAGE):$(params.TAG)
-        - --destination=$(params.IMAGE):latest
-        - --digest-file=/tekton/results/IMAGE_DIGEST
-        - --skip-tls-verify
-        - --cache=false
-        - --snapshot-mode=redo
-        - --use-new-run
-        - $(params.BUILD_ARGS[*])
+        - name: IMAGE
+          value: $(params.IMAGE)
+        - name: CONTEXT
+          value: $(params.CONTEXT)
+        - name: DOCKERFILE
+          value: $(params.DOCKERFILE)
+      script: |
+        #!/busybox/sh
+        set -e
+
+        # Read commit SHA and create short tag (first 8 characters)
+        COMMIT_SHA=$(cat /tekton/results/COMMIT_SHA)
+        SHORT_SHA=$(echo "$COMMIT_SHA" | cut -c1-8)
+
+        echo "Building image with tag: $SHORT_SHA"
+
+        # Save short SHA as IMAGE_TAG for downstream tasks
+        echo -n "$SHORT_SHA" > /tekton/results/IMAGE_TAG
+
+        # Build and push with Kaniko
+        /kaniko/executor \
+          --context=$(workspaces.source.path)/$CONTEXT \
+          --dockerfile=$(workspaces.source.path)/$CONTEXT/$DOCKERFILE \
+          --destination=$IMAGE:$SHORT_SHA \
+          --destination=$IMAGE:latest \
+          --digest-file=/tekton/results/IMAGE_DIGEST \
+          --skip-tls-verify \
+          --cache=false \
+          --snapshot-mode=redo \
+          --use-new-run
       volumeMounts:
         - name: kaniko-docker
           mountPath: /kaniko/.docker
-    - name: tag-with-digest
-      image: gcr.io/go-containerregistry/crane:latest
-      env:
-        - name: IMAGE
-          value: $(params.IMAGE)
-      script: |
-        #!/bin/sh
-        set -e
-
-        # Read the digest from previous step
-        DIGEST=$(cat /tekton/results/IMAGE_DIGEST)
-        echo "Full digest: $DIGEST"
-
-        # Extract short tag (first 12 chars of hash)
-        SHORT_TAG=$(echo "$DIGEST" | sed 's/sha256://' | cut -c1-12)
-        echo "Short tag: $SHORT_TAG"
-
-        # Save short tag as result
-        echo -n "$SHORT_TAG" > /tekton/results/IMAGE_TAG
-
-        # Copy image from latest to short digest tag
-        echo "Tagging $IMAGE:latest as $IMAGE:$SHORT_TAG"
-        crane copy "$IMAGE:latest" "$IMAGE:$SHORT_TAG" --insecure
-
-        echo "Successfully tagged image with $SHORT_TAG"
-      volumeMounts:
-        - name: kaniko-docker
-          mountPath: /home/nonroot/.docker
   volumes:
     - name: kaniko-docker
       emptyDir: {}
