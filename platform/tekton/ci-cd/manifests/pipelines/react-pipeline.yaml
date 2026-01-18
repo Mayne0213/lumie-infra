@@ -79,7 +79,7 @@ spec:
         - name: VALUES_FILE_PATH
           value: $(params.values-file-path)
         - name: IMAGE_DIGEST
-          value: $(tasks.build-push.results.IMAGE_DIGEST)
+          value: $(tasks.build-push.results.IMAGE_TAG)
         - name: APP_NAME
           value: $(params.app-name)
       workspaces:
