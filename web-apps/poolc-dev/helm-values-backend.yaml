@@ -4,7 +4,7 @@ name: poolc-dev-backend
 image:
   registry: zot0213.kro.kr
   repository: web-apps/poolc-backend
-  tag: b5b212e0d009
+  tag: 61c75109
   pullPolicy: Always
 imagePullSecrets:
   - name: zot-registry-credentials
