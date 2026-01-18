@@ -42,6 +42,10 @@ spec:
             value: ./nextjs
           - name: image-prefix
             value: web-apps/
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: web-apps/$(tt.params.repo-name)/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -93,6 +97,10 @@ spec:
             value: .
           - name: image-prefix
             value: web-apps/
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: applications/docusaurus/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -144,6 +152,10 @@ spec:
             value: ./nextjs
           - name: image-prefix
             value: web-apps/
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: web-apps/$(tt.params.repo-name)-dev/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -195,6 +207,10 @@ spec:
             value: ./fastapi
           - name: image-prefix
             value: web-apps/
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: web-apps/$(tt.params.repo-name)/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -246,6 +262,10 @@ spec:
             value: ./langgraph
           - name: image-prefix
             value: web-apps/
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: applications/mas/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -297,6 +317,10 @@ spec:
             value: ./fastapi
           - name: image-prefix
             value: web-apps/
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: web-apps/$(tt.params.repo-name)-dev/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
