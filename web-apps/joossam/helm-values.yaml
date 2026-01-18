@@ -1,24 +1,19 @@
 # Joossam Web App Helm Values
 
 name: joossam
-
 image:
   registry: zot0213.kro.kr
   repository: web-apps/joossam
-  tag: latest  # Updated by ArgoCD Image Updater
+  tag: b58b56cb # Updated by ArgoCD Image Updater
   pullPolicy: Always
-
 imagePullSecrets:
   - name: zot-registry-credentials
-
 replicaCount: 1
 containerPort: 8000
-
 service:
   enabled: true
   type: ClusterIP
   port: 80
-
 ingress:
   enabled: true
   className: traefik
@@ -33,7 +28,6 @@ ingress:
     - secretName: joossam-tls
       hosts:
         - joossameng.kro.kr
-
 # Resource settings (no CPU limit for stability)
 resources:
   requests:
@@ -41,7 +35,6 @@ resources:
     memory: 109Mi
   limits:
     memory: 351Mi
-
 healthCheck:
   enabled: true
   path: /
@@ -56,10 +49,8 @@ healthCheck:
     initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 5
-
 externalSecret:
   enabled: false
-
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:
   podAntiAffinity:
