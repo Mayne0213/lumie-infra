@@ -4,8 +4,8 @@ metadata:
   name: postgresql
   namespace: postgresql
 spec:
-  # PostgreSQL version
-  imageName: zot0213.kro.kr/storage/postgresql:16.6
+  # PostgreSQL version (external registry - temporary)
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.6
 
   # Number of instances
   instances: 3  # 1 primary + 2 replicas for HA
