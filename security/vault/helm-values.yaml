@@ -75,6 +75,9 @@ server:
   # High priority for critical secrets management
   priorityClassName: high-priority
 
+  # Enable automatic rolling updates for StatefulSet
+  updateStrategyType: "RollingUpdate"
+
 # UI 활성화
 ui:
   enabled: true
