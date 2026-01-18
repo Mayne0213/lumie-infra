@@ -10,7 +10,7 @@ kind: DaemonSet
 # IMAGE - Zot Registry
 # =============================================================================
 image:
-  repository: zot.zot.svc.cluster.local:5000/platform/haproxy
+  repository: zot0213.kro.kr/platform/haproxy
   tag: 3.0-alpine
 
 existingImagePullSecret: zot-registry-credentials

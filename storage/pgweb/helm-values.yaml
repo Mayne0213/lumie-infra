@@ -9,7 +9,7 @@ controllers:
     containers:
       main:
         image:
-          repository: zot.zot.svc.cluster.local:5000/storage/pgweb
+          repository: zot0213.kro.kr/storage/pgweb
           tag: "0.17.0"
         args:
           - "--bind=0.0.0.0"

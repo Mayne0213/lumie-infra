@@ -62,7 +62,7 @@ spec:
         fullnameOverride: karma
 
         image:
-          repository: zot.zot.svc.cluster.local:5000/observability/karma
+          repository: zot0213.kro.kr/observability/karma
           tag: v0.122
 
         imagePullSecrets:

@@ -7,7 +7,7 @@ controllers:
     initContainers:
       copy-homer-files:
         image:
-          repository: zot.zot.svc.cluster.local:5000/applications/homer
+          repository: zot0213.kro.kr/applications/homer
           tag: v25.11.1
         command:
           - sh
@@ -16,7 +16,7 @@ controllers:
             cp -r /www/* /tmp/www/
       copy-assets:
         image:
-          repository: zot.zot.svc.cluster.local:5000/applications/alpine-git
+          repository: zot0213.kro.kr/applications/alpine-git
           tag: v2.47.1
         command:
           - sh
@@ -31,7 +31,7 @@ controllers:
     containers:
       main:
         image:
-          repository: zot.zot.svc.cluster.local:5000/applications/homer
+          repository: zot0213.kro.kr/applications/homer
           tag: v25.11.1
           pullPolicy: IfNotPresent
         # Resource settings (no CPU limit for stability)

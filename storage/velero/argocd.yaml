@@ -65,7 +65,7 @@ spec:
     helm:
       values: |
         image:
-          repository: zot.zot.svc.cluster.local:5000/storage/velero-ui
+          repository: zot0213.kro.kr/storage/velero-ui
           tag: v0.10.1
           pullPolicy: IfNotPresent
 

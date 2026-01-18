@@ -15,9 +15,8 @@ spec:
       labels:
         app: minio-console
     spec:
-      # imagePullSecrets disabled until Zot is deployed
-      # imagePullSecrets:
-      #   - name: zot-registry-credentials
+      imagePullSecrets:
+        - name: zot-registry-credentials
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -29,8 +28,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
       containers:
         - name: console
-          # TODO: Change back to internal Zot registry after Zot is running
-          image: minio/console:v1.9.1
+          image: zot0213.kro.kr/storage/minio-console:v1.9.1
           ports:
             - containerPort: 9090
               name: http

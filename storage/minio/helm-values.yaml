@@ -8,16 +8,15 @@
 # - worker-2: 1 x 50GB (minio-data1)
 # Total: 4 drives for erasure coding
 
-# MinIO image - using public image until Zot is deployed
-# TODO: Change back to internal Zot registry after Zot is running
+# MinIO image (via external Zot registry)
 image:
-  repository: quay.io/minio/minio
-  tag: RELEASE.2025-01-20T14-49-07Z
+  repository: zot0213.kro.kr/storage/minio
+  tag: RELEASE.2025-09-07T16-13-09Z
   pullPolicy: IfNotPresent
 
-# Pull from internal Zot registry (disabled until Zot is deployed)
-# imagePullSecrets:
-#   - name: zot-registry-credentials
+# Pull from Zot registry
+imagePullSecrets:
+  - name: zot-registry-credentials
 
 # 4 replicas, 1 drive per replica = 4 drives total
 replicas: 4

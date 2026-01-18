@@ -1,13 +1,13 @@
 # CloudNativePG Operator Helm Values
 # Chart: https://github.com/cloudnative-pg/charts
 
-# Operator image (mirrored via Zot - internal cluster address)
+# Operator image (via external Zot registry)
 image:
-  repository: zot.zot.svc.cluster.local:5000/storage/cnpg
+  repository: zot0213.kro.kr/storage/cnpg
   tag: 1.25.1
   pullPolicy: IfNotPresent
 
-# Pull from internal Zot registry
+# Pull from Zot registry
 imagePullSecrets:
   - name: zot-registry-credentials
 

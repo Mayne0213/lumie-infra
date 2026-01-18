@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  registry: zot.zot.svc.cluster.local:5000
+  registry: zot0213.kro.kr
   repository: applications/headlamp
   tag: v0.39.0
   pullPolicy: IfNotPresent

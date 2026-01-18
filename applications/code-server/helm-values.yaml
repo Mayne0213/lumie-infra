@@ -1,7 +1,7 @@
 fullnameOverride: code-server
 
 image:
-  repository: zot.zot.svc.cluster.local:5000/applications/code-server
+  repository: zot0213.kro.kr/applications/code-server
   tag: 4.104.2
   pullPolicy: Always
 

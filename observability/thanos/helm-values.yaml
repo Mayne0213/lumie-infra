@@ -14,7 +14,7 @@ global:
 
 # Use internal Zot registry
 image:
-  registry: zot.zot.svc.cluster.local:5000
+  registry: zot0213.kro.kr
   repository: observability/thanos
   tag: v0.37.2
 

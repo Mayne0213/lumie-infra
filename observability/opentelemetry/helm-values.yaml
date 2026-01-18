@@ -20,7 +20,7 @@ fullnameOverride: otel-collector
 # Image Configuration
 # =============================================================================
 image:
-  repository: zot.zot.svc.cluster.local:5000/observability/opentelemetry-collector-contrib
+  repository: zot0213.kro.kr/observability/opentelemetry-collector-contrib
   tag: 0.119.0
 
 imagePullSecrets:
