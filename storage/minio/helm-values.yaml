@@ -2,21 +2,18 @@
 # Chart: https://github.com/minio/minio/tree/master/helm/minio
 # Mode: Distributed with Erasure Coding (4 drives total)
 #
-# Disk allocation:
-# - master node: 2 x 50GB (minio-data1, minio-data2)
-# - worker-1: 1 x 50GB (minio-data1)
-# - worker-2: 1 x 50GB (minio-data1)
-# Total: 4 drives for erasure coding
+# Disk allocation (1 x 50GB per worker):
+# - k3s-worker-1: /mnt/minio-data (0214 account)
+# - k3s-worker-2: /mnt/minio-data (0214 account)
+# - k3s-worker-3: /mnt/minio-data (0213 account)
+# - k3s-worker-4: /mnt/minio-data (0213 account)
+# Total: 4 drives for erasure coding (EC:2)
 
-# MinIO image (via external Zot registry)
+# MinIO image (external registry - switch to zot after recovery)
 image:
-  repository: zot0213.kro.kr/storage/minio
-  tag: RELEASE.2025-09-07T16-13-09Z
+  repository: quay.io/minio/minio
+  tag: RELEASE.2025-01-20T14-49-07Z
   pullPolicy: IfNotPresent
-
-# Pull from Zot registry
-imagePullSecrets:
-  - name: zot-registry-credentials
 
 # 4 replicas, 1 drive per replica = 4 drives total
 replicas: 4
@@ -57,7 +54,6 @@ consoleService:
 environment:
   MINIO_API_CORS_ALLOW_ORIGIN: "*"
   MINIO_BROWSER_REDIRECT_URL: "https://minio.minio0213.kro.kr"
-  MINIO_PROMETHEUS_AUTH_TYPE: "public"
   # CPU optimization - disable unused workers
   MINIO_API_REPLICATION_MAX_WORKERS: "1"
   MINIO_API_REPLICATION_MAX_LRG_WORKERS: "1"
@@ -91,19 +87,17 @@ enableServiceLinks: false
 podAnnotations:
   backup.velero.io/backup-volumes-excludes: export
 
-# Use soft anti-affinity since worker-1 needs 2 pods (has 2 disks)
+# Hard anti-affinity - each pod on different node
 affinity:
   podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-              - key: app
-                operator: In
-                values:
-                  - minio
-          topologyKey: kubernetes.io/hostname
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: app
+              operator: In
+              values:
+                - minio
+        topologyKey: kubernetes.io/hostname
 
 # High priority for critical storage infrastructure
 priorityClassName: high-priority
