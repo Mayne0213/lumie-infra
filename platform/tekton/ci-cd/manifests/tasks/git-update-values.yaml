@@ -64,9 +64,13 @@ spec:
 
         # Update the values file
         VALUES_FILE="$(params.VALUES_FILE_PATH)"
-        DIGEST="$(params.IMAGE_DIGEST)"
+        FULL_DIGEST="$(params.IMAGE_DIGEST)"
 
-        echo "Updating $VALUES_FILE with digest: $DIGEST"
+        # Extract short hash (first 12 chars) from digest for use as tag
+        # Input: sha256:xxxxx -> Output: first 12 chars of xxxxx
+        SHORT_TAG=$(echo "$FULL_DIGEST" | sed 's/sha256://' | cut -c1-12)
+
+        echo "Updating $VALUES_FILE with tag: $SHORT_TAG (from $FULL_DIGEST)"
 
         if [ ! -f "$VALUES_FILE" ]; then
           echo "ERROR: Values file not found: $VALUES_FILE"
@@ -74,7 +78,7 @@ spec:
         fi
 
         # Update image.tag using yq
-        yq -i '.image.tag = "'"$DIGEST"'"' "$VALUES_FILE"
+        yq -i '.image.tag = "'"$SHORT_TAG"'"' "$VALUES_FILE"
 
         # Check if there are changes
         if git diff --quiet "$VALUES_FILE"; then
@@ -89,10 +93,10 @@ spec:
         # Commit and push
         git add "$VALUES_FILE"
         git commit -m "$(cat <<EOF
-        CHORE(app): update $(params.APP_NAME) image
+CHORE(app): update $(params.APP_NAME) image
 
-        - Update image digest to $DIGEST
-        EOF
+- Update image tag to $SHORT_TAG
+EOF
         )"
 
         echo "Pushing to $(params.GIT_BRANCH)..."
