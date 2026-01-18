@@ -26,8 +26,6 @@ spec:
   workspaces:
     - name: source
       description: Workspace for git operations
-    - name: git-credentials
-      description: Git credentials (username/password)
   steps:
     - name: update-and-push
       image: docker.io/alpine:latest
