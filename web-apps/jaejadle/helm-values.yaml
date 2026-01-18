@@ -1,24 +1,19 @@
 # Jaejadle Web App Helm Values
 
 name: jaejadle
-
 image:
   registry: zot0213.kro.kr
   repository: web-apps/jaejadle
-  tag: latest  # Updated by ArgoCD Image Updater
+  tag: 4afbbe87 # Updated by ArgoCD Image Updater
   pullPolicy: Always
-
 imagePullSecrets:
   - name: zot-registry-credentials
-
 replicaCount: 1
 containerPort: 3000
-
 service:
   enabled: true
   type: ClusterIP
   port: 80
-
 ingress:
   enabled: true
   className: traefik
@@ -33,7 +28,6 @@ ingress:
     - secretName: jaejadle-tls
       hosts:
         - jaejadle.kro.kr
-
 # Resource settings (no CPU limit for stability)
 resources:
   requests:
@@ -41,7 +35,6 @@ resources:
     memory: 100Mi
   limits:
     memory: 109Mi
-
 healthCheck:
   enabled: true
   path: /
@@ -54,11 +47,9 @@ healthCheck:
   readinessProbe:
     initialDelaySeconds: 0
     periodSeconds: 5
-
 envFrom:
   - secretRef:
       name: jaejadle-secrets
-
 externalSecret:
   enabled: true
   refreshInterval: 1h
@@ -125,7 +116,6 @@ externalSecret:
       remoteRef:
         key: web-apps/jaejadle
         property: JAEJADLE_CODE
-
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:
   podAntiAffinity:
