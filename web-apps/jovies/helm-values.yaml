@@ -1,24 +1,19 @@
 # Jovies Web App Helm Values
 
 name: jovies
-
 image:
   registry: zot0213.kro.kr
   repository: web-apps/jovies
-  tag: latest  # Updated by ArgoCD Image Updater
+  tag: 0ab5f5ed # Updated by ArgoCD Image Updater
   pullPolicy: Always
-
 imagePullSecrets:
   - name: zot-registry-credentials
-
 replicaCount: 1
 containerPort: 3000
-
 service:
   enabled: true
   type: ClusterIP
   port: 80
-
 ingress:
   enabled: true
   className: traefik
@@ -38,7 +33,6 @@ ingress:
       hosts:
         - jovies.kro.kr
         - www.jovies.kro.kr
-
 # Resource settings (no CPU limit for stability)
 resources:
   requests:
@@ -46,7 +40,6 @@ resources:
     memory: 100Mi
   limits:
     memory: 100Mi
-
 healthCheck:
   enabled: true
   path: /
@@ -59,14 +52,11 @@ healthCheck:
   readinessProbe:
     initialDelaySeconds: 0
     periodSeconds: 5
-
 env:
   - name: NODE_ENV
     value: production
-
 externalSecret:
   enabled: false
-
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:
   podAntiAffinity:
