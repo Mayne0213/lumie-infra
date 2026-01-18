@@ -19,7 +19,7 @@ server:
   # HA 설정 - PostgreSQL storage (config from External Secret)
   ha:
     enabled: true
-    replicas: 3
+    replicas: 2
     raft:
       enabled: false
     # UI enabled - actual storage config is in vault-config-secret
