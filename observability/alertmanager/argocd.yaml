@@ -42,6 +42,7 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
+        zot-registry: enabled
   revisionHistoryLimit: 10
 ---
 apiVersion: argoproj.io/v1alpha1
