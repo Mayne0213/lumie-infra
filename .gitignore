@@ -1,2 +1,5 @@
 # Test commit 1768401486
 # Webhook test 1768401669
+
+# Terraform state and configuration
+terraform/

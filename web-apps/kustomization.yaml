@@ -13,6 +13,4 @@ resources:
   - jaejadle-dev/argocd.yaml
   - joossam/argocd.yaml
   - joossam-dev/argocd.yaml
-  - poolc/frontend/argocd.yaml
-  - poolc/backend/argocd.yaml
   - poolc-dev/argocd.yaml
