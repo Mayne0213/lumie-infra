@@ -164,13 +164,14 @@ configMap:
             - openid
             - profile
             - email
-          token_endpoint_auth_method: client_secret_basic
+          token_endpoint_auth_method: client_secret_post
         - client_id: vault
           client_name: Vault
           client_secret:
             path: /secrets/VAULT_CLIENT_SECRET
           public: false
           authorization_policy: one_factor
+          claims_policy: default
           redirect_uris:
             - https://vault0213.kro.kr/ui/vault/auth/oidc/oidc/callback
             - http://localhost:8250/oidc/callback
