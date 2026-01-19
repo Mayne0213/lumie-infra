@@ -32,9 +32,9 @@ ingress:
 resources:
   requests:
     cpu: 50m
-    memory: 256Mi
-  limits:
     memory: 512Mi
+  limits:
+    memory: 768Mi
 healthCheck:
   enabled: true
   path: /v2/api-docs # Swagger endpoint
@@ -53,7 +53,7 @@ env:
   - name: SPRING_PROFILES_ACTIVE
     value: "prod"
   - name: JAVA_OPTS
-    value: "-Xmx384m -Xms256m"
+    value: "-Xmx512m -Xms384m"
 # External Secret for sensitive data (DB credentials, JWT secret, etc.)
 externalSecret:
   enabled: true
