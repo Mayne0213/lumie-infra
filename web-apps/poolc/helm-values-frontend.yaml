@@ -4,7 +4,7 @@ name: poolc-frontend
 image:
   registry: zot0213.kro.kr
   repository: web-apps/poolc-frontend
-  tag: a2c9a42d # Updated by ArgoCD Image Updater
+  tag: ce294314 # Updated by ArgoCD Image Updater
   pullPolicy: Always
 imagePullSecrets:
   - name: zot-registry-credentials

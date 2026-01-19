@@ -1,24 +1,19 @@
 # PoolC Dev Frontend Helm Values
 
 name: poolc-dev-frontend
-
 image:
   registry: zot0213.kro.kr
   repository: web-apps/poolc-frontend
-  tag: latest  # Updated by ArgoCD Image Updater
+  tag: ce294314 # Updated by ArgoCD Image Updater
   pullPolicy: Always
-
 imagePullSecrets:
   - name: zot-registry-credentials
-
 replicaCount: 1
-containerPort: 80  # nginx serving built assets
-
+containerPort: 80 # nginx serving built assets
 service:
   enabled: true
   type: ClusterIP
   port: 80
-
 ingress:
   enabled: true
   className: traefik
@@ -33,14 +28,12 @@ ingress:
     - secretName: poolc-dev-tls
       hosts:
         - dev.poolc0213.kro.kr
-
 resources:
   requests:
     cpu: 10m
     memory: 64Mi
   limits:
     memory: 128Mi
-
 healthCheck:
   enabled: true
   path: /
@@ -55,14 +48,11 @@ healthCheck:
     initialDelaySeconds: 0
     periodSeconds: 5
     timeoutSeconds: 5
-
 env:
   - name: VITE_API_URL
     value: "https://dev.poolc0213.kro.kr/api"
-
 externalSecret:
   enabled: false
-
 affinity:
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
