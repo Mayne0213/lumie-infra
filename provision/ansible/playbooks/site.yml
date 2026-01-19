@@ -45,6 +45,8 @@
 - name: Verify cluster
   hosts: masters
   become: yes
+  vars:
+    k3s_kubeconfig: /etc/rancher/k3s/k3s.yaml
   tasks:
     - name: Get cluster nodes
       ansible.builtin.command: kubectl get nodes -o wide
