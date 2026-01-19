@@ -5,11 +5,9 @@ defaultPodOptions:
   hostPID: true
   imagePullSecrets:
     - name: zot-registry-credentials
-
 serviceAccount:
   create: false
   name: mas
-
 controllers:
   main:
     replicas: 1
@@ -22,7 +20,7 @@ controllers:
       main:
         image:
           repository: zot0213.kro.kr/web-apps/mas
-          tag: latest  # Updated by ArgoCD Image Updater
+          tag: 7777de55 # Updated by ArgoCD Image Updater
           pullPolicy: Always
         securityContext:
           privileged: true
@@ -109,14 +107,12 @@ controllers:
                   matchLabels:
                     app.kubernetes.io/name: mas
                 topologyKey: kubernetes.io/hostname
-
 service:
   main:
     controller: main
     ports:
       http:
         port: 8000
-
 ingress:
   main:
     enabled: true
