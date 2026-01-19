@@ -1,0 +1,41 @@
+# K3s Cluster Inventory Example
+# Copy this file to hosts.yml and update the IP addresses
+# Usage: ansible-playbook -i inventory/hosts.yml playbooks/site.yml
+
+all:
+  children:
+    masters:
+      hosts:
+        master:
+          ansible_host: "MASTER_PUBLIC_IP"  # Replace with actual public IP
+          private_ip: "10.0.0.241"
+          # Public IP is used for SSH, Private IP for K3s cluster communication
+
+    workers:
+      children:
+        workers_0214:
+          hosts:
+            worker-1:
+              ansible_host: "WORKER1_PUBLIC_IP"  # Replace with actual public IP
+              private_ip: "10.0.0.124"
+            worker-2:
+              ansible_host: "WORKER2_PUBLIC_IP"  # Replace with actual public IP
+              private_ip: "10.0.0.2"
+
+        workers_0213:
+          hosts:
+            worker-3:
+              ansible_host: "WORKER3_PUBLIC_IP"  # Replace with actual public IP
+              private_ip: "10.1.0.148"
+            worker-4:
+              ansible_host: "WORKER4_PUBLIC_IP"  # Replace with actual public IP
+              private_ip: "10.1.0.9"
+
+  vars:
+    ansible_user: ubuntu
+    ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+    ansible_python_interpreter: /usr/bin/python3
+
+    # K3s Master URL (Private IP - accessible via VCN Peering)
+    k3s_master_url: "https://10.0.0.241:6443"
+    k3s_master_private_ip: "10.0.0.241"

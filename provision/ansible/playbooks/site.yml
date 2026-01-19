@@ -1,0 +1,75 @@
+---
+# Full K3s cluster deployment playbook
+# Usage: ansible-playbook -i inventory/terraform_inventory.py playbooks/site.yml
+
+- name: Prepare all nodes
+  hosts: all
+  become: yes
+  roles:
+    - common
+  tags:
+    - common
+    - prepare
+
+- name: Install K3s Master
+  hosts: masters
+  become: yes
+  roles:
+    - k3s-master
+  tags:
+    - master
+    - k3s
+
+- name: Install K3s Workers (Account 0214)
+  hosts: workers_0214
+  become: yes
+  serial: 1  # Install one at a time to avoid race conditions
+  roles:
+    - k3s-worker
+  tags:
+    - workers
+    - workers_0214
+    - k3s
+
+- name: Install K3s Workers (Account 0213)
+  hosts: workers_0213
+  become: yes
+  serial: 1  # Install one at a time
+  roles:
+    - k3s-worker
+  tags:
+    - workers
+    - workers_0213
+    - k3s
+
+- name: Verify cluster
+  hosts: masters
+  become: yes
+  tasks:
+    - name: Get cluster nodes
+      ansible.builtin.command: kubectl get nodes -o wide
+      register: cluster_nodes
+      changed_when: false
+      environment:
+        KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+    - name: Display cluster status
+      ansible.builtin.debug:
+        msg: |
+          K3s Cluster Status:
+          {{ cluster_nodes.stdout }}
+
+    - name: Get cluster pods (all namespaces)
+      ansible.builtin.command: kubectl get pods -A
+      register: cluster_pods
+      changed_when: false
+      environment:
+        KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+    - name: Display cluster pods
+      ansible.builtin.debug:
+        msg: |
+          Cluster Pods:
+          {{ cluster_pods.stdout }}
+  tags:
+    - verify

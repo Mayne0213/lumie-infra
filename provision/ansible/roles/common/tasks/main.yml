@@ -1,0 +1,73 @@
+---
+# Common tasks for all K3s nodes
+
+- name: Wait for cloud-init to complete
+  ansible.builtin.wait_for:
+    path: /var/lib/cloud/instance/boot-finished
+    timeout: 300
+  when: ansible_virtualization_type != "docker"
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install common packages
+  ansible.builtin.apt:
+    name: "{{ common_packages }}"
+    state: present
+  register: apt_result
+  retries: 3
+  delay: 10
+  until: apt_result is success
+
+- name: Set iptables policy to ACCEPT
+  ansible.builtin.iptables:
+    chain: "{{ item }}"
+    policy: ACCEPT
+  loop:
+    - INPUT
+    - FORWARD
+    - OUTPUT
+  notify: Save iptables rules
+
+- name: Flush iptables rules
+  ansible.builtin.iptables:
+    flush: yes
+  notify: Save iptables rules
+
+- name: Load required kernel modules
+  community.general.modprobe:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ kernel_modules }}"
+
+- name: Ensure kernel modules load at boot
+  ansible.builtin.lineinfile:
+    path: /etc/modules-load.d/k3s.conf
+    line: "{{ item }}"
+    create: yes
+    mode: '0644'
+  loop: "{{ kernel_modules }}"
+
+- name: Configure sysctl settings for K3s
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_file: /etc/sysctl.d/99-k3s.conf
+    reload: yes
+  loop: "{{ sysctl_settings | dict2items }}"
+
+- name: Enable and start iscsid service (for Longhorn)
+  ansible.builtin.systemd:
+    name: iscsid
+    state: started
+    enabled: yes
+  when: "'open-iscsi' in common_packages"
+
+- name: Ensure /usr/local/bin exists
+  ansible.builtin.file:
+    path: /usr/local/bin
+    state: directory
+    mode: '0755'

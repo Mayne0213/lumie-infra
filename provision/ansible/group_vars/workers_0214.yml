@@ -1,0 +1,8 @@
+---
+# Variables specific to workers in Account 0214 (same VCN as master)
+
+k3s_role: agent
+
+# These workers are in the same VCN as master
+# They connect to master via private IP
+k3s_connect_via: private

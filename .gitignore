@@ -1,5 +1,24 @@
 # Test commit 1768401486
 # Webhook test 1768401669
 
-# Terraform state and configuration
-terraform/
+# Terraform
+provision/terraform/.terraform/
+provision/terraform/.terraform.lock.hcl
+provision/terraform/*.tfstate
+provision/terraform/*.tfstate.backup
+provision/terraform/terraform.tfvars
+provision/terraform/*.auto.tfvars
+
+# Ansible
+provision/ansible/inventory/hosts.yml
+provision/ansible/kubeconfig/
+provision/ansible/*.retry
+
+# Sensitive files
+*.pem
+*secret*
+
+# OS
+.DS_Store
+*.swp
+*~
