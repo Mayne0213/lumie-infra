@@ -15,7 +15,7 @@ spec:
       type: string
       default: main
     - name: VALUES_FILE_PATH
-      description: Path to helm values file (e.g., web-apps/poolc-dev/helm-values-backend.yaml)
+      description: Comma-separated paths to helm values files (e.g., web-apps/poolc-dev/helm-values-backend.yaml,web-apps/poolc/helm-values-backend.yaml)
       type: string
     - name: IMAGE_DIGEST
       description: New image digest to set
@@ -66,36 +66,46 @@ spec:
         git clone --depth=1 --branch=$(params.GIT_BRANCH) "$REPO_URL" k3s-home
         cd k3s-home
 
-        # Update the values file
-        VALUES_FILE="$(params.VALUES_FILE_PATH)"
+        # Parse comma-separated file paths
+        VALUES_FILES="$(params.VALUES_FILE_PATH)"
         IMAGE_TAG="$(params.IMAGE_DIGEST)"
-
-        echo "Updating $VALUES_FILE with tag: $IMAGE_TAG"
-
-        if [ ! -f "$VALUES_FILE" ]; then
-          echo "ERROR: Values file not found: $VALUES_FILE"
-          exit 1
-        fi
-
-        # Update image tag using yq with configurable path
         YQ_PATH="$(params.YQ_PATH)"
-        yq -i "${YQ_PATH} = \"${IMAGE_TAG}\"" "$VALUES_FILE"
+        UPDATED_FILES=""
 
-        # Check if there are changes
-        if git diff --quiet "$VALUES_FILE"; then
+        # Process each values file
+        echo "$VALUES_FILES" | tr ',' '\n' | while read -r VALUES_FILE; do
+          # Skip empty lines
+          [ -z "$VALUES_FILE" ] && continue
+
+          echo "Processing: $VALUES_FILE"
+
+          if [ ! -f "$VALUES_FILE" ]; then
+            echo "WARNING: Values file not found: $VALUES_FILE, skipping..."
+            continue
+          fi
+
+          # Update image tag using yq with configurable path
+          yq -i "${YQ_PATH} = \"${IMAGE_TAG}\"" "$VALUES_FILE"
+
+          # Add to staging
+          git add "$VALUES_FILE"
+          echo "Updated: $VALUES_FILE"
+        done
+
+        # Check if there are staged changes
+        if git diff --cached --quiet; then
           echo "No changes detected, skipping commit"
           exit 0
         fi
 
-        # Show the change
+        # Show the changes
         echo "Changes:"
-        git diff "$VALUES_FILE"
+        git diff --cached
 
         # Commit and push
-        git add "$VALUES_FILE"
         git commit -m "CHORE(app): update $(params.APP_NAME) image to $IMAGE_TAG"
 
         echo "Pushing to $(params.GIT_BRANCH)..."
         git push origin $(params.GIT_BRANCH)
 
-        echo "Successfully updated $VALUES_FILE"
+        echo "Successfully updated values files"
