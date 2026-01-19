@@ -70,8 +70,9 @@ resource "oci_core_instance" "nodes_0213" {
     "name" = "k3s-${each.key}"
   }
 
-  # lifecycle block removed - Ansible handles configuration now
-  # user_data changes will trigger instance recreation if needed
+  lifecycle {
+    ignore_changes = [metadata]
+  }
 
   depends_on = [oci_core_instance.nodes_0214]
 }
