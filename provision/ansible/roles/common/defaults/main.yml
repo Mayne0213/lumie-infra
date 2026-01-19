@@ -1,0 +1,21 @@
+---
+# Default variables for common role
+
+common_packages:
+  - curl
+  - wget
+  - git
+  - vim
+  - htop
+  - iptables
+  - netfilter-persistent
+  - open-iscsi
+
+kernel_modules:
+  - br_netfilter
+  - overlay
+
+sysctl_settings:
+  net.bridge.bridge-nf-call-iptables: 1
+  net.bridge.bridge-nf-call-ip6tables: 1
+  net.ipv4.ip_forward: 1

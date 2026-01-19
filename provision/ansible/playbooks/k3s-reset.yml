@@ -1,0 +1,75 @@
+---
+# K3s cluster reset playbook
+# WARNING: This will remove K3s from all nodes!
+# Usage: ansible-playbook -i inventory/terraform_inventory.py playbooks/k3s-reset.yml
+
+- name: Confirm reset
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Pause for confirmation
+      ansible.builtin.pause:
+        prompt: |
+          WARNING: This will completely remove K3s from all nodes!
+          All data will be lost. Press Enter to continue or Ctrl+C to abort.
+
+- name: Reset K3s Workers
+  hosts: workers
+  become: yes
+  tasks:
+    - name: Check if k3s-agent-uninstall.sh exists
+      ansible.builtin.stat:
+        path: /usr/local/bin/k3s-agent-uninstall.sh
+      register: k3s_agent_uninstall
+
+    - name: Uninstall K3s agent
+      ansible.builtin.command: /usr/local/bin/k3s-agent-uninstall.sh
+      when: k3s_agent_uninstall.stat.exists
+      ignore_errors: yes
+
+    - name: Clean up K3s data directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /var/lib/rancher
+        - /etc/rancher
+        - /var/lib/kubelet
+      ignore_errors: yes
+
+- name: Reset K3s Master
+  hosts: masters
+  become: yes
+  tasks:
+    - name: Check if k3s-uninstall.sh exists
+      ansible.builtin.stat:
+        path: /usr/local/bin/k3s-uninstall.sh
+      register: k3s_uninstall
+
+    - name: Uninstall K3s server
+      ansible.builtin.command: /usr/local/bin/k3s-uninstall.sh
+      when: k3s_uninstall.stat.exists
+      ignore_errors: yes
+
+    - name: Clean up K3s data directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /var/lib/rancher
+        - /etc/rancher
+        - /var/lib/kubelet
+      ignore_errors: yes
+
+- name: Verify reset
+  hosts: all
+  become: yes
+  tasks:
+    - name: Check K3s processes
+      ansible.builtin.shell: pgrep -f k3s || true
+      register: k3s_processes
+      changed_when: false
+
+    - name: Display reset status
+      ansible.builtin.debug:
+        msg: "K3s processes remaining: {{ k3s_processes.stdout_lines | length }}"

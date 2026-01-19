@@ -1,0 +1,39 @@
+---
+# K3s Workers only deployment
+# Usage: ansible-playbook -i inventory/terraform_inventory.py playbooks/k3s-workers.yml
+# Note: Master must be already installed
+
+- name: Prepare worker nodes
+  hosts: workers
+  become: yes
+  roles:
+    - common
+
+- name: Install K3s Workers (Account 0214)
+  hosts: workers_0214
+  become: yes
+  serial: 1
+  roles:
+    - k3s-worker
+
+- name: Install K3s Workers (Account 0213)
+  hosts: workers_0213
+  become: yes
+  serial: 1
+  roles:
+    - k3s-worker
+
+- name: Verify cluster
+  hosts: masters
+  become: yes
+  tasks:
+    - name: Get cluster nodes
+      ansible.builtin.command: kubectl get nodes -o wide
+      register: cluster_nodes
+      changed_when: false
+      environment:
+        KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+
+    - name: Display cluster status
+      ansible.builtin.debug:
+        var: cluster_nodes.stdout_lines

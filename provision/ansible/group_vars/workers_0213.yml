@@ -1,0 +1,8 @@
+---
+# Variables specific to workers in Account 0213 (different VCN, connected via peering)
+
+k3s_role: agent
+
+# These workers are in a different VCN but connected via VCN peering
+# They can still connect to master via private IP (tested: 0.4ms latency)
+k3s_connect_via: private

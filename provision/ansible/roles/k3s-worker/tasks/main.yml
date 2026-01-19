@@ -1,0 +1,91 @@
+---
+# K3s Worker (Agent) installation tasks
+
+- name: Get K3s token from master
+  ansible.builtin.slurp:
+    src: "{{ k3s_token_file }}"
+  delegate_to: "{{ groups['masters'][0] }}"
+  register: k3s_token_raw
+
+- name: Set K3s token fact
+  ansible.builtin.set_fact:
+    k3s_token: "{{ k3s_token_raw.content | b64decode | trim }}"
+
+- name: Display connection info
+  ansible.builtin.debug:
+    msg: |
+      Worker: {{ inventory_hostname }}
+      Connecting to: {{ k3s_master_url }}
+      Using private IP: {{ k3s_master_private_ip }}
+
+- name: Check if K3s agent is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/k3s
+  register: k3s_binary
+
+- name: Check K3s agent service status
+  ansible.builtin.systemd:
+    name: k3s-agent
+  register: k3s_agent_service
+  ignore_errors: true
+
+- name: Get installed K3s version
+  ansible.builtin.command: k3s --version
+  register: k3s_installed_version
+  changed_when: false
+  failed_when: false
+  when: k3s_binary.stat.exists
+
+- name: Display K3s status
+  ansible.builtin.debug:
+    msg: >
+      K3s installed: {{ k3s_binary.stat.exists }},
+      Version: {{ k3s_installed_version.stdout | default('not installed') | regex_search('v[0-9.]+\\+k3s[0-9]+') }}
+
+- name: Test connectivity to master
+  ansible.builtin.wait_for:
+    host: "{{ k3s_master_private_ip }}"
+    port: 6443
+    timeout: 30
+  register: master_connectivity
+
+- name: Download K3s install script
+  ansible.builtin.get_url:
+    url: "{{ k3s_install_url }}"
+    dest: /tmp/k3s-install.sh
+    mode: '0755'
+  when: not k3s_binary.stat.exists or k3s_version not in (k3s_installed_version.stdout | default(''))
+
+- name: Install K3s agent
+  ansible.builtin.shell: |
+    K3S_URL="{{ k3s_master_url }}" \
+    K3S_TOKEN="{{ k3s_token }}" \
+    INSTALL_K3S_VERSION="{{ k3s_version }}" \
+    /tmp/k3s-install.sh agent
+  args:
+    creates: /usr/local/bin/k3s
+  register: k3s_agent_install
+  when: not k3s_binary.stat.exists
+
+- name: Ensure K3s agent service is enabled and running
+  ansible.builtin.systemd:
+    name: k3s-agent
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+- name: Wait for node to register with master
+  ansible.builtin.shell: |
+    kubectl get nodes | grep -q "{{ inventory_hostname }}"
+  delegate_to: "{{ groups['masters'][0] }}"
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+  register: node_registered
+  retries: 30
+  delay: 10
+  until: node_registered.rc == 0
+  changed_when: false
+
+- name: Display worker status
+  ansible.builtin.debug:
+    msg: "Worker {{ inventory_hostname }} successfully joined the cluster!"

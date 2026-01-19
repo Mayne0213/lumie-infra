@@ -1,0 +1,15 @@
+---
+# K3s Master only deployment
+# Usage: ansible-playbook -i inventory/terraform_inventory.py playbooks/k3s-master.yml
+
+- name: Prepare master node
+  hosts: masters
+  become: yes
+  roles:
+    - common
+
+- name: Install K3s Master
+  hosts: masters
+  become: yes
+  roles:
+    - k3s-master

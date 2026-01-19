@@ -1,0 +1,66 @@
+# Terraform Variables Example
+# Copy this file to terraform.tfvars and fill in your values
+# terraform.tfvars is gitignored for security
+
+# ============================================
+# Account 0214 (Master Account - DEFAULT profile)
+# ============================================
+
+tenancy_0214_ocid     = "ocid1.tenancy.oc1..your_tenancy_ocid_here"
+compartment_0214_ocid = "ocid1.tenancy.oc1..your_compartment_ocid_here"
+vcn_0214_cidr         = "10.0.0.0/16"
+subnet_0214_cidr      = "10.0.0.0/24"
+
+nodes_0214 = {
+  "master" = {
+    ocpus         = 1
+    memory_in_gbs = 4
+    role          = "master"
+  }
+  "worker-1" = {
+    ocpus         = 1
+    memory_in_gbs = 8
+    role          = "worker"
+  }
+  "worker-2" = {
+    ocpus         = 2
+    memory_in_gbs = 12
+    role          = "worker"
+  }
+}
+
+# ============================================
+# Account 0213 (Worker Account - SECOND profile)
+# ============================================
+
+tenancy_0213_ocid     = "ocid1.tenancy.oc1..your_second_tenancy_ocid_here"
+compartment_0213_ocid = "ocid1.tenancy.oc1..your_second_compartment_ocid_here"
+vcn_0213_cidr         = "10.1.0.0/16"
+subnet_0213_cidr      = "10.1.0.0/24"
+
+nodes_0213 = {
+  "worker-3" = {
+    ocpus         = 2
+    memory_in_gbs = 12
+    role          = "worker"
+  }
+  "worker-4" = {
+    ocpus         = 2
+    memory_in_gbs = 12
+    role          = "worker"
+  }
+}
+
+# ============================================
+# SSH Key
+# ============================================
+
+ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEBk9xpEIqpetWKvvzE1OvqFgAWp11AUQGOnv5E+WFC/ bluemayne@github"
+
+# ============================================
+# Notes
+# ============================================
+# - OCI CLI profiles used: DEFAULT (0214), SECOND (0213)
+# - Configure profiles in ~/.oci/config
+# - ARM64 instances use VM.Standard.A1.Flex shape
+# - Total resources: 4 OCPUs, 24GB RAM per account (Always Free tier)
