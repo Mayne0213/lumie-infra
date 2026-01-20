@@ -23,9 +23,6 @@ image:
   repository: zot0213.kro.kr/observability/opentelemetry-collector-contrib
   tag: 0.119.0
 
-imagePullSecrets:
-  - name: zot-registry-credentials
-
 # =============================================================================
 # Deployment Mode
 # =============================================================================

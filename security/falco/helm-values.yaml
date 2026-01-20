@@ -12,9 +12,6 @@ image:
   repository: security/falco
   tag: 0.40.0
 
-imagePullSecrets:
-  - name: zot-registry-credentials
-
 # Resource settings (no CPU limit for stability)
 resources:
   requests:

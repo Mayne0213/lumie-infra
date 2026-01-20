@@ -6,8 +6,6 @@ image:
   repository: web-apps/docusaurus
   tag: 05a4692f # Updated by ArgoCD Image Updater
   pullPolicy: Always
-imagePullSecrets:
-  - name: zot-registry-credentials
 replicaCount: 1
 containerPort: 80 # nginx
 service:

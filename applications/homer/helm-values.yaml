@@ -42,8 +42,6 @@ controllers:
           limits:
             memory: 50Mi
     pod:
-      imagePullSecrets:
-        - name: zot-registry-credentials
       # Affinity - Soft Anti-Affinity to spread pods across nodes
       affinity:
         podAntiAffinity:

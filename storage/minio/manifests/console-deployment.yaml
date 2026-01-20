@@ -15,8 +15,6 @@ spec:
       labels:
         app: minio-console
     spec:
-      imagePullSecrets:
-        - name: zot-registry-credentials
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

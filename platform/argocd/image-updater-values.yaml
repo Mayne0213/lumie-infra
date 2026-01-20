@@ -1,13 +1,12 @@
 # ArgoCD Image Updater Helm Values
 
-# Configuration for Zot private registry
+# Configuration for Zot registry (anonymous read enabled)
 config:
   logLevel: debug
   registries:
     - name: zot
       prefix: zot0213.kro.kr
       api_url: https://zot0213.kro.kr
-      credentials: pullsecret:argocd/zot-registry-credentials
       insecure: false
 
 # Resource limits

@@ -6,8 +6,6 @@ image:
   repository: web-apps/jaejadle
   tag: 4afbbe87 # Updated by ArgoCD Image Updater
   pullPolicy: Always
-imagePullSecrets:
-  - name: zot-registry-credentials
 replicaCount: 1
 containerPort: 3000
 service:

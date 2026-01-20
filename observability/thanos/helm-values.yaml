@@ -18,9 +18,6 @@ image:
   repository: observability/thanos
   tag: v0.37.2
 
-imagePullSecrets:
-  - name: zot-registry-credentials
-
 # Object storage configuration (MinIO S3)
 # Uses secret created by ExternalSecret
 existingObjstoreSecret: thanos-objstore-secret

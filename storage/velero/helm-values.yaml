@@ -10,10 +10,6 @@ image:
   tag: v1.17.1
   pullPolicy: IfNotPresent
 
-# Pull from internal Zot registry
-imagePullSecrets:
-  - name: zot-registry-credentials
-
 # Replica count (Velero does not support multiple replicas)
 replicaCount: 1
 

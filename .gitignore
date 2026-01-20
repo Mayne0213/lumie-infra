@@ -16,7 +16,6 @@ provision/ansible/*.retry
 
 # Sensitive files
 *.pem
-*secret*
 
 # OS
 .DS_Store

@@ -6,8 +6,6 @@ image:
   repository: web-apps/joossam
   tag: b58b56cb # Updated by ArgoCD Image Updater
   pullPolicy: Always
-imagePullSecrets:
-  - name: zot-registry-credentials
 replicaCount: 1
 containerPort: 8000
 service:

@@ -42,5 +42,4 @@ spec:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
         minio-s3: enabled
-        zot-registry: enabled
   revisionHistoryLimit: 10

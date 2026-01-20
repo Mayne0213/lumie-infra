@@ -5,9 +5,6 @@ image:
   tag: 4.104.2
   pullPolicy: Always
 
-imagePullSecrets:
-  - name: zot-registry-credentials
-
 # Persistence configuration for workspace data
 persistence:
   enabled: true
