@@ -119,6 +119,13 @@ configMaps:
             "port": "5000",
             "externalUrl": "https://zot0213.kro.kr",
             "compat": ["docker2s2"],
+            "accessControl": {
+              "repositories": {
+                "**": {
+                  "anonymousPolicy": ["read"]
+                }
+              }
+            },
             "auth": {
               "htpasswd": {
                 "path": "/etc/zot/htpasswd"
