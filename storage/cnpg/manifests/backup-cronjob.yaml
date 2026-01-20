@@ -88,11 +88,11 @@ spec:
             - /bin/sh
             - -c
             - |
-              # Download mc client
-              wget -q https://dl.min.io/client/mc/release/linux-amd64/mc -O /tools/mc
+              # Download mc client (arm64)
+              wget -q https://dl.min.io/client/mc/release/linux-arm64/mc -O /tools/mc
               chmod +x /tools/mc
-              # Download kubectl
-              wget -q "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl" -O /tools/kubectl
+              # Download kubectl (arm64)
+              wget -q "https://dl.k8s.io/release/v1.29.0/bin/linux/arm64/kubectl" -O /tools/kubectl
               chmod +x /tools/kubectl
             volumeMounts:
             - name: tools
