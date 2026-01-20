@@ -97,9 +97,6 @@ configMap:
       database: authelia
       username: authelia
       timeout: 5s
-      password:
-        secret_name: authelia-db-app
-        key: password
 
   # Network definitions for access control
   definitions:
