@@ -20,6 +20,15 @@
     - master
     - k3s
 
+- name: Setup MinIO storage on workers
+  hosts: workers
+  become: yes
+  roles:
+    - minio-storage
+  tags:
+    - storage
+    - minio
+
 - name: Install K3s Workers (Account 0214)
   hosts: workers_0214
   become: yes
@@ -75,3 +84,13 @@
           {{ cluster_pods.stdout }}
   tags:
     - verify
+
+- name: Bootstrap ArgoCD and GitOps
+  hosts: masters
+  become: yes
+  roles:
+    - argocd-bootstrap
+  tags:
+    - argocd
+    - gitops
+    - bootstrap
