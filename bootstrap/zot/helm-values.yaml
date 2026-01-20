@@ -12,9 +12,22 @@ controllers:
           repository: ghcr.io/project-zot/zot-linux-arm64
           tag: v2.1.13
           pullPolicy: IfNotPresent
-        envFrom:
-        - secretRef:
-            name: minio-s3-credentials
+        env:
+          AWS_ACCESS_KEY_ID:
+            valueFrom:
+              secretKeyRef:
+                name: minio-s3-credentials
+                key: MINIO_ACCESS_KEY_ID
+          AWS_SECRET_ACCESS_KEY:
+            valueFrom:
+              secretKeyRef:
+                name: minio-s3-credentials
+                key: MINIO_SECRET_ACCESS_KEY
+          AWS_REGION:
+            valueFrom:
+              secretKeyRef:
+                name: minio-s3-credentials
+                key: MINIO_REGION
         probes:
           liveness:
             enabled: true
