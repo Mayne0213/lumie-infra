@@ -34,15 +34,16 @@ data:
 
       echo "=== Backing up $DATABASE from $CLUSTER.$NAMESPACE ==="
 
-      # Get postgres superuser password from CNPG secret
-      PGPASSWORD=$(/tools/kubectl get secret "${CLUSTER}-superuser" -n "$NAMESPACE" -o jsonpath='{.data.password}' | base64 -d)
+      # Get app user credentials from CNPG secret
+      PGPASSWORD=$(/tools/kubectl get secret "${CLUSTER}-app" -n "$NAMESPACE" -o jsonpath='{.data.password}' | base64 -d)
+      PGUSER=$(/tools/kubectl get secret "${CLUSTER}-app" -n "$NAMESPACE" -o jsonpath='{.data.username}' | base64 -d)
 
       # Connection string
       PGHOST="${CLUSTER}-rw.${NAMESPACE}.svc.cluster.local"
 
       # Run pg_dump
       BACKUP_FILE="/tmp/${BUCKET}-${DATE}.sql"
-      PGPASSWORD="$PGPASSWORD" pg_dump -h "$PGHOST" -U postgres -d "$DATABASE" -F p > "$BACKUP_FILE"
+      PGPASSWORD="$PGPASSWORD" pg_dump -h "$PGHOST" -U "$PGUSER" -d "$DATABASE" -F p > "$BACKUP_FILE"
 
       # Ensure bucket exists
       /tools/mc mb --ignore-existing "minio/${BUCKET}"
