@@ -89,14 +89,17 @@ configMap:
       password:
         disabled: true
 
-  # Storage - PostgreSQL (CNPG cluster)
+  # Storage - PostgreSQL (independent CNPG cluster)
   storage:
     postgres:
       enabled: true
-      address: tcp://postgresql-rw.postgresql.svc.cluster.local:5432
+      address: tcp://authelia-db-rw:5432
       database: authelia
-      username: bluemayne
+      username: authelia
       timeout: 5s
+      password:
+        secret_name: authelia-db-app
+        key: password
 
   # Network definitions for access control
   definitions:

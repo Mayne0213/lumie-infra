@@ -57,7 +57,25 @@ env:
     value: "prod"
   - name: JAVA_OPTS
     value: "-Xmx512m -Xms384m"
-# External Secret for sensitive data (DB credentials, JWT secret, etc.)
+  # Database from CNPG
+  - name: DB_HOST
+    value: "poolc-db-rw:5432"
+  - name: DB_NAME
+    valueFrom:
+      secretKeyRef:
+        name: poolc-db-app
+        key: dbname
+  - name: DB_USER_NAME
+    valueFrom:
+      secretKeyRef:
+        name: poolc-db-app
+        key: username
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: poolc-db-app
+        key: password
+# External Secret for sensitive data (JWT secret, MinIO, etc.)
 externalSecret:
   enabled: true
   refreshInterval: 1h
@@ -70,11 +88,6 @@ externalSecret:
     template:
       engineVersion: v2
       data:
-        # Database
-        DB_HOST: "{{ .pgHost }}:{{ .pgPort }}"
-        DB_NAME: "PoolcDB"
-        DB_USER_NAME: "{{ .pgUser }}"
-        DB_PASSWORD: "{{ .pgPassword }}"
         # JWT
         PROJECT_NAME_HERE_SECRET_KEY: "{{ .jwtSecret }}"
         EXPIRE_LENGTH_IN_MILLISECONDS: "3600000"
@@ -93,23 +106,6 @@ externalSecret:
         NAVER_BOOK_CLIENT_SECRET: ""
         KUBERNETES_API_KEY: ""
   data:
-    # From shared PostgreSQL secret
-    - secretKey: pgHost
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_HOST
-    - secretKey: pgPort
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_PORT
-    - secretKey: pgUser
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_USER
-    - secretKey: pgPassword
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_PASSWORD
     # From shared JWT secret
     - secretKey: jwtSecret
       remoteRef:

@@ -45,6 +45,12 @@ healthCheck:
   readinessProbe:
     initialDelaySeconds: 0
     periodSeconds: 5
+env:
+  - name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: jaejadle-db-app
+        key: uri
 envFrom:
   - secretRef:
       name: jaejadle-secrets
@@ -59,7 +65,6 @@ externalSecret:
     deletionPolicy: Retain
     template:
       data:
-        DATABASE_URL: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/JaejadleDB"
         JAEJADLE_JWT_SECRET: "{{ .JAEJADLE_JWT_SECRET }}"
         MINIO_ACCESS_KEY_ID: "{{ .MINIO_ACCESS_KEY_ID }}"
         MINIO_SECRET_ACCESS_KEY: "{{ .MINIO_SECRET_ACCESS_KEY }}"
@@ -68,23 +73,6 @@ externalSecret:
         MINIO_REGION: "{{ .MINIO_REGION }}"
         JAEJADLE_CODE: "{{ .JAEJADLE_CODE }}"
   data:
-    # PostgreSQL credentials (centralized)
-    - secretKey: DB_HOST
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_HOST
-    - secretKey: DB_PORT
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_PORT
-    - secretKey: DB_USER
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_USER
-    - secretKey: DB_PASSWORD
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_PASSWORD
     # App-specific secrets
     - secretKey: JAEJADLE_JWT_SECRET
       remoteRef:

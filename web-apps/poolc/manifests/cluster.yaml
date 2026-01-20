@@ -1,0 +1,25 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: poolc-db
+  namespace: poolc
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.6
+  bootstrap:
+    initdb:
+      database: PoolcDB
+      owner: poolc
+  storage:
+    storageClass: local-path-retain
+    size: 5Gi
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "50m"
+    limits:
+      memory: "512Mi"
+  affinity:
+    podAntiAffinityType: preferred
+  monitoring:
+    enablePodMonitor: true

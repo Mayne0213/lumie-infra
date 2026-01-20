@@ -56,37 +56,8 @@ env:
   - name: DATABASE_URL
     valueFrom:
       secretKeyRef:
-        name: todo-secrets
-        key: database-url
-externalSecret:
-  enabled: true
-  refreshInterval: 1h
-  secretStoreRef:
-    name: vault-backend
-    kind: ClusterSecretStore
-  target:
-    creationPolicy: Owner
-    deletionPolicy: Retain
-    template:
-      data:
-        database-url: "postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/TodoDB"
-  data:
-    - secretKey: DB_HOST
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_HOST
-    - secretKey: DB_PORT
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_PORT
-    - secretKey: DB_USER
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_USER
-    - secretKey: DB_PASSWORD
-      remoteRef:
-        key: storage/postgresql
-        property: POSTGRES_PASSWORD
+        name: todo-db-app
+        key: uri
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:
   podAntiAffinity:

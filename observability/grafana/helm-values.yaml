@@ -7,8 +7,8 @@ replicas: 1
 
 # Use existing secret to prevent Helm from generating random admin-password
 admin:
-  existingSecret: grafana-db-password
-  userKey: admin-user
+  existingSecret: grafana-db-app
+  userKey: username
   passwordKey: password
 
 affinity:
@@ -33,19 +33,19 @@ env:
 envValueFrom:
   GF_DATABASE_HOST:
     secretKeyRef:
-      name: grafana-db-password
+      name: grafana-db-app
       key: host
   GF_DATABASE_PORT:
     secretKeyRef:
-      name: grafana-db-password
+      name: grafana-db-app
       key: port
   GF_DATABASE_USER:
     secretKeyRef:
-      name: grafana-db-password
-      key: user
+      name: grafana-db-app
+      key: username
   GF_DATABASE_PASSWORD:
     secretKeyRef:
-      name: grafana-db-password
+      name: grafana-db-app
       key: password
 
 initChownData:
@@ -137,37 +137,4 @@ ingress:
         - grafana0213.kro.kr
         - www.grafana0213.kro.kr
 
-extraObjects:
-  - apiVersion: external-secrets.io/v1
-    kind: ExternalSecret
-    metadata:
-      name: grafana-db-password
-    spec:
-      refreshInterval: 1h
-      secretStoreRef:
-        kind: ClusterSecretStore
-        name: vault-backend
-      target:
-        name: grafana-db-password
-        creationPolicy: Owner
-      data:
-        - secretKey: host
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_HOST
-        - secretKey: port
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_PORT
-        - secretKey: user
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_USER
-        - secretKey: password
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_PASSWORD
-        - secretKey: admin-user
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_USER
+# extraObjects removed - DB credentials now provided by CNPG cluster secret (grafana-db-app)
