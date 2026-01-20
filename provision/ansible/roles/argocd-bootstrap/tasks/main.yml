@@ -92,8 +92,6 @@
       type: Opaque
       stringData:
         extraconfig-from-values.hcl: |
-          ui = true
-
           storage "s3" {
             bucket     = "vault"
             endpoint   = "http://minio.minio.svc:9000"
@@ -102,16 +100,6 @@
             secret_key = "{{ minio_root_password }}"
             s3_force_path_style = true
             disable_ssl = true
-          }
-
-          listener "tcp" {
-            tls_disable = 1
-            address = "[::]:8200"
-            cluster_address = "[::]:8201"
-          }
-
-          seal "awskms" {
-            disabled = true
           }
   environment:
     KUBECONFIG: "{{ k3s_kubeconfig }}"
