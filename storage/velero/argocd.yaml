@@ -32,7 +32,7 @@ spec:
     namespace: velero
   syncPolicy:
     automated:
-      prune: false  # Disabled: Backup/Restore/ServerStatusRequest are dynamic
+      prune: true  # Disabled: Backup/Restore/ServerStatusRequest are dynamic
       selfHeal: true
       allowEmpty: false
     syncOptions:
@@ -122,7 +122,7 @@ spec:
     namespace: velero
   syncPolicy:
     automated:
-      prune: false  # Disabled: Same namespace as velero
+      prune: true  # Disabled: Same namespace as velero
       selfHeal: true
       allowEmpty: false
     syncOptions:
