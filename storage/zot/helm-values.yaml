@@ -122,7 +122,11 @@ configMaps:
             "accessControl": {
               "repositories": {
                 "**": {
-                  "anonymousPolicy": ["read"]
+                  "anonymousPolicy": ["read"],
+                  "policies": [{
+                    "users": ["admin"],
+                    "actions": ["read", "create", "update", "delete"]
+                  }]
                 }
               }
             },
