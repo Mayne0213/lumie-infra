@@ -5,8 +5,7 @@ resources:
   # Self-reference for App of Apps pattern
   - application.yaml
 
-  # Security apps (vault moved to bootstrap/)
-  - cert-manager/argocd.yaml
+  # Security apps (vault, cert-manager moved to bootstrap/)
   - authelia/argocd.yaml
   - external-secrets/argocd.yaml
   - falco/argocd.yaml
