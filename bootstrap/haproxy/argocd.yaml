@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: haproxy
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
@@ -13,7 +15,7 @@ spec:
     targetRevision: 1.27.0
     helm:
       valueFiles:
-      - $values/platform/haproxy/helm-values.yaml
+      - $values/bootstrap/haproxy/helm-values.yaml
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
