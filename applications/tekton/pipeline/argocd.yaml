@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: platform/tekton/pipeline
+    path: applications/tekton/pipeline
   destination:
     server: https://kubernetes.default.svc
     namespace: tekton-pipelines
