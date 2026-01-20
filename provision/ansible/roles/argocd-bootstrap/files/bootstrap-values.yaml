@@ -1,0 +1,59 @@
+# Minimal ArgoCD values for initial bootstrap
+# ArgoCD will self-manage and update to full configuration via GitOps
+
+global:
+  priorityClassName: ""
+
+configs:
+  cm:
+    # Enable anonymous access for initial setup (will be secured via GitOps)
+    users.anonymous.enabled: "true"
+  params:
+    server.insecure: "true"
+  rbac:
+    policy.default: role:admin
+
+controller:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+
+server:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      memory: 128Mi
+
+repoServer:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+
+redis:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      memory: 64Mi
+
+dex:
+  enabled: false
+
+applicationSet:
+  enabled: false
+
+notifications:
+  enabled: false
+
+crds:
+  install: true
+  keep: true

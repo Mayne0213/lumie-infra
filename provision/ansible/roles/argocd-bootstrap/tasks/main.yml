@@ -1,0 +1,211 @@
+---
+# ArgoCD Bootstrap Tasks
+# Installs ArgoCD and applies root app-of-apps for GitOps
+
+- name: Check if Helm is installed
+  ansible.builtin.command: helm version --short
+  register: helm_version
+  changed_when: false
+  failed_when: false
+
+- name: Install Helm if not present
+  when: helm_version.rc != 0
+  block:
+    - name: Download Helm install script
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+        dest: /tmp/get_helm.sh
+        mode: '0755'
+
+    - name: Run Helm install script
+      ansible.builtin.command: /tmp/get_helm.sh
+      changed_when: true
+
+- name: Add ArgoCD Helm repository
+  kubernetes.core.helm_repository:
+    name: argo
+    repo_url: "{{ argocd_chart_repo }}"
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Create ArgoCD namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ argocd_namespace }}"
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+# Static secrets for bootstrap (must exist before ArgoCD deploys apps)
+- name: Create minio namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: minio
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Create minio-root-password secret
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: minio-root-password
+        namespace: minio
+      type: Opaque
+      stringData:
+        root-user: "{{ minio_root_user }}"
+        root-password: "{{ minio_root_password }}"
+        rootUser: "{{ minio_root_user }}"
+        rootPassword: "{{ minio_root_password }}"
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Create vault namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: vault
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Create vault-config-secret (S3 backend)
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: vault-config-secret
+        namespace: vault
+      type: Opaque
+      stringData:
+        extraconfig-from-values.hcl: |
+          ui = true
+
+          storage "s3" {
+            bucket     = "vault"
+            endpoint   = "http://minio.minio.svc:9000"
+            region     = "us-east-1"
+            access_key = "{{ minio_root_user }}"
+            secret_key = "{{ minio_root_password }}"
+            s3_force_path_style = true
+            disable_ssl = true
+          }
+
+          listener "tcp" {
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+          }
+
+          seal "awskms" {
+            disabled = true
+          }
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Check if ArgoCD is already installed
+  kubernetes.core.k8s_info:
+    kind: Deployment
+    namespace: "{{ argocd_namespace }}"
+    name: argocd-server
+  register: argocd_deployment
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Install ArgoCD via Helm (bootstrap)
+  kubernetes.core.helm:
+    name: argocd
+    chart_ref: argo/argo-cd
+    chart_version: "{{ argocd_chart_version }}"
+    release_namespace: "{{ argocd_namespace }}"
+    create_namespace: true
+    values_files:
+      - "{{ role_path }}/files/bootstrap-values.yaml"
+    wait: true
+    wait_timeout: 5m
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+  when: argocd_deployment.resources | length == 0
+
+- name: Wait for ArgoCD server to be ready
+  kubernetes.core.k8s_info:
+    kind: Deployment
+    namespace: "{{ argocd_namespace }}"
+    name: argocd-server
+    wait: true
+    wait_condition:
+      type: Available
+      status: "True"
+    wait_timeout: 300
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Wait for ArgoCD CRDs to be available
+  kubernetes.core.k8s_info:
+    api_version: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    name: applications.argoproj.io
+  register: argocd_crd
+  until: argocd_crd.resources | length > 0
+  retries: 30
+  delay: 10
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Clone GitOps repository for app-of-apps
+  ansible.builtin.git:
+    repo: "{{ gitops_repo }}"
+    dest: /tmp/k3s-home-gitops
+    version: "{{ gitops_branch }}"
+    force: true
+
+- name: Apply root app-of-apps
+  kubernetes.core.k8s:
+    state: present
+    src: "/tmp/k3s-home-gitops/{{ item }}"
+  loop: "{{ app_of_apps_paths }}"
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Wait for app-of-apps to be created
+  kubernetes.core.k8s_info:
+    api_version: argoproj.io/v1alpha1
+    kind: Application
+    namespace: "{{ argocd_namespace }}"
+  register: argocd_apps
+  until: argocd_apps.resources | length >= (app_of_apps_paths | length)
+  retries: 12
+  delay: 10
+  environment:
+    KUBECONFIG: "{{ k3s_kubeconfig }}"
+
+- name: Clean up cloned repository
+  ansible.builtin.file:
+    path: /tmp/k3s-home-gitops
+    state: absent
+
+- name: Display ArgoCD applications
+  ansible.builtin.debug:
+    msg: |
+      ArgoCD Bootstrap Complete!
+
+      Root App-of-Apps applied:
+      {% for app in argocd_apps.resources %}
+      - {{ app.metadata.name }}
+      {% endfor %}
+
+      ArgoCD will now sync all applications from Git.
+      Note: Some apps may fail initially until dependencies (Vault, PostgreSQL) are ready.
