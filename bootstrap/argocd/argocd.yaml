@@ -4,8 +4,7 @@ metadata:
   name: argocd
   namespace: argocd
   annotations:
-    # Sync early in the wave order
-    argocd.argoproj.io/sync-wave: "-10"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   sources:
@@ -15,7 +14,7 @@ spec:
       targetRevision: 7.7.10
       helm:
         valueFiles:
-          - $values/platform/argocd/helm-values.yaml
+          - $values/bootstrap/argocd/helm-values.yaml
     # Source 2: Helm values from Git repo
     - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
       targetRevision: main
@@ -23,7 +22,7 @@ spec:
     # Source 3: Additional manifests (Ingress, Namespace)
     - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
       targetRevision: main
-      path: platform/argocd/manifests
+      path: bootstrap/argocd/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

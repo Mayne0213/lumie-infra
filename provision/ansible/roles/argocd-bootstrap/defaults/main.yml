@@ -12,7 +12,9 @@ gitops_repo: https://github0213.com/Mayne0213/K3S-HOME.git
 gitops_branch: main
 
 # Root app-of-apps paths (relative to repo root)
+# bootstrap MUST be first - it deploys minio, vault, argocd with sync waves
 app_of_apps_paths:
+  - bootstrap/application.yaml
   - platform/application.yaml
   - storage/application.yaml
   - security/application.yaml

@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+# Sync wave order: minio(0) -> vault(1) -> argocd(2)
+- minio/argocd.yaml
+- vault/argocd.yaml
+- argocd/argocd.yaml
+- argocd/image-updater.yaml

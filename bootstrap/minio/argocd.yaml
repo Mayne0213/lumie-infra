@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: minio
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
@@ -13,13 +15,13 @@ spec:
     targetRevision: 5.4.0
     helm:
       valueFiles:
-      - $values/storage/minio/helm-values.yaml
+      - $values/bootstrap/minio/helm-values.yaml
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: storage/minio
+    path: bootstrap/minio
   destination:
     server: https://kubernetes.default.svc
     namespace: minio

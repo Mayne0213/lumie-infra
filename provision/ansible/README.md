@@ -25,7 +25,7 @@ Account 0213 (SECOND):
 ### Install Ansible Collections
 
 ```bash
-ansible-galaxy collection install ansible.posix community.general
+ansible-galaxy install -r requirements.yml
 ```
 
 ## Quick Start
@@ -34,11 +34,11 @@ ansible-galaxy collection install ansible.posix community.general
 
 ```bash
 # 1. Deploy infrastructure
-cd ..
+cd provision/terraform
 terraform apply
 
-# 2. Deploy K3s cluster
-cd ansible
+# 2. Deploy K3s cluster + ArgoCD + GitOps
+cd ../ansible
 ansible-playbook -i inventory/terraform_inventory.py playbooks/site.yml
 
 # 3. Fetch kubeconfig to local machine
@@ -48,6 +48,39 @@ ansible-playbook -i inventory/terraform_inventory.py playbooks/fetch-kubeconfig.
 export KUBECONFIG=./kubeconfig/config
 kubectl get nodes
 ```
+
+## Bootstrap Sequence
+
+The `site.yml` playbook performs the following steps:
+
+| Step | Description | Hosts |
+|------|-------------|-------|
+| 1 | Install common packages, kernel modules, sysctl | All |
+| 2 | Install K3s Master | Masters |
+| 3 | Mount MinIO block volumes (LABEL-based) | Workers |
+| 4 | Install K3s Workers | Workers |
+| 5 | Verify cluster | Masters |
+| 6 | Install ArgoCD via Helm | Masters |
+| 7 | Apply root App-of-Apps | Masters |
+
+### After Ansible Completes
+
+ArgoCD will automatically deploy all applications via GitOps. However, some apps require manual steps:
+
+1. **PostgreSQL**: Restore from backup (if recovering)
+2. **Vault**: Create `vault-config-secret` and unseal
+
+```bash
+# Manual: Restore PostgreSQL (if needed)
+# Manual: Create vault-config-secret
+kubectl create secret generic vault-config-secret -n vault \
+  --from-file=extraconfig-from-values.hcl=/path/to/config.hcl
+
+# Manual: Unseal Vault
+kubectl exec -n vault vault-0 -- vault operator unseal <key>
+```
+
+After Vault is unsealed, all remaining applications will automatically sync via GitOps.
 
 ### Without Terraform
 
@@ -119,6 +152,7 @@ ansible-playbook -i inventory/terraform_inventory.py playbooks/site.yml -v
 ```
 ansible/
 ├── ansible.cfg                    # Ansible configuration
+├── requirements.yml               # Ansible Galaxy requirements
 ├── inventory/
 │   ├── hosts.yml.example          # Static inventory example
 │   └── terraform_inventory.py     # Dynamic inventory from Terraform
@@ -130,7 +164,9 @@ ansible/
 ├── roles/
 │   ├── common/                    # OS preparation role
 │   ├── k3s-master/                # K3s server installation
-│   └── k3s-worker/                # K3s agent installation
+│   ├── k3s-worker/                # K3s agent installation
+│   ├── minio-storage/             # MinIO block volume mount
+│   └── argocd-bootstrap/          # ArgoCD + GitOps setup
 ├── playbooks/
 │   ├── site.yml                   # Full deployment
 │   ├── k3s-master.yml             # Master only

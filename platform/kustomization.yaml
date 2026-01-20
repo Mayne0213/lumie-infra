@@ -5,11 +5,9 @@ resources:
   # Platform self-reference
   - application.yaml
 
-  # Core infrastructure
+  # Core infrastructure (argocd moved to bootstrap/)
   - haproxy/argocd.yaml
   - traefik/argocd.yaml
-  - argocd/argocd.yaml
-  - argocd/image-updater.yaml
   - gitea/argocd.yaml
 
   # Tekton CI/CD Platform
