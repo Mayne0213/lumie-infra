@@ -123,6 +123,7 @@ configMaps:
               "repositories": {
                 "**": {
                   "anonymousPolicy": ["read"],
+                  "defaultPolicy": ["read"],
                   "policies": [{
                     "users": ["admin"],
                     "actions": ["read", "create", "update", "delete"]
