@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   # Secrets
   - secrets/gitea-credentials.yaml
+  - secrets/zot-registry-credentials.yaml
   # Tasks
   - tasks/kaniko-clone-build.yaml
   - tasks/git-update-values.yaml

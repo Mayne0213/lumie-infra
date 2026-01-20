@@ -46,8 +46,6 @@ controllers:
               periodSeconds: 5
     # Affinity - Soft Anti-Affinity to spread pods across nodes
     pod:
-      imagePullSecrets:
-        - name: zot-registry-credentials
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

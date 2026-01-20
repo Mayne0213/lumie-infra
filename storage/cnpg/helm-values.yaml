@@ -7,9 +7,6 @@ image:
   tag: "1.25.1"
   pullPolicy: IfNotPresent
 
-# No pull secrets needed for public registry
-imagePullSecrets: []
-
 # Replica count for operator
 replicaCount: 1
 

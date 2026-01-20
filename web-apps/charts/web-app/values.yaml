@@ -10,10 +10,6 @@ image:
   tag: latest
   pullPolicy: Always
 
-# Image pull secrets
-imagePullSecrets:
-  - name: zot-registry-credentials
-
 # Replicas
 replicaCount: 1
 

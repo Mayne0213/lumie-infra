@@ -6,8 +6,6 @@ image:
   repository: web-apps/poolc-backend
   tag: 61c75109
   pullPolicy: Always
-imagePullSecrets:
-  - name: zot-registry-credentials
 replicaCount: 1
 containerPort: 8080
 service:

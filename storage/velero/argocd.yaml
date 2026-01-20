@@ -47,7 +47,6 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
-        zot-registry: enabled
   revisionHistoryLimit: 10
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -69,9 +68,6 @@ spec:
           repository: zot0213.kro.kr/storage/velero-ui
           tag: v0.10.1
           pullPolicy: IfNotPresent
-
-        imagePullSecrets:
-          - name: zot-registry-credentials
 
         replicaCount: 1
 

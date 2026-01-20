@@ -74,10 +74,6 @@ prometheus:
     enabled: true
 
   prometheusSpec:
-    # Image pull secrets for Zot registry
-    imagePullSecrets:
-      - name: zot-registry-credentials
-
     # Enable remote write receiver for OTel Collector
     enableRemoteWriteReceiver: true
 

@@ -69,7 +69,7 @@ autoscaling:
 
 # Health checks
 startupProbe:
-  enabled: true
+   true
   httpGet:
     path: /api/heartbeat
     port: 3000

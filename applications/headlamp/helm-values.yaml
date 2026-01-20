@@ -8,9 +8,6 @@ image:
   tag: v0.39.0
   pullPolicy: IfNotPresent
 
-imagePullSecrets:
-  - name: zot-registry-credentials
-
 serviceAccount:
   create: true
   name: headlamp

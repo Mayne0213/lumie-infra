@@ -31,7 +31,6 @@ spec:
     - PruneLast=true
     managedNamespaceMetadata:
       labels:
-        zot-registry: enabled
     retry:
       limit: 5
       backoff:
