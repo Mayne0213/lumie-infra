@@ -3,8 +3,8 @@ kind: Application
 metadata:
   name: zot
   namespace: argocd
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   project: default
   sources:
@@ -13,13 +13,13 @@ spec:
     targetRevision: 3.6.1
     helm:
       valueFiles:
-      - $values/storage/zot/helm-values.yaml
+      - $values/bootstrap/zot/helm-values.yaml
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: storage/zot
+    path: bootstrap/zot
   destination:
     server: https://kubernetes.default.svc
     namespace: zot
