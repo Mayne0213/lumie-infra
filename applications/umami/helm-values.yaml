@@ -3,28 +3,28 @@ fullnameOverride: umami
 image:
   tag: postgresql-latest
 
-# Disable PostgreSQL subchart (using external PostgreSQL)
+# Disable PostgreSQL subchart (using CNPG Cluster in same namespace)
 postgresql:
   enabled: false
 
-# External database configuration
+# External database configuration - points to CNPG Cluster
 externalDatabase:
   type: postgresql
-  hostname: postgresql-rw.postgresql.svc.cluster.local
+  hostname: umami-db-rw  # CNPG service name
   port: 5432
   auth:
     database: umami
-    username: bluemayne
-    # Password is managed via External Secrets Operator (Vault)
+    username: umami  # CNPG bootstrap.initdb.owner
 
-# Use existing secret for sensitive data
+# Use CNPG-generated secret for DATABASE_URL
 database:
-  existingSecret: umami-password
+  existingSecret: umami-db-app
+  databaseUrlKey: uri
 
-# Environment variables from secret
+# Environment variables from secrets
 envFrom:
   - secretRef:
-      name: umami-password
+      name: umami-hash-salt  # HASH_SALT only
 
 ingress:
   enabled: true
