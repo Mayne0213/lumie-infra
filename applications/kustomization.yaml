@@ -11,3 +11,9 @@ resources:
   - umami/argocd.yaml
   - headlamp/argocd.yaml
   - mas/argocd.yaml
+
+  # Tekton CI/CD
+  - tekton/pipeline/argocd.yaml
+  - tekton/triggers/argocd.yaml
+  - tekton/dashboard/argocd.yaml
+  - tekton/ci-cd/argocd.yaml
