@@ -1,0 +1,166 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pg-backup-script
+  namespace: cnpg
+data:
+  backup.sh: |
+    #!/bin/bash
+    set -e
+
+    DATE=$(date +%Y%m%d-%H%M%S)
+    MINIO_HOST="${MINIO_ENDPOINT:-http://minio.minio.svc.cluster.local:9000}"
+
+    # Database configurations: cluster-name|namespace|database-name|bucket-name
+    DATABASES=(
+      "todo-db|todo|TodoDB|todo"
+      "jaejadle-db|jaejadle|JaejadleDB|jaejadle"
+      "jaejadle-dev-db|jaejadle-dev|JaejadleDevDB|jaejadle-dev"
+      "jotion-db|jotion|JotionDB|jotion"
+      "poolc-db|poolc|PoolcDB|poolc"
+      "poolc-dev-db|poolc-dev|PoolcDB|poolc-dev"
+      "mas-db|mas|mas|mas"
+      "umami-db|umami|umami|umami"
+      "authelia-db|authelia|authelia|authelia"
+      "grafana-db|grafana|grafana|grafana"
+      "vault-db|vault|vault|vault"
+    )
+
+    # Configure mc client
+    /tools/mc alias set minio "$MINIO_HOST" "$MINIO_ACCESS_KEY_ID" "$MINIO_SECRET_ACCESS_KEY"
+
+    for entry in "${DATABASES[@]}"; do
+      IFS='|' read -r CLUSTER NAMESPACE DATABASE BUCKET <<< "$entry"
+
+      echo "=== Backing up $DATABASE from $CLUSTER.$NAMESPACE ==="
+
+      # Get postgres superuser password from CNPG secret
+      PGPASSWORD=$(/tools/kubectl get secret "${CLUSTER}-superuser" -n "$NAMESPACE" -o jsonpath='{.data.password}' | base64 -d)
+
+      # Connection string
+      PGHOST="${CLUSTER}-rw.${NAMESPACE}.svc.cluster.local"
+
+      # Run pg_dump
+      BACKUP_FILE="/tmp/${BUCKET}-${DATE}.sql"
+      PGPASSWORD="$PGPASSWORD" pg_dump -h "$PGHOST" -U postgres -d "$DATABASE" -F p > "$BACKUP_FILE"
+
+      # Ensure bucket exists
+      /tools/mc mb --ignore-existing "minio/${BUCKET}"
+
+      # Upload to MinIO
+      /tools/mc cp "$BACKUP_FILE" "minio/${BUCKET}/"
+
+      # Cleanup local file
+      rm -f "$BACKUP_FILE"
+
+      # Keep only last 7 backups per bucket
+      /tools/mc ls "minio/${BUCKET}/" | sort | head -n -7 | awk '{print $NF}' | while read -r old_file; do
+        if [ -n "$old_file" ]; then
+          /tools/mc rm "minio/${BUCKET}/${old_file}"
+        fi
+      done
+
+      echo "=== Completed backup for $DATABASE ==="
+    done
+
+    echo "All backups completed successfully!"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pg-backup
+  namespace: cnpg
+spec:
+  schedule: "0 3 * * *"  # Daily at 3 AM
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          serviceAccountName: pg-backup
+          initContainers:
+          - name: download-tools
+            image: alpine:3.19
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # Download mc client
+              wget -q https://dl.min.io/client/mc/release/linux-amd64/mc -O /tools/mc
+              chmod +x /tools/mc
+              # Download kubectl
+              wget -q "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl" -O /tools/kubectl
+              chmod +x /tools/kubectl
+            volumeMounts:
+            - name: tools
+              mountPath: /tools
+          containers:
+          - name: backup
+            image: ghcr.io/cloudnative-pg/postgresql:16.6
+            command: ["/bin/bash", "/scripts/backup.sh"]
+            env:
+            - name: MINIO_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: minio-s3-credentials
+                  key: MINIO_ACCESS_KEY_ID
+            - name: MINIO_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-s3-credentials
+                  key: MINIO_SECRET_ACCESS_KEY
+            - name: MINIO_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: minio-s3-credentials
+                  key: MINIO_ENDPOINT
+            volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+            - name: tools
+              mountPath: /tools
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+          volumes:
+          - name: scripts
+            configMap:
+              name: pg-backup-script
+              defaultMode: 0755
+          - name: tools
+            emptyDir: {}
+          restartPolicy: OnFailure
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pg-backup
+  namespace: cnpg
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pg-backup
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pg-backup
+subjects:
+- kind: ServiceAccount
+  name: pg-backup
+  namespace: cnpg
+roleRef:
+  kind: ClusterRole
+  name: pg-backup
+  apiGroup: rbac.authorization.k8s.io

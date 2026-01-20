@@ -23,29 +23,3 @@ spec:
     podAntiAffinityType: preferred
   monitoring:
     enablePodMonitor: true
-
-  backup:
-    barmanObjectStore:
-      destinationPath: s3://jotion/
-      endpointURL: http://minio.minio.svc:9000
-      s3Credentials:
-        accessKeyId:
-          name: minio-s3-credentials
-          key: MINIO_ACCESS_KEY_ID
-        secretAccessKey:
-          name: minio-s3-credentials
-          key: MINIO_SECRET_ACCESS_KEY
-    retentionPolicy: "7d"
-
-  externalClusters:
-    - name: jotion-backup
-      barmanObjectStore:
-        destinationPath: s3://jotion/
-        endpointURL: http://minio.minio.svc:9000
-        s3Credentials:
-          accessKeyId:
-            name: minio-s3-credentials
-            key: MINIO_ACCESS_KEY_ID
-          secretAccessKey:
-            name: minio-s3-credentials
-            key: MINIO_SECRET_ACCESS_KEY
