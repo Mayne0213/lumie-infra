@@ -8,8 +8,6 @@ resources:
   # Storage systems
   - minio/argocd.yaml
   - zot/argocd.yaml
-  # PostgreSQL databases
-  - postgresql/argocd/postgresql.yaml
   # Database tools
   - pgweb/argocd.yaml
   # Operators
