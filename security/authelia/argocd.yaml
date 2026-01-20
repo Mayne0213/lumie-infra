@@ -41,4 +41,5 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
+        minio-s3: 'enabled'
   revisionHistoryLimit: 10

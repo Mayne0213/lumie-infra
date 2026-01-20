@@ -40,3 +40,4 @@ spec:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
         zot-registry: 'enabled'
+        minio-s3: 'enabled'
