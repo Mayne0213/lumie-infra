@@ -13,6 +13,7 @@ provision/terraform/*.auto.tfvars
 provision/ansible/inventory/hosts.yml
 provision/ansible/kubeconfig/
 provision/ansible/*.retry
+provision/ansible/group_vars/secrets.yml
 
 # Sensitive files
 *.pem

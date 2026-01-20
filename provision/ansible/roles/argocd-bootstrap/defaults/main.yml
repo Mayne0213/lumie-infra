@@ -24,6 +24,9 @@ app_of_apps_paths:
 k3s_kubeconfig: /etc/rancher/k3s/k3s.yaml
 
 # Static secrets for bootstrap (MinIO must start before Vault)
-# Note: For production, these should be ansible-vault encrypted or in group_vars
-minio_root_user: "bluemayne"
-minio_root_password: "Mi87345364"
+# These MUST be provided via:
+#   - ansible-vault encrypted group_vars (recommended)
+#   - Extra vars: -e "minio_root_user=xxx minio_root_password=xxx"
+#   - Environment: MINIO_ROOT_USER, MINIO_ROOT_PASSWORD
+# minio_root_user: "{{ lookup('env', 'MINIO_ROOT_USER') }}"
+# minio_root_password: "{{ lookup('env', 'MINIO_ROOT_PASSWORD') }}"
