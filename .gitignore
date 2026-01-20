@@ -21,3 +21,4 @@ provision/ansible/*.retry
 .DS_Store
 *.swp
 *~
+backups/
