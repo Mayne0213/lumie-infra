@@ -12,21 +12,15 @@ server:
   dev:
     enabled: false
 
-  # Standalone 비활성화 (HA 사용)
+  # Standalone mode - MinIO S3 provides storage HA via erasure coding
   standalone:
+    enabled: true
+
+  # HA 비활성화 (S3 backend doesn't support HA)
+  ha:
     enabled: false
 
-  # HA 설정 - PostgreSQL storage (config from External Secret)
-  ha:
-    enabled: true
-    replicas: 2
-    raft:
-      enabled: false
-    # UI enabled - actual storage config is in vault-config-secret
-    config: |
-      ui = true
-
-  # PVC 비활성화 (PostgreSQL 사용)
+  # PVC 비활성화 (S3 사용)
   dataStorage:
     enabled: false
 

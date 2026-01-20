@@ -1,0 +1,29 @@
+---
+# ArgoCD Bootstrap Configuration
+
+# ArgoCD Helm Chart
+argocd_chart_repo: https://argoproj.github.io/argo-helm
+argocd_chart_name: argo-cd
+argocd_chart_version: "7.7.10"
+argocd_namespace: argocd
+
+# Git repository for app-of-apps
+gitops_repo: https://github0213.com/Mayne0213/K3S-HOME.git
+gitops_branch: main
+
+# Root app-of-apps paths (relative to repo root)
+app_of_apps_paths:
+  - platform/application.yaml
+  - storage/application.yaml
+  - security/application.yaml
+  - observability/application.yaml
+  - applications/application.yaml
+  - web-apps/application.yaml
+
+# Kubeconfig path
+k3s_kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+# Static secrets for bootstrap (MinIO must start before Vault)
+# Note: For production, these should be ansible-vault encrypted or in group_vars
+minio_root_user: "bluemayne"
+minio_root_password: "Mi87345364"
