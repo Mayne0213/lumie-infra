@@ -4,6 +4,18 @@ kind: Kustomization
 resources:
 - https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 
+# Override upstream images to use zot registry
+images:
+- name: ghcr.io/tektoncd/pipeline/controller-10a3e32792f33651396d02b6855a6e36
+  newName: zot0213.kro.kr/tekton/pipeline-controller
+  newTag: v1.6.0
+- name: ghcr.io/tektoncd/pipeline/webhook-d4749e605405422fd87700164e31b2d1
+  newName: zot0213.kro.kr/tekton/pipeline-webhook
+  newTag: v1.6.0
+- name: ghcr.io/tektoncd/pipeline/events-a9042f7efb0cbade2a868a1ee5ddd52c
+  newName: zot0213.kro.kr/tekton/pipeline-events
+  newTag: v1.6.0
+
 patches:
 - target:
     group: apiextensions.k8s.io

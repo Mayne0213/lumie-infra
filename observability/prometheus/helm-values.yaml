@@ -14,6 +14,16 @@ prometheusOperator:
   enabled: true
   # CRD 생성 비활성화
   createCustomResource: false
+  # Image configuration - use zot registry
+  image:
+    registry: zot0213.kro.kr
+    repository: observability/prometheus-operator
+    tag: v0.87.0
+  prometheusConfigReloader:
+    image:
+      registry: zot0213.kro.kr
+      repository: observability/prometheus-config-reloader
+      tag: v0.87.0
   # Resource settings (no CPU limit for stability)
   resources:
     requests:
@@ -74,6 +84,11 @@ prometheus:
     enabled: true
 
   prometheusSpec:
+    # Image configuration - use zot registry
+    image:
+      registry: zot0213.kro.kr
+      repository: observability/prometheus
+      tag: v3.8.0
     # Enable remote write receiver for OTel Collector
     enableRemoteWriteReceiver: true
 
