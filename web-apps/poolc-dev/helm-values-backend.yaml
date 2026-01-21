@@ -109,19 +109,19 @@ externalSecret:
     # From MinIO secret
     - secretKey: minioEndpoint
       remoteRef:
-        key: storage/minio
+        key: bootstrap/minio
         property: MINIO_ENDPOINT
     - secretKey: minioAccessKey
       remoteRef:
-        key: storage/minio
+        key: bootstrap/minio
         property: MINIO_ACCESS_KEY_ID
     - secretKey: minioSecretKey
       remoteRef:
-        key: storage/minio
+        key: bootstrap/minio
         property: MINIO_SECRET_ACCESS_KEY
     - secretKey: minioRegion
       remoteRef:
-        key: storage/minio
+        key: bootstrap/minio
         property: MINIO_REGION
 envFrom:
   - secretRef:
