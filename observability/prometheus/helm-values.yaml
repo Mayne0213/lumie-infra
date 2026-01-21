@@ -86,7 +86,7 @@ prometheus:
   prometheusSpec:
     # Image pull secrets for zot registry
     imagePullSecrets:
-      - name: zot-registry-creds
+      - name: zot-registry-credentials
     # Image configuration - use zot registry
     image:
       registry: zot0213.kro.kr
