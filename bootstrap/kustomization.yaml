@@ -16,4 +16,3 @@ resources:
 - cert-manager/argocd.yaml
 - zot/argocd.yaml
 - argocd/argocd.yaml
-- argocd/image-updater.yaml
