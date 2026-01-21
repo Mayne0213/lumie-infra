@@ -3,10 +3,6 @@
 
 images:
   # Storage
-  - name: minio
-    source: quay.io/minio/minio
-    tag: RELEASE.2025-09-07T16-13-09Z
-    dest: storage/minio
 
   - name: cnpg
     source: ghcr.io/cloudnative-pg/cloudnative-pg
@@ -256,3 +252,8 @@ images:
     source: ghcr.io/tektoncd/dashboard/dashboard-9623576a202fe86c8b7d1bc489905f86
     tag: v0.63.1
     dest: tekton/dashboard
+
+  - name: tekton-pipeline-resolvers
+    source: ghcr.io/tektoncd/pipeline/resolvers-ff86b24f130c42b88983d3c13993056d
+    tag: v1.6.0
+    dest: tekton/pipeline-resolvers
