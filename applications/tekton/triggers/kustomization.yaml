@@ -5,6 +5,21 @@ resources:
 - https://storage.googleapis.com/tekton-releases/triggers/latest/release.yaml
 - https://storage.googleapis.com/tekton-releases/triggers/latest/interceptors.yaml
 
+# Override upstream images to use zot registry
+images:
+- name: ghcr.io/tektoncd/triggers/controller-f656ca31de179ab913fa76abc255c315
+  newName: zot0213.kro.kr/tekton/triggers-controller
+  newTag: v0.34.0
+- name: ghcr.io/tektoncd/triggers/webhook-dd1edc925ee1772a9f76e2c1bc291ef6
+  newName: zot0213.kro.kr/tekton/triggers-webhook
+  newTag: v0.34.0
+- name: ghcr.io/tektoncd/triggers/interceptors-3176d6a3f314c3655b30bfd36e421dd5
+  newName: zot0213.kro.kr/tekton/triggers-interceptors
+  newTag: v0.34.0
+- name: ghcr.io/tektoncd/triggers/eventlistenersink-7ad1faa98cddbcb0c24990303b220bb8
+  newName: zot0213.kro.kr/tekton/triggers-eventlistenersink
+  newTag: v0.34.0
+
 patches:
 - target:
     group: apiextensions.k8s.io

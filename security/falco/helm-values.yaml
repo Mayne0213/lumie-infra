@@ -5,6 +5,12 @@
 driver:
   enabled: true
   kind: modern_ebpf  # Uses modern eBPF features, no driver compilation needed
+  loader:
+    # Image configuration for falcoctl (driver loader)
+    image:
+      registry: zot0213.kro.kr
+      repository: security/falcoctl
+      tag: 0.11.0
 
 # Image configuration - use internal Zot registry
 image:
@@ -131,6 +137,11 @@ falcosidekick:
   enabled: true
   fullfqdn: false
   replicaCount: 1
+  # Image configuration - use zot registry
+  image:
+    registry: zot0213.kro.kr
+    repository: security/falcosidekick
+    tag: 2.31.1
 
   # Resource settings (no CPU limit for stability)
   resources:
