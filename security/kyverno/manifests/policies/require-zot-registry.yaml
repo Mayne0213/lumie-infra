@@ -37,7 +37,7 @@ spec:
           - zot
           - kyverno
     validate:
-      message: "Container image '{{element.image}}' must be from zot0213.kro.kr registry."
+      message: "Container images must be from zot0213.kro.kr registry."
       foreach:
       - list: "request.object.spec.containers"
         deny:
@@ -74,7 +74,7 @@ spec:
         operator: GreaterThanOrEquals
         value: 1
     validate:
-      message: "Init container image '{{element.image}}' must be from zot0213.kro.kr registry."
+      message: "Init container images must be from zot0213.kro.kr registry."
       foreach:
       - list: "request.object.spec.initContainers"
         deny:

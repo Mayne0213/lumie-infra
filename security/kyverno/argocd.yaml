@@ -35,7 +35,7 @@ spec:
     - PruneLast=true
     - RespectIgnoreDifferences=true
     - ApplyOutOfSyncOnly=true
-    - ServerSideApply=true
+    - SkipDryRunOnMissingResource=true
     retry:
       limit: 5
       backoff:

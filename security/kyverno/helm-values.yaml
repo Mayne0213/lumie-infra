@@ -7,8 +7,10 @@ global:
   image:
     registry: zot0213.kro.kr
 
-# CRDs migration image
+# CRDs - disable Helm installation to avoid annotation size limit
+# CRDs must be installed manually: kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.13.4/install.yaml
 crds:
+  install: false
   migration:
     image:
       registry: zot0213.kro.kr
@@ -115,13 +117,21 @@ reportsController:
     labels:
       release: prometheus
 
-# Webhooks configuration
+# Webhooks cleanup (pre-delete hook)
 webhooksCleanup:
   enabled: true
   image:
     registry: zot0213.kro.kr
-    repository: kyverno/kyverno-cli
-    tag: v1.13.4
+    repository: applications/kubectl
+    tag: "1.32"
+
+# Policy reports cleanup (post-upgrade hook)
+policyReportsCleanup:
+  enabled: true
+  image:
+    registry: zot0213.kro.kr
+    repository: applications/kubectl
+    tag: "1.32"
 
 # Features configuration
 features:
