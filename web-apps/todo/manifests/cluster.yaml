@@ -23,3 +23,27 @@ spec:
     podAntiAffinityType: preferred
   monitoring:
     enablePodMonitor: true
+
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://cnpg-backups/todo/todo-db
+      endpointURL: http://minio.minio.svc.cluster.local:9000
+      s3Credentials:
+        accessKeyId:
+          name: minio-s3-credentials
+          key: MINIO_ACCESS_KEY_ID
+        secretAccessKey:
+          name: minio-s3-credentials
+          key: MINIO_SECRET_ACCESS_KEY
+    retentionPolicy: "7d"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: todo-db-backup
+  namespace: todo
+spec:
+  schedule: "0 3 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: todo-db
