@@ -138,6 +138,11 @@ images:
     tag: v1.2.1
     dest: security/external-secrets
 
+  - name: trivy
+    source: docker.io/aquasec/trivy
+    tag: "0.68.2"
+    dest: security/trivy
+
   # Observability (added 2025-01-21)
   - name: grafana
     source: docker.io/grafana/grafana
