@@ -21,3 +21,27 @@ spec:
       memory: "512Mi"
   monitoring:
     enablePodMonitor: true
+
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://cnpg-backups/poolc-dev/poolc-dev-db
+      endpointURL: http://minio.minio.svc.cluster.local:9000
+      s3Credentials:
+        accessKeyId:
+          name: minio-s3-credentials
+          key: MINIO_ACCESS_KEY_ID
+        secretAccessKey:
+          name: minio-s3-credentials
+          key: MINIO_SECRET_ACCESS_KEY
+    retentionPolicy: "7d"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: poolc-dev-db-backup
+  namespace: poolc-dev
+spec:
+  schedule: "0 3 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: poolc-dev-db
