@@ -2,7 +2,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - manifests/secret.yaml
-- manifests/backup-rbac.yaml
-- manifests/backup-script.yaml
-- manifests/backup-cronjob.yaml
 - manifests/health-ingress.yaml
