@@ -5,9 +5,10 @@
 # Sidecar image (for config reload)
 sidecar:
   image:
-    registry: zot0213.kro.kr
-    repository: observability/k8s-sidecar
+    repository: zot0213.kro.kr/observability/k8s-sidecar
     tag: "1.28.0"
+  rules:
+    enabled: true
 
 # Image configuration - use zot registry
 loki:
