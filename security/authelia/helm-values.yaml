@@ -227,7 +227,7 @@ redis:
     enabled: false
   image:
     registry: zot0213.kro.kr
-    repository: security/redis
+    repository: storage/redis
     tag: latest
   master:
     # Resource settings (no CPU limit for stability)

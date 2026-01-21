@@ -135,7 +135,7 @@ images:
   - name: redis
     source: docker.io/bitnami/redis
     tag: latest
-    dest: security/redis
+    dest: storage/redis
 
   - name: external-secrets
     source: ghcr.io/external-secrets/external-secrets
