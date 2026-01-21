@@ -67,6 +67,7 @@ spec:
           - zot
           - falco
           - kyverno
+          - mas
     validate:
       message: "Privileged containers are not allowed."
       deny:
