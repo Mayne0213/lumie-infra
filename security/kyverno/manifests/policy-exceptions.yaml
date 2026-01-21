@@ -1,0 +1,74 @@
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: bootstrap-exceptions
+  namespace: kyverno
+spec:
+  exceptions:
+  - policyName: require-zot-registry
+    ruleNames:
+    - validate-image-registry
+    - validate-init-container-registry
+  - policyName: require-security-context
+    ruleNames:
+    - require-run-as-non-root
+    - deny-privileged-containers
+    - deny-privilege-escalation
+  match:
+    any:
+    - resources:
+        namespaces:
+        - argocd
+        - cert-manager
+        - external-secrets
+        - gitea
+        - haproxy
+        - minio
+        - vault
+        - zot
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: falco-privileged-exception
+  namespace: kyverno
+spec:
+  exceptions:
+  - policyName: require-security-context
+    ruleNames:
+    - require-run-as-non-root
+    - deny-privileged-containers
+    - deny-privilege-escalation
+  match:
+    any:
+    - resources:
+        namespaces:
+        - falco
+        kinds:
+        - Pod
+  conditions:
+    any:
+    - key: "{{request.object.metadata.labels.app}}"
+      operator: Equals
+      value: falco
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: cnpg-exception
+  namespace: kyverno
+spec:
+  exceptions:
+  - policyName: require-security-context
+    ruleNames:
+    - require-run-as-non-root
+  match:
+    any:
+    - resources:
+        kinds:
+        - Pod
+  conditions:
+    any:
+    - key: "{{request.object.metadata.labels.cnpg.io/cluster || ''}}"
+      operator: NotEquals
+      value: ""

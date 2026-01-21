@@ -1,0 +1,151 @@
+# Kyverno Helm Values
+# Chart: https://github.com/kyverno/kyverno
+# Version: 3.3.7
+
+# Global settings
+global:
+  image:
+    registry: zot0213.kro.kr
+
+# CRDs migration image
+crds:
+  migration:
+    image:
+      registry: zot0213.kro.kr
+      repository: kyverno/kyverno-cli
+      tag: v1.13.4
+
+# Admission Controller (main component)
+admissionController:
+  replicas: 1
+
+  container:
+    image:
+      registry: zot0213.kro.kr
+      repository: kyverno/kyverno
+      tag: v1.13.4
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 512Mi
+
+  initContainer:
+    image:
+      registry: zot0213.kro.kr
+      repository: kyverno/kyvernopre
+      tag: v1.13.4
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 256Mi
+
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    labels:
+      release: prometheus
+
+# Background Controller
+backgroundController:
+  enabled: true
+
+  image:
+    registry: zot0213.kro.kr
+    repository: kyverno/background-controller
+    tag: v1.13.4
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    labels:
+      release: prometheus
+
+# Cleanup Controller
+cleanupController:
+  enabled: true
+
+  image:
+    registry: zot0213.kro.kr
+    repository: kyverno/cleanup-controller
+    tag: v1.13.4
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    labels:
+      release: prometheus
+
+# Reports Controller
+reportsController:
+  enabled: true
+
+  image:
+    registry: zot0213.kro.kr
+    repository: kyverno/reports-controller
+    tag: v1.13.4
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    labels:
+      release: prometheus
+
+# Webhooks configuration
+webhooksCleanup:
+  enabled: true
+  image:
+    registry: zot0213.kro.kr
+    repository: kyverno/kyverno-cli
+    tag: v1.13.4
+
+# Features configuration
+features:
+  logging:
+    format: json
+    verbosity: 2
+
+# Exclude system namespaces from policy enforcement
+config:
+  excludeGroups:
+    - system:nodes
+  resourceFilters:
+    - '[Event,*,*]'
+    - '[*/*,kube-system,*]'
+    - '[*/*,kube-public,*]'
+    - '[*/*,kube-node-lease,*]'
+    - '[Node,*,*]'
+    - '[Node/*,*,*]'
+    - '[APIService,*,*]'
+    - '[APIService/*,*,*]'
+    - '[TokenReview,*,*]'
+    - '[SubjectAccessReview,*,*]'
+    - '[SelfSubjectAccessReview,*,*]'
+    - '[Binding,*,*]'
+    - '[Pod/binding,*,*]'
+    - '[ReplicaSet,*,*]'
+    - '[ReplicaSet/*,*,*]'

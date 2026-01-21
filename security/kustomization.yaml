@@ -9,4 +9,5 @@ resources:
   - authelia/argocd.yaml
   - external-secrets/argocd.yaml
   - falco/argocd.yaml
+  - kyverno/argocd.yaml
   - trivy/argocd.yaml
