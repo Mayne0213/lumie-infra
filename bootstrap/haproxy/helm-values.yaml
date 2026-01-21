@@ -7,10 +7,10 @@
 kind: DaemonSet
 
 # =============================================================================
-# IMAGE - Docker Hub (public image, no pull secret needed)
+# IMAGE - Zot registry
 # =============================================================================
 image:
-  repository: docker.io/library/haproxy
+  repository: zot0213.kro.kr/bootstrap/haproxy
   tag: 3.0-alpine
 
 # =============================================================================

@@ -1,6 +1,12 @@
 # Kube State Metrics Helm Values
 # Chart: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics
 
+# Image configuration - use zot registry
+image:
+  registry: zot0213.kro.kr
+  repository: observability/kube-state-metrics
+  tag: "v2.13.0"
+
 fullnameOverride: kube-state-metrics
 
 # replicaCount: 1 (default)

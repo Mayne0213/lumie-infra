@@ -1,10 +1,20 @@
 # Goldilocks Helm Values
 # Reference: https://github.com/FairwindsOps/charts/tree/master/stable/goldilocks
 
+# Image configuration - use zot registry
+image:
+  repository: zot0213.kro.kr/observability/goldilocks
+  tag: "v4.10.0"
+
 # Dashboard configuration
 dashboard:
   enabled: true
   replicaCount: 1
+
+  # Dashboard image - use zot registry
+  image:
+    repository: zot0213.kro.kr/observability/goldilocks
+    tag: "v4.10.0"
 
   # Resource settings (no CPU limit for stability)
   resources:

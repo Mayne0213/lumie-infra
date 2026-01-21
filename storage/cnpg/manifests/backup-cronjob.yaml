@@ -84,7 +84,7 @@ spec:
           serviceAccountName: pg-backup
           initContainers:
           - name: download-tools
-            image: alpine:3.19
+            image: zot0213.kro.kr/applications/alpine:3.19
             command:
             - /bin/sh
             - -c
@@ -100,7 +100,7 @@ spec:
               mountPath: /tools
           containers:
           - name: backup
-            image: ghcr.io/cloudnative-pg/postgresql:16.6
+            image: zot0213.kro.kr/storage/postgresql:16.6
             command: ["/bin/bash", "/scripts/backup.sh"]
             env:
             - name: MINIO_ACCESS_KEY_ID

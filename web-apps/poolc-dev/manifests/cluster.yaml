@@ -5,7 +5,7 @@ metadata:
   namespace: poolc-dev
 spec:
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.6
+  imageName: zot0213.kro.kr/storage/postgresql:16.6
   bootstrap:
     initdb:
       database: PoolcDB

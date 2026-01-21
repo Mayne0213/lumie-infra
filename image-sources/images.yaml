@@ -101,3 +101,91 @@ images:
     source: docker.io/falcosecurity/falco
     tag: "0.40.0"
     dest: security/falco
+
+  - name: authelia
+    source: ghcr.io/authelia/authelia
+    tag: "4.39.13"
+    dest: security/authelia
+
+  - name: redis
+    source: docker.io/bitnami/redis
+    tag: latest
+    dest: security/redis
+
+  - name: external-secrets
+    source: ghcr.io/external-secrets/external-secrets
+    tag: v1.2.1
+    dest: security/external-secrets
+
+  # Observability (added 2025-01-21)
+  - name: grafana
+    source: docker.io/grafana/grafana
+    tag: "12.3.1"
+    dest: observability/grafana
+
+  - name: loki
+    source: docker.io/grafana/loki
+    tag: "3.3.2"
+    dest: observability/loki
+
+  - name: k8s-sidecar
+    source: docker.io/kiwigrid/k8s-sidecar
+    tag: "1.28.0"
+    dest: observability/k8s-sidecar
+
+  - name: tempo
+    source: docker.io/grafana/tempo
+    tag: "2.6.1"
+    dest: observability/tempo
+
+  - name: alertmanager
+    source: quay.io/prometheus/alertmanager
+    tag: v0.30.0
+    dest: observability/alertmanager
+
+  - name: node-exporter
+    source: quay.io/prometheus/node-exporter
+    tag: v1.8.2
+    dest: observability/node-exporter
+
+  - name: blackbox-exporter
+    source: quay.io/prometheus/blackbox-exporter
+    tag: v0.25.0
+    dest: observability/blackbox-exporter
+
+  - name: kube-state-metrics
+    source: registry.k8s.io/kube-state-metrics/kube-state-metrics
+    tag: v2.13.0
+    dest: observability/kube-state-metrics
+
+  - name: vpa-recommender
+    source: registry.k8s.io/autoscaling/vpa-recommender
+    tag: "1.0.0"
+    dest: observability/vpa-recommender
+
+  - name: goldilocks
+    source: us-docker.pkg.dev/fairwinds-ops/oss/goldilocks
+    tag: v4.10.0
+    dest: observability/goldilocks
+
+  # Applications (added 2025-01-21)
+  - name: umami
+    source: ghcr.io/umami-software/umami
+    tag: postgresql-latest
+    dest: applications/umami
+
+  - name: kubectl
+    source: docker.io/bitnami/kubectl
+    tag: latest
+    dest: applications/kubectl
+
+  - name: kaniko
+    source: gcr.io/kaniko-project/executor
+    tag: debug
+    dest: applications/kaniko
+
+  # Platform (added 2025-01-21)
+  - name: gitea
+    source: docker.gitea.com/gitea
+    tag: 1.24.6-rootless
+    dest: platform/gitea

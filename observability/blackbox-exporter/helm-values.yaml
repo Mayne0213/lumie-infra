@@ -1,6 +1,12 @@
 # Prometheus Blackbox Exporter Helm Values
 # Chart: https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-blackbox-exporter
 
+# Image configuration - use zot registry
+image:
+  registry: zot0213.kro.kr
+  repository: observability/blackbox-exporter
+  tag: "v0.25.0"
+
 fullnameOverride: blackbox-exporter
 
 replicas: 1
