@@ -47,7 +47,7 @@ spec:
       description: Git commit SHA
   steps:
     - name: clone
-      image: docker.io/alpine/git:latest
+      image: zot0213.kro.kr/applications/alpine-git:v2.47.1
       script: |
         #!/bin/sh
         set -e
@@ -58,7 +58,7 @@ spec:
         echo "Cloned $(params.GIT_URL) at $COMMIT"
         ls -la $(params.CONTEXT)/
     - name: setup-docker-config
-      image: docker.io/library/alpine:latest
+      image: zot0213.kro.kr/applications/alpine:3.19
       env:
         - name: IMAGE
           value: $(params.IMAGE)
@@ -81,7 +81,7 @@ spec:
         - name: kaniko-docker
           mountPath: /kaniko/.docker
     - name: build-and-push
-      image: gcr.io/kaniko-project/executor:debug
+      image: zot0213.kro.kr/applications/kaniko:debug
       env:
         - name: DOCKER_CONFIG
           value: /kaniko/.docker

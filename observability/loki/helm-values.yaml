@@ -2,7 +2,20 @@
 # Chart: https://grafana.github.io/helm-charts
 # Single binary deployment with local filesystem storage (emptyDir)
 
+# Sidecar image (for config reload)
+sidecar:
+  image:
+    registry: zot0213.kro.kr
+    repository: observability/k8s-sidecar
+    tag: "1.28.0"
+
+# Image configuration - use zot registry
 loki:
+  image:
+    registry: zot0213.kro.kr
+    repository: observability/loki
+    tag: "3.3.2"
+
   # Use local filesystem storage (emptyDir)
   storage:
     type: filesystem

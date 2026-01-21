@@ -1,6 +1,12 @@
 # Authelia Helm Values
 # Chart: https://charts.authelia.com
 
+# Image configuration - use zot registry
+image:
+  registry: zot0213.kro.kr
+  repository: security/authelia
+  tag: "4.39.13"
+
 # Ingress - disabled, using manifests/ingress.yaml due to chart schema complexity
 ingress:
   enabled: false
@@ -220,6 +226,8 @@ redis:
   auth:
     enabled: false
   image:
+    registry: zot0213.kro.kr
+    repository: security/redis
     tag: latest
   master:
     # Resource settings (no CPU limit for stability)

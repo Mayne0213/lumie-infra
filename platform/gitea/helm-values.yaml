@@ -1,6 +1,13 @@
 # Gitea Helm Chart Values
 # Self-contained deployment with SQLite and local-path storage
 
+# Image configuration - use zot registry
+image:
+  registry: zot0213.kro.kr
+  repository: platform/gitea
+  tag: "1.24.6-rootless"
+  rootless: true
+
 # =============================================================================
 # DISABLE ALL EXTERNAL DEPENDENCIES
 # =============================================================================

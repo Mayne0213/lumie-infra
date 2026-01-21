@@ -1,6 +1,11 @@
 # Alertmanager Helm Values
 # Chart: https://github.com/prometheus-community/helm-charts/tree/main/charts/alertmanager
 
+# Image configuration - use zot registry
+image:
+  repository: zot0213.kro.kr/observability/alertmanager
+  tag: "v0.30.0"
+
 fullnameOverride: alertmanager
 
 replicaCount: 1

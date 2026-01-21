@@ -1,6 +1,11 @@
 # External Secrets Operator Helm Values
 # Chart: https://github.com/external-secrets/external-secrets
 
+# Image configuration - use zot registry
+image:
+  repository: zot0213.kro.kr/security/external-secrets
+  tag: "v1.2.1"
+
 # Replica count
 replicaCount: 1
 

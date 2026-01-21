@@ -17,6 +17,12 @@ replicas: 1
 # Tempo Configuration
 # =============================================================================
 tempo:
+  # Image configuration - use zot registry
+  image:
+    registry: zot0213.kro.kr
+    repository: observability/tempo
+    tag: "2.6.1"
+
   # Resource settings (no CPU limit for stability)
   resources:
     requests:
