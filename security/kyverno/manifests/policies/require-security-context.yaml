@@ -1,0 +1,106 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-security-context
+  annotations:
+    policies.kyverno.io/title: Require Security Context
+    policies.kyverno.io/category: Pod Security
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      Containers must run as non-root and must not be privileged.
+      This ensures basic security hardening for all workloads.
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+  - name: require-run-as-non-root
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    exclude:
+      any:
+      - resources:
+          namespaces:
+          - kube-system
+          - kube-public
+          - kube-node-lease
+          - argocd
+          - cert-manager
+          - external-secrets
+          - gitea
+          - haproxy
+          - minio
+          - vault
+          - zot
+          - falco
+          - kyverno
+    validate:
+      message: "Containers must set securityContext.runAsNonRoot to true."
+      pattern:
+        spec:
+          containers:
+          - securityContext:
+              runAsNonRoot: true
+  - name: deny-privileged-containers
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    exclude:
+      any:
+      - resources:
+          namespaces:
+          - kube-system
+          - kube-public
+          - kube-node-lease
+          - argocd
+          - cert-manager
+          - external-secrets
+          - gitea
+          - haproxy
+          - minio
+          - vault
+          - zot
+          - falco
+          - kyverno
+    validate:
+      message: "Privileged containers are not allowed."
+      pattern:
+        spec:
+          containers:
+          - securityContext:
+              privileged: "false"
+  - name: deny-privilege-escalation
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    exclude:
+      any:
+      - resources:
+          namespaces:
+          - kube-system
+          - kube-public
+          - kube-node-lease
+          - argocd
+          - cert-manager
+          - external-secrets
+          - gitea
+          - haproxy
+          - minio
+          - vault
+          - zot
+          - falco
+          - kyverno
+    validate:
+      message: "Privilege escalation is not allowed."
+      pattern:
+        spec:
+          containers:
+          - securityContext:
+              allowPrivilegeEscalation: false

@@ -143,6 +143,37 @@ images:
     tag: "0.68.2"
     dest: security/trivy
 
+  # Security - Kyverno
+  - name: kyverno
+    source: ghcr.io/kyverno/kyverno
+    tag: "v1.13.4"
+    dest: kyverno/kyverno
+
+  - name: kyverno-background-controller
+    source: ghcr.io/kyverno/background-controller
+    tag: "v1.13.4"
+    dest: kyverno/background-controller
+
+  - name: kyverno-cleanup-controller
+    source: ghcr.io/kyverno/cleanup-controller
+    tag: "v1.13.4"
+    dest: kyverno/cleanup-controller
+
+  - name: kyverno-reports-controller
+    source: ghcr.io/kyverno/reports-controller
+    tag: "v1.13.4"
+    dest: kyverno/reports-controller
+
+  - name: kyvernopre
+    source: ghcr.io/kyverno/kyvernopre
+    tag: "v1.13.4"
+    dest: kyverno/kyvernopre
+
+  - name: kyverno-cli
+    source: ghcr.io/kyverno/kyverno-cli
+    tag: "v1.13.4"
+    dest: kyverno/kyverno-cli
+
   # Observability (added 2025-01-21)
   - name: grafana
     source: docker.io/grafana/grafana
