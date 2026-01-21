@@ -29,7 +29,7 @@ patches:
     - op: replace
       path: /metadata/labels/app.kubernetes.io~1instance
       value: tekton-triggers
-# Override -el-image argument to use zot registry
+# Override -el-image argument to use zot registry (index 4 is the image value after -el-image flag)
 - target:
     group: apps
     version: v1
@@ -37,5 +37,5 @@ patches:
     name: tekton-triggers-controller
   patch: |-
     - op: replace
-      path: /spec/template/spec/containers/0/args/5
+      path: /spec/template/spec/containers/0/args/4
       value: zot0213.kro.kr/tekton/triggers-eventlistenersink:v0.34.0
