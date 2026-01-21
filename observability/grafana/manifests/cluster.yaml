@@ -43,7 +43,7 @@ metadata:
   name: grafana-db-backup
   namespace: grafana
 spec:
-  schedule: "0 3 * * *"
+  schedule: "10 3 * * *"
   backupOwnerReference: self
   cluster:
     name: grafana-db

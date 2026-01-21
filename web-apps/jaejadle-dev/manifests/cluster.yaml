@@ -41,7 +41,7 @@ metadata:
   name: jaejadle-dev-db-backup
   namespace: jaejadle-dev
 spec:
-  schedule: "0 3 * * *"
+  schedule: "20 4 * * *"
   backupOwnerReference: self
   cluster:
     name: jaejadle-dev-db

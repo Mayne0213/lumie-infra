@@ -33,13 +33,14 @@ existingSecret: minio-root-password
 rootUserSecretKey: root-user
 rootPasswordSecretKey: root-password
 
-# Resource settings (no CPU limit for stability)
+# Resource settings with CPU limit to prevent burst overload
 resources:
   requests:
-    cpu: 48m
-    memory: 126Mi
+    cpu: 100m
+    memory: 256Mi
   limits:
-    memory: 183Mi
+    cpu: 500m
+    memory: 512Mi
 
 # Service
 service:
@@ -59,6 +60,8 @@ environment:
   MINIO_API_REPLICATION_MAX_LRG_WORKERS: "1"
   MINIO_API_TRANSITION_WORKERS: "1"
   MINIO_SCANNER_SPEED: "slowest"
+  # Limit Go runtime CPU usage
+  GOMAXPROCS: "1"
 
 # API Ingress (S3 endpoint)
 ingress:

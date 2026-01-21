@@ -41,7 +41,7 @@ metadata:
   name: poolc-dev-db-backup
   namespace: poolc-dev
 spec:
-  schedule: "0 3 * * *"
+  schedule: "30 4 * * *"
   backupOwnerReference: self
   cluster:
     name: poolc-dev-db

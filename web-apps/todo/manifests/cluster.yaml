@@ -43,7 +43,7 @@ metadata:
   name: todo-db-backup
   namespace: todo
 spec:
-  schedule: "0 3 * * *"
+  schedule: "0 4 * * *"
   backupOwnerReference: self
   cluster:
     name: todo-db

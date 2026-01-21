@@ -43,7 +43,7 @@ metadata:
   name: jotion-db-backup
   namespace: jotion
 spec:
-  schedule: "0 3 * * *"
+  schedule: "50 3 * * *"
   backupOwnerReference: self
   cluster:
     name: jotion-db
