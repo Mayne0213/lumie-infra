@@ -15,6 +15,9 @@ images:
 - name: ghcr.io/tektoncd/pipeline/events-a9042f7efb0cbade2a868a1ee5ddd52c
   newName: zot0213.kro.kr/tekton/pipeline-events
   newTag: v1.6.0
+- name: ghcr.io/tektoncd/pipeline/resolvers-ff86b24f130c42b88983d3c13993056d
+  newName: zot0213.kro.kr/tekton/pipeline-resolvers
+  newTag: v1.6.0
 
 patches:
 - target:
