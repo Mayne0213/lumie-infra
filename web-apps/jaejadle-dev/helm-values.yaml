@@ -80,11 +80,11 @@ externalSecret:
         property: JAEJADLE_JWT_SECRET
     - secretKey: MINIO_ACCESS_KEY_ID
       remoteRef:
-        key: storage/minio
+        key: bootstrap/minio
         property: MINIO_ACCESS_KEY_ID
     - secretKey: MINIO_SECRET_ACCESS_KEY
       remoteRef:
-        key: storage/minio
+        key: bootstrap/minio
         property: MINIO_SECRET_ACCESS_KEY
     - secretKey: MINIO_BUCKET_NAME
       remoteRef:
@@ -92,11 +92,11 @@ externalSecret:
         property: MINIO_BUCKET_NAME
     - secretKey: MINIO_ENDPOINT
       remoteRef:
-        key: storage/minio
+        key: bootstrap/minio
         property: MINIO_ENDPOINT
     - secretKey: MINIO_REGION
       remoteRef:
-        key: storage/minio
+        key: bootstrap/minio
         property: MINIO_REGION
     - secretKey: JAEJADLE_CODE
       remoteRef:
