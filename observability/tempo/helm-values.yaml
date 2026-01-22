@@ -25,7 +25,7 @@ tempo:
   resources:
     requests:
       cpu: 15m
-      memory: 100Mi
+      memory: 109Mi
     limits:
       memory: 109Mi
   # Receivers - protocols Tempo accepts

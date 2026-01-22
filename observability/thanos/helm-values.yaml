@@ -50,7 +50,7 @@ query:
   resources:
     requests:
       cpu: 15m
-      memory: 100Mi
+      memory: 126Mi
     limits:
       memory: 126Mi
 
