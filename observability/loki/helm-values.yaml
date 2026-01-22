@@ -74,13 +74,13 @@ singleBinary:
       mountPath: /var/loki
   # Medium priority for observability
   priorityClassName: medium-priority
-  # Resource settings (no CPU limit for stability)
+  # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
-      cpu: 10m
-      memory: 225Mi
+      cpu: 35m
+      memory: 283Mi
     limits:
-      memory: 323Mi
+      memory: 283Mi
 
 # Disable components not needed in single binary mode
 backend:

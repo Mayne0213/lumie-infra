@@ -31,13 +31,13 @@ ingress:
       hosts:
         - minjo0213.kro.kr
         - www.minjo0213.kro.kr
-# Resource settings (no CPU limit for stability)
+# Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
-    cpu: 15m
-    memory: 150Mi
+    cpu: 23m
+    memory: 105Mi
   limits:
-    memory: 256Mi
+    memory: 105Mi
 healthCheck:
   enabled: true
   path: /

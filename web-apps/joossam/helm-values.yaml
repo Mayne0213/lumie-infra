@@ -26,13 +26,13 @@ ingress:
     - secretName: joossam-tls
       hosts:
         - joossameng.kro.kr
-# Resource settings (no CPU limit for stability)
+# Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
     cpu: 15m
-    memory: 109Mi
+    memory: 156Mi
   limits:
-    memory: 351Mi
+    memory: 156Mi
 healthCheck:
   enabled: true
   path: /

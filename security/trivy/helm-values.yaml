@@ -15,13 +15,13 @@ persistence:
   accessMode: ReadWriteOnce
   size: 5Gi
 
+# Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
-    cpu: 200m
-    memory: 512Mi
+    cpu: 15m
+    memory: 138Mi
   limits:
-    cpu: 1
-    memory: 1Gi
+    memory: 138Mi
 
 rbac:
   create: true

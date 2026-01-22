@@ -124,14 +124,14 @@ ingress:
     - github0213.com
 
 # =============================================================================
-# RESOURCES (no CPU limit for stability)
+# RESOURCES (VPA recommended, no CPU limit for stability)
 # =============================================================================
 resources:
   requests:
     cpu: 15m
-    memory: 256Mi
+    memory: 392Mi
   limits:
-    memory: 512Mi
+    memory: 392Mi
 
 # =============================================================================
 # POD CONFIGURATION

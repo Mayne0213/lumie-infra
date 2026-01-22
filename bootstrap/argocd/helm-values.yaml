@@ -66,13 +66,13 @@ controller:
   args:
     appResyncPeriod: "0"
 
-  # Resource settings (no CPU limit for stability)
+  # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
-      cpu: 22m
-      memory: 1388Mi
+      cpu: 350m
+      memory: 933Mi
     limits:
-      memory: 1861Mi
+      memory: 933Mi
 
 # =============================================================================
 # API SERVER (Deployment)
@@ -97,13 +97,13 @@ server:
       traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
     tls: true
 
-  # Resource settings (no CPU limit for stability)
+  # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
-      memory: 163Mi
+      memory: 105Mi
     limits:
-      memory: 218Mi
+      memory: 105Mi
 
 # =============================================================================
 # REPO SERVER (Deployment)
@@ -118,13 +118,13 @@ repoServer:
     serviceMonitor:
       enabled: true
 
-  # Resource settings (no CPU limit for stability)
+  # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
-      cpu: 15m
-      memory: 225Mi
+      cpu: 35m
+      memory: 335Mi
     limits:
-      memory: 1310Mi
+      memory: 335Mi
 
   # Probe settings (increase timeout for stability under load)
   livenessProbe:

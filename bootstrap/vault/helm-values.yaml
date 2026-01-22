@@ -38,13 +38,13 @@ server:
   # Extra args to use config from secret
   extraArgs: "-config=/vault/userconfig/extraconfig-from-values.hcl"
 
-  # Resource settings (no CPU limit for stability)
+  # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
-      cpu: 34m
-      memory: 126Mi
+      cpu: 49m
+      memory: 156Mi
     limits:
-      memory: 163Mi
+      memory: 156Mi
 
   # Ingress 설정
   ingress:

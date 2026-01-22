@@ -36,13 +36,13 @@ webhook:
 
 cainjector:
   replicaCount: 1
-  # Resource settings (no CPU limit for stability)
+  # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
-      memory: 126Mi
+      memory: 138Mi
     limits:
-      memory: 248Mi
+      memory: 138Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:

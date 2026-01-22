@@ -33,14 +33,13 @@ existingSecret: minio-root-password
 rootUserSecretKey: root-user
 rootPasswordSecretKey: root-password
 
-# Resource settings with CPU limit to prevent burst overload
+# Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 63m
+    memory: 194Mi
   limits:
-    cpu: 500m
-    memory: 512Mi
+    memory: 194Mi
 
 # Service
 service:

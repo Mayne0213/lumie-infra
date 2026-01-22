@@ -59,13 +59,13 @@ controllers:
                 name: mas-db-app
                 key: password
           REDIS_URL: "redis://redis:6379/0"
-        # Resource settings (no CPU limit for stability)
+        # Resource settings (VPA recommended, no CPU limit for stability)
         resources:
           requests:
             cpu: 15m
-            memory: 144Mi
+            memory: 215Mi
           limits:
-            memory: 203Mi
+            memory: 215Mi
         probes:
           startup:
             enabled: true

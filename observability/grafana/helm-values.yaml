@@ -61,13 +61,13 @@ podSecurityContext:
   fsGroup: 472
   fsGroupChangePolicy: "Always"
 
-# Resource settings (no CPU limit for stability)
+# Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
-    cpu: 22m
-    memory: 144Mi
+    cpu: 23m
+    memory: 260Mi
   limits:
-    memory: 242Mi
+    memory: 260Mi
 
 service:
   type: ClusterIP

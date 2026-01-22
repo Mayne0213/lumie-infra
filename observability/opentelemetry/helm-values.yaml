@@ -29,14 +29,14 @@ image:
 mode: daemonset
 
 # =============================================================================
-# Resource Limits (no CPU limit for stability, mem limit capped at 1024Mi)
+# Resource Limits (VPA recommended, no CPU limit for stability)
 # =============================================================================
 resources:
   requests:
-    cpu: 34m
-    memory: 142Mi
+    cpu: 49m
+    memory: 138Mi
   limits:
-    memory: 1024Mi
+    memory: 138Mi
 
 # =============================================================================
 # Environment Variables

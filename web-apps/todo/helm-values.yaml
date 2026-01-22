@@ -31,13 +31,13 @@ ingress:
       hosts:
         - todo0213.kro.kr
         - www.todo0213.kro.kr
-# Resource settings (no CPU limit for stability)
+# Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
     cpu: 15m
-    memory: 100Mi
+    memory: 237Mi
   limits:
-    memory: 150Mi
+    memory: 237Mi
 healthCheck:
   enabled: true
   path: /api/health

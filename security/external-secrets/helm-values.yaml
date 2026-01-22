@@ -51,13 +51,13 @@ webhook:
 # CertController 설정
 certController:
   replicaCount: 1
-  # Resource settings (no CPU limit for stability)
+  # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
-      memory: 144Mi
+      memory: 215Mi
     limits:
-      memory: 297Mi
+      memory: 215Mi
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:

@@ -32,12 +32,13 @@ ingress:
       hosts:
         - www.poolc0213.kro.kr
         - poolc0213.kro.kr
+# Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
-    cpu: 100m
-    memory: 768Mi
+    cpu: 23m
+    memory: 933Mi
   limits:
-    memory: 1Gi
+    memory: 933Mi
 healthCheck:
   enabled: true
   path: /v2/api-docs # Swagger endpoint

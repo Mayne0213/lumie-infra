@@ -27,12 +27,13 @@ ingress:
     - secretName: poolc-dev-tls
       hosts:
         - dev.poolc0213.kro.kr
+# Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
-    cpu: 50m
-    memory: 512Mi
+    cpu: 23m
+    memory: 1115Mi
   limits:
-    memory: 768Mi
+    memory: 1115Mi
 healthCheck:
   enabled: true
   path: /v2/api-docs # Swagger endpoint

@@ -14,13 +14,13 @@ ingress:
 # Pod configuration
 pod:
   kind: DaemonSet
-  # Resource settings (no CPU limit for stability)
+  # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
       cpu: 15m
-      memory: 100Mi
+      memory: 105Mi
     limits:
-      memory: 144Mi
+      memory: 105Mi
   extraVolumes:
     - name: users-database
       configMap:
@@ -230,10 +230,10 @@ redis:
     repository: storage/redis
     tag: latest
   master:
-    # Resource settings (no CPU limit for stability)
+    # Resource settings (VPA recommended, no CPU limit for stability)
     resources:
       requests:
-        cpu: 22m
+        cpu: 23m
         memory: 100Mi
       limits:
         memory: 100Mi
