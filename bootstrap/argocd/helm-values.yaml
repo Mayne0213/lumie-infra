@@ -58,7 +58,7 @@ controller:
   # Memory optimization environment variables
   env:
     - name: GOMEMLIMIT
-      value: "800MiB"
+      value: "1600MiB"
     - name: GOGC
       value: "50"
 
@@ -70,9 +70,9 @@ controller:
   resources:
     requests:
       cpu: 350m
-      memory: 933Mi
+      memory: 1866Mi
     limits:
-      memory: 933Mi
+      memory: 1866Mi
 
 # =============================================================================
 # API SERVER (Deployment)
@@ -123,9 +123,9 @@ repoServer:
   resources:
     requests:
       cpu: 35m
-      memory: 512Mi
+      memory: 1024Mi
     limits:
-      memory: 512Mi
+      memory: 1024Mi
 
   # Probe settings (increase timeout for stability under load)
   livenessProbe:
