@@ -11,39 +11,15 @@ spec:
       database: mas
       owner: mas
   storage:
-    storageClass: local-path-retain
-    size: 5Gi
+    storageClass: local-path
+    size: 1Gi
   resources:
     requests:
       memory: "512Mi"
       cpu: "50m"
     limits:
       memory: "512Mi"
-  affinity:
-    podAntiAffinityType: preferred
   monitoring:
     enablePodMonitor: true
-
-  backup:
-    barmanObjectStore:
-      destinationPath: s3://cnpg-backups/mas/mas-db
-      endpointURL: http://minio.minio.svc.cluster.local:9000
-      s3Credentials:
-        accessKeyId:
-          name: minio-s3-credentials
-          key: MINIO_ACCESS_KEY_ID
-        secretAccessKey:
-          name: minio-s3-credentials
-          key: MINIO_SECRET_ACCESS_KEY
-    retentionPolicy: "7d"
----
-apiVersion: postgresql.cnpg.io/v1
-kind: ScheduledBackup
-metadata:
-  name: mas-db-backup
-  namespace: mas
-spec:
-  schedule: "20 3 * * *"
-  backupOwnerReference: self
-  cluster:
-    name: mas-db
+  affinity:
+    podAntiAffinityType: required

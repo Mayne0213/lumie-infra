@@ -52,9 +52,16 @@ deploymentMode: SingleBinary
 
 singleBinary:
   replicas: 1
-  # Disable PVC - use emptyDir for all data
+  # Use emptyDir (no persistent storage)
   persistence:
     enabled: false
+  # emptyDir volume for data
+  extraVolumes:
+    - name: data
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: data
+      mountPath: /var/loki
   # Soft anti-affinity for HA
   affinity:
     podAntiAffinity:
@@ -65,13 +72,6 @@ singleBinary:
               matchLabels:
                 app.kubernetes.io/name: loki
             topologyKey: kubernetes.io/hostname
-  extraVolumes:
-    - name: data
-      emptyDir:
-        sizeLimit: 5Gi
-  extraVolumeMounts:
-    - name: data
-      mountPath: /var/loki
   # Medium priority for observability
   priorityClassName: medium-priority
   # Resource settings (VPA recommended, no CPU limit for stability)

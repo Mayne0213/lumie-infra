@@ -38,7 +38,7 @@ tempo:
           endpoint: 0.0.0.0:4318
 
   # Retention settings
-  retention: 24h  # Keep traces for 1 day (reduced for local storage)
+  retention: 72h  # Keep traces for 3 days
 
   # Backend storage (local filesystem)
   storage:
@@ -59,22 +59,20 @@ tempo:
     enabled: true
     remoteWriteUrl: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
 
-  # Additional volume mounts
-  extraVolumeMounts:
-    - name: tempo-data
-      mountPath: /var/tempo
 
 # =============================================================================
-# Persistence - Disabled (use emptyDir)
+# Persistence - Use emptyDir (no persistent storage)
 # =============================================================================
 persistence:
   enabled: false
 
-# emptyDir volume for all data
+# emptyDir volume for data (since persistence is disabled)
 extraVolumes:
-  - name: tempo-data
-    emptyDir:
-      sizeLimit: 5Gi
+  - name: data
+    emptyDir: {}
+extraVolumeMounts:
+  - name: data
+    mountPath: /var/tempo
 
 # =============================================================================
 # Service

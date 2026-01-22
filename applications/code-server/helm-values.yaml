@@ -10,7 +10,7 @@ persistence:
   enabled: true
   accessMode: ReadWriteOnce
   size: 5Gi
-  storageClassName: local-path-retain
+  storageClass: local-path
 
 ingress:
   enabled: true
