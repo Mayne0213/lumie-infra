@@ -4,4 +4,5 @@ resources:
 - manifests/policies/require-zot-registry.yaml
 - manifests/policies/require-security-context.yaml
 - manifests/policies/require-resource-limits.yaml
+- manifests/policies/require-goldilocks-label.yaml
 - manifests/policy-exceptions.yaml
