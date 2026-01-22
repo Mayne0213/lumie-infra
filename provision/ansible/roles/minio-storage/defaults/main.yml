@@ -1,5 +1,0 @@
----
-# MinIO storage configuration
-minio_mount_path: /mnt/minio-data
-minio_block_device: /dev/sdb
-minio_filesystem: ext4

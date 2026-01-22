@@ -5,7 +5,8 @@ resources:
   # Self-reference for App of Apps pattern
   - application.yaml
 
-  # Storage systems (minio, zot moved to bootstrap/)
+  # Distributed storage
+  - longhorn/argocd.yaml
   # Database tools
   - pgweb/argocd.yaml
   # Operators

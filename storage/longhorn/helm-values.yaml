@@ -1,0 +1,117 @@
+# Longhorn Helm Values
+
+# Disable pre-upgrade checker (required for ArgoCD/GitOps)
+preUpgradeChecker:
+  jobEnabled: false
+
+# Image configuration - Zot registry
+image:
+  longhorn:
+    engine:
+      repository: zot0213.kro.kr/longhorn/longhorn-engine
+      tag: v1.8.1
+    manager:
+      repository: zot0213.kro.kr/longhorn/longhorn-manager
+      tag: v1.8.1
+    ui:
+      repository: zot0213.kro.kr/longhorn/longhorn-ui
+      tag: v1.8.1
+    instanceManager:
+      repository: zot0213.kro.kr/longhorn/longhorn-instance-manager
+      tag: v1.8.1
+    shareManager:
+      repository: zot0213.kro.kr/longhorn/longhorn-share-manager
+      tag: v1.8.1
+    backingImageManager:
+      repository: zot0213.kro.kr/longhorn/backing-image-manager
+      tag: v1.8.1
+    supportBundleKit:
+      repository: zot0213.kro.kr/longhorn/longhorn-support-bundle-kit
+      tag: v0.0.47
+  csi:
+    attacher:
+      repository: zot0213.kro.kr/longhorn/csi-attacher
+      tag: v4.7.0
+    provisioner:
+      repository: zot0213.kro.kr/longhorn/csi-provisioner
+      tag: v4.0.1
+    nodeDriverRegistrar:
+      repository: zot0213.kro.kr/longhorn/csi-node-driver-registrar
+      tag: v2.12.0
+    resizer:
+      repository: zot0213.kro.kr/longhorn/csi-resizer
+      tag: v1.12.0
+    snapshotter:
+      repository: zot0213.kro.kr/longhorn/csi-snapshotter
+      tag: v7.0.2
+    livenessProbe:
+      repository: zot0213.kro.kr/longhorn/livenessprobe
+      tag: v2.14.0
+  pullPolicy: IfNotPresent
+
+# Service account
+serviceAccount:
+  create: true
+
+# Longhorn Manager - high priority
+longhornManager:
+  priorityClass: high-priority
+
+# Longhorn Driver - high priority
+longhornDriver:
+  priorityClass: high-priority
+
+# Longhorn UI
+longhornUI:
+  replicas: 1
+  priorityClass: high-priority
+
+# Default Settings
+defaultSettings:
+  # Dedicated disk path (Longhorn partition)
+  defaultDataPath: /mnt/longhorn-data
+  # 3 replicas across 4 workers
+  defaultReplicaCount: 3
+  # Storage settings
+  storageOverProvisioningPercentage: 200
+  storageMinimalAvailablePercentage: 15
+  storageReservedPercentageForDefaultDisk: 15
+  # Auto recovery
+  autoSalvage: true
+  autoDeletePodWhenVolumeDetachedUnexpectedly: true
+  # Airgapped
+  upgradeChecker: false
+  # Replica balance
+  replicaAutoBalance: best-effort
+  # Node drain policy
+  nodeDrainPolicy: block-for-eviction
+
+# StorageClass - NOT default (will migrate CNPG later)
+persistence:
+  defaultClass: false
+  defaultClassReplicaCount: 3
+  reclaimPolicy: Retain
+
+# CSI settings
+csi:
+  attacherReplicaCount: 1
+  provisionerReplicaCount: 1
+  resizerReplicaCount: 1
+  snapshotterReplicaCount: 1
+  kubeletRootDir: /var/lib/kubelet
+
+# Ingress for UI
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  host: longhorn0213.kro.kr
+  tls: true
+  tlsSecret: longhorn-tls
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
+
+# Monitoring
+metrics:
+  serviceMonitor:
+    enabled: true
