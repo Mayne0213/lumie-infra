@@ -20,14 +20,15 @@
     - master
     - k3s
 
-- name: Setup MinIO storage on workers
+- name: Setup storage partitions on workers
   hosts: workers
   become: yes
   roles:
-    - minio-storage
+    - storage-setup
   tags:
     - storage
     - minio
+    - longhorn
 
 - name: Install K3s Workers (Account 0214)
   hosts: workers_0214

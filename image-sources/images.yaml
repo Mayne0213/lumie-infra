@@ -39,6 +39,72 @@ images:
     tag: v1.9.1
     dest: storage/minio-console
 
+  # Longhorn distributed storage
+  - name: longhorn-manager
+    source: longhornio/longhorn-manager
+    tag: "v1.8.1"
+    dest: longhorn/longhorn-manager
+
+  - name: longhorn-engine
+    source: longhornio/longhorn-engine
+    tag: "v1.8.1"
+    dest: longhorn/longhorn-engine
+
+  - name: longhorn-ui
+    source: longhornio/longhorn-ui
+    tag: "v1.8.1"
+    dest: longhorn/longhorn-ui
+
+  - name: longhorn-instance-manager
+    source: longhornio/longhorn-instance-manager
+    tag: "v1.8.1"
+    dest: longhorn/longhorn-instance-manager
+
+  - name: longhorn-share-manager
+    source: longhornio/longhorn-share-manager
+    tag: "v1.8.1"
+    dest: longhorn/longhorn-share-manager
+
+  - name: backing-image-manager
+    source: longhornio/backing-image-manager
+    tag: "v1.8.1"
+    dest: longhorn/backing-image-manager
+
+  - name: longhorn-support-bundle-kit
+    source: longhornio/support-bundle-kit
+    tag: "v0.0.47"
+    dest: longhorn/longhorn-support-bundle-kit
+
+  - name: longhorn-csi-attacher
+    source: longhornio/csi-attacher
+    tag: "v4.7.0"
+    dest: longhorn/csi-attacher
+
+  - name: longhorn-csi-provisioner
+    source: longhornio/csi-provisioner
+    tag: "v4.0.1"
+    dest: longhorn/csi-provisioner
+
+  - name: longhorn-csi-resizer
+    source: longhornio/csi-resizer
+    tag: "v1.12.0"
+    dest: longhorn/csi-resizer
+
+  - name: longhorn-csi-snapshotter
+    source: longhornio/csi-snapshotter
+    tag: "v7.0.2"
+    dest: longhorn/csi-snapshotter
+
+  - name: longhorn-csi-node-driver-registrar
+    source: longhornio/csi-node-driver-registrar
+    tag: "v2.12.0"
+    dest: longhorn/csi-node-driver-registrar
+
+  - name: longhorn-livenessprobe
+    source: longhornio/livenessprobe
+    tag: "v2.14.0"
+    dest: longhorn/livenessprobe
+
   # Applications
   - name: homer
     source: docker.io/b4bz/homer

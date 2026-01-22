@@ -95,7 +95,7 @@ resource "oci_core_volume" "volumes_0214" {
   compartment_id      = var.compartment_0214_ocid
   availability_domain = data.oci_identity_availability_domains.ads_0214.availability_domains[0].name
   display_name        = "k3s-${each.key}-data"
-  size_in_gbs         = 50
+  size_in_gbs         = 80
   vpus_per_gb         = 10
 
   freeform_tags = {
