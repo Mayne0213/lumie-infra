@@ -24,6 +24,7 @@ resources:
     cpu: 35m
     memory: 138Mi
   limits:
+    cpu: null
     memory: 138Mi
 
 # Falco configuration

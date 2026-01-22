@@ -21,6 +21,7 @@ resources:
     cpu: 15m
     memory: 138Mi
   limits:
+    cpu: null
     memory: 138Mi
 
 rbac:
