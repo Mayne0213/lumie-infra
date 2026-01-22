@@ -1,0 +1,38 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-goldilocks-label
+  annotations:
+    policies.kyverno.io/title: Require Goldilocks Label
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/subject: Namespace
+    policies.kyverno.io/description: >-
+      Audits namespaces that are missing the goldilocks.fairwinds.com/enabled
+      label for VPA recommendations. This policy runs in background-only mode
+      to avoid API server impact.
+spec:
+  admission: false
+  background: true
+  validationFailureAction: Audit
+  rules:
+  - name: check-goldilocks-label
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+    exclude:
+      any:
+      - resources:
+          names:
+          - kube-system
+          - kube-public
+          - kube-node-lease
+          - default
+    validate:
+      message: "Namespace is missing goldilocks.fairwinds.com/enabled label for VPA tracking"
+      pattern:
+        metadata:
+          labels:
+            goldilocks.fairwinds.com/enabled: "true"
