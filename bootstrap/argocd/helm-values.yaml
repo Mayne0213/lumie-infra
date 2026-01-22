@@ -119,12 +119,13 @@ repoServer:
       enabled: true
 
   # Resource settings (VPA recommended, no CPU limit for stability)
+  # Increased memory for concurrent Helm chart fetching
   resources:
     requests:
       cpu: 35m
-      memory: 335Mi
+      memory: 512Mi
     limits:
-      memory: 335Mi
+      memory: 512Mi
 
   # Probe settings (increase timeout for stability under load)
   livenessProbe:
