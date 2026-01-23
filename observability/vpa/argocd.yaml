@@ -21,7 +21,9 @@ spec:
     server: https://kubernetes.default.svc
     namespace: vpa
   syncPolicy:
-    # automated sync disabled for resource optimization
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground

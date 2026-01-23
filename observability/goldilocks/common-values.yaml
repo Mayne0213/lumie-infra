@@ -1,0 +1,32 @@
+# Common chart values for goldilocks
+
+name: goldilocks
+
+# Disable deployment (external chart creates it)
+deployment:
+  enabled: false
+
+service:
+  enabled: false
+
+ingress:
+  enabled: false
+
+# Health check ingress
+additionalIngresses:
+  - name: health
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      traefik.ingress.kubernetes.io/router.priority: "100"
+    className: traefik
+    hosts:
+      - host: goldilocks0213.kro.kr
+        paths:
+          - path: /healthz
+            pathType: Exact
+    tls:
+      - secretName: goldilocks-dashboard-tls
+        hosts:
+          - goldilocks0213.kro.kr
+    serviceName: goldilocks-dashboard
+    servicePort: 80

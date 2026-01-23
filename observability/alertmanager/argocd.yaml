@@ -19,8 +19,10 @@ spec:
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: observability/alertmanager
-    kustomize: {}
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/observability/alertmanager/common-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: alertmanager

@@ -1,0 +1,130 @@
+# Common chart values for prometheus
+
+name: prometheus
+
+# Disable deployment (external chart creates it)
+deployment:
+  enabled: false
+
+service:
+  enabled: false
+
+ingress:
+  enabled: false
+
+# External Secrets
+additionalExternalSecrets:
+  # PostgreSQL password for postgres-exporter
+  - name: postgresql-password
+    refreshInterval: 1h
+    secretStoreRef:
+      name: vault-backend
+      kind: ClusterSecretStore
+    target:
+      name: postgresql-password
+      creationPolicy: Owner
+    data:
+      - secretKey: password
+        remoteRef:
+          key: storage/postgresql
+          property: POSTGRES_PASSWORD
+
+  # Thanos object store credentials
+  - name: thanos-objstore-secret
+    refreshInterval: 1h
+    secretStoreRef:
+      name: vault-backend
+      kind: ClusterSecretStore
+    target:
+      name: thanos-objstore-secret
+      template:
+        engineVersion: v2
+        data:
+          objstore.yml: |
+            type: S3
+            config:
+              bucket: thanos
+              endpoint: minio.minio.svc.cluster.local:9000
+              access_key: {{ .access_key }}
+              secret_key: {{ .secret_key }}
+              insecure: true
+    data:
+      - secretKey: access_key
+        remoteRef:
+          key: bootstrap/minio
+          property: MINIO_ROOT_USER
+      - secretKey: secret_key
+        remoteRef:
+          key: bootstrap/minio
+          property: MINIO_ROOT_PASSWORD
+
+  # Zot registry credentials for image pull
+  - name: zot-registry-credentials
+    refreshInterval: 1h
+    secretStoreRef:
+      name: vault-backend
+      kind: ClusterSecretStore
+    target:
+      name: zot-registry-credentials
+      creationPolicy: Owner
+      template:
+        type: kubernetes.io/dockerconfigjson
+        data:
+          .dockerconfigjson: |
+            {"auths":{"zot0213.kro.kr":{"username":"{{ .USERNAME }}","password":"{{ .PASSWORD }}","auth":"{{ printf "%s:%s" .USERNAME .PASSWORD | b64enc }}"}}}
+    data:
+      - secretKey: USERNAME
+        remoteRef:
+          key: bootstrap/zot
+          property: ZOT_USERNAME
+      - secretKey: PASSWORD
+        remoteRef:
+          key: bootstrap/zot
+          property: ZOT_PASSWORD
+
+# ServiceMonitor for alertmanager (cross-namespace monitoring)
+serviceMonitor:
+  enabled: true
+  name: alertmanager
+  labels:
+    release: prometheus
+  namespaceSelector:
+    matchNames:
+      - alertmanager
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: alertmanager
+      app.kubernetes.io/name: alertmanager
+  endpoints:
+    - port: http
+      path: /metrics
+      scheme: http
+      interval: 60s
+      relabelings:
+        - targetLabel: cluster
+          replacement: "mayne-cluster"
+        - sourceLabels: [__meta_kubernetes_service_name]
+          regex: alertmanager-headless
+          action: drop
+
+# PrometheusRules for OOM alerts
+prometheusRules:
+  enabled: true
+  groups:
+    - name: oom.rules
+      rules:
+        - alert: KubeContainerOOMKilled
+          annotations:
+            description: "Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} was OOMKilled in the last 10 minutes."
+            summary: "Container was recently OOMKilled"
+          expr: |
+            (
+              increase(kube_pod_container_status_restarts_total[10m]) > 0
+            )
+            and on (namespace, pod, container)
+            (
+              kube_pod_container_status_last_terminated_reason{reason="OOMKilled"} == 1
+            )
+          for: 0m
+          labels:
+            severity: warning
