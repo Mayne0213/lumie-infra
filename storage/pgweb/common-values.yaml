@@ -1,0 +1,44 @@
+# Common chart values for pgweb
+
+name: pgweb
+
+# Disable deployment (external chart creates it)
+deployment:
+  enabled: false
+
+service:
+  enabled: false
+
+ingress:
+  enabled: false
+
+# External Secret for PostgreSQL credentials
+additionalExternalSecrets:
+  - name: pgweb-secret
+    refreshInterval: 1h
+    secretStoreRef:
+      name: vault-backend
+      kind: ClusterSecretStore
+    target:
+      name: pgweb-password
+      creationPolicy: Owner
+      template:
+        data:
+          database-url: 'postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/postgres'
+    data:
+      - secretKey: DB_HOST
+        remoteRef:
+          key: storage/postgresql
+          property: POSTGRES_HOST
+      - secretKey: DB_PORT
+        remoteRef:
+          key: storage/postgresql
+          property: POSTGRES_PORT
+      - secretKey: DB_USER
+        remoteRef:
+          key: storage/postgresql
+          property: POSTGRES_USER
+      - secretKey: DB_PASSWORD
+        remoteRef:
+          key: storage/postgresql
+          property: POSTGRES_PASSWORD

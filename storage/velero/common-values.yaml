@@ -1,0 +1,59 @@
+# Common chart values for velero
+
+name: velero
+
+# Disable deployment (external chart creates it)
+deployment:
+  enabled: false
+
+service:
+  enabled: false
+
+ingress:
+  enabled: false
+
+# Health check ingress for velero-ui
+additionalIngresses:
+  - name: health
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      traefik.ingress.kubernetes.io/router.priority: "100"
+    className: traefik
+    hosts:
+      - host: velero0213.kro.kr
+        paths:
+          - path: /health
+            pathType: Exact
+    tls:
+      - secretName: velero-ui-tls
+        hosts:
+          - velero0213.kro.kr
+    serviceName: velero-ui
+    servicePort: 3000
+
+# External Secret for S3 credentials
+additionalExternalSecrets:
+  - name: velero-s3-credentials
+    refreshInterval: 1h
+    secretStoreRef:
+      name: vault-backend
+      kind: ClusterSecretStore
+    target:
+      name: velero-s3-credentials
+      creationPolicy: Owner
+      template:
+        type: Opaque
+        data:
+          cloud: |
+            [default]
+            aws_access_key_id={{ .minioAccessKey }}
+            aws_secret_access_key="{{ .minioSecretKey }}"
+    data:
+      - secretKey: minioAccessKey
+        remoteRef:
+          key: bootstrap/minio
+          property: MINIO_ROOT_USER
+      - secretKey: minioSecretKey
+        remoteRef:
+          key: bootstrap/minio
+          property: MINIO_ROOT_PASSWORD

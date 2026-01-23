@@ -19,7 +19,10 @@ spec:
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: storage/cnpg
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/storage/cnpg/common-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: cnpg
