@@ -80,9 +80,9 @@ spec:
   resources:
     requests:
       cpu: 49m
-      memory: 256Mi
+      memory: 512Mi
     limits:
-      memory: 256Mi
+      memory: 512Mi
 
   # Collector configuration
   config:
