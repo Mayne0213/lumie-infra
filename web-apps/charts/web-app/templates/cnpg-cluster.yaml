@@ -1,0 +1,44 @@
+{{- if .Values.database.enabled }}
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "web-app.fullname" . }}-db
+spec:
+  instances: {{ .Values.database.instances | default 2 }}
+  imageName: zot0213.kro.kr/storage/postgresql:{{ .Values.database.version | default "16.6" }}
+  bootstrap:
+    initdb:
+      database: {{ .Values.database.name | default (printf "%sDB" (include "web-app.fullname" . | title)) }}
+      owner: {{ .Values.database.owner | default (include "web-app.fullname" .) }}
+  storage:
+    storageClass: {{ .Values.database.storage.class | default "local-path" }}
+    size: {{ .Values.database.storage.size | default "1Gi" }}
+  resources:
+    requests:
+      memory: {{ .Values.database.resources.memory | default "512Mi" | quote }}
+      cpu: {{ .Values.database.resources.cpu | default "50m" | quote }}
+    limits:
+      memory: {{ .Values.database.resources.memory | default "512Mi" | quote }}
+  monitoring:
+    enablePodMonitor: true
+  affinity:
+    podAntiAffinityType: required
+  {{- if .Values.database.backup.enabled }}
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://{{ include "web-app.fullname" . }}
+      endpointURL: https://s3.minio0213.kro.kr
+      s3Credentials:
+        accessKeyId:
+          name: {{ include "web-app.fullname" . }}-db-backup-creds
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: {{ include "web-app.fullname" . }}-db-backup-creds
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+      data:
+        compression: gzip
+    retentionPolicy: {{ .Values.database.backup.retention | default "7d" | quote }}
+  {{- end }}
+{{- end }}

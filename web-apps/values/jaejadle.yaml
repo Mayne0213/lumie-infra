@@ -109,3 +109,17 @@ affinity:
       - weight: 100
         podAffinityTerm:
           topologyKey: kubernetes.io/hostname
+
+# CNPG Database
+database:
+  enabled: true
+  instances: 2
+  name: JaejadleDB
+  storage:
+    size: 1Gi
+  resources:
+    memory: 512Mi
+    cpu: 50m
+  backup:
+    enabled: true
+    retention: "7d"

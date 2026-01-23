@@ -55,21 +55,21 @@ env:
     value: "-Xmx512m -Xms384m"
   # Database from CNPG
   - name: DB_HOST
-    value: "poolc-dev-db-rw:5432"
+    value: "poolc-dev-backend-db-rw:5432"
   - name: DB_NAME
     valueFrom:
       secretKeyRef:
-        name: poolc-dev-db-app
+        name: poolc-dev-backend-db-app
         key: dbname
   - name: DB_USER_NAME
     valueFrom:
       secretKeyRef:
-        name: poolc-dev-db-app
+        name: poolc-dev-backend-db-app
         key: username
   - name: DB_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: poolc-dev-db-app
+        name: poolc-dev-backend-db-app
         key: password
 # External Secret for sensitive data (JWT secret, MinIO, etc.)
 externalSecret:
@@ -140,3 +140,17 @@ middleware:
   stripPrefix:
     prefixes:
       - /api
+
+# CNPG Database (dev - single instance, no backup)
+database:
+  enabled: true
+  instances: 1
+  name: PoolcDB
+  owner: poolc-dev
+  storage:
+    size: 1Gi
+  resources:
+    memory: 512Mi
+    cpu: 50m
+  backup:
+    enabled: false

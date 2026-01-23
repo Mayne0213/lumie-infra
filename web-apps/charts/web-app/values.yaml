@@ -113,3 +113,21 @@ affinity:
 # ResourceQuota - Disabled by default (set to false to remove existing quotas)
 resourceQuota:
   enabled: false
+
+# CNPG Database configuration
+database:
+  enabled: false
+  instances: 2
+  version: "16.6"
+  name: ""        # Database name (defaults to app name + "DB")
+  owner: ""       # Database owner (defaults to app name)
+  storage:
+    class: local-path
+    size: 1Gi
+  resources:
+    memory: 512Mi
+    cpu: 50m
+  backup:
+    enabled: false
+    schedule: "0 19 * * *"
+    retention: "7d"

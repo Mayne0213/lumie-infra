@@ -1,10 +1,10 @@
-# Todo Web App Helm Values
+# Jotion Web App Helm Values
 
-name: todo
+name: jotion
 image:
   registry: zot0213.kro.kr
-  repository: web-apps/todo
-  tag: 8b41a615 # Updated by ArgoCD Image Updater
+  repository: web-apps/jotion
+  tag: 2646b160 # Updated by ArgoCD Image Updater
   pullPolicy: Always
 replicaCount: 1
 containerPort: 3000
@@ -18,47 +18,51 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: todo0213.kro.kr
+    - host: jotion0213.kro.kr
       paths:
         - path: /
           pathType: Prefix
-    - host: www.todo0213.kro.kr
+    - host: www.jotion0213.kro.kr
       paths:
         - path: /
           pathType: Prefix
   tls:
-    - secretName: todo-tls
+    - secretName: jotion-tls
       hosts:
-        - todo0213.kro.kr
-        - www.todo0213.kro.kr
+        - jotion0213.kro.kr
+        - www.jotion0213.kro.kr
 # Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
     cpu: 15m
-    memory: 237Mi
+    memory: 138Mi
   limits:
-    memory: 237Mi
-healthCheck:
-  enabled: true
-  path: /api/health
-  startupProbe:
-    periodSeconds: 10
-    failureThreshold: 30
-  livenessProbe:
-    initialDelaySeconds: 0
-    periodSeconds: 10
-  readinessProbe:
-    initialDelaySeconds: 0
-    periodSeconds: 5
+    memory: 138Mi
+livenessProbe:
+  httpGet:
+    path: /home
+    port: 3000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+readinessProbe:
+  httpGet:
+    path: /home
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 1
+  failureThreshold: 3
 initContainers:
   - name: prisma-migrate
-    image: zot0213.kro.kr/web-apps/todo:8b41a615
+    image: zot0213.kro.kr/web-apps/jotion:c8aefc7d
     command: ["sh", "-c", "npx --yes prisma@6 db push"]
     env:
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
-            name: todo-db-app
+            name: jotion-db-app
             key: uri
 env:
   - name: NODE_ENV
@@ -66,7 +70,7 @@ env:
   - name: DATABASE_URL
     valueFrom:
       secretKeyRef:
-        name: todo-db-app
+        name: jotion-db-app
         key: uri
 # Affinity - Soft Anti-Affinity to spread pods across nodes
 affinity:
@@ -75,3 +79,16 @@ affinity:
       - weight: 100
         podAffinityTerm:
           topologyKey: kubernetes.io/hostname
+
+# CNPG Database
+database:
+  enabled: true
+  instances: 2
+  name: JotionDB
+  storage:
+    size: 1Gi
+  resources:
+    memory: 512Mi
+    cpu: 50m
+  backup:
+    enabled: false

@@ -2,16 +2,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  # Self-reference for App of Apps pattern
   - application.yaml
-
-  - jovies/argocd.yaml
-  - portfolio/argocd.yaml
-  - todo/argocd.yaml
-  - jotion/argocd.yaml
-  - jaejadle/argocd.yaml
-  - jaejadle-dev/argocd.yaml
-  - joossam/argocd.yaml
-  - joossam-dev/argocd.yaml
-  - poolc/argocd.yaml
-  - poolc-dev/argocd.yaml
+  - applicationset.yaml
