@@ -19,12 +19,17 @@ spec:
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: observability/goldilocks
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/observability/goldilocks/common-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: goldilocks
   syncPolicy:
-    # automated sync disabled for resource optimization
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
