@@ -1,0 +1,81 @@
+{{- if .Values.rbac.enabled }}
+{{- if .Values.rbac.serviceAccount.create }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.rbac.serviceAccount.name | default (include "web-app.fullname" .) }}
+  labels:
+    {{- include "web-app.labels" . | nindent 4 }}
+{{- end }}
+{{- if .Values.rbac.clusterRoleBinding }}
+{{- if .Values.rbac.clusterRoleBinding.roleRef.name }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "web-app.fullname" . }}-{{ .Values.rbac.clusterRoleBinding.roleRef.name }}
+  labels:
+    {{- include "web-app.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.rbac.clusterRoleBinding.roleRef.name }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.rbac.serviceAccount.name | default (include "web-app.fullname" .) }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}
+{{- end }}
+{{- range .Values.rbac.clusterRoles }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "web-app.labels" $ | nindent 4 }}
+rules:
+  {{- toYaml .rules | nindent 2 }}
+{{- end }}
+{{- range .Values.rbac.clusterRoleBindings }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "web-app.labels" $ | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: {{ .roleRef.kind | default "ClusterRole" }}
+  name: {{ .roleRef.name }}
+subjects:
+  {{- toYaml .subjects | nindent 2 }}
+{{- end }}
+{{- range .Values.rbac.roles }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "web-app.labels" $ | nindent 4 }}
+rules:
+  {{- toYaml .rules | nindent 2 }}
+{{- end }}
+{{- range .Values.rbac.roleBindings }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "web-app.labels" $ | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: {{ .roleRef.kind | default "Role" }}
+  name: {{ .roleRef.name }}
+subjects:
+  {{- toYaml .subjects | nindent 2 }}
+{{- end }}
+{{- end }}

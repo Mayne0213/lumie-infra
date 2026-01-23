@@ -1,0 +1,33 @@
+{{- if .Values.middleware }}
+{{- if .Values.middleware.enabled }}
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ .Values.middleware.name | default (printf "%s-middleware" (include "web-app.fullname" .)) }}
+  labels:
+    {{- include "web-app.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.middleware.stripPrefix }}
+  stripPrefix:
+    prefixes:
+      {{- range .Values.middleware.stripPrefix.prefixes }}
+      - {{ . }}
+      {{- end }}
+  {{- end }}
+  {{- if .Values.middleware.forwardAuth }}
+  {{- if .Values.middleware.forwardAuth.address }}
+  forwardAuth:
+    address: {{ .Values.middleware.forwardAuth.address }}
+    {{- if .Values.middleware.forwardAuth.trustForwardHeader }}
+    trustForwardHeader: {{ .Values.middleware.forwardAuth.trustForwardHeader }}
+    {{- end }}
+    {{- if .Values.middleware.forwardAuth.authResponseHeaders }}
+    authResponseHeaders:
+      {{- range .Values.middleware.forwardAuth.authResponseHeaders }}
+      - {{ . }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}
