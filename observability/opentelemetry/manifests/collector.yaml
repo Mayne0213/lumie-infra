@@ -62,13 +62,16 @@ spec:
       port: 4317
       protocol: TCP
       hostPort: 4317
+      targetPort: 4317
     - name: otlp-http
       port: 4318
       protocol: TCP
       hostPort: 4318
+      targetPort: 4318
     - name: metrics
       port: 8888
       protocol: TCP
+      targetPort: 8888
 
   # Tolerations for master node scheduling
   tolerations:
