@@ -61,4 +61,4 @@ patches:
       path: /spec/template/spec/containers/0/resources/limits/cpu
     - op: replace
       path: /spec/template/spec/containers/0/resources/requests/memory
-      value: 4Gi
+      value: 1Gi
