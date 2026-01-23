@@ -7,15 +7,8 @@ metadata:
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 spec:
-  {{- if .Values.middleware.stripPrefix }}
-  stripPrefix:
-    prefixes:
-      {{- range .Values.middleware.stripPrefix.prefixes }}
-      - {{ . }}
-      {{- end }}
-  {{- end }}
-  {{- if .Values.middleware.forwardAuth }}
-  {{- if .Values.middleware.forwardAuth.address }}
+  {{- /* Traefik middleware can only have ONE type - check forwardAuth first, then stripPrefix */}}
+  {{- if and .Values.middleware.forwardAuth .Values.middleware.forwardAuth.address }}
   forwardAuth:
     address: {{ .Values.middleware.forwardAuth.address }}
     {{- if .Values.middleware.forwardAuth.trustForwardHeader }}
@@ -27,7 +20,12 @@ spec:
       - {{ . }}
       {{- end }}
     {{- end }}
-  {{- end }}
+  {{- else if and .Values.middleware.stripPrefix .Values.middleware.stripPrefix.prefixes }}
+  stripPrefix:
+    prefixes:
+      {{- range .Values.middleware.stripPrefix.prefixes }}
+      - {{ . }}
+      {{- end }}
   {{- end }}
 {{- end }}
 {{- end }}
