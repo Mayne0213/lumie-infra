@@ -20,7 +20,10 @@ spec:
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: applications/mas
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/applications/mas/common-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: mas
