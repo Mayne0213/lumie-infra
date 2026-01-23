@@ -1,32 +1,57 @@
-# Trivy Helm Values
-# https://github.com/aquasecurity/trivy/tree/main/helm/trivy
+# Trivy Operator Helm Values
+# https://github.com/aquasecurity/trivy-operator
 
+# Operator image
 image:
   registry: zot0213.kro.kr
-  repository: security/trivy
-  tag: "0.68.2"
+  repository: security/trivy-operator
+  tag: "0.28.0"
   pullPolicy: IfNotPresent
 
-replicaCount: 1
+# Trivy scanner image used by the operator
+trivy:
+  image:
+    registry: zot0213.kro.kr
+    repository: security/trivy
+    tag: "0.68.2"
+  mode: Standalone
+  storageClassEnabled: true
+  storageSize: "5Gi"
 
-persistence:
-  enabled: true
-  storageClass: ""
-  accessMode: ReadWriteOnce
-  size: 5Gi
+# Operator settings
+operator:
+  replicas: 1
+  vulnerabilityScannerEnabled: true
+  configAuditScannerEnabled: true
+  rbacAssessmentScannerEnabled: false
+  infraAssessmentScannerEnabled: false
+  clusterComplianceEnabled: false
+  exposedSecretScannerEnabled: false
+  sbomGenerationEnabled: false
+  scanJobTimeout: 10m
+  scanJobsConcurrentLimit: 2
+  scannerReportTTL: "24h"
 
-# Resource settings (VPA recommended, no CPU limit for stability)
+# Exclude system namespaces from scanning
+excludeNamespaces: "kube-system,kube-public,kube-node-lease"
+
+# Resource settings for operator
 resources:
   requests:
-    cpu: 15m
-    memory: 138Mi
+    cpu: 50m
+    memory: 128Mi
   limits:
-    cpu: null
-    memory: 138Mi
+    memory: 512Mi
 
+# RBAC
 rbac:
   create: true
 
+# Service account
+serviceAccount:
+  create: true
+
+# Pod security
 podSecurityContext:
   runAsUser: 65534
   runAsNonRoot: true
@@ -35,6 +60,11 @@ podSecurityContext:
 securityContext:
   privileged: false
   readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
 
-trivy:
-  debugMode: false
+# ServiceMonitor for Prometheus
+serviceMonitor:
+  enabled: true

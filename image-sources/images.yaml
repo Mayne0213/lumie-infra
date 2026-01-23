@@ -209,6 +209,11 @@ images:
     tag: "0.68.2"
     dest: security/trivy
 
+  - name: trivy-operator
+    source: docker.io/aquasec/trivy-operator
+    tag: "0.28.0"
+    dest: security/trivy-operator
+
   # Security - Kyverno
   - name: kyverno
     source: ghcr.io/kyverno/kyverno
