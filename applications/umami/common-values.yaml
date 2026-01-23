@@ -1,0 +1,66 @@
+# Common chart values for umami
+# Replaces manifests/ folder with Helm-based configuration
+
+name: umami
+
+# Disable deployment (external chart creates it)
+deployment:
+  enabled: false
+
+# Disable service/ingress (external chart creates them)
+service:
+  enabled: false
+
+ingress:
+  enabled: false
+
+# External Secret for HASH_SALT
+externalSecret:
+  enabled: true
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: umami-hash-salt
+    creationPolicy: Owner
+    deletionPolicy: Retain
+  data:
+    - secretKey: hash-salt
+      remoteRef:
+        key: applications/umami
+        property: UMAMI_HASH_SALT
+
+# CNPG Database configuration
+database:
+  enabled: true
+  instances: 2
+  version: "16.6"
+  name: umami
+  owner: umami
+  encoding: UTF8
+  localeCollate: C
+  localeCType: C
+  enableSuperuserAccess: true
+  storage:
+    class: local-path
+    size: 1Gi
+  resources:
+    memory: 512Mi
+    cpu: 50m
+  postgresql:
+    parameters:
+      max_connections: "50"
+      shared_buffers: "64MB"
+      effective_cache_size: "192MB"
+      maintenance_work_mem: "32MB"
+      checkpoint_completion_target: "0.9"
+      wal_buffers: "4MB"
+      default_statistics_target: "100"
+      random_page_cost: "1.1"
+      effective_io_concurrency: "200"
+      work_mem: "1MB"
+      min_wal_size: "256MB"
+      max_wal_size: "1GB"
+  backup:
+    enabled: false
