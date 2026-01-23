@@ -1,5 +1,5 @@
 ---
-# PV 1: k3s-worker-1 - /mnt/minio-data
+# PV 1: k3s-master - /mnt/minio-data (worker-1에서 이전)
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -21,7 +21,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - k3s-worker-1
+                - k3s-master
 ---
 # PV 2: k3s-worker-2 - /mnt/minio-data
 apiVersion: v1

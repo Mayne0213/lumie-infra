@@ -2,8 +2,8 @@
 # Chart: https://github.com/minio/minio/tree/master/helm/minio
 # Mode: Distributed with Erasure Coding (4 drives total)
 #
-# Disk allocation (1 x 50GB per worker):
-# - k3s-worker-1: /mnt/minio-data (0214 account)
+# Disk allocation (1 x 50GB per node):
+# - k3s-master: /mnt/minio-data (0214 account, worker-1에서 이전)
 # - k3s-worker-2: /mnt/minio-data (0214 account)
 # - k3s-worker-3: /mnt/minio-data (0213 account)
 # - k3s-worker-4: /mnt/minio-data (0213 account)
@@ -100,6 +100,12 @@ affinity:
               values:
                 - minio
         topologyKey: kubernetes.io/hostname
+
+# Master 노드 스케줄링을 위한 toleration
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
 
 # High priority for critical storage infrastructure
 priorityClassName: high-priority

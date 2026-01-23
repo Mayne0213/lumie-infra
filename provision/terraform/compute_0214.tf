@@ -118,3 +118,32 @@ resource "oci_core_volume_attachment" "attachments_0214" {
   is_read_only    = false
   is_shareable    = false
 }
+
+# ============================================
+# Master 노드 MinIO 볼륨 (worker-1에서 이전)
+# ============================================
+resource "oci_core_volume" "master_minio_volume" {
+  provider    = oci.account_0214
+
+  compartment_id      = var.compartment_0214_ocid
+  availability_domain = data.oci_identity_availability_domains.ads_0214.availability_domains[0].name
+  display_name        = "k3s-master-minio"
+  size_in_gbs         = 50
+  vpus_per_gb         = 10
+
+  freeform_tags = {
+    "role" = "minio"
+    "node" = "k3s-master"
+  }
+}
+
+resource "oci_core_volume_attachment" "master_minio_attachment" {
+  provider    = oci.account_0214
+
+  attachment_type = "paravirtualized"
+  instance_id     = oci_core_instance.nodes_0214["master"].id
+  volume_id       = oci_core_volume.master_minio_volume.id
+  display_name    = "k3s-master-minio-attachment"
+  is_read_only    = false
+  is_shareable    = false
+}
