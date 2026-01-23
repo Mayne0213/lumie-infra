@@ -11,7 +11,7 @@ spec:
   sources:
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: web-apps/charts/web-app
+    path: charts/common
     helm:
       valueFiles:
       - $values/applications/docusaurus/helm-values.yaml

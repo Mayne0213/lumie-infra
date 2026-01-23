@@ -1,57 +1,58 @@
 # Docusaurus Web App Helm Values
 
-name: docusaurus
-image:
-  registry: zot0213.kro.kr
-  repository: web-apps/docusaurus
-  tag: 05a4692f # Updated by ArgoCD Image Updater
-  pullPolicy: Always
-replicaCount: 1
-containerPort: 80 # nginx
-service:
-  enabled: true
-  type: ClusterIP
-  port: 80
-ingress:
-  enabled: true
-  className: traefik
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-  hosts:
-    - host: docusaurus0213.kro.kr
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: docusaurus-tls
-      hosts:
-        - docusaurus0213.kro.kr
-# Resource settings (no CPU limit for stability)
-resources:
-  requests:
-    cpu: 10m
-    memory: 50Mi
-  limits:
-    memory: 50Mi
-healthCheck:
-  enabled: true
-  path: /
-  startupProbe:
-    periodSeconds: 5
-    failureThreshold: 30
-  livenessProbe:
-    initialDelaySeconds: 0
-    periodSeconds: 10
-  readinessProbe:
-    initialDelaySeconds: 0
-    periodSeconds: 5
-env: []
-externalSecret:
-  enabled: false
-# Affinity - Soft Anti-Affinity to spread pods across nodes
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          topologyKey: kubernetes.io/hostname
+common:
+  name: docusaurus
+  image:
+    registry: zot0213.kro.kr
+    repository: web-apps/docusaurus
+    tag: 05a4692f # Updated by ArgoCD Image Updater
+    pullPolicy: Always
+  replicaCount: 1
+  containerPort: 80 # nginx
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: docusaurus0213.kro.kr
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: docusaurus-tls
+        hosts:
+          - docusaurus0213.kro.kr
+  # Resource settings (no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 10m
+      memory: 50Mi
+    limits:
+      memory: 50Mi
+  healthCheck:
+    enabled: true
+    path: /
+    startupProbe:
+      periodSeconds: 5
+      failureThreshold: 30
+    livenessProbe:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+    readinessProbe:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+  env: []
+  externalSecret:
+    enabled: false
+  # Affinity - Soft Anti-Affinity to spread pods across nodes
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname
