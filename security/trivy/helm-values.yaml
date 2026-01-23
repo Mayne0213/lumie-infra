@@ -17,6 +17,13 @@ trivy:
   mode: Standalone
   storageClassEnabled: true
   storageSize: "5Gi"
+  # Scan job resources (requests = limits for QoS Guaranteed class)
+  resources:
+    requests:
+      cpu: 100m
+      memory: 500Mi
+    limits:
+      memory: 500Mi
 
 # Operator settings
 operator:
@@ -35,13 +42,14 @@ operator:
 # Exclude system namespaces from scanning
 excludeNamespaces: "kube-system,kube-public,kube-node-lease"
 
-# Resource settings for operator
+# Resource settings for operator (based on VPA recommendations)
+# memory requests = limits for QoS Guaranteed class
 resources:
   requests:
     cpu: 50m
-    memory: 128Mi
+    memory: 384Mi
   limits:
-    memory: 512Mi
+    memory: 384Mi
 
 # RBAC
 rbac:
