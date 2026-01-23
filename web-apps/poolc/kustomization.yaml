@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: poolc
 resources:
 - manifests/cluster.yaml
+- manifests/external-secret.yaml

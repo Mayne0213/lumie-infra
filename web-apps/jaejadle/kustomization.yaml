@@ -3,3 +3,4 @@ kind: Kustomization
 namespace: jaejadle
 resources:
 - manifests/cluster.yaml
+- manifests/external-secret.yaml

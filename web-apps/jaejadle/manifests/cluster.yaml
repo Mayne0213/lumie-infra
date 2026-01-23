@@ -23,3 +23,30 @@ spec:
     enablePodMonitor: true
   affinity:
     podAntiAffinityType: required
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://jaejadle
+      endpointURL: https://s3.minio0213.kro.kr
+      s3Credentials:
+        accessKeyId:
+          name: jaejadle-db-backup-creds
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: jaejadle-db-backup-creds
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+      data:
+        compression: gzip
+    retentionPolicy: "7d"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: jaejadle-db-backup
+  namespace: jaejadle
+spec:
+  schedule: "0 19 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: jaejadle-db
