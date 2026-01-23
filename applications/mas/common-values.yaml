@@ -1,143 +1,144 @@
 # Common chart values for mas
 
-name: mas
-
-# Disable deployment (external chart creates it)
-deployment:
-  enabled: false
-
-service:
-  enabled: false
-
-ingress:
-  enabled: false
-
-# External Secret for API keys
-additionalExternalSecrets:
-  - name: mas-api-keys
-    refreshInterval: 1h
-    secretStoreRef:
-      name: vault-backend
-      kind: ClusterSecretStore
-    target:
-      name: mas-api-keys
-      creationPolicy: Owner
-    data:
-      - secretKey: anthropic-api-key
-        remoteRef:
-          key: applications/mas
-          property: ANTHROPIC_API_KEY
-
-# RBAC configuration
-rbac:
-  enabled: true
-  serviceAccount:
-    create: true
-    name: mas
-  # ClusterRoles
-  clusterRoles:
-    - name: mas-viewer
-      rules:
-        - apiGroups: [""]
-          resources:
-            - pods
-            - pods/log
-            - services
-            - endpoints
-            - namespaces
-            - nodes
-            - persistentvolumeclaims
-            - configmaps
-          verbs: ["get", "list", "watch"]
-        - apiGroups: ["apps"]
-          resources:
-            - deployments
-            - statefulsets
-            - daemonsets
-            - replicasets
-          verbs: ["get", "list", "watch"]
-        - apiGroups: ["batch"]
-          resources:
-            - jobs
-            - cronjobs
-          verbs: ["get", "list", "watch"]
-        - apiGroups: ["networking.k8s.io"]
-          resources:
-            - ingresses
-          verbs: ["get", "list", "watch"]
-        - apiGroups: ["argoproj.io"]
-          resources:
-            - applications
-          verbs: ["get", "list", "watch"]
-        - apiGroups: [""]
-          resources:
-            - pods/status
-            - services/status
-          verbs: ["get"]
-    - name: mas-writer
-      rules:
-        - apiGroups: [""]
-          resources:
-            - pods
-            - services
-            - configmaps
-            - secrets
-          verbs: ["create", "update", "patch", "delete"]
-        - apiGroups: ["apps"]
-          resources:
-            - deployments
-            - statefulsets
-            - daemonsets
-            - replicasets
-          verbs: ["create", "update", "patch", "delete"]
-        - apiGroups: ["networking.k8s.io"]
-          resources:
-            - ingresses
-          verbs: ["create", "update", "patch", "delete"]
-        - apiGroups: ["batch"]
-          resources:
-            - jobs
-            - cronjobs
-          verbs: ["create", "update", "patch", "delete"]
-        - apiGroups: [""]
-          resources:
-            - namespaces
-          verbs: ["create", "update", "patch"]
-        - apiGroups: ["argoproj.io"]
-          resources:
-            - applications
-          verbs: ["create", "update", "patch", "delete"]
-  # ClusterRoleBindings
-  clusterRoleBindings:
-    - name: mas-viewer-binding
-      roleRef:
-        kind: ClusterRole
-        name: mas-viewer
-      subjects:
-        - kind: ServiceAccount
-          name: mas
-          namespace: mas
-    - name: mas-writer-binding
-      roleRef:
-        kind: ClusterRole
-        name: mas-writer
-      subjects:
-        - kind: ServiceAccount
-          name: mas
-          namespace: mas
-
-# CNPG Database configuration
-database:
-  enabled: true
-  instances: 2
-  version: "16.6"
+common:
   name: mas
-  owner: mas
-  storage:
-    class: local-path
-    size: 1Gi
-  resources:
-    memory: 512Mi
-    cpu: 50m
-  backup:
+
+  # Disable deployment (external chart creates it)
+  deployment:
     enabled: false
+
+  service:
+    enabled: false
+
+  ingress:
+    enabled: false
+
+  # External Secret for API keys
+  additionalExternalSecrets:
+    - name: mas-api-keys
+      refreshInterval: 1h
+      secretStoreRef:
+        name: vault-backend
+        kind: ClusterSecretStore
+      target:
+        name: mas-api-keys
+        creationPolicy: Owner
+      data:
+        - secretKey: anthropic-api-key
+          remoteRef:
+            key: applications/mas
+            property: ANTHROPIC_API_KEY
+
+  # RBAC configuration
+  rbac:
+    enabled: true
+    serviceAccount:
+      create: true
+      name: mas
+    # ClusterRoles
+    clusterRoles:
+      - name: mas-viewer
+        rules:
+          - apiGroups: [""]
+            resources:
+              - pods
+              - pods/log
+              - services
+              - endpoints
+              - namespaces
+              - nodes
+              - persistentvolumeclaims
+              - configmaps
+            verbs: ["get", "list", "watch"]
+          - apiGroups: ["apps"]
+            resources:
+              - deployments
+              - statefulsets
+              - daemonsets
+              - replicasets
+            verbs: ["get", "list", "watch"]
+          - apiGroups: ["batch"]
+            resources:
+              - jobs
+              - cronjobs
+            verbs: ["get", "list", "watch"]
+          - apiGroups: ["networking.k8s.io"]
+            resources:
+              - ingresses
+            verbs: ["get", "list", "watch"]
+          - apiGroups: ["argoproj.io"]
+            resources:
+              - applications
+            verbs: ["get", "list", "watch"]
+          - apiGroups: [""]
+            resources:
+              - pods/status
+              - services/status
+            verbs: ["get"]
+      - name: mas-writer
+        rules:
+          - apiGroups: [""]
+            resources:
+              - pods
+              - services
+              - configmaps
+              - secrets
+            verbs: ["create", "update", "patch", "delete"]
+          - apiGroups: ["apps"]
+            resources:
+              - deployments
+              - statefulsets
+              - daemonsets
+              - replicasets
+            verbs: ["create", "update", "patch", "delete"]
+          - apiGroups: ["networking.k8s.io"]
+            resources:
+              - ingresses
+            verbs: ["create", "update", "patch", "delete"]
+          - apiGroups: ["batch"]
+            resources:
+              - jobs
+              - cronjobs
+            verbs: ["create", "update", "patch", "delete"]
+          - apiGroups: [""]
+            resources:
+              - namespaces
+            verbs: ["create", "update", "patch"]
+          - apiGroups: ["argoproj.io"]
+            resources:
+              - applications
+            verbs: ["create", "update", "patch", "delete"]
+    # ClusterRoleBindings
+    clusterRoleBindings:
+      - name: mas-viewer-binding
+        roleRef:
+          kind: ClusterRole
+          name: mas-viewer
+        subjects:
+          - kind: ServiceAccount
+            name: mas
+            namespace: mas
+      - name: mas-writer-binding
+        roleRef:
+          kind: ClusterRole
+          name: mas-writer
+        subjects:
+          - kind: ServiceAccount
+            name: mas
+            namespace: mas
+
+  # CNPG Database configuration
+  database:
+    enabled: true
+    instances: 2
+    version: "16.6"
+    name: mas
+    owner: mas
+    storage:
+      class: local-path
+      size: 1Gi
+    resources:
+      memory: 512Mi
+      cpu: 50m
+    backup:
+      enabled: false

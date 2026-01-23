@@ -1,38 +1,39 @@
 # Common chart values for headlamp
 
-name: headlamp
+common:
+  name: headlamp
 
-# Disable deployment (external chart creates it)
-deployment:
-  enabled: false
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
 
-service:
-  enabled: false
+  service:
+    enabled: false
 
-ingress:
-  enabled: false
+  ingress:
+    enabled: false
 
-# External Secret for OIDC configuration
-additionalExternalSecrets:
-  - name: headlamp-oidc
-    refreshInterval: 1h
-    secretStoreRef:
-      name: vault-backend
-      kind: ClusterSecretStore
-    target:
-      name: headlamp-oidc
-      creationPolicy: Owner
-      template:
-        engineVersion: v2
-        data:
-          OIDC_CLIENT_ID: headlamp
-          OIDC_CLIENT_SECRET: "{{ .clientSecret }}"
-          OIDC_ISSUER_URL: https://auth0213.kro.kr
-          OIDC_SCOPES: "openid profile email"
-          OIDC_VALIDATOR_CLIENT_ID: headlamp
-          OIDC_VALIDATOR_ISSUER_URL: https://auth0213.kro.kr
-    data:
-      - secretKey: clientSecret
-        remoteRef:
-          key: security/authelia
-          property: AUTHELIA_HEADLAMP_CLIENT_SECRET
+  # External Secret for OIDC configuration
+  additionalExternalSecrets:
+    - name: headlamp-oidc
+      refreshInterval: 1h
+      secretStoreRef:
+        name: vault-backend
+        kind: ClusterSecretStore
+      target:
+        name: headlamp-oidc
+        creationPolicy: Owner
+        template:
+          engineVersion: v2
+          data:
+            OIDC_CLIENT_ID: headlamp
+            OIDC_CLIENT_SECRET: "{{ .clientSecret }}"
+            OIDC_ISSUER_URL: https://auth0213.kro.kr
+            OIDC_SCOPES: "openid profile email"
+            OIDC_VALIDATOR_CLIENT_ID: headlamp
+            OIDC_VALIDATOR_ISSUER_URL: https://auth0213.kro.kr
+      data:
+        - secretKey: clientSecret
+          remoteRef:
+            key: security/authelia
+            property: AUTHELIA_HEADLAMP_CLIENT_SECRET

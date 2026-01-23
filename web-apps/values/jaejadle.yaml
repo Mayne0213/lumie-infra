@@ -1,125 +1,126 @@
 # Jaejadle Web App Helm Values
 
-name: jaejadle
-image:
-  registry: zot0213.kro.kr
-  repository: web-apps/jaejadle
-  tag: 4afbbe87 # Updated by ArgoCD Image Updater
-  pullPolicy: Always
-replicaCount: 1
-containerPort: 3000
-service:
-  enabled: true
-  type: ClusterIP
-  port: 80
-ingress:
-  enabled: true
-  className: traefik
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-  hosts:
-    - host: jaejadle.kro.kr
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: jaejadle-tls
-      hosts:
-        - jaejadle.kro.kr
-# Resource settings (VPA recommended, no CPU limit for stability)
-resources:
-  requests:
-    cpu: 15m
-    memory: 105Mi
-  limits:
-    memory: 105Mi
-healthCheck:
-  enabled: true
-  path: /
-  startupProbe:
-    periodSeconds: 10
-    failureThreshold: 30
-  livenessProbe:
-    initialDelaySeconds: 0
-    periodSeconds: 10
-  readinessProbe:
-    initialDelaySeconds: 0
-    periodSeconds: 5
-env:
-  - name: DATABASE_URL
-    valueFrom:
-      secretKeyRef:
-        name: jaejadle-db-app
-        key: uri
-envFrom:
-  - secretRef:
-      name: jaejadle-secrets
-externalSecret:
-  enabled: true
-  refreshInterval: 1h
-  secretStoreRef:
-    name: vault-backend
-    kind: ClusterSecretStore
-  target:
-    creationPolicy: Owner
-    deletionPolicy: Retain
-    template:
-      data:
-        JAEJADLE_JWT_SECRET: "{{ .JAEJADLE_JWT_SECRET }}"
-        MINIO_ACCESS_KEY_ID: "{{ .MINIO_ACCESS_KEY_ID }}"
-        MINIO_SECRET_ACCESS_KEY: "{{ .MINIO_SECRET_ACCESS_KEY }}"
-        MINIO_BUCKET_NAME: "{{ .MINIO_BUCKET_NAME }}"
-        MINIO_ENDPOINT: "{{ .MINIO_ENDPOINT }}"
-        MINIO_REGION: "{{ .MINIO_REGION }}"
-        JAEJADLE_CODE: "{{ .JAEJADLE_CODE }}"
-  data:
-    # App-specific secrets
-    - secretKey: JAEJADLE_JWT_SECRET
-      remoteRef:
-        key: web-apps/jaejadle
-        property: JAEJADLE_JWT_SECRET
-    - secretKey: MINIO_ACCESS_KEY_ID
-      remoteRef:
-        key: bootstrap/minio
-        property: MINIO_ACCESS_KEY_ID
-    - secretKey: MINIO_SECRET_ACCESS_KEY
-      remoteRef:
-        key: bootstrap/minio
-        property: MINIO_SECRET_ACCESS_KEY
-    - secretKey: MINIO_BUCKET_NAME
-      remoteRef:
-        key: web-apps/jaejadle
-        property: MINIO_BUCKET_NAME
-    - secretKey: MINIO_ENDPOINT
-      remoteRef:
-        key: bootstrap/minio
-        property: MINIO_ENDPOINT
-    - secretKey: MINIO_REGION
-      remoteRef:
-        key: bootstrap/minio
-        property: MINIO_REGION
-    - secretKey: JAEJADLE_CODE
-      remoteRef:
-        key: web-apps/jaejadle
-        property: JAEJADLE_CODE
-# Affinity - Soft Anti-Affinity to spread pods across nodes
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          topologyKey: kubernetes.io/hostname
-
-# CNPG Database
-database:
-  enabled: true
-  instances: 2
-  name: JaejadleDB
-  storage:
-    size: 1Gi
-  resources:
-    memory: 512Mi
-    cpu: 50m
-  backup:
+common:
+  name: jaejadle
+  image:
+    registry: zot0213.kro.kr
+    repository: web-apps/jaejadle
+    tag: 4afbbe87 # Updated by ArgoCD Image Updater
+    pullPolicy: Always
+  replicaCount: 1
+  containerPort: 3000
+  service:
     enabled: true
-    retention: "7d"
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: jaejadle.kro.kr
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: jaejadle-tls
+        hosts:
+          - jaejadle.kro.kr
+  # Resource settings (VPA recommended, no CPU limit for stability)
+  resources:
+    requests:
+      cpu: 15m
+      memory: 105Mi
+    limits:
+      memory: 105Mi
+  healthCheck:
+    enabled: true
+    path: /
+    startupProbe:
+      periodSeconds: 10
+      failureThreshold: 30
+    livenessProbe:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+    readinessProbe:
+      initialDelaySeconds: 0
+      periodSeconds: 5
+  env:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: jaejadle-db-app
+          key: uri
+  envFrom:
+    - secretRef:
+        name: jaejadle-secrets
+  externalSecret:
+    enabled: true
+    refreshInterval: 1h
+    secretStoreRef:
+      name: vault-backend
+      kind: ClusterSecretStore
+    target:
+      creationPolicy: Owner
+      deletionPolicy: Retain
+      template:
+        data:
+          JAEJADLE_JWT_SECRET: "{{ .JAEJADLE_JWT_SECRET }}"
+          MINIO_ACCESS_KEY_ID: "{{ .MINIO_ACCESS_KEY_ID }}"
+          MINIO_SECRET_ACCESS_KEY: "{{ .MINIO_SECRET_ACCESS_KEY }}"
+          MINIO_BUCKET_NAME: "{{ .MINIO_BUCKET_NAME }}"
+          MINIO_ENDPOINT: "{{ .MINIO_ENDPOINT }}"
+          MINIO_REGION: "{{ .MINIO_REGION }}"
+          JAEJADLE_CODE: "{{ .JAEJADLE_CODE }}"
+    data:
+      # App-specific secrets
+      - secretKey: JAEJADLE_JWT_SECRET
+        remoteRef:
+          key: web-apps/jaejadle
+          property: JAEJADLE_JWT_SECRET
+      - secretKey: MINIO_ACCESS_KEY_ID
+        remoteRef:
+          key: bootstrap/minio
+          property: MINIO_ACCESS_KEY_ID
+      - secretKey: MINIO_SECRET_ACCESS_KEY
+        remoteRef:
+          key: bootstrap/minio
+          property: MINIO_SECRET_ACCESS_KEY
+      - secretKey: MINIO_BUCKET_NAME
+        remoteRef:
+          key: web-apps/jaejadle
+          property: MINIO_BUCKET_NAME
+      - secretKey: MINIO_ENDPOINT
+        remoteRef:
+          key: bootstrap/minio
+          property: MINIO_ENDPOINT
+      - secretKey: MINIO_REGION
+        remoteRef:
+          key: bootstrap/minio
+          property: MINIO_REGION
+      - secretKey: JAEJADLE_CODE
+        remoteRef:
+          key: web-apps/jaejadle
+          property: JAEJADLE_CODE
+  # Affinity - Soft Anti-Affinity to spread pods across nodes
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname
+
+  # CNPG Database
+  database:
+    enabled: true
+    instances: 2
+    name: JaejadleDB
+    storage:
+      size: 1Gi
+    resources:
+      memory: 512Mi
+      cpu: 50m
+    backup:
+      enabled: true
+      retention: "7d"

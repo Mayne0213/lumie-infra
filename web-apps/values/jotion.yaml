@@ -1,94 +1,95 @@
 # Jotion Web App Helm Values
 
-name: jotion
-image:
-  registry: zot0213.kro.kr
-  repository: web-apps/jotion
-  tag: 2646b160 # Updated by ArgoCD Image Updater
-  pullPolicy: Always
-replicaCount: 1
-containerPort: 3000
-service:
-  enabled: true
-  type: ClusterIP
-  port: 80
-ingress:
-  enabled: true
-  className: traefik
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-  hosts:
-    - host: jotion0213.kro.kr
-      paths:
-        - path: /
-          pathType: Prefix
-    - host: www.jotion0213.kro.kr
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: jotion-tls
-      hosts:
-        - jotion0213.kro.kr
-        - www.jotion0213.kro.kr
-# Resource settings (VPA recommended, no CPU limit for stability)
-resources:
-  requests:
-    cpu: 15m
-    memory: 138Mi
-  limits:
-    memory: 138Mi
-livenessProbe:
-  httpGet:
-    path: /home
-    port: 3000
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 1
-  failureThreshold: 3
-readinessProbe:
-  httpGet:
-    path: /home
-    port: 3000
-  initialDelaySeconds: 5
-  periodSeconds: 5
-  timeoutSeconds: 1
-  failureThreshold: 3
-initContainers:
-  - name: prisma-migrate
-    image: zot0213.kro.kr/web-apps/jotion:c8aefc7d
-    command: ["sh", "-c", "npx --yes prisma@6 db push"]
-    env:
-      - name: DATABASE_URL
-        valueFrom:
-          secretKeyRef:
-            name: jotion-db-app
-            key: uri
-env:
-  - name: NODE_ENV
-    value: production
-  - name: DATABASE_URL
-    valueFrom:
-      secretKeyRef:
-        name: jotion-db-app
-        key: uri
-# Affinity - Soft Anti-Affinity to spread pods across nodes
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          topologyKey: kubernetes.io/hostname
-
-# CNPG Database
-database:
-  enabled: true
-  instances: 2
-  name: JotionDB
-  storage:
-    size: 1Gi
+common:
+  name: jotion
+  image:
+    registry: zot0213.kro.kr
+    repository: web-apps/jotion
+    tag: c8aefc7d # Updated by ArgoCD Image Updater
+    pullPolicy: Always
+  replicaCount: 1
+  containerPort: 3000
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: jotion0213.kro.kr
+        paths:
+          - path: /
+            pathType: Prefix
+      - host: www.jotion0213.kro.kr
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: jotion-tls
+        hosts:
+          - jotion0213.kro.kr
+          - www.jotion0213.kro.kr
+  # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
-    memory: 512Mi
-    cpu: 50m
-  backup:
-    enabled: false
+    requests:
+      cpu: 15m
+      memory: 138Mi
+    limits:
+      memory: 138Mi
+  livenessProbe:
+    httpGet:
+      path: /home
+      port: 3000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /home
+      port: 3000
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 3
+  initContainers:
+    - name: prisma-migrate
+      image: zot0213.kro.kr/web-apps/jotion:c8aefc7d
+      command: ["sh", "-c", "npx --yes prisma@6 db push"]
+      env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: jotion-db-app
+              key: uri
+  env:
+    - name: NODE_ENV
+      value: production
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: jotion-db-app
+          key: uri
+  # Affinity - Soft Anti-Affinity to spread pods across nodes
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname
+
+  # CNPG Database
+  database:
+    enabled: true
+    instances: 2
+    name: JotionDB
+    storage:
+      size: 1Gi
+    resources:
+      memory: 512Mi
+      cpu: 50m
+    backup:
+      enabled: false

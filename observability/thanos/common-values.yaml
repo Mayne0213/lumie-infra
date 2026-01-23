@@ -1,43 +1,43 @@
 # Common chart values for thanos
+common:
+  name: thanos
 
-name: thanos
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
 
-# Disable deployment (external chart creates it)
-deployment:
-  enabled: false
+  service:
+    enabled: false
 
-service:
-  enabled: false
+  ingress:
+    enabled: false
 
-ingress:
-  enabled: false
-
-# External Secret for object store credentials
-additionalExternalSecrets:
-  - name: thanos-objstore-secret
-    refreshInterval: 1h
-    secretStoreRef:
-      name: vault-backend
-      kind: ClusterSecretStore
-    target:
-      name: thanos-objstore-secret
-      template:
-        engineVersion: v2
-        data:
-          objstore.yml: |
-            type: S3
-            config:
-              bucket: thanos
-              endpoint: minio.minio.svc.cluster.local:9000
-              access_key: {{ .access_key }}
-              secret_key: {{ .secret_key }}
-              insecure: true
-    data:
-      - secretKey: access_key
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_ROOT_USER
-      - secretKey: secret_key
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_ROOT_PASSWORD
+  # External Secret for object store credentials
+  additionalExternalSecrets:
+    - name: thanos-objstore-secret
+      refreshInterval: 1h
+      secretStoreRef:
+        name: vault-backend
+        kind: ClusterSecretStore
+      target:
+        name: thanos-objstore-secret
+        template:
+          engineVersion: v2
+          data:
+            objstore.yml: |
+              type: S3
+              config:
+                bucket: thanos
+                endpoint: minio.minio.svc.cluster.local:9000
+                access_key: {{ .access_key }}
+                secret_key: {{ .secret_key }}
+                insecure: true
+      data:
+        - secretKey: access_key
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_ROOT_USER
+        - secretKey: secret_key
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_ROOT_PASSWORD
