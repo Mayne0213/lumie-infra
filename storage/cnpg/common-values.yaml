@@ -1,21 +1,21 @@
 # Common chart values for cnpg
+common:
+  name: cnpg
 
-name: cnpg
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
 
-# Disable deployment (external chart creates it)
-deployment:
-  enabled: false
+  service:
+    enabled: false
 
-service:
-  enabled: false
+  ingress:
+    enabled: false
 
-ingress:
-  enabled: false
-
-# StorageClass for local-path with retain policy
-storageClass:
-  enabled: true
-  name: local-path-retain
-  provisioner: rancher.io/local-path
-  reclaimPolicy: Retain
-  volumeBindingMode: WaitForFirstConsumer
+  # StorageClass for local-path with retain policy
+  storageClass:
+    enabled: true
+    name: local-path-retain
+    provisioner: rancher.io/local-path
+    reclaimPolicy: Retain
+    volumeBindingMode: WaitForFirstConsumer

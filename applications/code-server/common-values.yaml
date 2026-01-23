@@ -1,47 +1,48 @@
 # Common chart values for code-server
 
-name: code-server
+common:
+  name: code-server
 
-# Disable deployment (external chart creates it)
-deployment:
-  enabled: false
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
 
-service:
-  enabled: false
+  service:
+    enabled: false
 
-ingress:
-  enabled: false
+  ingress:
+    enabled: false
 
-# Health check ingress
-additionalIngresses:
-  - name: health
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      traefik.ingress.kubernetes.io/router.priority: "100"
-    className: traefik
-    hosts:
-      - host: vscode0213.kro.kr
-        paths:
-          - path: /healthz
-            pathType: Exact
-    tls:
-      - secretName: code-server-tls
-        hosts:
-          - vscode0213.kro.kr
-    serviceName: code-server
-    servicePort: 8080
+  # Health check ingress
+  additionalIngresses:
+    - name: health
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/router.priority: "100"
+      className: traefik
+      hosts:
+        - host: vscode0213.kro.kr
+          paths:
+            - path: /healthz
+              pathType: Exact
+      tls:
+        - secretName: code-server-tls
+          hosts:
+            - vscode0213.kro.kr
+      serviceName: code-server
+      servicePort: 8080
 
-# RBAC - ClusterRoleBinding for cluster-admin access
-rbac:
-  enabled: true
-  serviceAccount:
-    create: false  # ServiceAccount created by helm chart
-  clusterRoleBindings:
-    - name: code-server-cluster-admin
-      roleRef:
-        kind: ClusterRole
-        name: cluster-admin
-      subjects:
-        - kind: ServiceAccount
-          name: code-server
-          namespace: code-server
+  # RBAC - ClusterRoleBinding for cluster-admin access
+  rbac:
+    enabled: true
+    serviceAccount:
+      create: false  # ServiceAccount created by helm chart
+    clusterRoleBindings:
+      - name: code-server-cluster-admin
+        roleRef:
+          kind: ClusterRole
+          name: cluster-admin
+        subjects:
+          - kind: ServiceAccount
+            name: code-server
+            namespace: code-server

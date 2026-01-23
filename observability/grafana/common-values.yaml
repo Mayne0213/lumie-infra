@@ -1,71 +1,71 @@
 # Common chart values for grafana
-
-name: grafana
-
-# Disable deployment (external chart creates it)
-deployment:
-  enabled: false
-
-service:
-  enabled: false
-
-ingress:
-  enabled: false
-
-# Additional Ingresses
-additionalIngresses:
-  # Health check ingress
-  - name: health
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      traefik.ingress.kubernetes.io/router.priority: "100"
-    className: traefik
-    hosts:
-      - host: grafana0213.kro.kr
-        paths:
-          - path: /api/health
-            pathType: Exact
-    tls:
-      - secretName: grafana-tls
-        hosts:
-          - grafana0213.kro.kr
-    serviceName: grafana
-    servicePort: 80
-
-  # Embed ingress (for public dashboard embedding)
-  - name: embed
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      traefik.ingress.kubernetes.io/router.priority: "100"
-    className: traefik
-    hosts:
-      - host: grafana0213.kro.kr
-        paths:
-          - path: /d-solo
-            pathType: Prefix
-          - path: /public
-            pathType: Prefix
-          - path: /api
-            pathType: Prefix
-    tls:
-      - secretName: grafana-tls
-        hosts:
-          - grafana0213.kro.kr
-    serviceName: grafana
-    servicePort: 80
-
-# CNPG Database configuration
-database:
-  enabled: true
-  instances: 2
-  version: "16.6"
+common:
   name: grafana
-  owner: grafana
-  storage:
-    class: local-path
-    size: 1Gi
-  resources:
-    memory: 512Mi
-    cpu: 50m
-  backup:
+
+  # Disable deployment (external chart creates it)
+  deployment:
     enabled: false
+
+  service:
+    enabled: false
+
+  ingress:
+    enabled: false
+
+  # Additional Ingresses
+  additionalIngresses:
+    # Health check ingress
+    - name: health
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/router.priority: "100"
+      className: traefik
+      hosts:
+        - host: grafana0213.kro.kr
+          paths:
+            - path: /api/health
+              pathType: Exact
+      tls:
+        - secretName: grafana-tls
+          hosts:
+            - grafana0213.kro.kr
+      serviceName: grafana
+      servicePort: 80
+
+    # Embed ingress (for public dashboard embedding)
+    - name: embed
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/router.priority: "100"
+      className: traefik
+      hosts:
+        - host: grafana0213.kro.kr
+          paths:
+            - path: /d-solo
+              pathType: Prefix
+            - path: /public
+              pathType: Prefix
+            - path: /api
+              pathType: Prefix
+      tls:
+        - secretName: grafana-tls
+          hosts:
+            - grafana0213.kro.kr
+      serviceName: grafana
+      servicePort: 80
+
+  # CNPG Database configuration
+  database:
+    enabled: true
+    instances: 2
+    version: "16.6"
+    name: grafana
+    owner: grafana
+    storage:
+      class: local-path
+      size: 1Gi
+    resources:
+      memory: 512Mi
+      cpu: 50m
+    backup:
+      enabled: false
