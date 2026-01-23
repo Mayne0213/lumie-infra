@@ -70,13 +70,19 @@ spec:
       port: 8888
       protocol: TCP
 
+  # Tolerations for master node scheduling
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+
   # Resource limits
   resources:
     requests:
       cpu: 49m
-      memory: 138Mi
+      memory: 256Mi
     limits:
-      memory: 138Mi
+      memory: 256Mi
 
   # Collector configuration
   config:
