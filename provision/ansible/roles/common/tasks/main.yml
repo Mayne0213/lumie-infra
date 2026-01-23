@@ -59,13 +59,6 @@
     reload: yes
   loop: "{{ sysctl_settings | dict2items }}"
 
-- name: Enable and start iscsid service (for Longhorn)
-  ansible.builtin.systemd:
-    name: iscsid
-    state: started
-    enabled: yes
-  when: "'open-iscsi' in common_packages"
-
 - name: Ensure /usr/local/bin exists
   ansible.builtin.file:
     path: /usr/local/bin

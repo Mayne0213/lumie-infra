@@ -24,7 +24,6 @@ common_packages:
   - htop
   - iptables
   - netfilter-persistent
-  - open-iscsi  # For Longhorn storage
 
 # Kernel modules required for K3s
 kernel_modules:

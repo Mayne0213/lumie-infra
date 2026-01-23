@@ -28,7 +28,6 @@
   tags:
     - storage
     - minio
-    - longhorn
 
 - name: Install K3s Workers (Account 0214)
   hosts: workers_0214
