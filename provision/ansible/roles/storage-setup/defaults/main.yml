@@ -2,12 +2,5 @@
 storage_block_device: /dev/sdb
 storage_filesystem: ext4
 
-# MinIO partition
-minio_partition: /dev/sdb1
-minio_partition_size: 50GiB
+# MinIO mount configuration (uses entire block device, no partitioning)
 minio_mount_path: /mnt/minio-data
-minio_backup_path: /tmp/minio-backup
-
-# Longhorn partition
-longhorn_partition: /dev/sdb2
-longhorn_mount_path: /mnt/longhorn-data

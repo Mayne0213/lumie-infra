@@ -86,7 +86,7 @@ locals {
 }
 
 # ============================================
-# 블록 볼륨 - 0214 Worker 노드용
+# 블록 볼륨 (50GB MinIO) - 0214 Worker 노드용
 # ============================================
 resource "oci_core_volume" "volumes_0214" {
   provider    = oci.account_0214
@@ -94,12 +94,12 @@ resource "oci_core_volume" "volumes_0214" {
 
   compartment_id      = var.compartment_0214_ocid
   availability_domain = data.oci_identity_availability_domains.ads_0214.availability_domains[0].name
-  display_name        = "k3s-${each.key}-data"
-  size_in_gbs         = 80
+  display_name        = "k3s-${each.key}-minio"
+  size_in_gbs         = 50
   vpus_per_gb         = 10
 
   freeform_tags = {
-    "role" = "storage"
+    "role" = "minio"
     "node" = "k3s-${each.key}"
   }
 }
@@ -114,7 +114,7 @@ resource "oci_core_volume_attachment" "attachments_0214" {
   attachment_type = "paravirtualized"
   instance_id     = oci_core_instance.nodes_0214[each.key].id
   volume_id       = oci_core_volume.volumes_0214[each.key].id
-  display_name    = "k3s-${each.key}-data-attachment"
+  display_name    = "k3s-${each.key}-minio-attachment"
   is_read_only    = false
   is_shareable    = false
 }

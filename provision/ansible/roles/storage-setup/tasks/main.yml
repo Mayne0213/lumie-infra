@@ -1,5 +1,5 @@
 ---
-# Storage setup: Partition block volume for MinIO and Longhorn
+# Storage setup: Configure block volume for MinIO (whole disk, no partitioning)
 
 - name: Check if block device exists
   ansible.builtin.stat:
@@ -11,159 +11,73 @@
     msg: "Block device {{ storage_block_device }} not found."
   when: not block_device.stat.exists
 
-- name: Check if already partitioned
-  ansible.builtin.command: lsblk -no PTTYPE {{ storage_block_device }}
-  register: partition_table
+- name: Set MinIO label
+  ansible.builtin.set_fact:
+    minio_label: "minio-{{ inventory_hostname | replace('k3s-', '') }}"
+
+- name: Check current mount
+  ansible.builtin.command: findmnt -n -o SOURCE {{ minio_mount_path }}
+  register: current_mount
   changed_when: false
   failed_when: false
 
-- name: Check if MinIO data exists
-  ansible.builtin.stat:
-    path: "{{ minio_mount_path }}"
-  register: minio_data
+- name: Check disk label
+  ansible.builtin.command: blkid -o value -s LABEL {{ storage_block_device }}
+  register: disk_label
+  changed_when: false
+  failed_when: false
 
-# === Backup existing MinIO data if not partitioned ===
-- name: Backup MinIO data (if migrating from raw disk)
-  when: partition_table.stdout != "gpt" and minio_data.stat.exists
+- name: Check disk filesystem
+  ansible.builtin.command: blkid -o value -s TYPE {{ storage_block_device }}
+  register: disk_fs
+  changed_when: false
+  failed_when: false
+
+# Skip if already correctly mounted
+- name: Storage already configured
+  ansible.builtin.debug:
+    msg: "Storage already mounted at {{ minio_mount_path }} with label {{ minio_label }}"
+  when:
+    - current_mount.rc == 0
+    - disk_label.stdout == minio_label
+
+# Format and mount if not already configured
+- name: Configure storage
+  when: current_mount.rc != 0 or disk_label.stdout != minio_label
   block:
-    - name: Create backup directory
-      ansible.builtin.file:
-        path: "{{ minio_backup_path }}"
-        state: directory
-        mode: '0755'
-
-    - name: Sync MinIO data to backup
-      ansible.builtin.command: rsync -av {{ minio_mount_path }}/ {{ minio_backup_path }}/
-      changed_when: true
-
-    - name: Unmount old MinIO volume
+    - name: Unmount if mounted elsewhere
       ansible.posix.mount:
         path: "{{ minio_mount_path }}"
         state: unmounted
+      when: current_mount.rc == 0
 
-# === Partition the disk ===
-- name: Create GPT partition table and partitions
-  when: partition_table.stdout != "gpt"
-  block:
-    - name: Create GPT partition table
-      ansible.builtin.command: parted -s {{ storage_block_device }} mklabel gpt
+    - name: Format disk
+      community.general.filesystem:
+        fstype: "{{ storage_filesystem }}"
+        dev: "{{ storage_block_device }}"
+      when: disk_fs.stdout != storage_filesystem
+
+    - name: Set disk label
+      ansible.builtin.command: e2label {{ storage_block_device }} {{ minio_label }}
       changed_when: true
+      when: disk_label.stdout != minio_label
 
-    - name: Create MinIO partition (50GB)
-      ansible.builtin.command: parted -s {{ storage_block_device }} mkpart primary ext4 1MiB {{ minio_partition_size }}
-      changed_when: true
-
-    - name: Create Longhorn partition (remaining space)
-      ansible.builtin.command: parted -s {{ storage_block_device }} mkpart primary ext4 {{ minio_partition_size }} 100%
-      changed_when: true
-
-    - name: Wait for partition devices
-      ansible.builtin.wait_for:
-        path: "{{ longhorn_partition }}"
-        state: present
-        timeout: 30
-
-    - name: Update kernel partition table
-      ansible.builtin.command: partprobe {{ storage_block_device }}
-      changed_when: true
-
-    - name: Wait for kernel to settle
-      ansible.builtin.pause:
-        seconds: 2
-
-# === Format partitions ===
-- name: Check MinIO partition filesystem
-  ansible.builtin.command: blkid -o value -s TYPE {{ minio_partition }}
-  register: minio_fs_type
-  changed_when: false
-  failed_when: false
-
-- name: Format MinIO partition
-  community.general.filesystem:
-    fstype: "{{ storage_filesystem }}"
-    dev: "{{ minio_partition }}"
-  when: minio_fs_type.stdout == ""
-
-- name: Check Longhorn partition filesystem
-  ansible.builtin.command: blkid -o value -s TYPE {{ longhorn_partition }}
-  register: longhorn_fs_type
-  changed_when: false
-  failed_when: false
-
-- name: Format Longhorn partition
-  community.general.filesystem:
-    fstype: "{{ storage_filesystem }}"
-    dev: "{{ longhorn_partition }}"
-  when: longhorn_fs_type.stdout == ""
-
-# === Set labels ===
-- name: Set MinIO partition label
-  ansible.builtin.set_fact:
-    minio_label: "minio-{{ inventory_hostname | replace('k3s-', '') }}"
-    longhorn_label: "longhorn-{{ inventory_hostname | replace('k3s-', '') }}"
-
-- name: Apply MinIO label
-  ansible.builtin.command: e2label {{ minio_partition }} {{ minio_label }}
-  changed_when: true
-  failed_when: false
-
-- name: Apply Longhorn label
-  ansible.builtin.command: e2label {{ longhorn_partition }} {{ longhorn_label }}
-  changed_when: true
-  failed_when: false
-
-# === Mount partitions ===
-- name: Create MinIO mount point
-  ansible.builtin.file:
-    path: "{{ minio_mount_path }}"
-    state: directory
-    mode: '0755'
-
-- name: Create Longhorn mount point
-  ansible.builtin.file:
-    path: "{{ longhorn_mount_path }}"
-    state: directory
-    mode: '0755'
-
-- name: Mount MinIO partition
-  ansible.posix.mount:
-    path: "{{ minio_mount_path }}"
-    src: "LABEL={{ minio_label }}"
-    fstype: "{{ storage_filesystem }}"
-    opts: defaults,nofail
-    state: mounted
-
-- name: Mount Longhorn partition
-  ansible.posix.mount:
-    path: "{{ longhorn_mount_path }}"
-    src: "LABEL={{ longhorn_label }}"
-    fstype: "{{ storage_filesystem }}"
-    opts: defaults,nofail
-    state: mounted
-
-# === Restore MinIO data ===
-- name: Restore MinIO data from backup
-  when: minio_backup_path is defined
-  block:
-    - name: Check if backup exists
-      ansible.builtin.stat:
-        path: "{{ minio_backup_path }}"
-      register: backup_exists
-
-    - name: Restore data from backup
-      ansible.builtin.command: rsync -av {{ minio_backup_path }}/ {{ minio_mount_path }}/
-      when: backup_exists.stat.exists
-      changed_when: true
-
-    - name: Remove backup after successful restore
+    - name: Create mount point
       ansible.builtin.file:
-        path: "{{ minio_backup_path }}"
-        state: absent
-      when: backup_exists.stat.exists
+        path: "{{ minio_mount_path }}"
+        state: directory
+        mode: '0755'
 
-# === Verify ===
-- name: Verify mounts
-  ansible.builtin.command: df -h {{ minio_mount_path }} {{ longhorn_mount_path }}
+    - name: Mount disk
+      ansible.posix.mount:
+        path: "{{ minio_mount_path }}"
+        src: "LABEL={{ minio_label }}"
+        fstype: "{{ storage_filesystem }}"
+        opts: defaults,nofail
+        state: mounted
+
+- name: Verify mount
+  ansible.builtin.command: df -h {{ minio_mount_path }}
   register: mount_verify
   changed_when: false
 
