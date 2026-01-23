@@ -78,9 +78,9 @@ singleBinary:
   resources:
     requests:
       cpu: 35m
-      memory: 283Mi
+      memory: 512Mi
     limits:
-      memory: 283Mi
+      memory: 512Mi
 
 # Disable components not needed in single binary mode
 backend:
