@@ -4,7 +4,7 @@ name: portfolio
 image:
   registry: zot0213.kro.kr
   repository: web-apps/portfolio
-  tag: b0bdffc9 # Updated by ArgoCD Image Updater
+  tag: f15b4f0d
   pullPolicy: Always
 replicaCount: 1
 containerPort: 3000
