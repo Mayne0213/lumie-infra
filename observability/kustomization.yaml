@@ -5,6 +5,7 @@ resources:
   # Self-reference for App of Apps pattern
   - application.yaml
 
+  - opentelemetry-operator/argocd.yaml
   - prometheus/argocd.yaml
   - thanos/argocd.yaml
   - alertmanager/argocd.yaml

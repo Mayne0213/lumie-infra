@@ -117,6 +117,10 @@ prometheus:
     evaluationInterval: 60s   # 30s → 60s
     retention: 3d             # Local retention only (no S3 upload)
 
+    # TSDB configuration for out-of-order samples from OTel Collector
+    tsdb:
+      outOfOrderTimeWindow: 5m
+
     # Thanos Sidecar configuration (query only, no S3 upload)
     thanos:
       image: zot0213.kro.kr/observability/thanos:v0.37.2
@@ -132,11 +136,17 @@ prometheus:
       limits:
         memory: 1Gi
     
-    # ServiceMonitor selector - scrape all ServiceMonitors
+    # ServiceMonitor selector - disable scraping (OTel Collector handles all scraping)
+    # Set selector to match nothing - OTel Target Allocator reads ServiceMonitors
+    # and distributes targets to collectors which send metrics via remote write
     serviceMonitorSelectorNilUsesHelmValues: false
-    serviceMonitorSelector: {}
+    serviceMonitorSelector:
+      matchLabels:
+        scrape-by: prometheus-only
     podMonitorSelectorNilUsesHelmValues: false
-    podMonitorSelector: {}
+    podMonitorSelector:
+      matchLabels:
+        scrape-by: prometheus-only
     probeSelectorNilUsesHelmValues: false
     ruleSelector: {}
     

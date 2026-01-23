@@ -1,0 +1,64 @@
+# OpenTelemetry Operator Helm Values
+# Chart: https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-operator
+#
+# The Operator manages OpenTelemetryCollector CRs and provides:
+# - Target Allocator for ServiceMonitor-based scrape target discovery
+# - Auto-instrumentation for applications (optional)
+
+# =============================================================================
+# Name Override
+# =============================================================================
+fullnameOverride: otel-operator
+
+# =============================================================================
+# Manager (Operator) Configuration
+# =============================================================================
+manager:
+  # Operator image from Zot registry
+  image:
+    repository: zot0213.kro.kr/observability/opentelemetry-operator
+    tag: "0.141.0"
+
+  # Default collector image for OpenTelemetryCollector CRs (when not specified)
+  collectorImage:
+    repository: zot0213.kro.kr/observability/opentelemetry-collector-contrib
+    tag: "0.144.0"
+
+  # Target Allocator image for prometheus receiver target distribution
+  targetAllocatorImage:
+    repository: zot0213.kro.kr/observability/opentelemetry-target-allocator
+    tag: "0.141.0"
+
+  # Resource limits (VPA recommended, no CPU limit)
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      memory: 128Mi
+
+  # ServiceMonitor for operator metrics
+  serviceMonitor:
+    enabled: true
+    extraLabels:
+      release: prometheus
+
+  # Environment configuration
+  env:
+    ENABLE_WEBHOOKS: "true"
+
+# =============================================================================
+# Admission Webhooks
+# =============================================================================
+# Disable cert-manager - operator will generate its own self-signed certs
+# (Let's Encrypt cannot issue certs for internal k8s service DNS names)
+admissionWebhooks:
+  certManager:
+    enabled: false
+
+# =============================================================================
+# RBAC
+# =============================================================================
+# The operator needs permissions to manage collectors and read ServiceMonitors
+kubeRBACProxy:
+  enabled: false

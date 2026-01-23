@@ -149,8 +149,18 @@ images:
 
   - name: opentelemetry-collector-contrib
     source: docker.io/otel/opentelemetry-collector-contrib
-    tag: "0.119.0"
+    tag: "0.144.0"
     dest: observability/opentelemetry-collector-contrib
+
+  - name: opentelemetry-operator
+    source: ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator
+    tag: "0.141.0"
+    dest: observability/opentelemetry-operator
+
+  - name: opentelemetry-target-allocator
+    source: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator
+    tag: "0.141.0"
+    dest: observability/opentelemetry-target-allocator
 
   - name: karma
     source: ghcr.io/prymitive/karma
