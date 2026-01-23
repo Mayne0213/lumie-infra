@@ -1,4 +1,4 @@
-{{- if .Values.service.enabled }}
+{{- if .Values.common.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,11 +6,11 @@ metadata:
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.common.service.type }}
   ports:
     - name: http
-      port: {{ .Values.service.port }}
-      targetPort: {{ .Values.containerPort }}
+      port: {{ .Values.common.service.port }}
+      targetPort: {{ .Values.common.containerPort }}
       protocol: TCP
   selector:
     {{- include "web-app.selectorLabels" . | nindent 4 }}

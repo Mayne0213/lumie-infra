@@ -1,81 +1,81 @@
-{{- if .Values.cronJob.enabled }}
-{{- if .Values.cronJob.serviceAccount.create }}
+{{- if .Values.common.cronJob.enabled }}
+{{- if .Values.common.cronJob.serviceAccount.create }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ .Values.cronJob.serviceAccount.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
+  name: {{ .Values.common.cronJob.serviceAccount.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 {{- end }}
-{{- if .Values.cronJob.rbac.create }}
+{{- if .Values.common.cronJob.rbac.create }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ .Values.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
+  name: {{ .Values.common.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 rules:
-  {{- toYaml .Values.cronJob.rbac.rules | nindent 2 }}
+  {{- toYaml .Values.common.cronJob.rbac.rules | nindent 2 }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ .Values.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
+  name: {{ .Values.common.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ .Values.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
+  name: {{ .Values.common.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.cronJob.serviceAccount.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
+  name: {{ .Values.common.cronJob.serviceAccount.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
   namespace: {{ .Release.Namespace }}
 {{- end }}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ .Values.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
+  name: {{ .Values.common.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 spec:
-  schedule: {{ .Values.cronJob.schedule | quote }}
-  {{- if .Values.cronJob.concurrencyPolicy }}
-  concurrencyPolicy: {{ .Values.cronJob.concurrencyPolicy }}
+  schedule: {{ .Values.common.cronJob.schedule | quote }}
+  {{- if .Values.common.cronJob.concurrencyPolicy }}
+  concurrencyPolicy: {{ .Values.common.cronJob.concurrencyPolicy }}
   {{- end }}
-  {{- if .Values.cronJob.successfulJobsHistoryLimit }}
-  successfulJobsHistoryLimit: {{ .Values.cronJob.successfulJobsHistoryLimit }}
+  {{- if .Values.common.cronJob.successfulJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.common.cronJob.successfulJobsHistoryLimit }}
   {{- end }}
-  {{- if .Values.cronJob.failedJobsHistoryLimit }}
-  failedJobsHistoryLimit: {{ .Values.cronJob.failedJobsHistoryLimit }}
+  {{- if .Values.common.cronJob.failedJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.common.cronJob.failedJobsHistoryLimit }}
   {{- end }}
   jobTemplate:
     spec:
       template:
         spec:
-          {{- if or .Values.cronJob.serviceAccount.create .Values.cronJob.serviceAccount.name }}
-          serviceAccountName: {{ .Values.cronJob.serviceAccount.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
+          {{- if or .Values.common.cronJob.serviceAccount.create .Values.common.cronJob.serviceAccount.name }}
+          serviceAccountName: {{ .Values.common.cronJob.serviceAccount.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
           {{- end }}
           containers:
-          - name: {{ .Values.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
-            image: {{ printf "%s/%s:%s" .Values.cronJob.image.registry .Values.cronJob.image.repository .Values.cronJob.image.tag }}
-            {{- with .Values.cronJob.command }}
+          - name: {{ .Values.common.cronJob.name | default (printf "%s-cronjob" (include "web-app.fullname" .)) }}
+            image: {{ printf "%s/%s:%s" .Values.common.cronJob.image.registry .Values.common.cronJob.image.repository .Values.common.cronJob.image.tag }}
+            {{- with .Values.common.cronJob.command }}
             command:
               {{- toYaml . | nindent 14 }}
             {{- end }}
-            {{- with .Values.cronJob.args }}
+            {{- with .Values.common.cronJob.args }}
             args:
               {{- toYaml . | nindent 14 }}
             {{- end }}
-            {{- with .Values.cronJob.env }}
+            {{- with .Values.common.cronJob.env }}
             env:
               {{- toYaml . | nindent 14 }}
             {{- end }}
-            {{- with .Values.cronJob.resources }}
+            {{- with .Values.common.cronJob.resources }}
             resources:
               {{- toYaml . | nindent 14 }}
             {{- end }}
-          restartPolicy: {{ .Values.cronJob.restartPolicy | default "OnFailure" }}
+          restartPolicy: {{ .Values.common.cronJob.restartPolicy | default "OnFailure" }}
 {{- end }}

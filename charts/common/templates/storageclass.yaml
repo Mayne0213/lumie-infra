@@ -1,14 +1,14 @@
-{{- if .Values.storageClass.enabled }}
+{{- if .Values.common.storageClass.enabled }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ .Values.storageClass.name }}
+  name: {{ .Values.common.storageClass.name }}
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
-provisioner: {{ .Values.storageClass.provisioner }}
-reclaimPolicy: {{ .Values.storageClass.reclaimPolicy | default "Retain" }}
-volumeBindingMode: {{ .Values.storageClass.volumeBindingMode | default "WaitForFirstConsumer" }}
-{{- with .Values.storageClass.parameters }}
+provisioner: {{ .Values.common.storageClass.provisioner }}
+reclaimPolicy: {{ .Values.common.storageClass.reclaimPolicy | default "Retain" }}
+volumeBindingMode: {{ .Values.common.storageClass.volumeBindingMode | default "WaitForFirstConsumer" }}
+{{- with .Values.common.storageClass.parameters }}
 parameters:
   {{- toYaml . | nindent 2 }}
 {{- end }}

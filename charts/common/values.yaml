@@ -1,274 +1,276 @@
 # Common Helm Chart Default Values
+# All values are nested under 'common:' to avoid conflicts with external charts
 
-# Application name (used for labels, selectors, service names)
-name: ""
+common:
+  # Application name (used for labels, selectors, service names)
+  name: ""
 
-# Deployment configuration
-deployment:
-  enabled: true  # Set to false when using external charts that create their own Deployment
+  # Deployment configuration
+  deployment:
+    enabled: true  # Set to false when using external charts that create their own Deployment
 
-# Image configuration
-image:
-  registry: zot0213.kro.kr
-  repository: web-apps/app
-  tag: latest
-  pullPolicy: Always
-
-# Replicas
-replicaCount: 1
-
-# Container port
-containerPort: 3000
-
-# Service configuration
-service:
-  enabled: true
-  type: ClusterIP
-  port: 80
-
-# Ingress configuration
-ingress:
-  enabled: true
-  className: traefik
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-  hosts:
-    - host: app.example.com
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: app-tls
-      hosts:
-        - app.example.com
-
-# Resources
-resources:
-  requests:
-    memory: 80Mi
-    cpu: 20m
-  limits:
-    memory: 80Mi
-
-# Health checks
-healthCheck:
-  enabled: true
-  path: /
-  livenessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 10
-  readinessProbe:
-    initialDelaySeconds: 5
-    periodSeconds: 5
-
-# Environment variables (plain)
-env: []
-# - name: NODE_ENV
-#   value: production
-
-# Environment variables from secrets
-envFrom: []
-# - secretRef:
-#     name: app-secrets
-
-# External Secrets configuration
-externalSecret:
-  enabled: false
-  refreshInterval: 1h
-  secretStoreRef:
-    name: vault-backend
-    kind: ClusterSecretStore
-  target:
-    name: ""  # If empty, defaults to <fullname>-secrets
-    creationPolicy: Owner
-    deletionPolicy: Retain
-  data: []
-  # - secretKey: DATABASE_URL
-  #   remoteRef:
-  #     key: myapp
-  #     property: DATABASE_URL
-
-# Deployment strategy
-strategy:
-  type: RollingUpdate
-  rollingUpdate:
-    maxUnavailable: 0
-    maxSurge: 1
-
-# Revision history
-revisionHistoryLimit: 3
-
-# Pod annotations
-podAnnotations: {}
-
-# Node selector
-nodeSelector: {}
-
-# Tolerations
-tolerations: []
-
-# Affinity - Soft Anti-Affinity to spread pods across nodes
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          topologyKey: kubernetes.io/hostname
-
-# ResourceQuota - Disabled by default (set to false to remove existing quotas)
-resourceQuota:
-  enabled: false
-
-# RBAC configuration
-rbac:
-  enabled: false
-  serviceAccount:
-    create: false
-    name: ""  # If empty, defaults to app name
-  clusterRoleBinding:
-    roleRef:
-      name: ""  # e.g., cluster-admin
-  # Additional ClusterRoles with custom rules
-  clusterRoles: []
-  # - name: my-cluster-role
-  #   rules:
-  #     - apiGroups: [""]
-  #       resources: ["pods"]
-  #       verbs: ["get", "list"]
-  # Additional ClusterRoleBindings
-  clusterRoleBindings: []
-  # - name: my-binding
-  #   roleRef:
-  #     kind: ClusterRole
-  #     name: my-cluster-role
-  #   subjects:
-  #     - kind: ServiceAccount
-  #       name: my-sa
-  #       namespace: my-ns
-  # Namespaced Roles
-  roles: []
-  # - name: my-role
-  #   rules:
-  #     - apiGroups: [""]
-  #       resources: ["pods"]
-  #       verbs: ["get", "list"]
-  # Namespaced RoleBindings
-  roleBindings: []
-  # - name: my-rolebinding
-  #   roleRef:
-  #     kind: Role
-  #     name: my-role
-  #   subjects:
-  #     - kind: ServiceAccount
-  #       name: my-sa
-
-# ConfigMap configuration
-configMap:
-  enabled: false
-  name: ""  # If empty, defaults to <fullname>-config
-  data: {}
-  # key: value
-
-# Additional Ingresses (for health checks, embed routes, etc.)
-additionalIngresses: []
-# - name: health
-#   annotations:
-#     cert-manager.io/cluster-issuer: letsencrypt-prod
-#   className: traefik
-#   hosts:
-#     - host: app-health.example.com
-#       paths:
-#         - path: /
-#           pathType: Prefix
-#   tls:
-#     - secretName: app-health-tls
-#       hosts:
-#         - app-health.example.com
-#   serviceName: ""  # If empty, uses app name
-#   servicePort: 80
-
-# Additional ExternalSecrets (for multiple secrets)
-additionalExternalSecrets: []
-# - name: app-smtp-secret
-#   refreshInterval: 1h
-#   data:
-#     - secretKey: SMTP_PASSWORD
-#       remoteRef:
-#         key: myapp
-#         property: SMTP_PASSWORD
-
-# Traefik Middleware configuration
-middleware:
-  enabled: false
-  name: ""  # If empty, defaults to <fullname>-middleware
-  stripPrefix:
-    prefixes: []
-  forwardAuth:
-    address: ""
-    trustForwardHeader: false
-    authResponseHeaders: []
-
-# ServiceMonitor for Prometheus
-serviceMonitor:
-  enabled: false
-  endpoints: []
-  # - port: http
-  #   interval: 30s
-  #   path: /metrics
-
-# PrometheusRules for alerting
-prometheusRules:
-  enabled: false
-  groups: []
-  # - name: app-alerts
-  #   rules:
-  #     - alert: AppDown
-  #       expr: up{job="app"} == 0
-  #       for: 5m
-
-# CronJob configuration
-cronJob:
-  enabled: false
-  name: ""  # If empty, defaults to <fullname>-cronjob
-  schedule: "0 0 * * *"
+  # Image configuration
   image:
     registry: zot0213.kro.kr
-    repository: platform/alpine
+    repository: web-apps/app
     tag: latest
-  command: []
-  args: []
-  serviceAccount:
-    create: false
-    name: ""
-  rbac:
-    create: false
-    rules: []
+    pullPolicy: Always
 
-# StorageClass configuration
-storageClass:
-  enabled: false
-  name: ""
-  provisioner: ""
-  reclaimPolicy: Retain
-  volumeBindingMode: WaitForFirstConsumer
-  parameters: {}
+  # Replicas
+  replicaCount: 1
 
-# CNPG Database configuration
-database:
-  enabled: false
-  instances: 2
-  version: "16.6"
-  name: ""        # Database name (defaults to app name + "DB")
-  owner: ""       # Database owner (defaults to app name)
-  storage:
-    class: local-path
-    size: 1Gi
+  # Container port
+  containerPort: 3000
+
+  # Service configuration
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 80
+
+  # Ingress configuration
+  ingress:
+    enabled: true
+    className: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: app.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: app-tls
+        hosts:
+          - app.example.com
+
+  # Resources
   resources:
-    memory: 512Mi
-    cpu: 50m
-  postgresql:
-    parameters: {}  # Custom PostgreSQL parameters
-  backup:
+    requests:
+      memory: 80Mi
+      cpu: 20m
+    limits:
+      memory: 80Mi
+
+  # Health checks
+  healthCheck:
+    enabled: true
+    path: /
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+    readinessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 5
+
+  # Environment variables (plain)
+  env: []
+  # - name: NODE_ENV
+  #   value: production
+
+  # Environment variables from secrets
+  envFrom: []
+  # - secretRef:
+  #     name: app-secrets
+
+  # External Secrets configuration
+  externalSecret:
     enabled: false
-    schedule: "0 19 * * *"
-    retention: "7d"
+    refreshInterval: 1h
+    secretStoreRef:
+      name: vault-backend
+      kind: ClusterSecretStore
+    target:
+      name: ""  # If empty, defaults to <fullname>-secrets
+      creationPolicy: Owner
+      deletionPolicy: Retain
+    data: []
+    # - secretKey: DATABASE_URL
+    #   remoteRef:
+    #     key: myapp
+    #     property: DATABASE_URL
+
+  # Deployment strategy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  # Revision history
+  revisionHistoryLimit: 3
+
+  # Pod annotations
+  podAnnotations: {}
+
+  # Node selector
+  nodeSelector: {}
+
+  # Tolerations
+  tolerations: []
+
+  # Affinity - Soft Anti-Affinity to spread pods across nodes
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname
+
+  # ResourceQuota - Disabled by default (set to false to remove existing quotas)
+  resourceQuota:
+    enabled: false
+
+  # RBAC configuration
+  rbac:
+    enabled: false
+    serviceAccount:
+      create: false
+      name: ""  # If empty, defaults to app name
+    clusterRoleBinding:
+      roleRef:
+        name: ""  # e.g., cluster-admin
+    # Additional ClusterRoles with custom rules
+    clusterRoles: []
+    # - name: my-cluster-role
+    #   rules:
+    #     - apiGroups: [""]
+    #       resources: ["pods"]
+    #       verbs: ["get", "list"]
+    # Additional ClusterRoleBindings
+    clusterRoleBindings: []
+    # - name: my-binding
+    #   roleRef:
+    #     kind: ClusterRole
+    #     name: my-cluster-role
+    #   subjects:
+    #     - kind: ServiceAccount
+    #       name: my-sa
+    #       namespace: my-ns
+    # Namespaced Roles
+    roles: []
+    # - name: my-role
+    #   rules:
+    #     - apiGroups: [""]
+    #       resources: ["pods"]
+    #       verbs: ["get", "list"]
+    # Namespaced RoleBindings
+    roleBindings: []
+    # - name: my-rolebinding
+    #   roleRef:
+    #     kind: Role
+    #     name: my-role
+    #   subjects:
+    #     - kind: ServiceAccount
+    #       name: my-sa
+
+  # ConfigMap configuration
+  configMap:
+    enabled: false
+    name: ""  # If empty, defaults to <fullname>-config
+    data: {}
+    # key: value
+
+  # Additional Ingresses (for health checks, embed routes, etc.)
+  additionalIngresses: []
+  # - name: health
+  #   annotations:
+  #     cert-manager.io/cluster-issuer: letsencrypt-prod
+  #   className: traefik
+  #   hosts:
+  #     - host: app-health.example.com
+  #       paths:
+  #         - path: /
+  #           pathType: Prefix
+  #   tls:
+  #     - secretName: app-health-tls
+  #       hosts:
+  #         - app-health.example.com
+  #   serviceName: ""  # If empty, uses app name
+  #   servicePort: 80
+
+  # Additional ExternalSecrets (for multiple secrets)
+  additionalExternalSecrets: []
+  # - name: app-smtp-secret
+  #   refreshInterval: 1h
+  #   data:
+  #     - secretKey: SMTP_PASSWORD
+  #       remoteRef:
+  #         key: myapp
+  #         property: SMTP_PASSWORD
+
+  # Traefik Middleware configuration
+  middleware:
+    enabled: false
+    name: ""  # If empty, defaults to <fullname>-middleware
+    stripPrefix:
+      prefixes: []
+    forwardAuth:
+      address: ""
+      trustForwardHeader: false
+      authResponseHeaders: []
+
+  # ServiceMonitor for Prometheus
+  serviceMonitor:
+    enabled: false
+    endpoints: []
+    # - port: http
+    #   interval: 30s
+    #   path: /metrics
+
+  # PrometheusRules for alerting
+  prometheusRules:
+    enabled: false
+    groups: []
+    # - name: app-alerts
+    #   rules:
+    #     - alert: AppDown
+    #       expr: up{job="app"} == 0
+    #       for: 5m
+
+  # CronJob configuration
+  cronJob:
+    enabled: false
+    name: ""  # If empty, defaults to <fullname>-cronjob
+    schedule: "0 0 * * *"
+    image:
+      registry: zot0213.kro.kr
+      repository: platform/alpine
+      tag: latest
+    command: []
+    args: []
+    serviceAccount:
+      create: false
+      name: ""
+    rbac:
+      create: false
+      rules: []
+
+  # StorageClass configuration
+  storageClass:
+    enabled: false
+    name: ""
+    provisioner: ""
+    reclaimPolicy: Retain
+    volumeBindingMode: WaitForFirstConsumer
+    parameters: {}
+
+  # CNPG Database configuration
+  database:
+    enabled: false
+    instances: 2
+    version: "16.6"
+    name: ""        # Database name (defaults to app name + "DB")
+    owner: ""       # Database owner (defaults to app name)
+    storage:
+      class: local-path
+      size: 1Gi
+    resources:
+      memory: 512Mi
+      cpu: 50m
+    postgresql:
+      parameters: {}  # Custom PostgreSQL parameters
+    backup:
+      enabled: false
+      schedule: "0 19 * * *"
+      retention: "7d"

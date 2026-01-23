@@ -1,29 +1,29 @@
-{{- if .Values.middleware }}
-{{- if .Values.middleware.enabled }}
+{{- if .Values.common.middleware }}
+{{- if .Values.common.middleware.enabled }}
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ .Values.middleware.name | default (printf "%s-middleware" (include "web-app.fullname" .)) }}
+  name: {{ .Values.common.middleware.name | default (printf "%s-middleware" (include "web-app.fullname" .)) }}
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 spec:
   {{- /* Traefik middleware can only have ONE type - check forwardAuth first, then stripPrefix */}}
-  {{- if and .Values.middleware.forwardAuth .Values.middleware.forwardAuth.address }}
+  {{- if and .Values.common.middleware.forwardAuth .Values.common.middleware.forwardAuth.address }}
   forwardAuth:
-    address: {{ .Values.middleware.forwardAuth.address }}
-    {{- if .Values.middleware.forwardAuth.trustForwardHeader }}
-    trustForwardHeader: {{ .Values.middleware.forwardAuth.trustForwardHeader }}
+    address: {{ .Values.common.middleware.forwardAuth.address }}
+    {{- if .Values.common.middleware.forwardAuth.trustForwardHeader }}
+    trustForwardHeader: {{ .Values.common.middleware.forwardAuth.trustForwardHeader }}
     {{- end }}
-    {{- if .Values.middleware.forwardAuth.authResponseHeaders }}
+    {{- if .Values.common.middleware.forwardAuth.authResponseHeaders }}
     authResponseHeaders:
-      {{- range .Values.middleware.forwardAuth.authResponseHeaders }}
+      {{- range .Values.common.middleware.forwardAuth.authResponseHeaders }}
       - {{ . }}
       {{- end }}
     {{- end }}
-  {{- else if and .Values.middleware.stripPrefix .Values.middleware.stripPrefix.prefixes }}
+  {{- else if and .Values.common.middleware.stripPrefix .Values.common.middleware.stripPrefix.prefixes }}
   stripPrefix:
     prefixes:
-      {{- range .Values.middleware.stripPrefix.prefixes }}
+      {{- range .Values.common.middleware.stripPrefix.prefixes }}
       - {{ . }}
       {{- end }}
   {{- end }}

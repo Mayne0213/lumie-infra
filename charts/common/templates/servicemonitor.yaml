@@ -1,25 +1,25 @@
-{{- if .Values.serviceMonitor.enabled }}
+{{- if .Values.common.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ .Values.serviceMonitor.name | default (include "web-app.fullname" .) }}
+  name: {{ .Values.common.serviceMonitor.name | default (include "web-app.fullname" .) }}
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
-    {{- with .Values.serviceMonitor.labels }}
+    {{- with .Values.common.serviceMonitor.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  {{- if .Values.serviceMonitor.namespaceSelector }}
+  {{- if .Values.common.serviceMonitor.namespaceSelector }}
   namespaceSelector:
-    {{- toYaml .Values.serviceMonitor.namespaceSelector | nindent 4 }}
+    {{- toYaml .Values.common.serviceMonitor.namespaceSelector | nindent 4 }}
   {{- end }}
   selector:
-    {{- if .Values.serviceMonitor.selector }}
-    {{- toYaml .Values.serviceMonitor.selector | nindent 4 }}
+    {{- if .Values.common.serviceMonitor.selector }}
+    {{- toYaml .Values.common.serviceMonitor.selector | nindent 4 }}
     {{- else }}
     matchLabels:
       {{- include "web-app.selectorLabels" . | nindent 6 }}
     {{- end }}
   endpoints:
-    {{- toYaml .Values.serviceMonitor.endpoints | nindent 4 }}
+    {{- toYaml .Values.common.serviceMonitor.endpoints | nindent 4 }}
 {{- end }}
