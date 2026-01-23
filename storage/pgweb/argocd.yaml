@@ -19,7 +19,10 @@ spec:
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: storage/pgweb
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/storage/pgweb/common-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: pgweb
