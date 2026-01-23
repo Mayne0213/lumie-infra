@@ -2,15 +2,15 @@
 Expand the name of the chart.
 */}}
 {{- define "web-app.name" -}}
-{{- default .Chart.Name .Values.name | trunc 63 | trimSuffix "-" }}
+{{- default .Chart.Name .Values.common.name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
 */}}
 {{- define "web-app.fullname" -}}
-{{- if .Values.name }}
-{{- .Values.name | trunc 63 | trimSuffix "-" }}
+{{- if .Values.common.name }}
+{{- .Values.common.name | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
@@ -36,5 +36,5 @@ app: {{ include "web-app.fullname" . }}
 Image name
 */}}
 {{- define "web-app.image" -}}
-{{- printf "%s/%s:%s" .Values.image.registry .Values.image.repository .Values.image.tag }}
+{{- printf "%s/%s:%s" .Values.common.image.registry .Values.common.image.repository .Values.common.image.tag }}
 {{- end }}

@@ -1,52 +1,52 @@
-{{- if .Values.database.enabled }}
+{{- if .Values.common.database.enabled }}
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: {{ include "web-app.fullname" . }}-db
 spec:
-  instances: {{ .Values.database.instances | default 2 }}
-  imageName: zot0213.kro.kr/storage/postgresql:{{ .Values.database.version | default "16.6" }}
+  instances: {{ .Values.common.database.instances | default 2 }}
+  imageName: zot0213.kro.kr/storage/postgresql:{{ .Values.common.database.version | default "16.6" }}
   bootstrap:
     initdb:
-      database: {{ .Values.database.name | default (printf "%sDB" (include "web-app.fullname" . | title)) }}
-      owner: {{ .Values.database.owner | default (include "web-app.fullname" .) }}
-      {{- if .Values.database.bootstrap }}
-      {{- if .Values.database.bootstrap.secret }}
+      database: {{ .Values.common.database.name | default (printf "%sDB" (include "web-app.fullname" . | title)) }}
+      owner: {{ .Values.common.database.owner | default (include "web-app.fullname" .) }}
+      {{- if .Values.common.database.bootstrap }}
+      {{- if .Values.common.database.bootstrap.secret }}
       secret:
-        name: {{ .Values.database.bootstrap.secret }}
+        name: {{ .Values.common.database.bootstrap.secret }}
       {{- end }}
       {{- end }}
-      {{- if .Values.database.encoding }}
-      encoding: {{ .Values.database.encoding }}
+      {{- if .Values.common.database.encoding }}
+      encoding: {{ .Values.common.database.encoding }}
       {{- end }}
-      {{- if .Values.database.localeCollate }}
-      localeCollate: {{ .Values.database.localeCollate }}
+      {{- if .Values.common.database.localeCollate }}
+      localeCollate: {{ .Values.common.database.localeCollate }}
       {{- end }}
-      {{- if .Values.database.localeCType }}
-      localeCType: {{ .Values.database.localeCType }}
+      {{- if .Values.common.database.localeCType }}
+      localeCType: {{ .Values.common.database.localeCType }}
       {{- end }}
   storage:
-    storageClass: {{ .Values.database.storage.class | default "local-path" }}
-    size: {{ .Values.database.storage.size | default "1Gi" }}
+    storageClass: {{ .Values.common.database.storage.class | default "local-path" }}
+    size: {{ .Values.common.database.storage.size | default "1Gi" }}
   resources:
     requests:
-      memory: {{ .Values.database.resources.memory | default "512Mi" | quote }}
-      cpu: {{ .Values.database.resources.cpu | default "50m" | quote }}
+      memory: {{ .Values.common.database.resources.memory | default "512Mi" | quote }}
+      cpu: {{ .Values.common.database.resources.cpu | default "50m" | quote }}
     limits:
-      memory: {{ .Values.database.resources.memory | default "512Mi" | quote }}
-  {{- if .Values.database.postgresql.parameters }}
+      memory: {{ .Values.common.database.resources.memory | default "512Mi" | quote }}
+  {{- if .Values.common.database.postgresql.parameters }}
   postgresql:
     parameters:
-      {{- toYaml .Values.database.postgresql.parameters | nindent 6 }}
+      {{- toYaml .Values.common.database.postgresql.parameters | nindent 6 }}
   {{- end }}
   monitoring:
     enablePodMonitor: true
-  {{- if .Values.database.enableSuperuserAccess }}
+  {{- if .Values.common.database.enableSuperuserAccess }}
   enableSuperuserAccess: true
   {{- end }}
   affinity:
     podAntiAffinityType: required
-  {{- if .Values.database.backup.enabled }}
+  {{- if .Values.common.database.backup.enabled }}
   backup:
     barmanObjectStore:
       destinationPath: s3://{{ include "web-app.fullname" . }}
@@ -62,6 +62,6 @@ spec:
         compression: gzip
       data:
         compression: gzip
-    retentionPolicy: {{ .Values.database.backup.retention | default "7d" | quote }}
+    retentionPolicy: {{ .Values.common.database.backup.retention | default "7d" | quote }}
   {{- end }}
 {{- end }}

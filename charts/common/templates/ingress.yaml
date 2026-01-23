@@ -1,17 +1,17 @@
-{{- if .Values.ingress.enabled }}
+{{- if .Values.common.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "web-app.fullname" . }}-ingress
-  {{- with .Values.ingress.annotations }}
+  {{- with .Values.common.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
-  {{- if .Values.ingress.tls }}
+  ingressClassName: {{ .Values.common.ingress.className }}
+  {{- if .Values.common.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.common.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -20,7 +20,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.common.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -31,7 +31,7 @@ spec:
               service:
                 name: {{ include "web-app.fullname" $ }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ $.Values.common.service.port }}
           {{- end }}
     {{- end }}
 {{- end }}

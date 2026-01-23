@@ -1,4 +1,4 @@
-{{- if .Values.deployment.enabled }}
+{{- if .Values.common.deployment.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,81 +6,81 @@ metadata:
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.common.replicaCount }}
   selector:
     matchLabels:
       {{- include "web-app.selectorLabels" . | nindent 6 }}
   strategy:
-    type: {{ .Values.strategy.type }}
-    {{- if eq .Values.strategy.type "RollingUpdate" }}
+    type: {{ .Values.common.strategy.type }}
+    {{- if eq .Values.common.strategy.type "RollingUpdate" }}
     rollingUpdate:
-      maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
-      maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.common.strategy.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.common.strategy.rollingUpdate.maxSurge }}
     {{- end }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.common.revisionHistoryLimit }}
   template:
     metadata:
       labels:
         {{- include "web-app.selectorLabels" . | nindent 8 }}
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.common.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- if .Values.rbac.enabled }}
-      {{- if .Values.rbac.serviceAccount.create }}
-      serviceAccountName: {{ .Values.rbac.serviceAccount.name | default (include "web-app.fullname" .) }}
+      {{- if .Values.common.rbac.enabled }}
+      {{- if .Values.common.rbac.serviceAccount.create }}
+      serviceAccountName: {{ .Values.common.rbac.serviceAccount.name | default (include "web-app.fullname" .) }}
       {{- end }}
       {{- end }}
-      {{- with .Values.initContainers }}
+      {{- with .Values.common.initContainers }}
       initContainers:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ include "web-app.fullname" . }}
           image: {{ include "web-app.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.common.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.containerPort }}
+            - containerPort: {{ .Values.common.containerPort }}
               protocol: TCP
-          {{- with .Values.env }}
+          {{- with .Values.common.env }}
           env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.envFrom }}
+          {{- with .Values.common.envFrom }}
           envFrom:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.healthCheck.enabled }}
+            {{- toYaml .Values.common.resources | nindent 12 }}
+          {{- if .Values.common.healthCheck.enabled }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.healthCheck.path }}
-              port: {{ .Values.containerPort }}
-            initialDelaySeconds: {{ .Values.healthCheck.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.healthCheck.livenessProbe.periodSeconds }}
+              path: {{ .Values.common.healthCheck.path }}
+              port: {{ .Values.common.containerPort }}
+            initialDelaySeconds: {{ .Values.common.healthCheck.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.common.healthCheck.livenessProbe.periodSeconds }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.healthCheck.path }}
-              port: {{ .Values.containerPort }}
-            initialDelaySeconds: {{ .Values.healthCheck.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.healthCheck.readinessProbe.periodSeconds }}
-          {{- if .Values.healthCheck.startupProbe }}
+              path: {{ .Values.common.healthCheck.path }}
+              port: {{ .Values.common.containerPort }}
+            initialDelaySeconds: {{ .Values.common.healthCheck.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.common.healthCheck.readinessProbe.periodSeconds }}
+          {{- if .Values.common.healthCheck.startupProbe }}
           startupProbe:
             httpGet:
-              path: {{ .Values.healthCheck.path }}
-              port: {{ .Values.containerPort }}
-            periodSeconds: {{ .Values.healthCheck.startupProbe.periodSeconds | default 10 }}
-            failureThreshold: {{ .Values.healthCheck.startupProbe.failureThreshold | default 30 }}
+              path: {{ .Values.common.healthCheck.path }}
+              port: {{ .Values.common.containerPort }}
+            periodSeconds: {{ .Values.common.healthCheck.startupProbe.periodSeconds | default 10 }}
+            failureThreshold: {{ .Values.common.healthCheck.startupProbe.failureThreshold | default 30 }}
           {{- end }}
           {{- end }}
       restartPolicy: Always
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.common.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.common.affinity }}
       affinity:
         {{- if and .podAntiAffinity .podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution }}
         podAntiAffinity:
@@ -97,7 +97,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.common.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
