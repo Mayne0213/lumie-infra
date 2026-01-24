@@ -56,81 +56,42 @@ common:
             groups:
               - admins
 
-  # External Secrets
-  additionalExternalSecrets:
-    # DB bootstrap secret
-    - name: authelia-db-bootstrap
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+  # Vault Static Secrets (uses central vault/vault-auth)
+  vaultStaticSecrets:
+    # DB bootstrap secret (for CNPG)
+    - name: authelia-db-bootstrap-static
+      path: storage/postgresql
+      destination:
         name: authelia-db-bootstrap
-        creationPolicy: Owner
-        template:
-          data:
+        transformation:
+          templates:
             username: authelia
-            password: "{{ .password }}"
-      data:
-        - secretKey: password
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_PASSWORD
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"
+      rolloutRestartTargets:
+        - kind: Deployment
+          name: authelia
 
-    # Authelia secrets
-    - name: authelia-secrets
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+    # Authelia secrets (all from security/authelia path)
+    - name: authelia-secrets-static
+      path: security/authelia
+      destination:
         name: authelia-secrets
-        creationPolicy: Owner
-      data:
-        - secretKey: storage.postgres.password.txt
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_PASSWORD
-        - secretKey: session.encryption.key
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_SESSION_SECRET
-        - secretKey: storage.encryption.key
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_STORAGE_ENCRYPTION_KEY
-        - secretKey: identity_validation.reset_password.jwt.hmac.key
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_JWT_HMAC_KEY
-        - secretKey: identity_providers.oidc.hmac.key
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_OIDC_HMAC_SECRET
-        - secretKey: identity_providers.oidc.jwks.key
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_OIDC_JWKS_PRIVATE_KEY
-        - secretKey: HEADLAMP_CLIENT_SECRET
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_HEADLAMP_CLIENT_SECRET
-        - secretKey: VAULT_CLIENT_SECRET
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_VAULT_CLIENT_SECRET
-        - secretKey: ZOT_CLIENT_SECRET
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_ZOT_CLIENT_SECRET
-        - secretKey: GITEA_CLIENT_SECRET
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_GITEA_CLIENT_SECRET
-        - secretKey: FORGEJO_CLIENT_SECRET
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_FORGEJO_CLIENT_SECRET
+        transformation:
+          templates:
+            storage.postgres.password.txt: "{{ .Secrets.AUTHELIA_POSTGRES_PASSWORD }}"
+            session.encryption.key: "{{ .Secrets.AUTHELIA_SESSION_SECRET }}"
+            storage.encryption.key: "{{ .Secrets.AUTHELIA_STORAGE_ENCRYPTION_KEY }}"
+            identity_validation.reset_password.jwt.hmac.key: "{{ .Secrets.AUTHELIA_JWT_HMAC_KEY }}"
+            identity_providers.oidc.hmac.key: "{{ .Secrets.AUTHELIA_OIDC_HMAC_SECRET }}"
+            identity_providers.oidc.jwks.key: "{{ .Secrets.AUTHELIA_OIDC_JWKS_PRIVATE_KEY }}"
+            HEADLAMP_CLIENT_SECRET: "{{ .Secrets.AUTHELIA_HEADLAMP_CLIENT_SECRET }}"
+            VAULT_CLIENT_SECRET: "{{ .Secrets.AUTHELIA_VAULT_CLIENT_SECRET }}"
+            ZOT_CLIENT_SECRET: "{{ .Secrets.AUTHELIA_ZOT_CLIENT_SECRET }}"
+            GITEA_CLIENT_SECRET: "{{ .Secrets.AUTHELIA_GITEA_CLIENT_SECRET }}"
+            FORGEJO_CLIENT_SECRET: "{{ .Secrets.AUTHELIA_FORGEJO_CLIENT_SECRET }}"
+      rolloutRestartTargets:
+        - kind: Deployment
+          name: authelia
 
   # RBAC - ClusterRoleBinding for OIDC admin user
   rbac:
