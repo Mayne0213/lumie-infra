@@ -45,7 +45,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/$(tt.params.repo-name)/helm-values.yaml
+            value: web-apps/values/$(tt.params.repo-name).yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -155,7 +155,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/$(tt.params.repo-name)-dev/helm-values.yaml
+            value: web-apps/values/$(tt.params.repo-name)-dev.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -210,7 +210,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/$(tt.params.repo-name)/helm-values.yaml
+            value: web-apps/values/$(tt.params.repo-name).yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -322,7 +322,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/$(tt.params.repo-name)-dev/helm-values.yaml
+            value: web-apps/values/$(tt.params.repo-name)-dev.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -380,7 +380,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/poolc-dev/helm-values-frontend.yaml,web-apps/poolc/helm-values-frontend.yaml
+            value: web-apps/values/poolc-frontend-dev.yaml,web-apps/values/poolc-frontend.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -435,7 +435,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/poolc-dev/helm-values-backend.yaml,web-apps/poolc/helm-values-backend.yaml
+            value: web-apps/values/poolc-backend-dev.yaml,web-apps/values/poolc-backend.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
