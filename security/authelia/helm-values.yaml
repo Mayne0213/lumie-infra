@@ -154,6 +154,7 @@ configMap:
             - name
             - preferred_username
             - email
+            - groups
       cors:
         endpoints:
           - authorization
@@ -233,6 +234,7 @@ configMap:
             - openid
             - profile
             - email
+            - groups
           token_endpoint_auth_method: client_secret_basic
 
 # Secret configuration - use existing secret from Vault
