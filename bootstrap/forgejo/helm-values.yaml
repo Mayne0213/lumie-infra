@@ -26,6 +26,9 @@ valkey-cluster:
 valkey:
   enabled: false
 
+redis-cluster:
+  enabled: false
+
 # =============================================================================
 # PERSISTENCE - Disabled, using MinIO S3
 # =============================================================================

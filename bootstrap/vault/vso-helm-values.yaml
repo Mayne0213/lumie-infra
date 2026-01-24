@@ -22,14 +22,9 @@ controller:
       memory: 100Mi
 
   manager:
-    # Client cache settings
+    # Client cache settings - disable encryption for simplicity
     clientCache:
-      persistenceModel: direct-encrypted
-      storageEncryption:
-        enabled: true
-        # Uses kubernetes secret for encryption key
-        keyName: vso-client-cache-key
-        transitMount: ""
+      persistenceModel: direct-unencrypted
 
 # Telemetry (disabled for now)
 telemetry:

@@ -18,6 +18,9 @@ spec:
   vaultConnectionRef: vault-connection
   method: kubernetes
   mount: kubernetes
+  # Allow all namespaces to use this VaultAuth
+  allowedNamespaces:
+    - "*"
   kubernetes:
     role: vault-secrets-operator
     serviceAccount: default
