@@ -178,7 +178,7 @@ gitea:
       provider: openidConnect
       existingSecret: forgejo-oidc-secret
       autoDiscoverUrl: https://auth0213.kro.kr/.well-known/openid-configuration
-      scopes: openid profile email
+      scopes: openid profile email groups
       groupClaimName: groups
       adminGroup: admins
 
