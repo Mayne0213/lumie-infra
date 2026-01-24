@@ -42,12 +42,13 @@ common:
       failureThreshold: 30
     livenessProbe:
       initialDelaySeconds: 0
-      periodSeconds: 10
-      timeoutSeconds: 5
+      periodSeconds: 30
+      timeoutSeconds: 30
+      failureThreshold: 3
     readinessProbe:
       initialDelaySeconds: 0
-      periodSeconds: 5
-      timeoutSeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 10
   externalSecret:
     enabled: false
   # Affinity - Soft Anti-Affinity to spread pods across nodes
