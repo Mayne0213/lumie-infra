@@ -12,7 +12,7 @@ spec:
   sources:
   # Source 1: Forgejo Helm Chart (Git-based)
   - repoURL: https://code.forgejo.org/forgejo-helm/forgejo-helm.git
-    targetRevision: v10.0.0
+    targetRevision: v16.0.1
     path: .
     helm:
       valueFiles:
