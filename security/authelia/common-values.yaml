@@ -127,6 +127,10 @@ common:
           remoteRef:
             key: security/authelia
             property: AUTHELIA_GITEA_CLIENT_SECRET
+        - secretKey: FORGEJO_CLIENT_SECRET
+          remoteRef:
+            key: security/authelia
+            property: AUTHELIA_FORGEJO_CLIENT_SECRET
 
   # RBAC - ClusterRoleBinding for OIDC admin user
   rbac:
