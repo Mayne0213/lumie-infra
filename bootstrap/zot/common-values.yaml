@@ -41,3 +41,14 @@ common:
         transformation:
           templates:
             session-keys.json: '{"hashKey":"{{ .Secrets.ZOT_SESSION_HASH_KEY }}","encryptKey":"{{ .Secrets.ZOT_SESSION_BLOCK_KEY }}"}'
+
+    # MinIO S3 credentials
+    - name: zot-minio-vss
+      path: bootstrap/minio
+      destination:
+        name: minio-s3-credentials
+        transformation:
+          templates:
+            MINIO_ACCESS_KEY_ID: "{{ .Secrets.MINIO_ROOT_USER }}"
+            MINIO_SECRET_ACCESS_KEY: "{{ .Secrets.MINIO_ROOT_PASSWORD }}"
+            MINIO_REGION: "us-east-1"
