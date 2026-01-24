@@ -73,22 +73,15 @@ common:
   # - secretRef:
   #     name: app-secrets
 
-  # External Secrets configuration
-  externalSecret:
-    enabled: false
-    refreshInterval: 1h
-    secretStoreRef:
-      name: vault-backend
-      kind: ClusterSecretStore
-    target:
-      name: ""  # If empty, defaults to <fullname>-secrets
-      creationPolicy: Owner
-      deletionPolicy: Retain
-    data: []
-    # - secretKey: DATABASE_URL
-    #   remoteRef:
-    #     key: myapp
-    #     property: DATABASE_URL
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets: []
+  # - name: app-vss
+  #   path: web-apps/myapp
+  #   destination:
+  #     name: app-secrets
+  #     transformation:
+  #       templates:
+  #         SECRET_KEY: "{{ .Secrets.SECRET_KEY }}"
 
   # Deployment strategy
   strategy:
@@ -116,10 +109,6 @@ common:
         - weight: 100
           podAffinityTerm:
             topologyKey: kubernetes.io/hostname
-
-  # ResourceQuota - Disabled by default (set to false to remove existing quotas)
-  resourceQuota:
-    enabled: false
 
   # RBAC configuration
   rbac:
@@ -189,16 +178,6 @@ common:
   #   serviceName: ""  # If empty, uses app name
   #   servicePort: 80
 
-  # Additional ExternalSecrets (for multiple secrets)
-  additionalExternalSecrets: []
-  # - name: app-smtp-secret
-  #   refreshInterval: 1h
-  #   data:
-  #     - secretKey: SMTP_PASSWORD
-  #       remoteRef:
-  #         key: myapp
-  #         property: SMTP_PASSWORD
-
   # Traefik Middleware configuration
   middleware:
     enabled: false
@@ -217,16 +196,6 @@ common:
     # - port: http
     #   interval: 30s
     #   path: /metrics
-
-  # PrometheusRules for alerting
-  prometheusRules:
-    enabled: false
-    groups: []
-    # - name: app-alerts
-    #   rules:
-    #     - alert: AppDown
-    #       expr: up{job="app"} == 0
-    #       for: 5m
 
   # CronJob configuration
   cronJob:
@@ -254,49 +223,6 @@ common:
     reclaimPolicy: Retain
     volumeBindingMode: WaitForFirstConsumer
     parameters: {}
-
-  # ClusterIssuers for cert-manager
-  clusterIssuers: []
-  # - name: letsencrypt-prod
-  #   server: https://acme-v02.api.letsencrypt.org/directory
-  #   email: user@example.com
-  #   privateKeySecretRef: letsencrypt-prod
-  #   solvers:
-  #     - ingressClass: traefik
-
-  # ClusterSecretStore for External Secrets
-  clusterSecretStore:
-    enabled: false
-    name: ""
-    vault:
-      server: ""
-      path: secret
-      version: v2
-      auth:
-        mountPath: kubernetes
-        role: ""
-        serviceAccountRef:
-          name: ""
-          namespace: ""
-
-  # ClusterExternalSecrets (namespace-wide secrets)
-  clusterExternalSecrets: []
-  # - name: my-cluster-secret
-  #   namespaceSelector:
-  #     matchLabels:
-  #       my-label: enabled
-  #   refreshInterval: 1h
-  #   secretStoreRef:
-  #     kind: ClusterSecretStore
-  #     name: vault-backend
-  #   target:
-  #     name: my-secret
-  #     creationPolicy: Owner
-  #   data:
-  #     - secretKey: KEY
-  #       remoteRef:
-  #         key: path/to/secret
-  #         property: PROPERTY
 
   # PersistentVolumes (for local storage)
   persistentVolumes: []
