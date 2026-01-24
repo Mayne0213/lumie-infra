@@ -40,7 +40,7 @@ common:
       class: local-path
       size: 1Gi
     resources:
-      memory: 512Mi
+      memory: 256Mi
       cpu: 50m
     postgresql:
       parameters:

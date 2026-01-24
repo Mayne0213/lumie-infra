@@ -65,7 +65,7 @@ controller:
   # Memory optimization environment variables
   env:
     - name: GOMEMLIMIT
-      value: "1600MiB"
+      value: "1400MiB"
     - name: GOGC
       value: "50"
 
@@ -77,9 +77,9 @@ controller:
   resources:
     requests:
       cpu: 350m
-      memory: 1866Mi
+      memory: 1536Mi
     limits:
-      memory: 1866Mi
+      memory: 1536Mi
 
 # =============================================================================
 # API SERVER (Deployment)

@@ -30,10 +30,10 @@ spec:
     size: {{ .Values.common.database.storage.size | default "1Gi" }}
   resources:
     requests:
-      memory: {{ .Values.common.database.resources.memory | default "512Mi" | quote }}
+      memory: {{ .Values.common.database.resources.memory | default "256Mi" | quote }}
       cpu: {{ .Values.common.database.resources.cpu | default "50m" | quote }}
     limits:
-      memory: {{ .Values.common.database.resources.memory | default "512Mi" | quote }}
+      memory: {{ .Values.common.database.resources.memory | default "256Mi" | quote }}
   {{- if .Values.common.database.postgresql.parameters }}
   postgresql:
     parameters:

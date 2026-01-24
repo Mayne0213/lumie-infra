@@ -132,9 +132,9 @@ prometheus:
     resources:
       requests:
         cpu: 50m
-        memory: 2Gi
+        memory: 1200Mi
       limits:
-        memory: 2Gi
+        memory: 1200Mi
     
     # ServiceMonitor selector - disable scraping (OTel Collector handles all scraping)
     # Set selector to match nothing - OTel Target Allocator reads ServiceMonitors
