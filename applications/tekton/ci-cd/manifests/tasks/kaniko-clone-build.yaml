@@ -48,11 +48,24 @@ spec:
   steps:
     - name: clone
       image: zot0213.kro.kr/applications/alpine-git:v2.47.1
+      env:
+        - name: GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: forgejo-credentials
+              key: username
+        - name: GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: forgejo-credentials
+              key: password
       script: |
         #!/bin/sh
         set -e
         cd $(workspaces.source.path)
-        git clone --depth=1 --branch=$(params.GIT_REVISION) $(params.GIT_URL) .
+        # Add credentials to URL
+        GIT_URL_AUTH=$(echo "$(params.GIT_URL)" | sed "s|https://|https://${GIT_USERNAME}:${GIT_PASSWORD}@|")
+        git clone --depth=1 --branch=$(params.GIT_REVISION) "$GIT_URL_AUTH" .
         COMMIT=$(git rev-parse HEAD)
         echo -n "$COMMIT" > /tekton/results/COMMIT_SHA
         echo "Cloned $(params.GIT_URL) at $COMMIT"
