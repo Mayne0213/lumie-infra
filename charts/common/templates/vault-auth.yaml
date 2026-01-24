@@ -27,4 +27,3 @@ spec:
       - vault
       {{- end }}
 {{- end }}
-{{- end }}
