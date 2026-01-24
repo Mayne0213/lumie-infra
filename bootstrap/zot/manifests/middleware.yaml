@@ -1,0 +1,17 @@
+# Traefik Middleware for Zot Registry large uploads
+# Container images can be hundreds of MB to GB in size
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: zot-upload
+  namespace: zot
+spec:
+  buffering:
+    # No limit on request body size (container images can be very large)
+    maxRequestBodyBytes: 0
+    # No limit on response body size
+    maxResponseBodyBytes: 0
+    # Memory buffer for request body (2MB)
+    memRequestBodyBytes: 2097152
+    # Memory buffer for response body (2MB)
+    memResponseBodyBytes: 2097152

@@ -64,6 +64,7 @@ ingress:
     className: traefik
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
+      traefik.ingress.kubernetes.io/router.middlewares: zot-zot-upload@kubernetescrd
     hosts:
     - host: zot0213.kro.kr
       paths:

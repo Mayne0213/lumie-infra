@@ -25,6 +25,9 @@ spec:
     helm:
       valueFiles:
       - $values/bootstrap/zot/common-values.yaml
+  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: bootstrap/zot/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: zot
