@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   # Secrets
-  - secrets/gitea-credentials.yaml
+  - secrets/forgejo-credentials.yaml
   - secrets/zot-registry-credentials.yaml
   # Tasks
   - tasks/kaniko-clone-build.yaml

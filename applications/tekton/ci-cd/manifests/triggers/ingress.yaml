@@ -19,6 +19,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: el-gitea-listener
+                name: el-forgejo-listener
                 port:
                   number: 8080

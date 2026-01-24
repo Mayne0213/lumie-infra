@@ -1,19 +1,19 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: gitea-listener
+  name: forgejo-listener
   namespace: tekton-pipelines
 spec:
   serviceAccountName: tekton-triggers-sa
   triggers:
-    - name: gitea-push-nextjs
+    - name: forgejo-push-nextjs
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: gitea-webhook-secret
+                secretName: forgejo-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -32,17 +32,17 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['jovies', 'jotion', 'jaejadle', 'portfolio', 'todo']"
       bindings:
-        - ref: gitea-push-binding
+        - ref: forgejo-push-binding
       template:
         ref: nextjs-build-template
-    - name: gitea-push-docusaurus
+    - name: forgejo-push-docusaurus
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: gitea-webhook-secret
+                secretName: forgejo-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -61,17 +61,17 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['docusaurus']"
       bindings:
-        - ref: gitea-push-binding
+        - ref: forgejo-push-binding
       template:
         ref: docusaurus-build-template
-    - name: gitea-push-fastapi
+    - name: forgejo-push-fastapi
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: gitea-webhook-secret
+                secretName: forgejo-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -90,17 +90,17 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['joossam']"
       bindings:
-        - ref: gitea-push-binding
+        - ref: forgejo-push-binding
       template:
         ref: fastapi-build-template
-    - name: gitea-push-mas
+    - name: forgejo-push-mas
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: gitea-webhook-secret
+                secretName: forgejo-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -119,18 +119,18 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['mas']"
       bindings:
-        - ref: gitea-push-binding
+        - ref: forgejo-push-binding
       template:
         ref: mas-build-template
     # Develop branch triggers for -dev deployments
-    - name: gitea-push-nextjs-dev
+    - name: forgejo-push-nextjs-dev
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: gitea-webhook-secret
+                secretName: forgejo-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -149,17 +149,17 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['jaejadle']"
       bindings:
-        - ref: gitea-push-binding
+        - ref: forgejo-push-binding
       template:
         ref: nextjs-dev-build-template
-    - name: gitea-push-fastapi-dev
+    - name: forgejo-push-fastapi-dev
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: gitea-webhook-secret
+                secretName: forgejo-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -178,17 +178,17 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['joossam']"
       bindings:
-        - ref: gitea-push-binding
+        - ref: forgejo-push-binding
       template:
         ref: fastapi-dev-build-template
-    - name: gitea-push-poolc-frontend
+    - name: forgejo-push-poolc-frontend
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: gitea-webhook-secret
+                secretName: forgejo-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -207,17 +207,17 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['PoolC-frontend']"
       bindings:
-        - ref: gitea-push-binding
+        - ref: forgejo-push-binding
       template:
         ref: poolc-frontend-build-template
-    - name: gitea-push-poolc-backend
+    - name: forgejo-push-poolc-backend
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: gitea-webhook-secret
+                secretName: forgejo-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -236,7 +236,7 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['PoolC-backend']"
       bindings:
-        - ref: gitea-push-binding
+        - ref: forgejo-push-binding
       template:
         ref: poolc-backend-build-template
   resources:
