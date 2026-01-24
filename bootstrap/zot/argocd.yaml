@@ -4,7 +4,7 @@ metadata:
   name: zot
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
@@ -16,10 +16,10 @@ spec:
     helm:
       valueFiles:
       - $values/bootstrap/zot/helm-values.yaml
-  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     path: charts/common
     helm:

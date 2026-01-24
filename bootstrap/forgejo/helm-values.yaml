@@ -1,0 +1,234 @@
+# Forgejo Helm Chart Values
+# Self-hosted Git service with MinIO S3 storage
+# Chart: https://code.forgejo.org/forgejo-helm/forgejo-helm
+
+# =============================================================================
+# IMAGE - Codeberg registry (bootstrap component - external registry required)
+# =============================================================================
+image:
+  registry: codeberg.org
+  repository: forgejo/forgejo
+  tag: "10.0.0"
+  rootless: false
+
+# =============================================================================
+# DISABLE ALL EXTERNAL DEPENDENCIES
+# =============================================================================
+postgresql-ha:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+valkey-cluster:
+  enabled: false
+
+valkey:
+  enabled: false
+
+# =============================================================================
+# PERSISTENCE - Disabled, using MinIO S3
+# =============================================================================
+persistence:
+  enabled: false
+
+# =============================================================================
+# ADMIN USER
+# =============================================================================
+gitea:
+  admin:
+    existingSecret: forgejo-admin-secret
+    username: Mayne0213
+    email: bluemayne0213@icloud.com
+    passwordMode: keepUpdated
+
+  # Forgejo configuration (app.ini)
+  config:
+    APP_NAME: Forgejo - K3S-HOME
+
+    server:
+      DOMAIN: github0213.com
+      ROOT_URL: https://github0213.com
+      HTTP_PORT: 3000
+      SSH_DOMAIN: github0213.com
+      SSH_PORT: 22
+      SSH_LISTEN_PORT: 2222
+      LFS_START_SERVER: true
+
+    database:
+      DB_TYPE: sqlite3
+      PATH: /data/gitea/gitea.db
+      SQLITE_TIMEOUT: 30000
+      SQLITE_JOURNAL_MODE: WAL
+
+    session:
+      PROVIDER: memory
+
+    cache:
+      ADAPTER: memory
+
+    queue:
+      TYPE: level
+
+    security:
+      INSTALL_LOCK: true
+
+    service:
+      DISABLE_REGISTRATION: true
+      REQUIRE_SIGNIN_VIEW: false
+      DEFAULT_KEEP_EMAIL_PRIVATE: true
+
+    log:
+      MODE: console
+      LEVEL: info
+
+    actions:
+      ENABLED: true
+      DEFAULT_ACTIONS_URL: github
+
+    openid:
+      ENABLE_OPENID_SIGNIN: false
+      ENABLE_OPENID_SIGNUP: false
+
+    # MinIO S3 Storage Configuration
+    storage:
+      STORAGE_TYPE: minio
+      MINIO_ENDPOINT: minio.minio.svc.cluster.local:9000
+      MINIO_BUCKET: forgejo
+      MINIO_USE_SSL: false
+
+    lfs:
+      STORAGE_TYPE: minio
+      MINIO_ENDPOINT: minio.minio.svc.cluster.local:9000
+      MINIO_BUCKET: forgejo-lfs
+      MINIO_USE_SSL: false
+
+    packages:
+      STORAGE_TYPE: minio
+      MINIO_ENDPOINT: minio.minio.svc.cluster.local:9000
+      MINIO_BUCKET: forgejo-packages
+      MINIO_USE_SSL: false
+
+    attachment:
+      STORAGE_TYPE: minio
+      MINIO_ENDPOINT: minio.minio.svc.cluster.local:9000
+      MINIO_BUCKET: forgejo-attachments
+      MINIO_USE_SSL: false
+
+  # Additional secrets for S3 credentials
+  additionalConfigFromEnvs:
+    - name: FORGEJO__STORAGE__MINIO_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-minio-secret
+          key: MINIO_ACCESS_KEY_ID
+    - name: FORGEJO__STORAGE__MINIO_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-minio-secret
+          key: MINIO_SECRET_ACCESS_KEY
+    - name: FORGEJO__LFS__MINIO_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-minio-secret
+          key: MINIO_ACCESS_KEY_ID
+    - name: FORGEJO__LFS__MINIO_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-minio-secret
+          key: MINIO_SECRET_ACCESS_KEY
+    - name: FORGEJO__PACKAGES__MINIO_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-minio-secret
+          key: MINIO_ACCESS_KEY_ID
+    - name: FORGEJO__PACKAGES__MINIO_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-minio-secret
+          key: MINIO_SECRET_ACCESS_KEY
+    - name: FORGEJO__ATTACHMENT__MINIO_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-minio-secret
+          key: MINIO_ACCESS_KEY_ID
+    - name: FORGEJO__ATTACHMENT__MINIO_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: forgejo-minio-secret
+          key: MINIO_SECRET_ACCESS_KEY
+
+  oauth:
+    - name: authelia
+      provider: openidConnect
+      existingSecret: forgejo-oidc-secret
+      autoDiscoverUrl: https://auth0213.kro.kr/.well-known/openid-configuration
+      scopes: openid profile email
+      groupClaimName: groups
+      adminGroup: admins
+
+# =============================================================================
+# INGRESS
+# =============================================================================
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+  - host: github0213.com
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - secretName: github-tls
+    hosts:
+    - github0213.com
+
+# =============================================================================
+# RESOURCES (VPA recommended, no CPU limit for stability)
+# =============================================================================
+resources:
+  requests:
+    cpu: 15m
+    memory: 392Mi
+  limits:
+    memory: 392Mi
+
+# =============================================================================
+# POD CONFIGURATION
+# =============================================================================
+strategy:
+  type: Recreate
+
+tolerations:
+- key: node-role.kubernetes.io/control-plane
+  operator: Exists
+  effect: NoSchedule
+
+nodeSelector:
+  node-role.kubernetes.io/control-plane: "true"
+
+priorityClassName: high-priority
+
+# =============================================================================
+# SSH SERVICE
+# =============================================================================
+service:
+  ssh:
+    type: ClusterIP
+    port: 22
+
+# =============================================================================
+# CUSTOM FILES (robots.txt)
+# =============================================================================
+extraVolumes:
+- name: robots
+  configMap:
+    name: forgejo-robots
+
+extraVolumeMounts:
+- name: robots
+  mountPath: /data/gitea/public/robots.txt
+  subPath: robots.txt
+  readOnly: true

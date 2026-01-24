@@ -1,27 +1,31 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: haproxy
+  name: cert-manager
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   sources:
-  - repoURL: https://haproxytech.github.io/helm-charts
-    chart: haproxy
-    targetRevision: 1.27.0
+  - repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    targetRevision: v1.16.2
     helm:
       valueFiles:
-      - $values/bootstrap/haproxy/helm-values.yaml
+      - $values/platform/cert-manager/helm-values.yaml
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/platform/cert-manager/common-values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: haproxy
+    namespace: cert-manager
   syncPolicy:
     automated:
       prune: true
@@ -31,12 +35,13 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
-    managedNamespaceMetadata:
-      labels:
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
   revisionHistoryLimit: 10

@@ -8,5 +8,10 @@ resources:
   # Cluster-wide resources
   - priority-classes/argocd.yaml
 
-  # Core infrastructure (argocd, haproxy, traefik moved to bootstrap/)
-  - gitea/argocd.yaml
+  # Core infrastructure (Forgejo 참조)
+  - traefik-config/argocd.yaml
+  - haproxy/argocd.yaml
+  - cert-manager/argocd.yaml
+
+  # Git server (파일 유지, Forgejo로 마이그레이션 후 삭제 예정)
+  # - gitea/argocd.yaml

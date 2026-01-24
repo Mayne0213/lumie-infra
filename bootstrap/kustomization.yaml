@@ -1,16 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-# Sync wave order:
-# 0: traefik-config (Traefik을 ClusterIP + PROXY Protocol로 변경)
-# 1: haproxy (외부 트래픽 진입점)
-# 2: minio (Vault 스토리지)
-# 3: vault (시크릿 저장소)
-# 4: cert-manager (TLS 인증서)
-# 5: zot (Private container registry)
-- traefik/argocd.yaml
-- haproxy/argocd.yaml
+# Sync wave order (GitHub 참조, 외부 이미지):
+# 0: minio (오브젝트 스토리지)
+# 1: zot (Private container registry)
+# 2: vault + VSO (시크릿 저장소)
+# 3: forgejo (Git 서버 - Gitea 대체)
 - minio/argocd.yaml
-- vault/argocd.yaml
-- cert-manager/argocd.yaml
 - zot/argocd.yaml
+- vault/argocd.yaml
+- forgejo/argocd.yaml

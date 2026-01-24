@@ -4,27 +4,41 @@ metadata:
   name: vault
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "2"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   sources:
+  # Source 1: Vault Helm Chart
   - repoURL: https://helm.releases.hashicorp.com
     chart: vault
     targetRevision: 0.28.1
     helm:
       valueFiles:
       - $values/bootstrap/vault/helm-values.yaml
-  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+  # Source 2: Vault Secrets Operator
+  - repoURL: https://helm.releases.hashicorp.com
+    chart: vault-secrets-operator
+    targetRevision: 0.10.0
+    helm:
+      valueFiles:
+      - $values/bootstrap/vault/vso-helm-values.yaml
+  # Source 3: Git repo for values reference
+  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
-  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+  # Source 4: Common chart for RBAC
+  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     path: charts/common
     helm:
       valueFiles:
       - $values/bootstrap/vault/common-values.yaml
+  # Source 5: Local manifests (VaultAuth, VaultStaticSecrets)
+  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: bootstrap/vault/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: vault

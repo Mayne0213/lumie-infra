@@ -6,8 +6,8 @@ resources:
   - application.yaml
 
   # Security apps (vault, cert-manager moved to bootstrap/)
+  # external-secrets removed - using VSO (Vault Secrets Operator) instead
   - authelia/argocd.yaml
-  - external-secrets/argocd.yaml
   - falco/argocd.yaml
   - kyverno/argocd.yaml
   - trivy/argocd.yaml

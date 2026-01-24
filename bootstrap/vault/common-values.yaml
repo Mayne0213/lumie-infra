@@ -1,4 +1,6 @@
 # Common chart values for vault
+# Note: VSO (Vault Secrets Operator) is now the preferred method for new deployments
+# ClusterSecretStore is kept for backward compatibility during ESO → VSO migration
 
 common:
   name: vault
@@ -13,7 +15,8 @@ common:
   ingress:
     enabled: false
 
-  # ClusterSecretStore for External Secrets Operator
+  # ClusterSecretStore for External Secrets Operator (backward compatibility)
+  # TODO: Remove after all ExternalSecrets are migrated to VaultStaticSecrets
   clusterSecretStore:
     enabled: true
     name: vault-backend
@@ -28,7 +31,7 @@ common:
           name: external-secrets
           namespace: external-secrets
 
-  # RBAC for Vault token reviewer
+  # RBAC for Vault token reviewer (still needed for VSO)
   rbac:
     enabled: true
     serviceAccount:
@@ -51,19 +54,3 @@ common:
           - kind: ServiceAccount
             name: vault
             namespace: vault
-
-  # External Secret for OIDC
-  additionalExternalSecrets:
-    - name: vault-oidc-secret
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
-        name: vault-oidc-secret
-        creationPolicy: Owner
-      data:
-        - secretKey: VAULT_CLIENT_SECRET
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_VAULT_CLIENT_SECRET

@@ -1,32 +1,33 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-secrets
+  name: forgejo
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  ignoreDifferences:
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      jsonPointers:
-        - /spec/conversion/webhook/clientConfig/caBundle
-        - /spec/versions
-        - /status
   sources:
-  - repoURL: https://charts.external-secrets.io
-    chart: external-secrets
-    targetRevision: 1.2.1
+  # Source 1: Forgejo Helm Chart (Git-based)
+  - repoURL: https://code.forgejo.org/forgejo-helm/forgejo-helm.git
+    targetRevision: v10.0.0
+    path: .
     helm:
       valueFiles:
-      - $values/security/external-secrets/helm-values.yaml
-  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+      - $values/bootstrap/forgejo/helm-values.yaml
+  # Source 2: Git repo for values reference
+  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     ref: values
+  # Source 3: Local manifests (VaultStaticSecrets, redirects)
+  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: bootstrap/forgejo/manifests
   destination:
     server: https://kubernetes.default.svc
-    namespace: external-secrets
+    namespace: forgejo
   syncPolicy:
     automated:
       prune: true
@@ -36,7 +37,6 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
-    - RespectIgnoreDifferences=true
     retry:
       limit: 5
       backoff:
@@ -46,4 +46,5 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: 'true'
+        minio-s3: enabled
   revisionHistoryLimit: 10

@@ -1,0 +1,13 @@
+# ConfigMap for robots.txt
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forgejo-robots
+  namespace: forgejo
+data:
+  robots.txt: |
+    User-agent: ClaudeBot
+    Disallow: /
+
+    User-agent: *
+    Allow: /
