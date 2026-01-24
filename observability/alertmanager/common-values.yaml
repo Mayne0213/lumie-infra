@@ -31,42 +31,31 @@ common:
       serviceName: karma
       servicePort: 8080
 
-  # External Secrets
-  additionalExternalSecrets:
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
     # SMTP credentials
-    - name: alertmanager-smtp
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+    - name: alertmanager-smtp-vss
+      path: observability/alertmanager
+      destination:
         name: alertmanager-smtp
-        creationPolicy: Owner
-      data:
-        - secretKey: smtp_auth_password
-          remoteRef:
-            key: observability/alertmanager
-            property: SMTP_PASSWORD
+        transformation:
+          templates:
+            smtp_auth_password: "{{ .Secrets.SMTP_PASSWORD }}"
 
     # Alertmanager configuration
-    - name: alertmanager-config
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+    - name: alertmanager-config-vss
+      path: observability/alertmanager
+      destination:
         name: alertmanager-config
-        creationPolicy: Owner
-        template:
-          engineVersion: v2
-          data:
+        transformation:
+          templates:
             alertmanager.yml: |
               global:
                 resolve_timeout: 5m
                 smtp_smarthost: "smtp.mail.me.com:587"
                 smtp_from: "bluemayne0213@icloud.com"
                 smtp_auth_username: "bluemayne0213@icloud.com"
-                smtp_auth_password: "{{ .smtp_password }}"
+                smtp_auth_password: "{{ .Secrets.SMTP_PASSWORD }}"
                 smtp_require_tls: true
               route:
                 group_by: ["alertname", "cluster", "service"]
@@ -105,8 +94,3 @@ common:
                 target_match:
                   severity: "warning"
                 equal: ["alertname", "cluster", "service"]
-      data:
-        - secretKey: smtp_password
-          remoteRef:
-            key: observability/alertmanager
-            property: SMTP_PASSWORD

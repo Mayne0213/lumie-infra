@@ -12,32 +12,19 @@ common:
   ingress:
     enabled: false
 
-  # External Secret for object store credentials
-  additionalExternalSecrets:
-    - name: thanos-objstore-secret
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
+    - name: minio-vss
+      path: bootstrap/minio
+      destination:
         name: thanos-objstore-secret
-        template:
-          engineVersion: v2
-          data:
+        transformation:
+          templates:
             objstore.yml: |
               type: S3
               config:
                 bucket: thanos
                 endpoint: minio.minio.svc.cluster.local:9000
-                access_key: {{ .access_key }}
-                secret_key: {{ .secret_key }}
+                access_key: {{ .Secrets.MINIO_ROOT_USER }}
+                secret_key: {{ .Secrets.MINIO_ROOT_PASSWORD }}
                 insecure: true
-      data:
-        - secretKey: access_key
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_USER
-        - secretKey: secret_key
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_PASSWORD

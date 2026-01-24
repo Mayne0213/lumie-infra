@@ -12,75 +12,42 @@ common:
   ingress:
     enabled: false
 
-  # External Secrets
-  additionalExternalSecrets:
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
     # PostgreSQL password for postgres-exporter
-    - name: postgresql-password
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+    - name: postgresql-vss
+      path: storage/postgresql
+      destination:
         name: postgresql-password
-        creationPolicy: Owner
-      data:
-        - secretKey: password
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_PASSWORD
+        transformation:
+          templates:
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"
 
     # Thanos object store credentials
-    - name: thanos-objstore-secret
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+    - name: minio-vss
+      path: bootstrap/minio
+      destination:
         name: thanos-objstore-secret
-        template:
-          engineVersion: v2
-          data:
+        transformation:
+          templates:
             objstore.yml: |
               type: S3
               config:
                 bucket: thanos
                 endpoint: minio.minio.svc.cluster.local:9000
-                access_key: {{ .access_key }}
-                secret_key: {{ .secret_key }}
+                access_key: {{ .Secrets.MINIO_ROOT_USER }}
+                secret_key: {{ .Secrets.MINIO_ROOT_PASSWORD }}
                 insecure: true
-      data:
-        - secretKey: access_key
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_USER
-        - secretKey: secret_key
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_PASSWORD
 
     # Zot registry credentials for image pull
-    - name: zot-registry-credentials
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+    - name: zot-vss
+      path: bootstrap/zot
+      destination:
         name: zot-registry-credentials
-        creationPolicy: Owner
-        template:
-          type: kubernetes.io/dockerconfigjson
-          data:
-            .dockerconfigjson: |
-              {"auths":{"zot0213.kro.kr":{"username":"{{ .USERNAME }}","password":"{{ .PASSWORD }}","auth":"{{ printf "%s:%s" .USERNAME .PASSWORD | b64enc }}"}}}
-      data:
-        - secretKey: USERNAME
-          remoteRef:
-            key: bootstrap/zot
-            property: ZOT_USERNAME
-        - secretKey: PASSWORD
-          remoteRef:
-            key: bootstrap/zot
-            property: ZOT_PASSWORD
+        type: kubernetes.io/dockerconfigjson
+        transformation:
+          templates:
+            .dockerconfigjson: '{"auths":{"zot0213.kro.kr":{"username":"{{ .Secrets.ZOT_USERNAME }}","password":"{{ .Secrets.ZOT_PASSWORD }}","auth":"{{ printf "%s:%s" .Secrets.ZOT_USERNAME .Secrets.ZOT_PASSWORD | base64Encode }}"}}}'
 
   # ServiceMonitor for alertmanager (cross-namespace monitoring)
   serviceMonitor:

@@ -31,29 +31,15 @@ common:
       serviceName: velero-ui
       servicePort: 3000
 
-  # External Secret for S3 credentials
-  additionalExternalSecrets:
-    - name: velero-s3-credentials
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
+    - name: minio-vss
+      path: bootstrap/minio
+      destination:
         name: velero-s3-credentials
-        creationPolicy: Owner
-        template:
-          type: Opaque
-          data:
+        transformation:
+          templates:
             cloud: |
               [default]
-              aws_access_key_id={{ .minioAccessKey }}
-              aws_secret_access_key="{{ .minioSecretKey }}"
-      data:
-        - secretKey: minioAccessKey
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_USER
-        - secretKey: minioSecretKey
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_PASSWORD
+              aws_access_key_id={{ .Secrets.MINIO_ROOT_USER }}
+              aws_secret_access_key="{{ .Secrets.MINIO_ROOT_PASSWORD }}"

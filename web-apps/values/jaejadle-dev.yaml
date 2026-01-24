@@ -54,55 +54,32 @@ common:
           key: uri
   envFrom:
     - secretRef:
-        name: jaejadle-dev-secrets
-  externalSecret:
-    enabled: true
-    refreshInterval: 1h
-    secretStoreRef:
-      name: vault-backend
-      kind: ClusterSecretStore
-    target:
-      creationPolicy: Owner
-      deletionPolicy: Retain
-      template:
-        data:
-          JAEJADLE_JWT_SECRET: "{{ .JAEJADLE_JWT_SECRET }}"
-          MINIO_ACCESS_KEY_ID: "{{ .MINIO_ACCESS_KEY_ID }}"
-          MINIO_SECRET_ACCESS_KEY: "{{ .MINIO_SECRET_ACCESS_KEY }}"
-          MINIO_BUCKET_NAME: "{{ .MINIO_BUCKET_NAME }}"
-          MINIO_ENDPOINT: "{{ .MINIO_ENDPOINT }}"
-          MINIO_REGION: "{{ .MINIO_REGION }}"
-          JAEJADLE_CODE: "{{ .JAEJADLE_CODE }}"
-    data:
-      # App-specific secrets
-      - secretKey: JAEJADLE_JWT_SECRET
-        remoteRef:
-          key: web-apps/jaejadle-dev
-          property: JAEJADLE_JWT_SECRET
-      - secretKey: MINIO_ACCESS_KEY_ID
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_ACCESS_KEY_ID
-      - secretKey: MINIO_SECRET_ACCESS_KEY
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_SECRET_ACCESS_KEY
-      - secretKey: MINIO_BUCKET_NAME
-        remoteRef:
-          key: web-apps/jaejadle-dev
-          property: MINIO_BUCKET_NAME
-      - secretKey: MINIO_ENDPOINT
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_ENDPOINT
-      - secretKey: MINIO_REGION
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_REGION
-      - secretKey: JAEJADLE_CODE
-        remoteRef:
-          key: web-apps/jaejadle-dev
-          property: JAEJADLE_CODE
+        name: jaejadle-dev-app-secrets
+    - secretRef:
+        name: jaejadle-dev-minio-secrets
+  # Vault Static Secrets (VSO) - Multiple secrets for different Vault paths
+  vaultStaticSecrets:
+    # App-specific secrets from web-apps/jaejadle-dev
+    - name: jaejadle-dev-vss
+      path: web-apps/jaejadle-dev
+      destination:
+        name: jaejadle-dev-app-secrets
+        transformation:
+          templates:
+            JAEJADLE_JWT_SECRET: "{{ .Secrets.JAEJADLE_JWT_SECRET }}"
+            JAEJADLE_CODE: "{{ .Secrets.JAEJADLE_CODE }}"
+            MINIO_BUCKET_NAME: "{{ .Secrets.MINIO_BUCKET_NAME }}"
+    # MinIO credentials from bootstrap/minio
+    - name: minio-vss
+      path: bootstrap/minio
+      destination:
+        name: jaejadle-dev-minio-secrets
+        transformation:
+          templates:
+            MINIO_ACCESS_KEY_ID: "{{ .Secrets.MINIO_ACCESS_KEY_ID }}"
+            MINIO_SECRET_ACCESS_KEY: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"
+            MINIO_ENDPOINT: "{{ .Secrets.MINIO_ENDPOINT }}"
+            MINIO_REGION: "{{ .Secrets.MINIO_REGION }}"
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:

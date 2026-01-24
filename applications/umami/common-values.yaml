@@ -15,22 +15,15 @@ common:
   ingress:
     enabled: false
 
-  # External Secret for HASH_SALT
-  externalSecret:
-    enabled: true
-    refreshInterval: 1h
-    secretStoreRef:
-      name: vault-backend
-      kind: ClusterSecretStore
-    target:
-      name: umami-hash-salt
-      creationPolicy: Owner
-      deletionPolicy: Retain
-    data:
-      - secretKey: hash-salt
-        remoteRef:
-          key: applications/umami
-          property: UMAMI_HASH_SALT
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
+    - name: umami-vss
+      path: applications/umami
+      destination:
+        name: umami-hash-salt
+        transformation:
+          templates:
+            hash-salt: "{{ .Secrets.UMAMI_HASH_SALT }}"
 
   # CNPG Database configuration
   database:

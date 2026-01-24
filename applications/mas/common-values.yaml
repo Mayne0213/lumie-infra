@@ -13,21 +13,15 @@ common:
   ingress:
     enabled: false
 
-  # External Secret for API keys
-  additionalExternalSecrets:
-    - name: mas-api-keys
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
+    - name: mas-vss
+      path: applications/mas
+      destination:
         name: mas-api-keys
-        creationPolicy: Owner
-      data:
-        - secretKey: anthropic-api-key
-          remoteRef:
-            key: applications/mas
-            property: ANTHROPIC_API_KEY
+        transformation:
+          templates:
+            anthropic-api-key: "{{ .Secrets.ANTHROPIC_API_KEY }}"
 
   # RBAC configuration
   rbac:

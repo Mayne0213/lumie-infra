@@ -12,33 +12,12 @@ common:
   ingress:
     enabled: false
 
-  # External Secret for PostgreSQL credentials
-  additionalExternalSecrets:
-    - name: pgweb-secret
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
+    - name: postgresql-vss
+      path: storage/postgresql
+      destination:
         name: pgweb-password
-        creationPolicy: Owner
-        template:
-          data:
-            database-url: 'postgresql://{{ .DB_USER }}:{{ .DB_PASSWORD }}@{{ .DB_HOST }}:{{ .DB_PORT }}/postgres'
-      data:
-        - secretKey: DB_HOST
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_HOST
-        - secretKey: DB_PORT
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_PORT
-        - secretKey: DB_USER
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_USER
-        - secretKey: DB_PASSWORD
-          remoteRef:
-            key: storage/postgresql
-            property: POSTGRES_PASSWORD
+        transformation:
+          templates:
+            database-url: "postgresql://{{ .Secrets.POSTGRES_USER }}:{{ .Secrets.POSTGRES_PASSWORD }}@{{ .Secrets.POSTGRES_HOST }}:{{ .Secrets.POSTGRES_PORT }}/postgres"

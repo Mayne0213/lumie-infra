@@ -13,27 +13,20 @@ common:
   ingress:
     enabled: false
 
-  # External Secret for OIDC configuration
-  additionalExternalSecrets:
-    - name: headlamp-oidc
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
+    - name: authelia-vss
+      path: security/authelia
+      destination:
         name: headlamp-oidc
-        creationPolicy: Owner
-        template:
-          engineVersion: v2
-          data:
-            OIDC_CLIENT_ID: headlamp
-            OIDC_CLIENT_SECRET: "{{ .clientSecret }}"
-            OIDC_ISSUER_URL: https://auth0213.kro.kr
+        transformation:
+          templates:
+            OIDC_CLIENT_ID: "headlamp"
+            OIDC_CLIENT_SECRET: "{{ .Secrets.AUTHELIA_HEADLAMP_CLIENT_SECRET }}"
+            OIDC_ISSUER_URL: "https://auth0213.kro.kr"
             OIDC_SCOPES: "openid profile email"
-            OIDC_VALIDATOR_CLIENT_ID: headlamp
-            OIDC_VALIDATOR_ISSUER_URL: https://auth0213.kro.kr
-      data:
-        - secretKey: clientSecret
-          remoteRef:
-            key: security/authelia
-            property: AUTHELIA_HEADLAMP_CLIENT_SECRET
+            OIDC_VALIDATOR_CLIENT_ID: "headlamp"
+            OIDC_VALIDATOR_ISSUER_URL: "https://auth0213.kro.kr"
+      rolloutRestartTargets:
+        - kind: Deployment
+          name: headlamp

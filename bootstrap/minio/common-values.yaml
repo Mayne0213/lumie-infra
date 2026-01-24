@@ -139,62 +139,18 @@ common:
             - minio.minio0213.kro.kr
             - minio0213.kro.kr
 
-  # External Secrets
-  additionalExternalSecrets:
-    - name: minio-root-password
-      refreshInterval: 1h
-      secretStoreRef:
-        name: vault-backend
-        kind: ClusterSecretStore
-      target:
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
+    - name: minio-vss
+      path: bootstrap/minio
+      destination:
         name: minio-root-password
-        creationPolicy: Owner
-      data:
-        - secretKey: root-user
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_USER
-        - secretKey: root-password
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_PASSWORD
-        - secretKey: rootUser
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_USER
-        - secretKey: rootPassword
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ROOT_PASSWORD
-
-  # ClusterExternalSecret for S3 credentials
-  clusterExternalSecrets:
-    - name: minio-s3-credentials
-      namespaceSelector:
-        matchLabels:
-          minio-s3: enabled
-      refreshInterval: 1h
-      secretStoreRef:
-        kind: ClusterSecretStore
-        name: vault-backend
-      target:
-        name: minio-s3-credentials
-        creationPolicy: Owner
-        deletionPolicy: Retain
-      data:
-        - secretKey: MINIO_ACCESS_KEY_ID
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ACCESS_KEY_ID
-        - secretKey: MINIO_SECRET_ACCESS_KEY
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_SECRET_ACCESS_KEY
-        - secretKey: MINIO_REGION
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_REGION
-        - secretKey: MINIO_ENDPOINT
-          remoteRef:
-            key: bootstrap/minio
-            property: MINIO_ENDPOINT
+        transformation:
+          templates:
+            root-user: "{{ .Secrets.MINIO_ROOT_USER }}"
+            root-password: "{{ .Secrets.MINIO_ROOT_PASSWORD }}"
+            rootUser: "{{ .Secrets.MINIO_ROOT_USER }}"
+            rootPassword: "{{ .Secrets.MINIO_ROOT_PASSWORD }}"
+      rolloutRestartTargets:
+        - kind: StatefulSet
+          name: minio

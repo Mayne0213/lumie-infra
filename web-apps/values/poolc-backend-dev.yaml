@@ -72,62 +72,41 @@ common:
         secretKeyRef:
           name: poolc-dev-backend-db-app
           key: password
-  # External Secret for sensitive data (JWT secret, MinIO, etc.)
-  externalSecret:
-    enabled: true
-    refreshInterval: 1h
-    secretStoreRef:
-      name: vault-backend
-      kind: ClusterSecretStore
-    target:
-      creationPolicy: Owner
-      deletionPolicy: Retain
-      template:
-        engineVersion: v2
-        data:
-          # JWT
-          PROJECT_NAME_HERE_SECRET_KEY: "{{ .jwtSecret }}"
-          EXPIRE_LENGTH_IN_MILLISECONDS: "3600000"
-          # MinIO (S3-compatible storage)
-          MINIO_ENDPOINT: "{{ .minioEndpoint }}"
-          MINIO_ACCESS_KEY: "{{ .minioAccessKey }}"
-          MINIO_SECRET_KEY: "{{ .minioSecretKey }}"
-          MINIO_REGION: "{{ .minioRegion }}"
-          MINIO_BUCKET: "poolc"
-          # Defaults for optional services
-          FILE_DIR: "/tmp/"
-          EMAIL_ADDRESS: ""
-          EMAIL_PASSWORD: ""
-          NAVER_BOOK_API_URL: ""
-          NAVER_BOOK_CLIENT_ID: ""
-          NAVER_BOOK_CLIENT_SECRET: ""
-          KUBERNETES_API_KEY: ""
-    data:
-      # From shared JWT secret
-      - secretKey: jwtSecret
-        remoteRef:
-          key: web-apps/jwt
-          property: JWT_SECRET
-      # From MinIO secret
-      - secretKey: minioEndpoint
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_ENDPOINT
-      - secretKey: minioAccessKey
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_ACCESS_KEY_ID
-      - secretKey: minioSecretKey
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_SECRET_ACCESS_KEY
-      - secretKey: minioRegion
-        remoteRef:
-          key: bootstrap/minio
-          property: MINIO_REGION
+  # Vault Static Secrets (VSO) - Multiple secrets for different Vault paths
+  vaultStaticSecrets:
+    # JWT secret from web-apps/jwt
+    - name: jwt-vss
+      path: web-apps/jwt
+      destination:
+        name: poolc-dev-backend-jwt-secrets
+        transformation:
+          templates:
+            PROJECT_NAME_HERE_SECRET_KEY: "{{ .Secrets.JWT_SECRET }}"
+            EXPIRE_LENGTH_IN_MILLISECONDS: "3600000"
+    # MinIO credentials from bootstrap/minio
+    - name: minio-vss
+      path: bootstrap/minio
+      destination:
+        name: poolc-dev-backend-minio-secrets
+        transformation:
+          templates:
+            MINIO_ENDPOINT: "{{ .Secrets.MINIO_ENDPOINT }}"
+            MINIO_ACCESS_KEY: "{{ .Secrets.MINIO_ACCESS_KEY_ID }}"
+            MINIO_SECRET_KEY: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"
+            MINIO_REGION: "{{ .Secrets.MINIO_REGION }}"
+            MINIO_BUCKET: "poolc"
+            FILE_DIR: "/tmp/"
+            EMAIL_ADDRESS: ""
+            EMAIL_PASSWORD: ""
+            NAVER_BOOK_API_URL: ""
+            NAVER_BOOK_CLIENT_ID: ""
+            NAVER_BOOK_CLIENT_SECRET: ""
+            KUBERNETES_API_KEY: ""
   envFrom:
     - secretRef:
-        name: poolc-dev-backend-secrets
+        name: poolc-dev-backend-jwt-secrets
+    - secretRef:
+        name: poolc-dev-backend-minio-secrets
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
