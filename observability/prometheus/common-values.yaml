@@ -47,7 +47,7 @@ common:
         type: kubernetes.io/dockerconfigjson
         transformation:
           templates:
-            .dockerconfigjson: '{"auths":{"zot0213.kro.kr":{"username":"{{ .Secrets.ZOT_USERNAME }}","password":"{{ .Secrets.ZOT_PASSWORD }}","auth":"{{ printf "%s:%s" .Secrets.ZOT_USERNAME .Secrets.ZOT_PASSWORD | base64Encode }}"}}}'
+            .dockerconfigjson: '{"auths":{"zot0213.kro.kr":{"username":"{{ .Secrets.ZOT_USERNAME }}","password":"{{ .Secrets.ZOT_PASSWORD }}","auth":"{{ printf "%s:%s" .Secrets.ZOT_USERNAME .Secrets.ZOT_PASSWORD | b64enc }}"}}}'
 
   # ServiceMonitor for alertmanager (cross-namespace monitoring)
   serviceMonitor:
