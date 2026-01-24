@@ -1,0 +1,69 @@
+# Common chart values for vault
+
+common:
+  name: vault
+
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
+
+  service:
+    enabled: false
+
+  ingress:
+    enabled: false
+
+  # ClusterSecretStore for External Secrets Operator
+  clusterSecretStore:
+    enabled: true
+    name: vault-backend
+    vault:
+      server: http://vault.vault.svc.cluster.local:8200
+      path: secret
+      version: v2
+      auth:
+        mountPath: kubernetes
+        role: external-secrets
+        serviceAccountRef:
+          name: external-secrets
+          namespace: external-secrets
+
+  # RBAC for Vault token reviewer
+  rbac:
+    enabled: true
+    serviceAccount:
+      create: false
+    clusterRoles:
+      - name: system:auth-delegator
+        rules:
+          - apiGroups: ["authentication.k8s.io"]
+            resources: ["tokenreviews"]
+            verbs: ["create"]
+          - apiGroups: ["authorization.k8s.io"]
+            resources: ["subjectaccessreviews"]
+            verbs: ["create"]
+    clusterRoleBindings:
+      - name: vault-token-reviewer
+        roleRef:
+          kind: ClusterRole
+          name: system:auth-delegator
+        subjects:
+          - kind: ServiceAccount
+            name: vault
+            namespace: vault
+
+  # External Secret for OIDC
+  additionalExternalSecrets:
+    - name: vault-oidc-secret
+      refreshInterval: 1h
+      secretStoreRef:
+        name: vault-backend
+        kind: ClusterSecretStore
+      target:
+        name: vault-oidc-secret
+        creationPolicy: Owner
+      data:
+        - secretKey: VAULT_CLIENT_SECRET
+          remoteRef:
+            key: security/authelia
+            property: AUTHELIA_VAULT_CLIENT_SECRET

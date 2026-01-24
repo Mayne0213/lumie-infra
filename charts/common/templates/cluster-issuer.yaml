@@ -1,0 +1,19 @@
+{{- range $issuer := .Values.common.clusterIssuers }}
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: {{ $issuer.name }}
+spec:
+  acme:
+    server: {{ $issuer.server }}
+    email: {{ $issuer.email }}
+    privateKeySecretRef:
+      name: {{ $issuer.privateKeySecretRef | default $issuer.name }}
+    solvers:
+    {{- range $issuer.solvers }}
+    - http01:
+        ingress:
+          class: {{ .ingressClass | default "traefik" }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,85 @@
+# Common chart values for zot
+
+common:
+  name: zot
+
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
+
+  service:
+    enabled: false
+
+  ingress:
+    enabled: false
+
+  # External Secrets for Zot
+  additionalExternalSecrets:
+    # htpasswd secret
+    - name: zot-htpasswd-secret
+      refreshInterval: 1h
+      secretStoreRef:
+        name: vault-backend
+        kind: ClusterSecretStore
+      target:
+        name: zot-htpasswd
+        creationPolicy: Owner
+      data:
+        - secretKey: htpasswd
+          remoteRef:
+            key: bootstrap/zot
+            property: ZOT_HTPASSWD
+
+    # OIDC credentials
+    - name: zot-oidc-secret
+      refreshInterval: 1h
+      secretStoreRef:
+        name: vault-backend
+        kind: ClusterSecretStore
+      target:
+        name: zot-oidc-credentials
+        creationPolicy: Owner
+        template:
+          engineVersion: v2
+          data:
+            credentials.json: |
+              {
+                "clientid": "{{ .client_id }}",
+                "clientsecret": "{{ .client_secret }}"
+              }
+      data:
+        - secretKey: client_id
+          remoteRef:
+            key: bootstrap/zot
+            property: ZOT_OIDC_CLIENT_ID
+        - secretKey: client_secret
+          remoteRef:
+            key: bootstrap/zot
+            property: ZOT_OIDC_CLIENT_SECRET
+
+    # Session keys
+    - name: zot-session-secret
+      refreshInterval: 1h
+      secretStoreRef:
+        name: vault-backend
+        kind: ClusterSecretStore
+      target:
+        name: zot-session-keys
+        creationPolicy: Owner
+        template:
+          engineVersion: v2
+          data:
+            session-keys.json: |
+              {
+                "hashKey": "{{ .hashKey }}",
+                "encryptKey": "{{ .encryptKey }}"
+              }
+      data:
+        - secretKey: hashKey
+          remoteRef:
+            key: bootstrap/zot
+            property: ZOT_SESSION_HASH_KEY
+        - secretKey: encryptKey
+          remoteRef:
+            key: bootstrap/zot
+            property: ZOT_SESSION_BLOCK_KEY

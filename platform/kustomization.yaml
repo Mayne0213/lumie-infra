@@ -5,5 +5,8 @@ resources:
   # Platform self-reference
   - application.yaml
 
+  # Cluster-wide resources
+  - priority-classes/argocd.yaml
+
   # Core infrastructure (argocd, haproxy, traefik moved to bootstrap/)
   - gitea/argocd.yaml

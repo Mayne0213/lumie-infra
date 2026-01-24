@@ -1,0 +1,29 @@
+{{- range $pv := .Values.common.persistentVolumes }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ $pv.name }}
+  {{- with $pv.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  capacity:
+    storage: {{ $pv.capacity }}
+  volumeMode: {{ $pv.volumeMode | default "Filesystem" }}
+  accessModes:
+    {{- toYaml $pv.accessModes | nindent 4 }}
+  persistentVolumeReclaimPolicy: {{ $pv.reclaimPolicy | default "Retain" }}
+  storageClassName: {{ $pv.storageClassName }}
+  {{- if $pv.local }}
+  local:
+    path: {{ $pv.local.path }}
+  {{- end }}
+  {{- if $pv.nodeAffinity }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        {{- toYaml $pv.nodeAffinity.nodeSelectorTerms | nindent 8 }}
+  {{- end }}
+{{- end }}

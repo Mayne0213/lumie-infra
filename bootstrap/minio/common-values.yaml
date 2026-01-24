@@ -1,0 +1,200 @@
+# Common chart values for minio
+
+common:
+  name: minio
+
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
+
+  service:
+    enabled: false
+
+  ingress:
+    enabled: false
+
+  # StorageClass for MinIO local storage
+  storageClass:
+    enabled: true
+    name: minio-local
+    provisioner: kubernetes.io/no-provisioner
+    reclaimPolicy: Retain
+    volumeBindingMode: WaitForFirstConsumer
+
+  # PersistentVolumes for MinIO
+  persistentVolumes:
+    - name: minio-pv-worker1
+      capacity: 45Gi
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: minio-local
+      local:
+        path: /mnt/minio-data
+      nodeAffinity:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - k3s-master
+
+    - name: minio-pv-worker2
+      capacity: 45Gi
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: minio-local
+      local:
+        path: /mnt/minio-data
+      nodeAffinity:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - k3s-worker-2
+
+    - name: minio-pv-worker3
+      capacity: 45Gi
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: minio-local
+      local:
+        path: /mnt/minio-data
+      nodeAffinity:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - k3s-worker-3
+
+    - name: minio-pv-worker4
+      capacity: 45Gi
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: minio-local
+      local:
+        path: /mnt/minio-data
+      nodeAffinity:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - k3s-worker-4
+
+  # Additional Deployments (MinIO Console)
+  additionalDeployments:
+    - name: minio-console
+      replicas: 1
+      image: zot0213.kro.kr/storage/minio-console:v1.9.1
+      ports:
+        - containerPort: 9090
+          name: http
+      env:
+        - name: CONSOLE_MINIO_SERVER
+          value: "http://minio.minio.svc.cluster.local:9000"
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 64Mi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: minio-console
+                topologyKey: kubernetes.io/hostname
+      service:
+        enabled: true
+        name: minio-console-ui
+        ports:
+          - port: 9090
+            targetPort: 9090
+            name: http
+
+  # Console Ingress
+  additionalIngresses:
+    - name: console
+      serviceName: minio-console-ui
+      servicePort: 9090
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+      hosts:
+        - host: minio.minio0213.kro.kr
+          paths:
+            - path: /
+              pathType: Prefix
+        - host: minio0213.kro.kr
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: minio-console-tls
+          hosts:
+            - minio.minio0213.kro.kr
+            - minio0213.kro.kr
+
+  # External Secrets
+  additionalExternalSecrets:
+    - name: minio-root-password
+      refreshInterval: 1h
+      secretStoreRef:
+        name: vault-backend
+        kind: ClusterSecretStore
+      target:
+        name: minio-root-password
+        creationPolicy: Owner
+      data:
+        - secretKey: root-user
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_ROOT_USER
+        - secretKey: root-password
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_ROOT_PASSWORD
+        - secretKey: rootUser
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_ROOT_USER
+        - secretKey: rootPassword
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_ROOT_PASSWORD
+
+  # ClusterExternalSecret for S3 credentials
+  clusterExternalSecrets:
+    - name: minio-s3-credentials
+      namespaceSelector:
+        matchLabels:
+          minio-s3: enabled
+      refreshInterval: 1h
+      secretStoreRef:
+        kind: ClusterSecretStore
+        name: vault-backend
+      target:
+        name: minio-s3-credentials
+        creationPolicy: Owner
+        deletionPolicy: Retain
+      data:
+        - secretKey: MINIO_ACCESS_KEY_ID
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_ACCESS_KEY_ID
+        - secretKey: MINIO_SECRET_ACCESS_KEY
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_SECRET_ACCESS_KEY
+        - secretKey: MINIO_REGION
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_REGION
+        - secretKey: MINIO_ENDPOINT
+          remoteRef:
+            key: bootstrap/minio
+            property: MINIO_ENDPOINT

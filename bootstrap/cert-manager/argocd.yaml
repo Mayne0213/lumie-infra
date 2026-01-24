@@ -21,7 +21,10 @@ spec:
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: bootstrap/cert-manager
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/bootstrap/cert-manager/common-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager

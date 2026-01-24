@@ -1,0 +1,30 @@
+# Common chart values for cert-manager
+
+common:
+  name: cert-manager
+
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
+
+  service:
+    enabled: false
+
+  ingress:
+    enabled: false
+
+  # ClusterIssuers for Let's Encrypt
+  clusterIssuers:
+    - name: letsencrypt-prod
+      server: https://acme-v02.api.letsencrypt.org/directory
+      email: bluemayne0213@icloud.com
+      privateKeySecretRef: letsencrypt-prod
+      solvers:
+        - ingressClass: traefik
+
+    - name: letsencrypt-staging
+      server: https://acme-staging-v02.api.letsencrypt.org/directory
+      email: bluemayne0213@icloud.com
+      privateKeySecretRef: letsencrypt-staging
+      solvers:
+        - ingressClass: traefik

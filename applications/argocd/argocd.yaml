@@ -3,8 +3,8 @@ kind: Application
 metadata:
   name: argocd
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "6"
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   sources:
@@ -14,15 +14,18 @@ spec:
       targetRevision: 7.7.10
       helm:
         valueFiles:
-          - $values/bootstrap/argocd/helm-values.yaml
+          - $values/applications/argocd/helm-values.yaml
     # Source 2: Helm values from Git repo
     - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
       targetRevision: main
       ref: values
-    # Source 3: Additional manifests (Ingress, Namespace)
+    # Source 3: Common chart for additional resources (Ingresses)
     - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
       targetRevision: main
-      path: bootstrap/argocd/manifests
+      path: charts/common
+      helm:
+        valueFiles:
+          - $values/applications/argocd/common-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

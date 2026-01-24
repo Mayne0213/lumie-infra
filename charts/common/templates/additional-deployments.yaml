@@ -1,0 +1,58 @@
+{{- range $deploy := .Values.common.additionalDeployments }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $deploy.name }}
+  labels:
+    app: {{ $deploy.name }}
+spec:
+  replicas: {{ $deploy.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ $deploy.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $deploy.name }}
+    spec:
+      {{- with $deploy.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ $deploy.containerName | default $deploy.name }}
+          image: {{ $deploy.image }}
+          {{- with $deploy.ports }}
+          ports:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $deploy.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $deploy.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- if $deploy.service }}
+{{- if $deploy.service.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $deploy.service.name | default $deploy.name }}
+spec:
+  selector:
+    app: {{ $deploy.name }}
+  ports:
+    {{- range $deploy.service.ports }}
+    - port: {{ .port }}
+      targetPort: {{ .targetPort | default .port }}
+      {{- if .name }}
+      name: {{ .name }}
+      {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,49 @@
+# Common chart values for argocd
+
+common:
+  name: argocd
+
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
+
+  service:
+    enabled: false
+
+  ingress:
+    enabled: false
+
+  # Additional Ingresses (Authelia bypass for webhook and health)
+  additionalIngresses:
+    # Webhook - GitHub needs direct access without Authelia
+    - name: webhook
+      serviceName: argocd-server
+      servicePort: 80
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+      hosts:
+        - host: argocd0213.kro.kr
+          paths:
+            - path: /api/webhook
+              pathType: Prefix
+      tls:
+        - secretName: argocd-server-tls
+          hosts:
+            - argocd0213.kro.kr
+
+    # Health check - monitoring needs direct access
+    - name: health
+      serviceName: argocd-server
+      servicePort: 80
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/router.priority: "100"
+      hosts:
+        - host: argocd0213.kro.kr
+          paths:
+            - path: /healthz
+              pathType: Exact
+      tls:
+        - secretName: argocd-server-tls
+          hosts:
+            - argocd0213.kro.kr

@@ -21,7 +21,10 @@ spec:
     ref: values
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
-    path: bootstrap/vault
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/bootstrap/vault/common-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: vault

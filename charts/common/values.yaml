@@ -255,6 +255,66 @@ common:
     volumeBindingMode: WaitForFirstConsumer
     parameters: {}
 
+  # ClusterIssuers for cert-manager
+  clusterIssuers: []
+  # - name: letsencrypt-prod
+  #   server: https://acme-v02.api.letsencrypt.org/directory
+  #   email: user@example.com
+  #   privateKeySecretRef: letsencrypt-prod
+  #   solvers:
+  #     - ingressClass: traefik
+
+  # ClusterSecretStore for External Secrets
+  clusterSecretStore:
+    enabled: false
+    name: ""
+    vault:
+      server: ""
+      path: secret
+      version: v2
+      auth:
+        mountPath: kubernetes
+        role: ""
+        serviceAccountRef:
+          name: ""
+          namespace: ""
+
+  # ClusterExternalSecrets (namespace-wide secrets)
+  clusterExternalSecrets: []
+  # - name: my-cluster-secret
+  #   namespaceSelector:
+  #     matchLabels:
+  #       my-label: enabled
+  #   refreshInterval: 1h
+  #   secretStoreRef:
+  #     kind: ClusterSecretStore
+  #     name: vault-backend
+  #   target:
+  #     name: my-secret
+  #     creationPolicy: Owner
+  #   data:
+  #     - secretKey: KEY
+  #       remoteRef:
+  #         key: path/to/secret
+  #         property: PROPERTY
+
+  # PersistentVolumes (for local storage)
+  persistentVolumes: []
+  # - name: my-pv
+  #   capacity: 10Gi
+  #   accessModes:
+  #     - ReadWriteOnce
+  #   storageClassName: local-storage
+  #   local:
+  #     path: /mnt/data
+  #   nodeAffinity:
+  #     nodeSelectorTerms:
+  #       - matchExpressions:
+  #           - key: kubernetes.io/hostname
+  #             operator: In
+  #             values:
+  #               - node1
+
   # CNPG Database configuration
   database:
     enabled: false
