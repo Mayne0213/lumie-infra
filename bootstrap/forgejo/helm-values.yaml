@@ -30,10 +30,18 @@ redis-cluster:
   enabled: false
 
 # =============================================================================
-# PERSISTENCE - Disabled, using MinIO S3
+# PERSISTENCE - Minimal PVC for SQLite database (blobs stored in MinIO S3)
 # =============================================================================
 persistence:
-  enabled: false
+  enabled: true
+  create: true
+  mount: true
+  size: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  storageClass: local-path
+  annotations:
+    helm.sh/resource-policy: keep
 
 # =============================================================================
 # ADMIN USER
