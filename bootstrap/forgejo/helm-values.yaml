@@ -101,6 +101,10 @@ gitea:
       ENABLE_OPENID_SIGNIN: false
       ENABLE_OPENID_SIGNUP: false
 
+    # Webhook configuration - allow internal cluster services
+    webhook:
+      ALLOWED_HOST_LIST: "*.svc.cluster.local,*.kro.kr,10.0.0.0/8"
+
     # MinIO S3 Storage Configuration
     storage:
       STORAGE_TYPE: minio
