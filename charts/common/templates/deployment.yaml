@@ -60,12 +60,16 @@ spec:
               port: {{ .Values.common.containerPort }}
             initialDelaySeconds: {{ .Values.common.healthCheck.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.common.healthCheck.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.common.healthCheck.livenessProbe.timeoutSeconds | default 1 }}
+            failureThreshold: {{ .Values.common.healthCheck.livenessProbe.failureThreshold | default 3 }}
           readinessProbe:
             httpGet:
               path: {{ .Values.common.healthCheck.path }}
               port: {{ .Values.common.containerPort }}
             initialDelaySeconds: {{ .Values.common.healthCheck.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.common.healthCheck.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.common.healthCheck.readinessProbe.timeoutSeconds | default 1 }}
+            failureThreshold: {{ .Values.common.healthCheck.readinessProbe.failureThreshold | default 3 }}
           {{- if .Values.common.healthCheck.startupProbe }}
           startupProbe:
             httpGet:
