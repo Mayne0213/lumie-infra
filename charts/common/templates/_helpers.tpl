@@ -36,5 +36,5 @@ app: {{ include "web-app.fullname" . }}
 Image name
 */}}
 {{- define "web-app.image" -}}
-{{- printf "%s/%s:%s" .Values.common.image.registry .Values.common.image.repository .Values.common.image.tag }}
+{{- printf "%s/%s:%s" .Values.common.image.registry .Values.common.image.repository (toString .Values.common.image.tag) }}
 {{- end }}

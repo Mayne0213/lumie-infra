@@ -5,7 +5,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: web-apps/joossam-dev
-    tag: 55d8f266 # Updated by ArgoCD Image Updater
+    tag: "2105e13"
     pullPolicy: Always
   replicaCount: 1
   containerPort: 8000
