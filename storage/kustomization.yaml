@@ -5,8 +5,8 @@ resources:
   # Self-reference for App of Apps pattern
   - application.yaml
 
-  # Distributed storage
-  - longhorn/argocd.yaml
+  # Distributed storage (disabled - not in use)
+  # - longhorn/argocd.yaml
   # Database tools
   - pgweb/argocd.yaml
   # Operators

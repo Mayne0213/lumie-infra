@@ -16,3 +16,4 @@ resources:
 - cert-manager/argocd.yaml
 - zot/argocd.yaml
 - argocd/argocd.yaml
+# longhorn: moved to storage/
