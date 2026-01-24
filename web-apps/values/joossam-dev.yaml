@@ -27,13 +27,13 @@ common:
       - secretName: joossam-dev-tls
         hosts:
           - dev.joossameng.kro.kr
-  # Resource settings (no CPU limit for stability)
+  # Resource settings - for batch OMR processing (1Gi due to cluster constraints)
   resources:
     requests:
-      cpu: 15m
-      memory: 100Mi
+      cpu: 100m
+      memory: 1Gi
     limits:
-      memory: 100Mi
+      memory: 1Gi
   healthCheck:
     enabled: true
     path: /
@@ -42,10 +42,13 @@ common:
       failureThreshold: 30
     livenessProbe:
       initialDelaySeconds: 0
-      periodSeconds: 10
+      periodSeconds: 30
+      timeoutSeconds: 30
+      failureThreshold: 3
     readinessProbe:
       initialDelaySeconds: 0
-      periodSeconds: 5
+      periodSeconds: 30
+      timeoutSeconds: 30
   externalSecret:
     enabled: false
   # Affinity - Soft Anti-Affinity to spread pods across nodes
