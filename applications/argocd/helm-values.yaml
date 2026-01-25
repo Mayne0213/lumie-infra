@@ -65,22 +65,24 @@ controller:
   # Memory optimization environment variables
   env:
     - name: GOMEMLIMIT
-      value: "1400MiB"
+      value: "800MiB"
     - name: GOGC
       value: "50"
 
-  # Disable periodic app resync (webhook only)
+  # Disable periodic app resync (webhook only) + reduce processors for memory
   extraArgs:
     - --app-resync=3600
     - --app-hard-resync=0
+    - --status-processors=10
+    - --operation-processors=5
 
   # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
       cpu: 350m
-      memory: 1536Mi
+      memory: 1024Mi
     limits:
-      memory: 1536Mi
+      memory: 1024Mi
 
 # =============================================================================
 # API SERVER (Deployment)
