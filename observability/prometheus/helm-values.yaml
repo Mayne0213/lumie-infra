@@ -36,6 +36,8 @@ prometheusOperator:
 kubelet:
   enabled: true
   serviceMonitor:
+    # Increase cadvisor interval from default 10s to 60s (reduce CPU load)
+    cAdvisorInterval: 60s
     # cAdvisor metrics (container_memory_working_set_bytes 등)
     cAdvisorRelabelings:
       - targetLabel: cluster
@@ -64,6 +66,34 @@ kubelet:
       - action: drop
         regex: ".+;"
         sourceLabels: [id, pod]
+    # Drop high-cardinality histogram bucket metrics from kubelet endpoint
+    # k3s exposes apiserver/etcd/scheduler metrics via kubelet, causing high series count
+    # Keep _count and _sum for rate calculations, drop only _bucket
+    metricRelabelings:
+      # Drop apiserver histogram buckets (~33k series), keep count/sum
+      - action: drop
+        regex: "apiserver_.*_bucket"
+        sourceLabels: [__name__]
+      # Drop etcd histogram buckets (~18k series), keep count/sum
+      - action: drop
+        regex: "etcd_.*_bucket"
+        sourceLabels: [__name__]
+      # Drop scheduler histogram buckets
+      - action: drop
+        regex: "scheduler_.*_bucket"
+        sourceLabels: [__name__]
+      # Drop workqueue histogram buckets
+      - action: drop
+        regex: "workqueue_.*_bucket"
+        sourceLabels: [__name__]
+      # Drop prober histogram buckets
+      - action: drop
+        regex: "prober_.*_bucket"
+        sourceLabels: [__name__]
+      # Drop some low-utility kubelet bucket metrics
+      - action: drop
+        regex: "(csi_operations|storage_operation_duration|kubelet_runtime_operations_duration)_seconds_bucket"
+        sourceLabels: [__name__]
     # Resource metrics
     resourceRelabelings:
       - targetLabel: cluster
@@ -92,8 +122,11 @@ prometheus:
       registry: zot0213.kro.kr
       repository: observability/prometheus
       tag: v3.8.0
-    # Enable remote write receiver for OTel Collector
-    enableRemoteWriteReceiver: true
+    # Enable OTLP receiver for OTel Collector (Prometheus 3.0+ native OTLP)
+    # More efficient than remote write (gRPC vs HTTP)
+    enableOTLPReceiver: true
+    # Keep remote write receiver as fallback (can be disabled later)
+    enableRemoteWriteReceiver: false
 
     # Single replica
     replicas: 1

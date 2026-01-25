@@ -208,12 +208,12 @@ spec:
         tls:
           insecure: true
 
-      prometheusremotewrite:
-        endpoint: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/write
+      # OTLP exporter for Prometheus 3.0+ native OTLP receiver
+      # More efficient than prometheusremotewrite (gRPC vs HTTP)
+      otlp/prometheus:
+        endpoint: prometheus-kube-prometheus-prometheus.prometheus.svc:4317
         tls:
           insecure: true
-        external_labels:
-          otel_collector: ${env:K8S_POD_NAME}
 
       # Loki via OTLP HTTP endpoint
       otlphttp/loki:
@@ -239,7 +239,7 @@ spec:
         metrics:
           receivers: [otlp, prometheus]
           processors: [memory_limiter, k8sattributes, resourcedetection, batch]
-          exporters: [prometheusremotewrite]
+          exporters: [otlp/prometheus]
 
         logs:
           receivers: [otlp, filelog]
