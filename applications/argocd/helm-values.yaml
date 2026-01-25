@@ -164,10 +164,16 @@ dex:
   enabled: false
 
 # =============================================================================
-# APPLICATIONSET CONTROLLER - Disabled (not used)
+# APPLICATIONSET CONTROLLER
 # =============================================================================
 applicationSet:
-  enabled: false
+  enabled: true
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      memory: 64Mi
 
 # =============================================================================
 # NOTIFICATIONS CONTROLLER - Disabled (not used)
