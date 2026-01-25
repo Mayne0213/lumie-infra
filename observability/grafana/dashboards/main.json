@@ -114,7 +114,7 @@
         "y": 1
       },
       "id": 77,
-      "interval": "2m",
+      "interval": "1m",
       "options": {
         "displayMode": "lcd",
         "legend": {
@@ -150,7 +150,7 @@
           "exemplar": true,
           "expr": "avg(sum by (instance, cpu) (rate(node_cpu_seconds_total{mode!~\"idle|iowait|steal\", cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])))",
           "hide": false,
-          "interval": "2m",
+          "interval": "1m",
           "legendFormat": "Real Linux",
           "range": true,
           "refId": "Real Linux"
@@ -164,7 +164,7 @@
           "exemplar": true,
           "expr": "avg(sum by (core) (rate(windows_cpu_time_total{mode!=\"idle\", cluster=\"$cluster\"}[2m])))",
           "hide": false,
-          "interval": "2m",
+          "interval": "1m",
           "legendFormat": "__auto",
           "range": true,
           "refId": "Real Windows"
@@ -791,7 +791,7 @@
         "y": 9
       },
       "id": 37,
-      "interval": "2m",
+      "interval": "1m",
       "options": {
         "colorMode": "none",
         "graphMode": "none",
@@ -820,7 +820,7 @@
           "editorMode": "code",
           "exemplar": true,
           "expr": "sum(rate(node_cpu_seconds_total{mode!~\"idle|iowait|steal\", cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])) or vector(0)",
-          "interval": "2m",
+          "interval": "1m",
           "legendFormat": "Real Linux",
           "range": true,
           "refId": "Real Linux"
@@ -834,7 +834,7 @@
           "exemplar": true,
           "expr": "sum(rate(windows_cpu_time_total{mode!=\"idle\", cluster=\"$cluster\"}[$__rate_interval])) or vector(0)",
           "hide": false,
-          "interval": "2m",
+          "interval": "1m",
           "legendFormat": "Real Windows",
           "range": true,
           "refId": "Real Windows"
@@ -1248,7 +1248,7 @@
           "editorMode": "code",
           "exemplar": true,
           "expr": "avg(sum by (instance, cpu) (rate(node_cpu_seconds_total{mode!~\"idle|iowait|steal\", cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])))",
-          "interval": "2m",
+          "interval": "1m",
           "legendFormat": "Linux",
           "range": true,
           "refId": "Linux"
@@ -1262,7 +1262,7 @@
           "exemplar": true,
           "expr": "1 - avg(rate(windows_cpu_time_total{cluster=\"$cluster\",mode=\"idle\"}[$__rate_interval]))",
           "hide": false,
-          "interval": "2m",
+          "interval": "1m",
           "legendFormat": "Windows",
           "range": true,
           "refId": "Windows"
