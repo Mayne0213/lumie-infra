@@ -5,9 +5,15 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
-    # DaemonSet for HA - runs on every node
+    # DaemonSet for HA - runs on every node including master
     deployment:
       kind: DaemonSet
+
+    # Toleration for master node
+    tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
       # Probe settings - 노드 부하 시에도 안정적으로 동작
       livenessProbe:
         initialDelaySeconds: 10

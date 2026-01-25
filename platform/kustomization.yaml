@@ -10,6 +10,7 @@ resources:
 
   # Core infrastructure
   - traefik-config/argocd.yaml
+  - coredns-config/argocd.yaml
   - haproxy/argocd.yaml
   - cert-manager/argocd.yaml
 
