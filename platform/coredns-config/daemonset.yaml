@@ -25,13 +25,6 @@ spec:
           effect: NoSchedule
       nodeSelector:
         kubernetes.io/os: linux
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node.kubernetes.io/instance-type
-                    operator: DoesNotExist
       containers:
         - name: coredns
           image: rancher/mirrored-coredns-coredns:1.13.1
