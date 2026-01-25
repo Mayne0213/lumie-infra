@@ -1,49 +1,4 @@
 {
-  "__inputs": [],
-  "__requires": [
-    {
-      "id": "gauge",
-      "name": "Gauge",
-      "type": "panel",
-      "version": ""
-    },
-    {
-      "id": "grafana",
-      "name": "Grafana",
-      "type": "grafana",
-      "version": "8.0.0"
-    },
-    {
-      "id": "graph",
-      "name": "Graph (old)",
-      "type": "panel",
-      "version": ""
-    },
-    {
-      "id": "heatmap",
-      "name": "Heatmap",
-      "type": "panel",
-      "version": ""
-    },
-    {
-      "id": "prometheus",
-      "name": "Prometheus",
-      "type": "datasource",
-      "version": "1.0.0"
-    },
-    {
-      "id": "stat",
-      "name": "Stat",
-      "type": "panel",
-      "version": ""
-    },
-    {
-      "id": "text",
-      "name": "Text",
-      "type": "panel",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -61,7 +16,7 @@
   "editable": true,
   "gnetId": 14584,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 21,
   "iteration": 1623677737451,
   "links": [],
   "panels": [

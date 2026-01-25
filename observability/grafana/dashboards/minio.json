@@ -26,7 +26,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 13502,
   "graphTooltip": 0,
-  "id": 16,
+  "id": 19,
   "links": [
     {
       "icon": "external link",
@@ -2226,6 +2226,8 @@
       "fieldConfig": {
         "defaults": {
           "mappings": [],
+          "max": 100,
+          "min": 0,
           "thresholds": {
             "mode": "percentage",
             "steps": [
@@ -2242,9 +2244,7 @@
               }
             ]
           },
-          "unit": "percent",
-          "min": 0,
-          "max": 100
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -3173,6 +3173,6 @@
   "timezone": "",
   "title": "MinIO",
   "uid": "TgmJnqnnk",
-  "version": 1,
+  "version": 13,
   "weekStart": ""
 }

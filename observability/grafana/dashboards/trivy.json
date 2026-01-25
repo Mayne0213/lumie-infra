@@ -2687,6 +2687,6 @@
   "timezone": "",
   "title": "Trivy",
   "uid": "security_trivy_operator",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

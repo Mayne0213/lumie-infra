@@ -1,37 +1,4 @@
 {
-  "__inputs": [],
-  "__requires": [
-    {
-      "id": "grafana",
-      "name": "Grafana",
-      "type": "grafana",
-      "version": "6.3.4"
-    },
-    {
-      "id": "graph",
-      "name": "Graph",
-      "type": "panel",
-      "version": ""
-    },
-    {
-      "id": "prometheus",
-      "name": "Prometheus",
-      "type": "datasource",
-      "version": "1.0.0"
-    },
-    {
-      "id": "singlestat",
-      "name": "Singlestat",
-      "type": "panel",
-      "version": ""
-    },
-    {
-      "id": "table",
-      "name": "Table",
-      "type": "panel",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -49,7 +16,7 @@
   "editable": true,
   "gnetId": 11001,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 16,
   "iteration": 1571233502297,
   "links": [],
   "panels": [

@@ -25,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 23,
+  "id": 14,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1521,6 +1521,6 @@
   "timezone": "",
   "title": "Traefik",
   "uid": "traefik-custom",
-  "version": 10,
+  "version": 1,
   "weekStart": ""
 }

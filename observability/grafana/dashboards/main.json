@@ -57,11 +57,10 @@
       }
     ]
   },
-  "description": "This is a modern 'Global View' dashboard for your Kubernetes cluster(s). Made for kube-prometheus-stack and take advantage of the latest Grafana features. GitHub repository: https://github.com/dotdc/grafana-dashboards-kubernetes",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 12,
+  "id": 27,
   "links": [],
   "panels": [
     {
@@ -114,7 +113,6 @@
         "y": 1
       },
       "id": 77,
-      "interval": "1m",
       "options": {
         "displayMode": "lcd",
         "legend": {
@@ -149,8 +147,7 @@
           "editorMode": "code",
           "exemplar": true,
           "expr": "avg(sum by (instance, cpu) (rate(node_cpu_seconds_total{mode!~\"idle|iowait|steal\", cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])))",
-          "hide": false,
-          "interval": "1m",
+          "interval": "",
           "legendFormat": "Real Linux",
           "range": true,
           "refId": "Real Linux"
@@ -162,10 +159,10 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "avg(sum by (core) (rate(windows_cpu_time_total{mode!=\"idle\", cluster=\"$cluster\"}[2m])))",
+          "expr": "avg(sum by (core) (rate(windows_cpu_time_total{mode!=\"idle\", cluster=\"$cluster\"}[$__rate_interval])))",
           "hide": false,
-          "interval": "1m",
-          "legendFormat": "__auto",
+          "interval": "",
+          "legendFormat": "Real Windows",
           "range": true,
           "refId": "Real Windows"
         },
@@ -342,7 +339,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\", cluster=\"$cluster\"}) / sum(machine_memory_bytes{cluster=\"$cluster\"})",
+          "expr": "sum(kube_pod_container_resource_limits{resource=\"memory\", cluster=\"$cluster\"}) / sum(machine_memory_bytes{cluster=\"$cluster\"}) or vector(0)",
           "hide": false,
           "legendFormat": "Limits",
           "range": true,
@@ -791,7 +788,6 @@
         "y": 9
       },
       "id": 37,
-      "interval": "1m",
       "options": {
         "colorMode": "none",
         "graphMode": "none",
@@ -819,8 +815,8 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(node_cpu_seconds_total{mode!~\"idle|iowait|steal\", cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])) or vector(0)",
-          "interval": "1m",
+          "expr": "sum(rate(node_cpu_seconds_total{mode!~\"idle|iowait|steal\", cluster=\"$cluster\", job=\"$job\"}[$__rate_interval]))",
+          "interval": "",
           "legendFormat": "Real Linux",
           "range": true,
           "refId": "Real Linux"
@@ -832,9 +828,9 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(windows_cpu_time_total{mode!=\"idle\", cluster=\"$cluster\"}[$__rate_interval])) or vector(0)",
+          "expr": "sum(rate(windows_cpu_time_total{mode!=\"idle\", cluster=\"$cluster\"}[$__rate_interval]))",
           "hide": false,
-          "interval": "1m",
+          "interval": "",
           "legendFormat": "Real Windows",
           "range": true,
           "refId": "Real Windows"
@@ -845,7 +841,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\", cluster=\"$cluster\"}) or vector(0)",
+          "expr": "sum(kube_pod_container_resource_requests{resource=\"cpu\", cluster=\"$cluster\"})",
           "hide": false,
           "legendFormat": "Requests",
           "range": true,
@@ -857,7 +853,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\", cluster=\"$cluster\"}) or vector(0)",
+          "expr": "sum(kube_pod_container_resource_limits{resource=\"cpu\", cluster=\"$cluster\"})",
           "hide": false,
           "legendFormat": "Limits",
           "range": true,
@@ -869,7 +865,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(machine_cpu_cores{cluster=\"$cluster\"}) or vector(0)",
+          "expr": "sum(machine_cpu_cores{cluster=\"$cluster\"})",
           "hide": false,
           "legendFormat": "Total",
           "range": true,
@@ -1248,7 +1244,7 @@
           "editorMode": "code",
           "exemplar": true,
           "expr": "avg(sum by (instance, cpu) (rate(node_cpu_seconds_total{mode!~\"idle|iowait|steal\", cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])))",
-          "interval": "1m",
+          "interval": "$resolution",
           "legendFormat": "Linux",
           "range": true,
           "refId": "Linux"
@@ -1262,7 +1258,7 @@
           "exemplar": true,
           "expr": "1 - avg(rate(windows_cpu_time_total{cluster=\"$cluster\",mode=\"idle\"}[$__rate_interval]))",
           "hide": false,
-          "interval": "1m",
+          "interval": "$resolution",
           "legendFormat": "Windows",
           "range": true,
           "refId": "Windows"
@@ -1987,14 +1983,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(container_pressure_cpu_waiting_seconds_total{pod!=\"\", cluster=\"$cluster\"}[$__rate_interval])) by (namespace) > 0.1",
+          "expr": "sum(rate(container_cpu_cfs_throttled_seconds_total{image!=\"\", cluster=\"$cluster\"}[$__rate_interval])) by (namespace) > 0",
           "interval": "$resolution",
           "legendFormat": "{{ namespace }}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "CPU Pressure (waiting) by namespace",
+      "title": "CPU Throttled seconds by namespace",
       "type": "timeseries"
     },
     {
@@ -2099,14 +2095,14 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(node_pressure_cpu_waiting_seconds_total{cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])) by (instance) > 0.1",
+          "expr": "sum(rate(node_cpu_core_throttles_total{cluster=\"$cluster\", job=\"$job\"}[$__rate_interval])) by (instance)",
           "interval": "$resolution",
           "legendFormat": "{{ instance }}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Node CPU Pressure (waiting) by instance",
+      "title": "CPU Core Throttled by instance",
       "type": "timeseries"
     },
     {
@@ -2353,11 +2349,45 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Pods that were OOM killed (based on lastState).",
+      "description": "No data is generally a good thing here.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "points",
+            "fillOpacity": 25,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -2365,15 +2395,11 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 1
+                "value": 0
               },
               {
                 "color": "red",
-                "value": 3
+                "value": 80
               }
             ]
           },
@@ -2389,18 +2415,23 @@
       },
       "id": 87,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
       },
       "pluginVersion": "12.3.1",
       "targets": [
@@ -2410,14 +2441,16 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "count(kube_pod_container_status_last_terminated_reason{cluster=\"$cluster\", reason=\"OOMKilled\"} == 1)",
-          "instant": true,
-          "legendFormat": "OOMKilled Pods",
+          "exemplar": true,
+          "expr": "sum(increase(container_oom_events_total{cluster=\"$cluster\"}[$__rate_interval])) by (namespace) > 0",
+          "interval": "",
+          "legendFormat": "{{ namespace }}",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "OOMKilled Pods",
-      "type": "stat"
+      "title": "OOM Events by namespace",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -2517,7 +2550,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(increase(kube_pod_container_status_restarts_total{cluster=\"$cluster\"}[$__rate_interval])) by (namespace) > 0 or vector(0)",
+          "expr": "sum(increase(kube_pod_container_status_restarts_total{cluster=\"$cluster\"}[$__rate_interval])) by (namespace) > 0",
           "interval": "",
           "legendFormat": "{{ namespace }}",
           "range": true,
@@ -3395,15 +3428,15 @@
     "list": [
       {
         "current": {
-          "text": "Thanos",
-          "value": "Thanos"
+          "text": "",
+          "value": ""
         },
         "includeAll": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
-        "regex": "/Thanos/",
+        "regex": "",
         "type": "datasource"
       },
       {
@@ -3501,7 +3534,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "Main",
-  "uid": "k8s_views_global",
-  "version": 9,
+  "uid": "k8s_views_globalss",
+  "version": 4,
   "weekStart": ""
 }

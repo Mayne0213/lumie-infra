@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "description": "",
-      "label": "Loki",
-      "name": "DS_LOKI",
-      "pluginId": "loki",
-      "pluginName": "Loki",
-      "type": "datasource"
-    }
-  ],
-  "__requires": [
-    {
-      "id": "grafana",
-      "name": "Grafana",
-      "type": "grafana",
-      "version": "7.1.0"
-    },
-    {
-      "id": "graph",
-      "name": "Graph",
-      "type": "panel",
-      "version": ""
-    },
-    {
-      "id": "logs",
-      "name": "Logs",
-      "type": "panel",
-      "version": ""
-    },
-    {
-      "id": "loki",
-      "name": "Loki",
-      "type": "datasource",
-      "version": "1.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -52,7 +16,7 @@
   "editable": true,
   "gnetId": 13639,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 18,
   "links": [
     {
       "icon": "bolt",
@@ -286,5 +250,5 @@
   "timezone": "",
   "title": "Logs",
   "uid": "sadlil-loki-apps-dashboard",
-  "version": 2
+  "version": 1
 }
