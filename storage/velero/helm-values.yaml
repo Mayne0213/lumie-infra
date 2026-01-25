@@ -17,9 +17,9 @@ replicaCount: 1
 resources:
   requests:
     cpu: 11m
-    memory: 50Mi
+    memory: 140Mi
   limits:
-    memory: 50Mi
+    memory: 140Mi
 
 # Init containers for plugins
 initContainers:
