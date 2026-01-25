@@ -208,10 +208,10 @@ spec:
         tls:
           insecure: true
 
-      # OTLP exporter for Prometheus 3.0+ native OTLP receiver
-      # More efficient than prometheusremotewrite (gRPC vs HTTP)
-      otlp/prometheus:
-        endpoint: prometheus-kube-prometheus-prometheus.prometheus.svc:4317
+      # OTLP HTTP exporter for Prometheus 3.0+ native OTLP receiver
+      # Prometheus OTLP uses HTTP endpoint, not gRPC
+      otlphttp/prometheus:
+        endpoint: http://prometheus-kube-prometheus-prometheus.prometheus.svc:9090/api/v1/otlp
         tls:
           insecure: true
 
@@ -239,7 +239,7 @@ spec:
         metrics:
           receivers: [otlp, prometheus]
           processors: [memory_limiter, k8sattributes, resourcedetection, batch]
-          exporters: [otlp/prometheus]
+          exporters: [otlphttp/prometheus]
 
         logs:
           receivers: [otlp, filelog]
