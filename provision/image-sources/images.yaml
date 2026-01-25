@@ -39,6 +39,11 @@ images:
     tag: v1.9.1
     dest: storage/minio-console
 
+  - name: minio-mc
+    source: docker.io/minio/mc
+    tag: latest
+    dest: storage/minio-mc
+
   # Longhorn distributed storage
   - name: longhorn-manager
     source: longhornio/longhorn-manager

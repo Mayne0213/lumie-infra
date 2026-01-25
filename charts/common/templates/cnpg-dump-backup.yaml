@@ -1,0 +1,117 @@
+{{- if and .Values.common.database.enabled .Values.common.database.dumpBackup.enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "web-app.fullname" . }}-db-dump
+  labels:
+    {{- include "web-app.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.common.database.dumpBackup.schedule | default "0 3 * * *" | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.common.database.dumpBackup.successfulJobsHistoryLimit | default 3 }}
+  failedJobsHistoryLimit: {{ .Values.common.database.dumpBackup.failedJobsHistoryLimit | default 3 }}
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 86400
+      template:
+        spec:
+          restartPolicy: OnFailure
+          initContainers:
+            - name: pg-dump
+              image: {{ .Values.common.database.dumpBackup.postgresImage | default "zot0213.kro.kr/storage/postgresql:16.6" }}
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -e
+                  TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+                  DUMP_FILE="/backup/{{ include "web-app.fullname" . }}-${TIMESTAMP}.sql.gz"
+                  echo "Starting pg_dump at $(date)"
+                  pg_dump -h "$PGHOST" -U "$PGUSER" -d "$PGDATABASE" | gzip > "$DUMP_FILE"
+                  echo "Dump completed: $DUMP_FILE ($(du -h $DUMP_FILE | cut -f1))"
+                  echo "$DUMP_FILE" > /backup/latest_dump_path
+              env:
+                - name: PGHOST
+                  value: {{ include "web-app.fullname" . }}-db-rw
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "web-app.fullname" . }}-db-app
+                      key: username
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "web-app.fullname" . }}-db-app
+                      key: password
+                - name: PGDATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "web-app.fullname" . }}-db-app
+                      key: dbname
+              volumeMounts:
+                - name: backup-volume
+                  mountPath: /backup
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  memory: 512Mi
+          containers:
+            - name: upload-to-minio
+              image: {{ .Values.common.database.dumpBackup.minioImage | default "zot0213.kro.kr/storage/minio-mc:latest" }}
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -e
+                  DUMP_FILE=$(cat /backup/latest_dump_path)
+                  BUCKET="{{ .Values.common.database.dumpBackup.bucket | default (include "web-app.fullname" .) }}"
+                  BACKUP_PATH="${BUCKET}/backup"
+
+                  echo "Configuring MinIO client..."
+                  mc alias set minio "$MINIO_ENDPOINT" "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"
+
+                  echo "Uploading $DUMP_FILE to minio/${BACKUP_PATH}/..."
+                  mc cp "$DUMP_FILE" "minio/${BACKUP_PATH}/"
+
+                  # Cleanup old backups (keep last N)
+                  RETENTION={{ .Values.common.database.dumpBackup.retention | default 7 }}
+                  echo "Cleaning up old backups, keeping last $RETENTION..."
+                  mc ls "minio/${BACKUP_PATH}/" | sort -r | tail -n +$((RETENTION + 1)) | awk '{print $NF}' | while read file; do
+                    if [ -n "$file" ]; then
+                      echo "Deleting old backup: $file"
+                      mc rm "minio/${BACKUP_PATH}/$file"
+                    fi
+                  done
+
+                  echo "Backup completed successfully at $(date)"
+                  mc ls "minio/${BACKUP_PATH}/"
+              env:
+                - name: MINIO_ENDPOINT
+                  value: {{ .Values.common.database.dumpBackup.minioEndpoint | default "https://s3.minio0213.kro.kr" }}
+                - name: MINIO_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "web-app.fullname" . }}-db-backup-creds
+                      key: ACCESS_KEY_ID
+                - name: MINIO_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "web-app.fullname" . }}-db-backup-creds
+                      key: ACCESS_SECRET_KEY
+              volumeMounts:
+                - name: backup-volume
+                  mountPath: /backup
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+                limits:
+                  memory: 128Mi
+          volumes:
+            - name: backup-volume
+              emptyDir:
+                sizeLimit: {{ .Values.common.database.dumpBackup.volumeSize | default "1Gi" }}
+{{- end }}
