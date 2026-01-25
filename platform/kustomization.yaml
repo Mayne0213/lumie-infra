@@ -8,7 +8,7 @@ resources:
   # Cluster-wide resources
   - priority-classes/argocd.yaml
 
-  # Core infrastructure (Forgejo 참조)
+  # Core infrastructure
   - traefik-config/argocd.yaml
   - haproxy/argocd.yaml
   - cert-manager/argocd.yaml

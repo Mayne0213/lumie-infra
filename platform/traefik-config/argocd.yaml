@@ -11,6 +11,8 @@ spec:
     repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
     path: platform/traefik-config
+    directory:
+      exclude: 'argocd.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
