@@ -69,9 +69,10 @@ controller:
     - name: GOGC
       value: "50"
 
-  # Disable periodic app resync
-  args:
-    appResyncPeriod: "0"
+  # Disable periodic app resync (webhook only)
+  extraArgs:
+    - --app-resync=3600
+    - --app-hard-resync=0
 
   # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
