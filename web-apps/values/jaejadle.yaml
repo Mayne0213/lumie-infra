@@ -98,6 +98,12 @@ common:
     resources:
       memory: 256Mi
       cpu: 50m
+    # WAL backup disabled (was causing MinIO CPU spike due to retry loop)
     backup:
+      enabled: false
+    # pg_dump backup (lower resource usage)
+    dumpBackup:
       enabled: true
-      retention: "7d"
+      schedule: "0 3 * * *"
+      retention: 7
+      bucket: jaejadle
