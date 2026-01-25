@@ -241,6 +241,15 @@ common:
   #             values:
   #               - node1
 
+  # ClusterIssuers for cert-manager
+  clusterIssuers: []
+  # - name: letsencrypt-prod
+  #   server: https://acme-v02.api.letsencrypt.org/directory
+  #   email: user@example.com
+  #   privateKeySecretRef: letsencrypt-prod
+  #   solvers:
+  #     - ingressClass: traefik
+
   # CNPG Database configuration
   database:
     enabled: false
