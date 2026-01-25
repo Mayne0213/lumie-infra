@@ -1,6 +1,11 @@
 # Trivy Operator Helm Values
 # https://github.com/aquasecurity/trivy-operator
 
+# Disable TTL-based periodic rescan (scan only on new image deployment)
+extraEnv:
+- name: OPERATOR_SCANNER_REPORT_TTL
+  value: ""
+
 # Operator image
 image:
   registry: zot0213.kro.kr
@@ -37,7 +42,7 @@ operator:
   sbomGenerationEnabled: false
   scanJobTimeout: 10m
   scanJobsConcurrentLimit: 2
-  scannerReportTTL: "24h"
+  scannerReportTTL: ""  # Empty = disable TTL-based rescan, scan only on new image
 
 # Exclude system namespaces from scanning
 excludeNamespaces: "kube-system,kube-public,kube-node-lease"
