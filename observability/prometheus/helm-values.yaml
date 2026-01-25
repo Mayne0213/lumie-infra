@@ -36,8 +36,6 @@ prometheusOperator:
 kubelet:
   enabled: true
   serviceMonitor:
-    # Increase cadvisor interval from default 10s to 60s (reduce CPU load)
-    cAdvisorInterval: 60s
     # cAdvisor metrics (container_memory_working_set_bytes 등)
     cAdvisorRelabelings:
       - targetLabel: cluster
