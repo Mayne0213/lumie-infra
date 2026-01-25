@@ -14,6 +14,11 @@ ingress:
 # Pod configuration
 pod:
   kind: DaemonSet
+  # Toleration for master node
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
   # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
