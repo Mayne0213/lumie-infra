@@ -5,7 +5,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: web-apps/jotion
-    tag: c8aefc7d # Updated by ArgoCD Image Updater
+    tag: e8cb600b
     pullPolicy: Always
   replicaCount: 1
   containerPort: 3000
