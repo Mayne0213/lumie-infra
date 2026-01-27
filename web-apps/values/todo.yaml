@@ -69,6 +69,8 @@ common:
         secretKeyRef:
           name: todo-db-app
           key: uri
+    - name: TRUSTED_ORIGINS
+      value: "https://jotion0213.kro.kr,https://www.jotion0213.kro.kr"
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
