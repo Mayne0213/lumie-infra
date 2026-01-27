@@ -197,24 +197,6 @@ common:
     #   interval: 30s
     #   path: /metrics
 
-  # CronJob configuration
-  cronJob:
-    enabled: false
-    name: ""  # If empty, defaults to <fullname>-cronjob
-    schedule: "0 0 * * *"
-    image:
-      registry: zot0213.kro.kr
-      repository: platform/alpine
-      tag: latest
-    command: []
-    args: []
-    serviceAccount:
-      create: false
-      name: ""
-    rbac:
-      create: false
-      rules: []
-
   # StorageClass configuration
   storageClass:
     enabled: false
@@ -265,11 +247,6 @@ common:
       cpu: 50m
     postgresql:
       parameters: {}  # Custom PostgreSQL parameters
-    # WAL-based backup (continuous, PITR capable) - HIGH MinIO load
-    backup:
-      enabled: false
-      schedule: "0 19 * * *"
-      retention: "7d"
     # pg_dump based backup (periodic, lower resource usage)
     dumpBackup:
       enabled: false
