@@ -56,9 +56,19 @@ common:
     - secretRef:
         name: jaejadle-app-secrets
     - secretRef:
+        name: jaejadle-jwt-secrets
+    - secretRef:
         name: jaejadle-minio-secrets
   # Vault Static Secrets (VSO) - Multiple secrets for different Vault paths
   vaultStaticSecrets:
+    # JWT secret from web-apps/jwt
+    - name: jwt-vss
+      path: web-apps/jwt
+      destination:
+        name: jaejadle-jwt-secrets
+        transformation:
+          templates:
+            JAEJADLE_JWT_SECRET: "{{ .Secrets.JWT_SECRET }}"
     # App-specific secrets from web-apps/jaejadle
     - name: jaejadle-vss
       path: web-apps/jaejadle
@@ -66,7 +76,6 @@ common:
         name: jaejadle-app-secrets
         transformation:
           templates:
-            JAEJADLE_JWT_SECRET: "{{ .Secrets.JAEJADLE_JWT_SECRET }}"
             JAEJADLE_CODE: "{{ .Secrets.JAEJADLE_CODE }}"
             MINIO_BUCKET_NAME: "{{ .Secrets.MINIO_BUCKET_NAME }}"
     # MinIO credentials from bootstrap/minio
