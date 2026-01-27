@@ -95,6 +95,7 @@ spec:
           mountPath: /kaniko/.docker
     - name: build-and-push
       image: zot0213.kro.kr/applications/kaniko:debug
+      args: ["$(params.BUILD_ARGS[*])"]
       env:
         - name: DOCKER_CONFIG
           value: /kaniko/.docker
@@ -117,6 +118,13 @@ spec:
         # Save short SHA as IMAGE_TAG for downstream tasks
         echo -n "$SHORT_SHA" > /tekton/results/IMAGE_TAG
 
+        # Build args passed via step args
+        BUILD_ARGS=""
+        for arg in "$@"; do
+          BUILD_ARGS="$BUILD_ARGS $arg"
+        done
+        echo "Build args: $BUILD_ARGS"
+
         # Build and push with Kaniko
         /kaniko/executor \
           --context=$(workspaces.source.path)/$CONTEXT \
@@ -127,7 +135,8 @@ spec:
           --skip-tls-verify \
           --cache=false \
           --snapshot-mode=redo \
-          --use-new-run
+          --use-new-run \
+          $BUILD_ARGS
       volumeMounts:
         - name: kaniko-docker
           mountPath: /kaniko/.docker
