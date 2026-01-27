@@ -73,6 +73,18 @@ common:
         secretKeyRef:
           name: jotion-db-app
           key: uri
+  envFrom:
+    - secretRef:
+        name: jotion-jwt-secrets
+  # Vault Static Secrets (VSO) - JWT secret for authentication
+  vaultStaticSecrets:
+    - name: jwt-vss
+      path: web-apps/jwt
+      destination:
+        name: jotion-jwt-secrets
+        transformation:
+          templates:
+            JWT_SECRET: "{{ .Secrets.JWT_SECRET }}"
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
