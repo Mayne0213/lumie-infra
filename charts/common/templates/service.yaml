@@ -1,4 +1,35 @@
-{{- if .Values.common.service.enabled }}
+{{/*
+Service template - supports both legacy and components format
+*/}}
+
+{{- if .Values.common.components }}
+{{/* New components format */}}
+{{- range $comp := .Values.common.components }}
+{{- if $comp.service }}
+{{- if $comp.service.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $comp.name }}
+  labels:
+    app: {{ $comp.name }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+spec:
+  type: {{ $comp.service.type | default "ClusterIP" }}
+  ports:
+    - name: http
+      port: {{ $comp.service.port | default 80 }}
+      targetPort: {{ $comp.containerPort | default 3000 }}
+      protocol: TCP
+  selector:
+    app: {{ $comp.name }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- else if .Values.common.service.enabled }}
+{{/* Legacy format */}}
 apiVersion: v1
 kind: Service
 metadata:

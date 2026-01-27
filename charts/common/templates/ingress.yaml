@@ -1,4 +1,54 @@
-{{- if .Values.common.ingress.enabled }}
+{{/*
+Ingress template - supports both legacy and components format
+*/}}
+
+{{- if .Values.common.components }}
+{{/* New components format */}}
+{{- range $comp := .Values.common.components }}
+{{- if $comp.ingress }}
+{{- if $comp.ingress.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $comp.name }}-ingress
+  {{- with $comp.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ $comp.ingress.className | default "traefik" }}
+  {{- if $comp.ingress.tls }}
+  tls:
+    {{- range $comp.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range $comp.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ $comp.name }}
+                port:
+                  number: {{ $comp.service.port | default 80 }}
+          {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- else if .Values.common.ingress.enabled }}
+{{/* Legacy format */}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
