@@ -33,13 +33,10 @@ spec:
           - name: portfolio
             namespace: portfolio
             valuesFile: portfolio.yaml
-          # Poolc dev app (frontend/backend split)
-          - name: poolc-backend-dev
+          # Poolc dev app (integrated backend + frontend)
+          - name: poolc-dev
             namespace: poolc-dev
-            valuesFile: poolc-backend-dev.yaml
-          - name: poolc-frontend-dev
-            namespace: poolc-dev
-            valuesFile: poolc-frontend-dev.yaml
+            valuesFile: poolc-dev.yaml
   template:
     metadata:
       name: "{{name}}"

@@ -1,3 +1,47 @@
+{{/*
+Middleware template - supports both legacy and components format
+*/}}
+
+{{- if .Values.common.components }}
+{{/* New components format */}}
+{{- range $comp := .Values.common.components }}
+{{- if $comp.middleware }}
+{{- if $comp.middleware.enabled }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $comp.middleware.name | default (printf "%s-middleware" $comp.name) }}
+  labels:
+    app: {{ $comp.name }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+spec:
+  {{/* Traefik middleware can only have ONE type - check forwardAuth first, then stripPrefix */}}
+  {{- if and $comp.middleware.forwardAuth $comp.middleware.forwardAuth.address }}
+  forwardAuth:
+    address: {{ $comp.middleware.forwardAuth.address }}
+    {{- if $comp.middleware.forwardAuth.trustForwardHeader }}
+    trustForwardHeader: {{ $comp.middleware.forwardAuth.trustForwardHeader }}
+    {{- end }}
+    {{- if $comp.middleware.forwardAuth.authResponseHeaders }}
+    authResponseHeaders:
+      {{- range $comp.middleware.forwardAuth.authResponseHeaders }}
+      - {{ . }}
+      {{- end }}
+    {{- end }}
+  {{- else if and $comp.middleware.stripPrefix $comp.middleware.stripPrefix.prefixes }}
+  stripPrefix:
+    prefixes:
+      {{- range $comp.middleware.stripPrefix.prefixes }}
+      - {{ . }}
+      {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- else }}
+{{/* Legacy format */}}
 {{- if .Values.common.middleware }}
 {{- if .Values.common.middleware.enabled }}
 apiVersion: traefik.io/v1alpha1
@@ -7,7 +51,7 @@ metadata:
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 spec:
-  {{- /* Traefik middleware can only have ONE type - check forwardAuth first, then stripPrefix */}}
+  {{/* Traefik middleware can only have ONE type - check forwardAuth first, then stripPrefix */}}
   {{- if and .Values.common.middleware.forwardAuth .Values.common.middleware.forwardAuth.address }}
   forwardAuth:
     address: {{ .Values.common.middleware.forwardAuth.address }}
@@ -27,5 +71,6 @@ spec:
       - {{ . }}
       {{- end }}
   {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}

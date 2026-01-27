@@ -1,4 +1,142 @@
-{{- if .Values.common.deployment.enabled }}
+{{/*
+Deployment template - supports both legacy and components format
+Legacy: Uses common.name, common.image, etc.
+Components: Uses common.components array
+*/}}
+
+{{- if .Values.common.components }}
+{{/* New components format */}}
+{{- range $comp := .Values.common.components }}
+{{- $deployEnabled := true }}
+{{- if $comp.deployment }}
+{{- $deployEnabled = $comp.deployment.enabled | default true }}
+{{- end }}
+{{- if $deployEnabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $comp.name }}
+  labels:
+    app: {{ $comp.name }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+spec:
+  replicas: {{ $comp.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ $comp.name }}
+  {{- if $comp.strategy }}
+  strategy:
+    type: {{ $comp.strategy.type | default "RollingUpdate" }}
+    {{- if eq ($comp.strategy.type | default "RollingUpdate") "RollingUpdate" }}
+    rollingUpdate:
+      maxUnavailable: {{ $comp.strategy.rollingUpdate.maxUnavailable | default 0 }}
+      maxSurge: {{ $comp.strategy.rollingUpdate.maxSurge | default 1 }}
+    {{- end }}
+  {{- end }}
+  revisionHistoryLimit: {{ $comp.revisionHistoryLimit | default 3 }}
+  template:
+    metadata:
+      labels:
+        app: {{ $comp.name }}
+      {{- with $comp.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- if $comp.rbac }}
+      {{- if $comp.rbac.enabled }}
+      {{- if $comp.rbac.serviceAccount.create }}
+      serviceAccountName: {{ $comp.rbac.serviceAccount.name | default $comp.name }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- with $comp.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ $comp.name }}
+          {{- if $comp.image.registry }}
+          image: {{ printf "%s/%s:%s" $comp.image.registry $comp.image.repository (toString $comp.image.tag) }}
+          {{- else }}
+          image: {{ printf "%s:%s" $comp.image.repository (toString $comp.image.tag) }}
+          {{- end }}
+          imagePullPolicy: {{ $comp.image.pullPolicy | default "Always" }}
+          ports:
+            - containerPort: {{ $comp.containerPort | default 3000 }}
+              protocol: TCP
+          {{- with $comp.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $comp.envFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $comp.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if $comp.healthCheck }}
+          {{- if $comp.healthCheck.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ $comp.healthCheck.path }}
+              port: {{ $comp.containerPort | default 3000 }}
+            initialDelaySeconds: {{ $comp.healthCheck.livenessProbe.initialDelaySeconds | default 0 }}
+            periodSeconds: {{ $comp.healthCheck.livenessProbe.periodSeconds | default 10 }}
+            timeoutSeconds: {{ $comp.healthCheck.livenessProbe.timeoutSeconds | default 1 }}
+            failureThreshold: {{ $comp.healthCheck.livenessProbe.failureThreshold | default 3 }}
+          readinessProbe:
+            httpGet:
+              path: {{ $comp.healthCheck.path }}
+              port: {{ $comp.containerPort | default 3000 }}
+            initialDelaySeconds: {{ $comp.healthCheck.readinessProbe.initialDelaySeconds | default 0 }}
+            periodSeconds: {{ $comp.healthCheck.readinessProbe.periodSeconds | default 5 }}
+            timeoutSeconds: {{ $comp.healthCheck.readinessProbe.timeoutSeconds | default 1 }}
+            failureThreshold: {{ $comp.healthCheck.readinessProbe.failureThreshold | default 3 }}
+          {{- if $comp.healthCheck.startupProbe }}
+          startupProbe:
+            httpGet:
+              path: {{ $comp.healthCheck.path }}
+              port: {{ $comp.containerPort | default 3000 }}
+            periodSeconds: {{ $comp.healthCheck.startupProbe.periodSeconds | default 10 }}
+            failureThreshold: {{ $comp.healthCheck.startupProbe.failureThreshold | default 30 }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+      restartPolicy: Always
+      {{- with $comp.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $comp.affinity }}
+      affinity:
+        {{- if and .podAntiAffinity .podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            {{- range .podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution }}
+            - weight: {{ .weight }}
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: {{ $comp.name }}
+                topologyKey: {{ .podAffinityTerm.topologyKey }}
+            {{- end }}
+        {{- else }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- with $comp.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
+{{- end }}
+
+{{- else if .Values.common.deployment.enabled }}
+{{/* Legacy format - single main deployment */}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

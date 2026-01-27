@@ -1,15 +1,28 @@
 {{- if .Values.common.database.enabled }}
+{{/*
+CNPG Cluster template
+For components format: uses database.clusterName or first component name
+For legacy format: uses web-app.fullname
+*/}}
+{{- $clusterName := "" -}}
+{{- if .Values.common.database.clusterName -}}
+  {{- $clusterName = .Values.common.database.clusterName -}}
+{{- else if .Values.common.components -}}
+  {{- $clusterName = (index .Values.common.components 0).name -}}
+{{- else -}}
+  {{- $clusterName = include "web-app.fullname" . -}}
+{{- end -}}
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: {{ include "web-app.fullname" . }}-db
+  name: {{ $clusterName }}-db
 spec:
   instances: {{ .Values.common.database.instances | default 2 }}
   imageName: zot0213.kro.kr/storage/postgresql:{{ .Values.common.database.version | default "16.6" }}
   bootstrap:
     initdb:
-      database: {{ .Values.common.database.name | default (printf "%sDB" (include "web-app.fullname" . | title)) }}
-      owner: {{ .Values.common.database.owner | default (include "web-app.fullname" .) }}
+      database: {{ .Values.common.database.name | default (printf "%sDB" ($clusterName | title)) }}
+      owner: {{ .Values.common.database.owner | default $clusterName }}
       {{- if .Values.common.database.bootstrap }}
       {{- if .Values.common.database.bootstrap.secret }}
       secret:
@@ -49,14 +62,14 @@ spec:
   {{- if .Values.common.database.backup.enabled }}
   backup:
     barmanObjectStore:
-      destinationPath: s3://{{ include "web-app.fullname" . }}
+      destinationPath: s3://{{ $clusterName }}
       endpointURL: https://s3.minio0213.kro.kr
       s3Credentials:
         accessKeyId:
-          name: {{ include "web-app.fullname" . }}-db-backup-creds
+          name: {{ $clusterName }}-db-backup-creds
           key: ACCESS_KEY_ID
         secretAccessKey:
-          name: {{ include "web-app.fullname" . }}-db-backup-creds
+          name: {{ $clusterName }}-db-backup-creds
           key: ACCESS_SECRET_KEY
       wal:
         compression: gzip
