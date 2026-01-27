@@ -83,14 +83,15 @@ common:
                 values:
                   - k3s-worker-4
 
-  # Additional Deployments (MinIO Console)
-  additionalDeployments:
+  # MinIO Console (using components format)
+  components:
     - name: minio-console
-      replicas: 1
-      image: zot0213.kro.kr/storage/minio-console:v1.9.1
-      ports:
-        - containerPort: 9090
-          name: http
+      replicaCount: 1
+      image:
+        repository: zot0213.kro.kr/storage/minio-console
+        tag: "v1.9.1"
+        pullPolicy: IfNotPresent
+      containerPort: 9090
       env:
         - name: CONSOLE_MINIO_SERVER
           value: "http://minio.minio.svc.cluster.local:9000"
@@ -111,16 +112,12 @@ common:
                 topologyKey: kubernetes.io/hostname
       service:
         enabled: true
-        name: minio-console-ui
-        ports:
-          - port: 9090
-            targetPort: 9090
-            name: http
+        port: 9090
 
   # Console Ingress
   additionalIngresses:
     - name: console
-      serviceName: minio-console-ui
+      serviceName: minio-console
       servicePort: 9090
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
