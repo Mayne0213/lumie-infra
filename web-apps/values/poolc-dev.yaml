@@ -77,6 +77,8 @@ common:
             name: poolc-dev-backend-jwt-secrets
         - secretRef:
             name: poolc-dev-backend-minio-secrets
+        - secretRef:
+            name: poolc-dev-backend-app-secrets
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -92,6 +94,20 @@ common:
               templates:
                 PROJECT_NAME_HERE_SECRET_KEY: "{{ .Secrets.JWT_SECRET }}"
                 EXPIRE_LENGTH_IN_MILLISECONDS: "3600000"
+        - name: poolc-dev-vss
+          path: web-apps/poolc-dev
+          destination:
+            name: poolc-dev-backend-app-secrets
+            transformation:
+              templates:
+                MINIO_BUCKET: "{{ .Secrets.MINIO_BUCKET }}"
+                FILE_DIR: "/tmp/"
+                EMAIL_ADDRESS: ""
+                EMAIL_PASSWORD: ""
+                NAVER_BOOK_API_URL: ""
+                NAVER_BOOK_CLIENT_ID: ""
+                NAVER_BOOK_CLIENT_SECRET: ""
+                KUBERNETES_API_KEY: ""
         - name: minio-vss
           path: bootstrap/minio
           destination:
@@ -102,14 +118,6 @@ common:
                 MINIO_ACCESS_KEY: "{{ .Secrets.MINIO_ACCESS_KEY_ID }}"
                 MINIO_SECRET_KEY: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"
                 MINIO_REGION: "{{ .Secrets.MINIO_REGION }}"
-                MINIO_BUCKET: "poolc"
-                FILE_DIR: "/tmp/"
-                EMAIL_ADDRESS: ""
-                EMAIL_PASSWORD: ""
-                NAVER_BOOK_API_URL: ""
-                NAVER_BOOK_CLIENT_ID: ""
-                NAVER_BOOK_CLIENT_SECRET: ""
-                KUBERNETES_API_KEY: ""
       middleware:
         enabled: true
         name: poolc-strip-api-prefix
@@ -179,7 +187,7 @@ common:
   database:
     enabled: true
     instances: 1
-    name: PoolcDB
+    name: PoolcDevDB
     owner: poolc-dev
     storage:
       size: 1Gi
