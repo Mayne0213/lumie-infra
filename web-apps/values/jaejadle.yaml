@@ -89,6 +89,15 @@ common:
             MINIO_SECRET_ACCESS_KEY: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"
             MINIO_ENDPOINT: "{{ .Secrets.MINIO_ENDPOINT }}"
             MINIO_REGION: "{{ .Secrets.MINIO_REGION }}"
+    # MinIO credentials for DB backup CronJob
+    - name: backup-creds-vss
+      path: bootstrap/minio
+      destination:
+        name: jaejadle-db-backup-creds
+        transformation:
+          templates:
+            ACCESS_KEY_ID: "{{ .Secrets.MINIO_ACCESS_KEY_ID }}"
+            ACCESS_SECRET_KEY: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:
     podAntiAffinity:
