@@ -31,8 +31,15 @@ spec:
           params:
             - name: "filter"
               value: "body.repository.name in ['jovies', 'jotion', 'jaejadle', 'portfolio', 'todo']"
+            - name: "overlays"
+              value:
+                - key: build_args
+                  expression: |
+                    body.repository.name == 'jotion' ? '--build-arg=NEXT_PUBLIC_TODO_API_URL=https://todo0213.kro.kr' : ''
       bindings:
         - ref: forgejo-push-binding
+        - name: build-args
+          value: $(extensions.build_args)
       template:
         ref: nextjs-build-template
     - name: forgejo-push-docusaurus

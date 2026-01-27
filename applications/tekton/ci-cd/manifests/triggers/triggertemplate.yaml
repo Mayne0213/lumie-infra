@@ -15,6 +15,9 @@ spec:
       description: Repository name
     - name: repo-full-name
       description: Full repository name (org/repo)
+    - name: build-args
+      description: Docker build arguments (comma-separated)
+      default: ""
   resourcetemplates:
     - apiVersion: tekton.dev/v1
       kind: PipelineRun
@@ -42,6 +45,8 @@ spec:
             value: ./nextjs
           - name: image-prefix
             value: web-apps/
+          - name: build-args
+            value: $(tt.params.build-args)
           - name: update-values
             value: "true"
           - name: values-file-path
