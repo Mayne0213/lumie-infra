@@ -57,7 +57,7 @@ common:
     failureThreshold: 3
   initContainers:
     - name: prisma-migrate
-      image: zot0213.kro.kr/web-apps/jotion:c8aefc7d
+      useMainImage: true
       command: ["sh", "-c", "npx --yes prisma@6 db push"]
       env:
         - name: DATABASE_URL
