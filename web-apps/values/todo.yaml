@@ -5,7 +5,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: web-apps/todo
-    tag: 8b41a615 # Updated by ArgoCD Image Updater
+    tag: 2e6ee108
     pullPolicy: Always
   replicaCount: 1
   containerPort: 3000
