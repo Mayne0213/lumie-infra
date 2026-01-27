@@ -5,7 +5,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: web-apps/jotion
-    tag: 7d13870b
+    tag: 50819b15
     pullPolicy: Always
   replicaCount: 1
   containerPort: 3000
