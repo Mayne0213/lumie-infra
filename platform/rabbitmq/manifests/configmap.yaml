@@ -74,6 +74,20 @@ data:
           }
         },
         {
+          "name": "tenant.schema-provisioning",
+          "vhost": "/",
+          "durable": true,
+          "arguments": {
+            "x-dead-letter-exchange": "lumie.dlx",
+            "x-message-ttl": 300000
+          }
+        },
+        {
+          "name": "tenant.schema-provisioning.dlq",
+          "vhost": "/",
+          "durable": true
+        },
+        {
           "name": "dlq.failed-messages",
           "vhost": "/",
           "durable": true
@@ -114,6 +128,20 @@ data:
           "destination": "analytics.result-submitted",
           "destination_type": "queue",
           "routing_key": "result.submitted"
+        },
+        {
+          "source": "lumie.events",
+          "vhost": "/",
+          "destination": "tenant.schema-provisioning",
+          "destination_type": "queue",
+          "routing_key": "tenant.created.*"
+        },
+        {
+          "source": "lumie.dlx",
+          "vhost": "/",
+          "destination": "tenant.schema-provisioning.dlq",
+          "destination_type": "queue",
+          "routing_key": ""
         },
         {
           "source": "lumie.dlx",

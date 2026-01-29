@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tenant-svc
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/applications/lumie/tenant-svc/common-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    ref: values
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: applications/lumie/tenant-svc/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lumie-platform
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    syncOptions:
+    - CreateNamespace=true
+  revisionHistoryLimit: 10
