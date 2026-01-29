@@ -1,5 +1,5 @@
 # Common chart values for RabbitMQ
-# VaultStaticSecrets only (manifests handle deployment)
+# VaultStaticSecrets only (Bitnami Helm chart handles deployment)
 
 common:
   name: rabbitmq

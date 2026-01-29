@@ -8,6 +8,16 @@ metadata:
 spec:
   project: default
   sources:
+  # Bitnami RabbitMQ Helm chart
+  - repoURL: https://charts.bitnami.com/bitnami
+    chart: rabbitmq
+    targetRevision: 16.0.*
+    helm:
+      valueFiles:
+      - $values/platform/rabbitmq/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    ref: values
   # VaultStaticSecret from common chart
   - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
     targetRevision: main
@@ -15,13 +25,6 @@ spec:
     helm:
       valueFiles:
       - $values/platform/rabbitmq/common-values.yaml
-  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
-    targetRevision: main
-    ref: values
-  # Raw manifests (StatefulSet, Services, ConfigMap)
-  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
-    targetRevision: main
-    path: platform/rabbitmq/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: lumie-event
