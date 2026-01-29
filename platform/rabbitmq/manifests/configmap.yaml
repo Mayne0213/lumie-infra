@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: lumie-rabbitmq-config
+  name: rabbitmq-config
   namespace: lumie-event
 data:
   enabled_plugins: |
@@ -13,8 +13,8 @@ data:
     cluster_formation.peer_discovery_backend = rabbit_peer_discovery_k8s
     cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
     cluster_formation.k8s.address_type = hostname
-    cluster_formation.k8s.service_name = lumie-rabbitmq-headless
-    cluster_formation.k8s.hostname_suffix = .lumie-rabbitmq-headless.lumie-event.svc.cluster.local
+    cluster_formation.k8s.service_name = rabbitmq-headless
+    cluster_formation.k8s.hostname_suffix = .rabbitmq-headless.lumie-event.svc.cluster.local
     cluster_formation.node_cleanup.interval = 30
     cluster_formation.node_cleanup.only_log_warning = true
     cluster_partition_handling = autoheal
@@ -26,8 +26,8 @@ data:
     vm_memory_high_watermark.relative = 0.7
     vm_memory_high_watermark_paging_ratio = 0.75
 
-    ## Management
-    management.load_definitions = /etc/rabbitmq/definitions.json
+    ## Management - disable definition loading (use env vars for user)
+    ## management.load_definitions = /etc/rabbitmq/definitions.json
 
     ## Logging
     log.console = true
@@ -36,23 +36,11 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: lumie-rabbitmq-definitions
+  name: rabbitmq-definitions
   namespace: lumie-event
 data:
   definitions.json: |
     {
-      "vhosts": [
-        {"name": "/"}
-      ],
-      "permissions": [
-        {
-          "user": "lumie",
-          "vhost": "/",
-          "configure": ".*",
-          "write": ".*",
-          "read": ".*"
-        }
-      ],
       "exchanges": [
         {
           "name": "lumie.events",

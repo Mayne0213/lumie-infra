@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: lumie-rabbitmq
+  name: rabbitmq
   namespace: lumie-event
   labels:
-    app: lumie-rabbitmq
+    app: rabbitmq
 spec:
   type: ClusterIP
   ports:
@@ -17,15 +17,15 @@ spec:
     port: 15672
     targetPort: 15672
   selector:
-    app: lumie-rabbitmq
+    app: rabbitmq
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: lumie-rabbitmq-headless
+  name: rabbitmq-headless
   namespace: lumie-event
   labels:
-    app: lumie-rabbitmq
+    app: rabbitmq
 spec:
   type: ClusterIP
   clusterIP: None
@@ -40,4 +40,4 @@ spec:
     port: 25672
     targetPort: 25672
   selector:
-    app: lumie-rabbitmq
+    app: rabbitmq

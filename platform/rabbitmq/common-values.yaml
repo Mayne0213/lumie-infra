@@ -2,7 +2,7 @@
 # VaultStaticSecrets only (manifests handle deployment)
 
 common:
-  name: lumie-rabbitmq
+  name: rabbitmq
 
   # Disable deployment (using raw manifests)
   deployment:
@@ -16,10 +16,10 @@ common:
 
   # Vault Static Secrets for RabbitMQ credentials
   vaultStaticSecrets:
-    - name: lumie-rabbitmq-vss
+    - name: rabbitmq-vss
       path: platform/rabbitmq
       destination:
-        name: lumie-rabbitmq-secrets
+        name: rabbitmq-secrets
         transformation:
           templates:
             rabbitmq-password: "{{ .Secrets.RABBITMQ_PASSWORD }}"

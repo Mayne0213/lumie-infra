@@ -3,13 +3,13 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: lumie-rabbitmq
+  name: rabbitmq
   namespace: lumie-event
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: lumie-rabbitmq
+  name: rabbitmq
   namespace: lumie-event
 rules:
 - apiGroups: [""]
@@ -25,13 +25,13 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: lumie-rabbitmq
+  name: rabbitmq
   namespace: lumie-event
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: lumie-rabbitmq
+  name: rabbitmq
 subjects:
 - kind: ServiceAccount
-  name: lumie-rabbitmq
+  name: rabbitmq
   namespace: lumie-event
