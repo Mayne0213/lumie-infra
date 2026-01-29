@@ -219,6 +219,21 @@ images:
     tag: "8.4.0"
     dest: storage/redis-sentinel
 
+  - name: redis-exporter
+    source: docker.io/bitnami/redis-exporter
+    tag: "latest"
+    dest: bitnami/redis-exporter
+
+  - name: os-shell
+    source: docker.io/bitnami/os-shell
+    tag: "latest"
+    dest: bitnami/os-shell
+
+  - name: kubectl
+    source: docker.io/bitnami/kubectl
+    tag: "latest"
+    dest: bitnami/kubectl
+
   - name: rabbitmq
     source: docker.io/library/rabbitmq
     tag: "4.1-management"
