@@ -1,0 +1,50 @@
+# RabbitmqCluster CR for LUMIE Event Bus
+# Managed by RabbitMQ Cluster Operator
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmq
+  namespace: lumie-event
+spec:
+  replicas: 3
+  image: zot0213.kro.kr/platform/rabbitmq:4.1-management
+
+  persistence:
+    storageClassName: local-path
+    storage: 2Gi
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+
+  rabbitmq:
+    additionalPlugins:
+      - rabbitmq_management
+      - rabbitmq_prometheus
+    additionalConfig: |
+      cluster_partition_handling = autoheal
+      queue_master_locator = min-masters
+      vm_memory_high_watermark.relative = 0.7
+      vm_memory_high_watermark_paging_ratio = 0.75
+      log.console = true
+      log.console.level = info
+
+  override:
+    statefulSet:
+      spec:
+        template:
+          spec:
+            containers:
+              - name: rabbitmq
+                env:
+                  - name: RABBITMQ_DEFAULT_USER
+                    value: lumie
+                  - name: RABBITMQ_DEFAULT_PASS
+                    valueFrom:
+                      secretKeyRef:
+                        name: rabbitmq-secrets
+                        key: rabbitmq-password
