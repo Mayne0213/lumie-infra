@@ -19,14 +19,50 @@ common:
   # Replicas
   replicaCount: 1
 
-  # Container port
+  # Container port (legacy - single port)
   containerPort: 3000
+
+  # Container ports (new - multiple ports with names)
+  # If defined, takes precedence over containerPort
+  ports: []
+  # - name: http
+  #   containerPort: 8080
+  #   protocol: TCP
+  # - name: grpc
+  #   containerPort: 9090
+  #   protocol: TCP
+
+  # Pod-level security context
+  podSecurityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  # runAsGroup: 1000
+  # fsGroup: 1000
+
+  # Container-level security context
+  securityContext: {}
+  # runAsNonRoot: true
+  # allowPrivilegeEscalation: false
+  # readOnlyRootFilesystem: false
+  # capabilities:
+  #   drop:
+  #     - ALL
 
   # Service configuration
   service:
     enabled: true
     type: ClusterIP
-    port: 80
+    port: 80           # Legacy single port
+    # Multiple ports (new - takes precedence over port if defined)
+    ports: []
+    # - name: http
+    #   port: 8080
+    #   targetPort: http   # Can reference port name or number
+    #   protocol: TCP
+    # - name: grpc
+    #   port: 9090
+    #   targetPort: grpc
+    #   protocol: TCP
 
   # Ingress configuration
   ingress:
@@ -55,13 +91,20 @@ common:
   # Health checks
   healthCheck:
     enabled: true
-    path: /
+    path: /                    # Default path (can be overridden per probe)
+    port: ""                   # Port name or number (defaults to first port)
     livenessProbe:
+      path: ""                 # Override path for liveness (defaults to healthCheck.path)
       initialDelaySeconds: 30
       periodSeconds: 10
     readinessProbe:
+      path: ""                 # Override path for readiness (defaults to healthCheck.path)
       initialDelaySeconds: 5
       periodSeconds: 5
+    startupProbe:              # Optional startup probe
+      path: ""                 # Override path for startup (defaults to healthCheck.path)
+      periodSeconds: 10
+      failureThreshold: 30
 
   # Environment variables (plain)
   env: []
