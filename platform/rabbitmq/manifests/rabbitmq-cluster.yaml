@@ -32,14 +32,23 @@ spec:
       vm_memory_high_watermark_paging_ratio = 0.75
       log.console = true
       log.console.level = info
+      load_definitions = /etc/rabbitmq/definitions/definitions.json
 
   override:
     statefulSet:
       spec:
         template:
           spec:
+            volumes:
+              - name: definitions
+                configMap:
+                  name: rabbitmq-definitions
             containers:
               - name: rabbitmq
+                volumeMounts:
+                  - name: definitions
+                    mountPath: /etc/rabbitmq/definitions
+                    readOnly: true
                 env:
                   - name: RABBITMQ_DEFAULT_USER
                     value: lumie
