@@ -18,9 +18,16 @@ spec:
         app: lumie-rabbitmq
     spec:
       serviceAccountName: lumie-rabbitmq
+      securityContext:
+        fsGroup: 999
+        runAsUser: 999
+        runAsGroup: 999
       initContainers:
       - name: wait-for-secrets
-        image: zot0213.kro.kr/applications/kubectl:latest
+        image: zot0213.kro.kr/applications/kubectl:1.32
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
         command:
         - /bin/sh
         - -c
@@ -34,6 +41,9 @@ spec:
       containers:
       - name: rabbitmq
         image: zot0213.kro.kr/platform/rabbitmq:4.0-management
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
         ports:
         - name: amqp
           containerPort: 5672

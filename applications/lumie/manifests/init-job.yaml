@@ -14,10 +14,17 @@ spec:
   template:
     spec:
       restartPolicy: OnFailure
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       initContainers:
       # Wait for CNPG cluster to be ready
       - name: wait-for-db
-        image: zot0213.kro.kr/applications/kubectl:latest
+        image: zot0213.kro.kr/applications/kubectl:1.32
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
         command:
         - /bin/sh
         - -c
@@ -31,6 +38,9 @@ spec:
       containers:
       - name: init-db
         image: zot0213.kro.kr/storage/postgresql:16.6
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
         env:
         - name: PGHOST
           value: lumie-db-rw.lumie-db.svc
