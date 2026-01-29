@@ -23,11 +23,17 @@ spec:
         runAsUser: 999
         runAsGroup: 999
       initContainers:
-      - name: wait-for-secrets
+      - name: setup-erlang-cookie
         image: zot0213.kro.kr/applications/kubectl:1.32
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false
+        env:
+        - name: RABBITMQ_ERLANG_COOKIE
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq-secrets
+              key: rabbitmq-erlang-cookie
         command:
         - /bin/sh
         - -c
@@ -37,7 +43,13 @@ spec:
             echo "Secret not ready, waiting..."
             sleep 5
           done
-          echo "Secrets ready!"
+          echo "Setting up Erlang cookie..."
+          echo -n "$RABBITMQ_ERLANG_COOKIE" > /var/lib/rabbitmq/.erlang.cookie
+          chmod 400 /var/lib/rabbitmq/.erlang.cookie
+          echo "Erlang cookie configured!"
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/rabbitmq
       containers:
       - name: rabbitmq
         image: zot0213.kro.kr/platform/rabbitmq:4.0-management
@@ -71,11 +83,6 @@ spec:
             secretKeyRef:
               name: rabbitmq-secrets
               key: rabbitmq-password
-        - name: RABBITMQ_ERLANG_COOKIE
-          valueFrom:
-            secretKeyRef:
-              name: rabbitmq-secrets
-              key: rabbitmq-erlang-cookie
         volumeMounts:
         - name: data
           mountPath: /var/lib/rabbitmq
