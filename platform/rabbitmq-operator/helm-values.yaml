@@ -1,0 +1,43 @@
+# RabbitMQ Cluster Operator Helm Values
+# Chart: bitnami/rabbitmq-cluster-operator
+# Using official RabbitMQ Operator images via Zot registry
+
+# Cluster Operator
+clusterOperator:
+  image:
+    registry: zot0213.kro.kr
+    repository: platform/rabbitmq-cluster-operator
+    tag: "2.19.0"
+  command:
+    - /manager
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+  rbac:
+    clusterRole:
+      extraRules:
+        - apiGroups: ["discovery.k8s.io"]
+          resources: ["endpointslices"]
+          verbs: ["get", "list", "watch"]
+
+# Default RabbitMQ image for clusters
+rabbitmqImage:
+  registry: zot0213.kro.kr
+  repository: platform/rabbitmq
+  tag: "4.1-management"
+
+# Disable credential updater (using Vault secrets)
+credentialUpdater:
+  enabled: false
+
+# Disable Messaging Topology Operator for now
+msgTopologyOperator:
+  enabled: false
+
+# Use Zot security settings
+global:
+  security:
+    allowInsecureImages: true

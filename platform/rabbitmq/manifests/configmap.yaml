@@ -1,0 +1,126 @@
+# RabbitMQ Definitions (exchanges, queues, bindings)
+# Can be loaded via management plugin or Messaging Topology Operator
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-definitions
+  namespace: lumie-event
+data:
+  definitions.json: |
+    {
+      "exchanges": [
+        {
+          "name": "lumie.events",
+          "vhost": "/",
+          "type": "topic",
+          "durable": true,
+          "auto_delete": false
+        },
+        {
+          "name": "lumie.commands",
+          "vhost": "/",
+          "type": "direct",
+          "durable": true,
+          "auto_delete": false
+        },
+        {
+          "name": "lumie.dlx",
+          "vhost": "/",
+          "type": "fanout",
+          "durable": true,
+          "auto_delete": false
+        }
+      ],
+      "queues": [
+        {
+          "name": "billing.tenant-created",
+          "vhost": "/",
+          "durable": true,
+          "arguments": {
+            "x-dead-letter-exchange": "lumie.dlx"
+          }
+        },
+        {
+          "name": "notification.tenant-created",
+          "vhost": "/",
+          "durable": true,
+          "arguments": {
+            "x-dead-letter-exchange": "lumie.dlx"
+          }
+        },
+        {
+          "name": "notification.course-published",
+          "vhost": "/",
+          "durable": true,
+          "arguments": {
+            "x-dead-letter-exchange": "lumie.dlx"
+          }
+        },
+        {
+          "name": "notification.assignment-submitted",
+          "vhost": "/",
+          "durable": true,
+          "arguments": {
+            "x-dead-letter-exchange": "lumie.dlx"
+          }
+        },
+        {
+          "name": "analytics.result-submitted",
+          "vhost": "/",
+          "durable": true,
+          "arguments": {
+            "x-dead-letter-exchange": "lumie.dlx"
+          }
+        },
+        {
+          "name": "dlq.failed-messages",
+          "vhost": "/",
+          "durable": true
+        }
+      ],
+      "bindings": [
+        {
+          "source": "lumie.events",
+          "vhost": "/",
+          "destination": "billing.tenant-created",
+          "destination_type": "queue",
+          "routing_key": "tenant.created"
+        },
+        {
+          "source": "lumie.events",
+          "vhost": "/",
+          "destination": "notification.tenant-created",
+          "destination_type": "queue",
+          "routing_key": "tenant.created"
+        },
+        {
+          "source": "lumie.events",
+          "vhost": "/",
+          "destination": "notification.course-published",
+          "destination_type": "queue",
+          "routing_key": "course.published"
+        },
+        {
+          "source": "lumie.events",
+          "vhost": "/",
+          "destination": "notification.assignment-submitted",
+          "destination_type": "queue",
+          "routing_key": "assignment.submitted"
+        },
+        {
+          "source": "lumie.events",
+          "vhost": "/",
+          "destination": "analytics.result-submitted",
+          "destination_type": "queue",
+          "routing_key": "result.submitted"
+        },
+        {
+          "source": "lumie.dlx",
+          "vhost": "/",
+          "destination": "dlq.failed-messages",
+          "destination_type": "queue",
+          "routing_key": ""
+        }
+      ]
+    }
