@@ -1,109 +1,35 @@
+# tenant-svc common chart values
+# Deployment is handled via raw manifests (multi-port support)
+
 common:
   name: tenant-svc
   namespace: lumie-platform
 
+  # Disable chart's deployment - using raw manifest instead
   deployment:
-    enabled: true
-    replicas: 2
-    image:
-      repository: zot0213.kro.kr/applications/tenant-svc
-      tag: f7e230a9
-      pullPolicy: IfNotPresent
-    ports:
-      - name: http
-        containerPort: 8080
-        protocol: TCP
-      - name: grpc
-        containerPort: 9090
-        protocol: TCP
-    resources:
-      requests:
-        cpu: 100m
-        memory: 512Mi
-      limits:
-        memory: 512Mi
-    env:
-      - name: SPRING_PROFILES_ACTIVE
-        value: "prod"
-      - name: DB_HOST
-        value: "lumie-db-rw.lumie-db.svc"
-      - name: DB_PORT
-        value: "5432"
-      - name: DB_NAME
-        value: "lumie"
-      - name: DB_USERNAME
-        valueFrom:
-          secretKeyRef:
-            name: lumie-db-app
-            key: username
-      - name: DB_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: lumie-db-app
-            key: password
-      - name: RABBITMQ_HOST
-        value: "rabbitmq.lumie-event.svc"
-      - name: RABBITMQ_PORT
-        value: "5672"
-      - name: RABBITMQ_USERNAME
-        value: "lumie"
-      - name: RABBITMQ_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: tenant-svc-rabbitmq-secrets
-            key: RABBITMQ_PASSWORD
-    livenessProbe:
-      httpGet:
-        path: /actuator/health/liveness
-        port: http
-      initialDelaySeconds: 60
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 3
-    readinessProbe:
-      httpGet:
-        path: /actuator/health/readiness
-        port: http
-      initialDelaySeconds: 30
-      periodSeconds: 10
-      timeoutSeconds: 5
-      failureThreshold: 3
-    startupProbe:
-      httpGet:
-        path: /actuator/health/startup
-        port: http
-      initialDelaySeconds: 10
-      periodSeconds: 5
-      timeoutSeconds: 3
-      failureThreshold: 30
+    enabled: false
 
+  # Disable chart's service - using raw manifest instead
   service:
-    enabled: true
-    type: ClusterIP
-    ports:
-      - name: http
-        port: 8080
-        targetPort: http
-        protocol: TCP
+    enabled: false
 
   ingress:
     enabled: false
 
+  # ServiceMonitor for Prometheus
   serviceMonitor:
     enabled: true
-    path: /actuator/prometheus
-    port: http
-    interval: 30s
+    endpoints:
+      - port: http
+        interval: 30s
+        path: /actuator/prometheus
 
-  database:
-    enabled: false
-
-  vaultSecret:
-    enabled: true
-    name: tenant-svc-rabbitmq-secrets
-    path: platform/rabbitmq
-    data:
-      - secretKey: RABBITMQ_PASSWORD
-        remoteRef:
-          key: platform/rabbitmq
-          property: RABBITMQ_PASSWORD
+  # Vault Static Secret for RabbitMQ password
+  vaultStaticSecrets:
+    - name: tenant-svc-rabbitmq-vss
+      path: platform/rabbitmq
+      destination:
+        name: tenant-svc-rabbitmq-secrets
+        transformation:
+          templates:
+            RABBITMQ_PASSWORD: "{{ .Secrets.RABBITMQ_PASSWORD }}"
