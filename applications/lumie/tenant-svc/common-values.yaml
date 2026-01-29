@@ -99,7 +99,7 @@ common:
       timeoutSeconds: 5
       failureThreshold: 3
     startupProbe:
-      path: /actuator/health/startup
+      path: /actuator/health
       periodSeconds: 5
       failureThreshold: 30
 
