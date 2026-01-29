@@ -7,7 +7,7 @@ common:
     replicas: 2
     image:
       repository: zot0213.kro.kr/applications/tenant-svc
-      tag: "0.1.0"
+      tag: f7e230a9
       pullPolicy: IfNotPresent
     ports:
       - name: http
