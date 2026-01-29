@@ -1,0 +1,37 @@
+# RabbitMQ RBAC for K8s peer discovery
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: lumie-rabbitmq
+  namespace: lumie-event
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: lumie-rabbitmq
+  namespace: lumie-event
+rules:
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: lumie-rabbitmq
+  namespace: lumie-event
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: lumie-rabbitmq
+subjects:
+- kind: ServiceAccount
+  name: lumie-rabbitmq
+  namespace: lumie-event

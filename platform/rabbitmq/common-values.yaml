@@ -1,0 +1,26 @@
+# Common chart values for RabbitMQ
+# VaultStaticSecrets only (manifests handle deployment)
+
+common:
+  name: lumie-rabbitmq
+
+  # Disable deployment (using raw manifests)
+  deployment:
+    enabled: false
+
+  service:
+    enabled: false
+
+  ingress:
+    enabled: false
+
+  # Vault Static Secrets for RabbitMQ credentials
+  vaultStaticSecrets:
+    - name: lumie-rabbitmq-vss
+      path: platform/rabbitmq
+      destination:
+        name: lumie-rabbitmq-secrets
+        transformation:
+          templates:
+            rabbitmq-password: "{{ .Secrets.RABBITMQ_PASSWORD }}"
+            rabbitmq-erlang-cookie: "{{ .Secrets.RABBITMQ_ERLANG_COOKIE }}"

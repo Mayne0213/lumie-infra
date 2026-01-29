@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lumie
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  # CNPG Cluster from common chart
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/applications/lumie/common-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    ref: values
+  # Raw manifests (namespaces, init-job)
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: applications/lumie/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lumie-db
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    syncOptions:
+    - CreateNamespace=true
+  revisionHistoryLimit: 10

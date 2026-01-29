@@ -1,0 +1,58 @@
+# LUMIE Platform Namespaces
+# 7 namespaces for multi-tenant LMS platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-gateway
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-platform
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-core
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-support
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-event
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-db
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-cache
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"

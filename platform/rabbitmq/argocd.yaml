@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lumie-rabbitmq
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  # VaultStaticSecret from common chart
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/platform/rabbitmq/common-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    ref: values
+  # Raw manifests (StatefulSet, Services, ConfigMap)
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: platform/rabbitmq/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lumie-event
+  ignoreDifferences:
+  - group: ''
+    kind: Secret
+    name: lumie-rabbitmq-secrets
+    jsonPointers:
+    - /data
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+    syncOptions:
+    - CreateNamespace=true
+  revisionHistoryLimit: 10

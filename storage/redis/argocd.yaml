@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lumie-redis
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  - repoURL: oci://registry-1.docker.io/bitnamicharts
+    chart: redis
+    targetRevision: 21.*
+    helm:
+      valueFiles:
+      - $values/storage/redis/helm-values.yaml
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lumie-cache
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+    syncOptions:
+    - CreateNamespace=true
+  revisionHistoryLimit: 10

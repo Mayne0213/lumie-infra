@@ -20,3 +20,6 @@ resources:
   - tekton/triggers/argocd.yaml
   - tekton/dashboard/argocd.yaml
   - tekton/ci-cd/argocd.yaml
+
+  # LUMIE Platform
+  - lumie/argocd.yaml

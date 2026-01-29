@@ -12,3 +12,6 @@ resources:
   # Operators
   - cnpg/argocd.yaml
   - velero/argocd.yaml
+
+  # LUMIE Cache
+  - redis/argocd.yaml

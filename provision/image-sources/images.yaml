@@ -214,6 +214,16 @@ images:
     tag: latest
     dest: storage/redis
 
+  - name: redis-sentinel
+    source: docker.io/bitnami/redis-sentinel
+    tag: latest
+    dest: storage/redis-sentinel
+
+  - name: rabbitmq
+    source: docker.io/library/rabbitmq
+    tag: "4.0-management"
+    dest: platform/rabbitmq
+
   - name: external-secrets
     source: ghcr.io/external-secrets/external-secrets
     tag: v1.2.1
