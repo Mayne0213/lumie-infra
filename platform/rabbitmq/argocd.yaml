@@ -8,10 +8,10 @@ metadata:
 spec:
   project: default
   sources:
-  # Bitnami RabbitMQ Helm chart
-  - repoURL: https://charts.bitnami.com/bitnami
-    chart: rabbitmq
-    targetRevision: 16.0.*
+  # Bitnami RabbitMQ Helm chart from git
+  - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    targetRevision: main
+    path: platform/rabbitmq/chart/rabbitmq
     helm:
       valueFiles:
       - $values/platform/rabbitmq/helm-values.yaml
