@@ -10,7 +10,7 @@ spec:
   sources:
   - repoURL: https://charts.bitnami.com/bitnami
     chart: redis
-    targetRevision: 21.*
+    targetRevision: 21.2.14
     helm:
       valueFiles:
       - $values/storage/redis/helm-values.yaml
