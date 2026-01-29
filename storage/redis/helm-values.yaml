@@ -3,6 +3,8 @@
 
 global:
   imageRegistry: zot0213.kro.kr
+  security:
+    allowInsecureImages: true
 
 image:
   repository: storage/redis
