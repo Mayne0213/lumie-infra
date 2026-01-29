@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: lumie-rabbitmq
+  name: rabbitmq
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -28,7 +28,7 @@ spec:
   ignoreDifferences:
   - group: ''
     kind: Secret
-    name: lumie-rabbitmq-secrets
+    name: rabbitmq-secrets
     jsonPointers:
     - /data
   syncPolicy:

@@ -4,20 +4,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: lumie-rabbitmq
+  name: rabbitmq
   namespace: lumie-event
 spec:
-  serviceName: lumie-rabbitmq-headless
+  serviceName: rabbitmq-headless
   replicas: 3
   selector:
     matchLabels:
-      app: lumie-rabbitmq
+      app: rabbitmq
   template:
     metadata:
       labels:
-        app: lumie-rabbitmq
+        app: rabbitmq
     spec:
-      serviceAccountName: lumie-rabbitmq
+      serviceAccountName: rabbitmq
       securityContext:
         fsGroup: 999
         runAsUser: 999
@@ -33,7 +33,7 @@ spec:
         - -c
         - |
           echo "Waiting for RabbitMQ secrets..."
-          until kubectl get secret lumie-rabbitmq-secrets -n lumie-event 2>/dev/null; do
+          until kubectl get secret rabbitmq-secrets -n lumie-event 2>/dev/null; do
             echo "Secret not ready, waiting..."
             sleep 5
           done
@@ -61,20 +61,20 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: K8S_SERVICE_NAME
-          value: lumie-rabbitmq-headless
+          value: rabbitmq-headless
         - name: K8S_HOSTNAME_SUFFIX
-          value: .lumie-rabbitmq-headless.lumie-event.svc.cluster.local
+          value: .rabbitmq-headless.lumie-event.svc.cluster.local
         - name: RABBITMQ_DEFAULT_USER
           value: lumie
         - name: RABBITMQ_DEFAULT_PASS
           valueFrom:
             secretKeyRef:
-              name: lumie-rabbitmq-secrets
+              name: rabbitmq-secrets
               key: rabbitmq-password
         - name: RABBITMQ_ERLANG_COOKIE
           valueFrom:
             secretKeyRef:
-              name: lumie-rabbitmq-secrets
+              name: rabbitmq-secrets
               key: rabbitmq-erlang-cookie
         volumeMounts:
         - name: data
@@ -82,9 +82,6 @@ spec:
         - name: config
           mountPath: /etc/rabbitmq/conf.d/10-custom.conf
           subPath: rabbitmq.conf
-        - name: definitions
-          mountPath: /etc/rabbitmq/definitions.json
-          subPath: definitions.json
         - name: plugins
           mountPath: /etc/rabbitmq/enabled_plugins
           subPath: enabled_plugins
@@ -115,13 +112,10 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: lumie-rabbitmq-config
-      - name: definitions
-        configMap:
-          name: lumie-rabbitmq-definitions
+          name: rabbitmq-config
       - name: plugins
         configMap:
-          name: lumie-rabbitmq-config
+          name: rabbitmq-config
           items:
           - key: enabled_plugins
             path: enabled_plugins
