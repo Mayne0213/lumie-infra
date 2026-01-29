@@ -6,7 +6,7 @@ global:
 
 image:
   repository: storage/redis
-  tag: latest
+  tag: "8.4.0"
 
 # Replication architecture with Sentinel
 architecture: replication
@@ -47,7 +47,7 @@ sentinel:
   enabled: true
   image:
     repository: storage/redis-sentinel
-    tag: latest
+    tag: "8.4.0"
   quorum: 2
   downAfterMilliseconds: 5000
   failoverTimeout: 60000

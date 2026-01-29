@@ -211,12 +211,12 @@ images:
 
   - name: redis
     source: docker.io/bitnami/redis
-    tag: latest
+    tag: "8.4.0"
     dest: storage/redis
 
   - name: redis-sentinel
     source: docker.io/bitnami/redis-sentinel
-    tag: latest
+    tag: "8.4.0"
     dest: storage/redis-sentinel
 
   - name: rabbitmq
