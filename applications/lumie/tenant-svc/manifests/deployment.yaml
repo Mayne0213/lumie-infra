@@ -20,10 +20,22 @@ spec:
       labels:
         app: tenant-svc
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: tenant-svc
           image: zot0213.kro.kr/applications/tenant-svc:f7e230a9
           imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
           ports:
             - name: http
               containerPort: 8080
@@ -43,12 +55,12 @@ spec:
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: lumie-db-app
+                  name: tenant-svc-db-secrets
                   key: username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: lumie-db-app
+                  name: tenant-svc-db-secrets
                   key: password
             - name: RABBITMQ_HOST
               value: "rabbitmq.lumie-event.svc"

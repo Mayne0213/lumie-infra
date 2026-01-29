@@ -24,8 +24,9 @@ common:
         interval: 30s
         path: /actuator/prometheus
 
-  # Vault Static Secret for RabbitMQ password
+  # Vault Static Secrets
   vaultStaticSecrets:
+    # RabbitMQ credentials
     - name: tenant-svc-rabbitmq-vss
       path: platform/rabbitmq
       destination:
@@ -33,3 +34,12 @@ common:
         transformation:
           templates:
             RABBITMQ_PASSWORD: "{{ .Secrets.RABBITMQ_PASSWORD }}"
+    # Database credentials (synced from CNPG-generated secret)
+    - name: tenant-svc-db-vss
+      path: platform/lumie-db
+      destination:
+        name: tenant-svc-db-secrets
+        transformation:
+          templates:
+            username: "{{ .Secrets.LUMIE_DB_USERNAME }}"
+            password: "{{ .Secrets.LUMIE_DB_PASSWORD }}"
