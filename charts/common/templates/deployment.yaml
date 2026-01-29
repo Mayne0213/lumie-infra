@@ -239,7 +239,12 @@ spec:
           resources:
             {{- toYaml .Values.common.resources | nindent 12 }}
           {{- if .Values.common.healthCheck.enabled }}
-          {{- $healthPort := .Values.common.healthCheck.port | default (index .Values.common.ports 0).name | default .Values.common.containerPort }}
+          {{- $healthPort := .Values.common.containerPort }}
+          {{- if .Values.common.healthCheck.port }}
+          {{- $healthPort = .Values.common.healthCheck.port }}
+          {{- else if .Values.common.ports }}
+          {{- $healthPort = (index .Values.common.ports 0).name }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: {{ .Values.common.healthCheck.livenessProbe.path | default .Values.common.healthCheck.path }}
