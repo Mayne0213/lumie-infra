@@ -221,7 +221,7 @@ images:
 
   - name: rabbitmq
     source: docker.io/library/rabbitmq
-    tag: "4.0-management"
+    tag: "4.1-management"
     dest: platform/rabbitmq
 
   - name: external-secrets
