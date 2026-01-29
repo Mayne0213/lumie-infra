@@ -165,6 +165,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      {{- with .Values.common.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if .Values.common.rbac.enabled }}
       {{- if .Values.common.rbac.serviceAccount.create }}
       serviceAccountName: {{ .Values.common.rbac.serviceAccount.name | default (include "web-app.fullname" .) }}
@@ -209,9 +213,21 @@ spec:
         - name: {{ include "web-app.fullname" . }}
           image: {{ include "web-app.image" . }}
           imagePullPolicy: {{ .Values.common.image.pullPolicy }}
+          {{- with .Values.common.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
+            {{- if .Values.common.ports }}
+            {{- range .Values.common.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .containerPort }}
+              protocol: {{ .protocol | default "TCP" }}
+            {{- end }}
+            {{- else }}
             - containerPort: {{ .Values.common.containerPort }}
               protocol: TCP
+            {{- end }}
           {{- with .Values.common.env }}
           env:
             {{- toYaml . | nindent 12 }}
@@ -223,18 +239,19 @@ spec:
           resources:
             {{- toYaml .Values.common.resources | nindent 12 }}
           {{- if .Values.common.healthCheck.enabled }}
+          {{- $healthPort := .Values.common.healthCheck.port | default (index .Values.common.ports 0).name | default .Values.common.containerPort }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.common.healthCheck.path }}
-              port: {{ .Values.common.containerPort }}
+              path: {{ .Values.common.healthCheck.livenessProbe.path | default .Values.common.healthCheck.path }}
+              port: {{ $healthPort }}
             initialDelaySeconds: {{ .Values.common.healthCheck.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.common.healthCheck.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.common.healthCheck.livenessProbe.timeoutSeconds | default 1 }}
             failureThreshold: {{ .Values.common.healthCheck.livenessProbe.failureThreshold | default 3 }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.common.healthCheck.path }}
-              port: {{ .Values.common.containerPort }}
+              path: {{ .Values.common.healthCheck.readinessProbe.path | default .Values.common.healthCheck.path }}
+              port: {{ $healthPort }}
             initialDelaySeconds: {{ .Values.common.healthCheck.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.common.healthCheck.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.common.healthCheck.readinessProbe.timeoutSeconds | default 1 }}
@@ -242,8 +259,8 @@ spec:
           {{- if .Values.common.healthCheck.startupProbe }}
           startupProbe:
             httpGet:
-              path: {{ .Values.common.healthCheck.path }}
-              port: {{ .Values.common.containerPort }}
+              path: {{ .Values.common.healthCheck.startupProbe.path | default .Values.common.healthCheck.path }}
+              port: {{ $healthPort }}
             periodSeconds: {{ .Values.common.healthCheck.startupProbe.periodSeconds | default 10 }}
             failureThreshold: {{ .Values.common.healthCheck.startupProbe.failureThreshold | default 30 }}
           {{- end }}
