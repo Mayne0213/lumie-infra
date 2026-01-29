@@ -1,0 +1,84 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: lumie-springboot-build-deploy
+  namespace: tekton-pipelines
+spec:
+  description: Build Lumie Spring Boot services from GitHub and push to Zot registry
+  params:
+    - name: git-url
+      description: Git repository URL
+      type: string
+    - name: git-revision
+      description: Git revision (branch/tag/sha)
+      type: string
+      default: main
+    - name: service-name
+      description: Service name (e.g., tenant-svc)
+      type: string
+    - name: context-dir
+      description: Docker build context directory
+      type: string
+      default: springboot
+    - name: dockerfile-path
+      description: Dockerfile path relative to context
+      type: string
+      default: Dockerfile
+    - name: image-prefix
+      description: Image path prefix (e.g., applications/)
+      type: string
+      default: "applications/"
+    - name: values-file-path
+      description: Path to helm values file to update
+      type: string
+      default: ""
+    - name: update-values
+      description: Whether to update values file (true/false)
+      type: string
+      default: "false"
+  workspaces:
+    - name: shared-workspace
+      description: Shared workspace for all tasks
+    - name: docker-credentials
+      description: Docker registry credentials
+  tasks:
+    - name: build-push
+      taskRef:
+        name: kaniko-clone-build-github
+      params:
+        - name: GIT_URL
+          value: $(params.git-url)
+        - name: GIT_REVISION
+          value: $(params.git-revision)
+        - name: IMAGE
+          value: zot0213.kro.kr/$(params.image-prefix)$(params.service-name)
+        - name: TAG
+          value: $(params.git-revision)
+        - name: CONTEXT
+          value: $(params.context-dir)
+        - name: DOCKERFILE
+          value: $(params.dockerfile-path)
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: dockerconfig
+          workspace: docker-credentials
+    - name: update-values
+      runAfter:
+        - build-push
+      when:
+        - input: $(params.update-values)
+          operator: in
+          values: ["true"]
+      taskRef:
+        name: git-update-values
+      params:
+        - name: VALUES_FILE_PATH
+          value: $(params.values-file-path)
+        - name: IMAGE_DIGEST
+          value: $(tasks.build-push.results.IMAGE_TAG)
+        - name: APP_NAME
+          value: $(params.service-name)
+      workspaces:
+        - name: source
+          workspace: shared-workspace

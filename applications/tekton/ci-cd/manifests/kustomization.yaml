@@ -5,8 +5,10 @@ resources:
   # Secrets
   - secrets/forgejo-credentials.yaml
   - secrets/zot-registry-credentials.yaml
+  - secrets/github-credentials.yaml
   # Tasks
   - tasks/kaniko-clone-build.yaml
+  - tasks/kaniko-clone-build-github.yaml
   - tasks/git-update-values.yaml
   # Pipelines
   - pipelines/nextjs-pipeline.yaml
@@ -14,6 +16,7 @@ resources:
   - pipelines/python-pipeline.yaml
   - pipelines/react-pipeline.yaml
   - pipelines/springboot-pipeline.yaml
+  - pipelines/lumie-pipeline.yaml
   # Triggers
   - triggers/
   # Cleanup CronJob

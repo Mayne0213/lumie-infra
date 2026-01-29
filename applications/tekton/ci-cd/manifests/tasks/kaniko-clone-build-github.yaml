@@ -1,0 +1,145 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: kaniko-clone-build-github
+  namespace: tekton-pipelines
+spec:
+  description: Clone git repo from GitHub and build/push container image using Kaniko
+  params:
+    - name: GIT_URL
+      description: Git repository URL
+      type: string
+    - name: GIT_REVISION
+      description: Git revision (branch/tag/sha)
+      type: string
+      default: main
+    - name: IMAGE
+      description: Image reference without tag (registry/repo)
+      type: string
+    - name: TAG
+      description: Image tag
+      type: string
+      default: latest
+    - name: CONTEXT
+      description: Build context directory relative to repo root
+      type: string
+      default: .
+    - name: DOCKERFILE
+      description: Dockerfile path relative to context
+      type: string
+      default: Dockerfile
+    - name: BUILD_ARGS
+      description: Docker build arguments (e.g., --build-arg KEY=VALUE)
+      type: array
+      default: []
+  workspaces:
+    - name: source
+      description: Workspace for git clone and build
+    - name: dockerconfig
+      description: Docker config for registry auth
+      optional: true
+  results:
+    - name: IMAGE_DIGEST
+      description: Digest of built image
+    - name: IMAGE_TAG
+      description: Image tag used for deployment
+    - name: COMMIT_SHA
+      description: Git commit SHA
+  steps:
+    - name: clone
+      image: zot0213.kro.kr/applications/alpine-git:v2.47.1
+      env:
+        - name: GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: github-credentials
+              key: username
+        - name: GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: github-credentials
+              key: password
+      script: |
+        #!/bin/sh
+        set -e
+        cd $(workspaces.source.path)
+        # Add credentials to URL for private repos
+        GIT_URL_AUTH=$(echo "$(params.GIT_URL)" | sed "s|https://|https://${GIT_USERNAME}:${GIT_PASSWORD}@|")
+        git clone --depth=1 --branch=$(params.GIT_REVISION) "$GIT_URL_AUTH" .
+        COMMIT=$(git rev-parse HEAD)
+        echo -n "$COMMIT" > /tekton/results/COMMIT_SHA
+        echo "Cloned $(params.GIT_URL) at $COMMIT"
+        ls -la $(params.CONTEXT)/
+    - name: setup-docker-config
+      image: zot0213.kro.kr/applications/alpine:3.19
+      env:
+        - name: IMAGE
+          value: $(params.IMAGE)
+      script: |
+        #!/bin/sh
+        set -e
+        DOCKER_CONFIG_FILE="$(workspaces.dockerconfig.path)/.dockerconfigjson"
+        REGISTRY=$(echo "$IMAGE" | cut -d'/' -f1)
+
+        if [ -f "$DOCKER_CONFIG_FILE" ]; then
+          USER=$(sed -n 's/.*"username":"\([^"]*\)".*/\1/p' "$DOCKER_CONFIG_FILE")
+          PASS=$(sed -n 's/.*"password":"\([^"]*\)".*/\1/p' "$DOCKER_CONFIG_FILE")
+          AUTH=$(echo -n "$USER:$PASS" | base64)
+
+          mkdir -p /kaniko/.docker
+          echo "{\"auths\":{\"$REGISTRY\":{\"username\":\"$USER\",\"password\":\"$PASS\",\"auth\":\"$AUTH\"}}}" > /kaniko/.docker/config.json
+          echo "Docker config created for $REGISTRY"
+        fi
+      volumeMounts:
+        - name: kaniko-docker
+          mountPath: /kaniko/.docker
+    - name: build-and-push
+      image: zot0213.kro.kr/applications/kaniko:debug
+      args: ["$(params.BUILD_ARGS[*])"]
+      env:
+        - name: DOCKER_CONFIG
+          value: /kaniko/.docker
+        - name: IMAGE
+          value: $(params.IMAGE)
+        - name: CONTEXT
+          value: $(params.CONTEXT)
+        - name: DOCKERFILE
+          value: $(params.DOCKERFILE)
+      script: |
+        #!/busybox/sh
+        set -e
+
+        # Read commit SHA and create short tag (first 8 characters)
+        COMMIT_SHA=$(cat /tekton/results/COMMIT_SHA)
+        SHORT_SHA=$(echo "$COMMIT_SHA" | cut -c1-8)
+
+        echo "Building image with tag: $SHORT_SHA"
+
+        # Save short SHA as IMAGE_TAG for downstream tasks
+        echo -n "$SHORT_SHA" > /tekton/results/IMAGE_TAG
+
+        # Build args passed via step args
+        BUILD_ARGS=""
+        for arg in "$@"; do
+          BUILD_ARGS="$BUILD_ARGS $arg"
+        done
+        echo "Build args: $BUILD_ARGS"
+
+        # Build and push with Kaniko
+        /kaniko/executor \
+          --context=$(workspaces.source.path)/$CONTEXT \
+          --dockerfile=$(workspaces.source.path)/$CONTEXT/$DOCKERFILE \
+          --destination=$IMAGE:$SHORT_SHA \
+          --destination=$IMAGE:latest \
+          --digest-file=/tekton/results/IMAGE_DIGEST \
+          --skip-tls-verify \
+          --cache=false \
+          --snapshot-mode=redo \
+          --use-new-run \
+          $BUILD_ARGS
+      volumeMounts:
+        - name: kaniko-docker
+          mountPath: /kaniko/.docker
+  volumes:
+    - name: kaniko-docker
+      emptyDir: {}
