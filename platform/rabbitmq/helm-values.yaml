@@ -1,6 +1,11 @@
 # Bitnami RabbitMQ Helm Chart Values
 # https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq
 
+# Allow non-Bitnami images (using Zot registry mirror)
+global:
+  security:
+    allowInsecureImages: true
+
 # Image from Zot registry
 image:
   registry: zot0213.kro.kr
