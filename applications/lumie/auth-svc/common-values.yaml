@@ -14,7 +14,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: applications/auth-svc
-    tag: fae5cd50
+    tag: v2
     pullPolicy: IfNotPresent
 
   # Multiple container ports
