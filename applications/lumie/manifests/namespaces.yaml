@@ -1,13 +1,6 @@
 # LUMIE Platform Namespaces
 # 8 namespaces for multi-tenant LMS platform
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kong
-  labels:
-    app.kubernetes.io/part-of: lumie
-    goldilocks.fairwinds.com/enabled: "true"
+# Note: kong namespace is managed in platform/kong (cluster-level infrastructure)
 ---
 apiVersion: v1
 kind: Namespace
