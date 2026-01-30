@@ -1,8 +1,10 @@
 # Kong Ingress Controller Configuration
 # Replaces Traefik as the cluster-wide API Gateway
 
-# Gateway (Kong Proxy)
+# Gateway (Kong Proxy) - uses kong/kong subchart
 gateway:
+  enabled: true
+
   image:
     repository: zot0213.kro.kr/platform/kong
     tag: "3.9"
@@ -18,9 +20,6 @@ gateway:
   proxy:
     enabled: true
     type: LoadBalancer
-    annotations:
-      # HAProxy will route to this service
-      service.kubernetes.io/topology-aware-hints: "auto"
     http:
       enabled: true
       containerPort: 8000
@@ -33,6 +32,7 @@ gateway:
   admin:
     enabled: true
     type: ClusterIP
+    clusterIP: None
     http:
       enabled: true
       containerPort: 8001
@@ -51,17 +51,19 @@ gateway:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8100"
 
-# Controller (Kong Ingress Controller)
+# Controller (Kong Ingress Controller) - uses kong-ingress-controller subchart
 controller:
-  image:
-    repository: zot0213.kro.kr/platform/kong-ingress-controller
-    tag: "3.4"
+  enabled: true
 
   ingressController:
     enabled: true
-    installCRDs: true
-    env:
-      kong_admin_url: "http://localhost:8001"
+    image:
+      repository: zot0213.kro.kr/platform/kong-ingress-controller
+      tag: "3.4"
+
+    gatewayDiscovery:
+      enabled: true
+      generateAdminApiService: true
 
   resources:
     requests:
@@ -70,17 +72,7 @@ controller:
     limits:
       memory: 256Mi
 
-# Disable PostgreSQL (DB-less mode)
-postgresql:
-  enabled: false
-
-# Service Monitor for Prometheus
-serviceMonitor:
-  enabled: true
-  labels:
-    release: prometheus
-
-# Pod Disruption Budget
-podDisruptionBudget:
-  enabled: true
-  minAvailable: 1
+# Disable test deployment
+deployment:
+  test:
+    enabled: false
