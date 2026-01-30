@@ -8,32 +8,9 @@ spec:
   generators:
     - list:
         elements:
-          # Simple apps (single container)
-          - name: jaejadle
-            namespace: jaejadle
-            valuesFile: jaejadle.yaml
-          - name: jaejadle-dev
-            namespace: jaejadle-dev
-            valuesFile: jaejadle-dev.yaml
-          - name: jotion
-            namespace: jotion
-            valuesFile: jotion.yaml
-          - name: todo
-            namespace: todo
-            valuesFile: todo.yaml
           - name: joossam
             namespace: joossam
             valuesFile: joossam.yaml
-          - name: joossam-dev
-            namespace: joossam-dev
-            valuesFile: joossam-dev.yaml
-          - name: jovies
-            namespace: jovies
-            valuesFile: jovies.yaml
-          - name: portfolio
-            namespace: portfolio
-            valuesFile: portfolio.yaml
-          # Poolc dev app (integrated backend + frontend)
           - name: poolc-dev
             namespace: poolc-dev
             valuesFile: poolc-dev.yaml

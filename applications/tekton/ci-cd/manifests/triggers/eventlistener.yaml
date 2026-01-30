@@ -6,6 +6,7 @@ metadata:
 spec:
   serviceAccountName: tekton-triggers-sa
   triggers:
+    # Next.js apps (main branch)
     - name: forgejo-push-nextjs
       interceptors:
         - ref:
@@ -30,12 +31,11 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['jovies', 'jotion', 'jaejadle', 'portfolio', 'todo']"
+              value: "body.repository.name in []"
             - name: "overlays"
               value:
                 - key: build_args
-                  expression: |
-                    body.repository.name == 'jotion' ? '--build-arg=NEXT_PUBLIC_TODO_API_URL=https://todo0213.kro.kr' : ''
+                  expression: "''"
       bindings:
         - ref: forgejo-push-binding
         - name: build-args
@@ -129,65 +129,6 @@ spec:
         - ref: forgejo-push-binding
       template:
         ref: mas-build-template
-    # Develop branch triggers for -dev deployments
-    - name: forgejo-push-nextjs-dev
-      interceptors:
-        - ref:
-            name: "github"
-          params:
-            - name: "secretRef"
-              value:
-                secretName: forgejo-webhook-secret
-                secretKey: webhook-secret
-            - name: "eventTypes"
-              value: ["push"]
-        - ref:
-            name: "cel"
-          params:
-            - name: "filter"
-              value: "body.ref.startsWith('refs/heads/develop')"
-            - name: "overlays"
-              value:
-                - key: branch_name
-                  expression: "body.ref.split('/')[2]"
-        - ref:
-            name: "cel"
-          params:
-            - name: "filter"
-              value: "body.repository.name in ['jaejadle']"
-      bindings:
-        - ref: forgejo-push-binding
-      template:
-        ref: nextjs-dev-build-template
-    - name: forgejo-push-fastapi-dev
-      interceptors:
-        - ref:
-            name: "github"
-          params:
-            - name: "secretRef"
-              value:
-                secretName: forgejo-webhook-secret
-                secretKey: webhook-secret
-            - name: "eventTypes"
-              value: ["push"]
-        - ref:
-            name: "cel"
-          params:
-            - name: "filter"
-              value: "body.ref.startsWith('refs/heads/develop')"
-            - name: "overlays"
-              value:
-                - key: branch_name
-                  expression: "body.ref.split('/')[2]"
-        - ref:
-            name: "cel"
-          params:
-            - name: "filter"
-              value: "body.repository.name in ['joossam']"
-      bindings:
-        - ref: forgejo-push-binding
-      template:
-        ref: fastapi-dev-build-template
     - name: forgejo-push-poolc-frontend
       interceptors:
         - ref:
