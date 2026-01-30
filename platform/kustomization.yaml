@@ -8,8 +8,7 @@ resources:
   # Cluster-wide resources
   - priority-classes/argocd.yaml
 
-  # Core infrastructure
-  - traefik-config/argocd.yaml
+  # Core infrastructure (Kong replaced Traefik)
   - kong/argocd.yaml
   - coredns-config/argocd.yaml
   - haproxy/argocd.yaml
