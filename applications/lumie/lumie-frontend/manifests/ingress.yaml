@@ -1,0 +1,62 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lumie-frontend-main
+  namespace: lumie-frontend
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    konghq.com/plugins: lumie-cors
+spec:
+  ingressClassName: kong
+  tls:
+    - hosts:
+        - lumie0213.kro.kr
+        - www.lumie0213.kro.kr
+      secretName: lumie-frontend-tls
+  rules:
+    - host: lumie0213.kro.kr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lumie-frontend
+                port:
+                  number: 3000
+    - host: www.lumie0213.kro.kr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lumie-frontend
+                port:
+                  number: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lumie-frontend-tenant
+  namespace: lumie-frontend
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    konghq.com/plugins: lumie-cors
+spec:
+  ingressClassName: kong
+  tls:
+    - hosts:
+        - "*.lumie0213.kro.kr"
+      secretName: lumie-frontend-wildcard-tls
+  rules:
+    - host: "*.lumie0213.kro.kr"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lumie-frontend
+                port:
+                  number: 3000

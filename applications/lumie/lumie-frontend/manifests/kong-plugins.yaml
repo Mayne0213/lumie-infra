@@ -1,0 +1,29 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongClusterPlugin
+metadata:
+  name: lumie-cors
+  annotations:
+    kubernetes.io/ingress.class: kong
+  labels:
+    global: "false"
+config:
+  origins:
+    - "https://lumie0213.kro.kr"
+    - "https://*.lumie0213.kro.kr"
+  methods:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    - OPTIONS
+  headers:
+    - Accept
+    - Authorization
+    - Content-Type
+    - X-Tenant-Slug
+  exposed_headers:
+    - X-Request-Id
+  credentials: true
+  max_age: 3600
+plugin: cors
