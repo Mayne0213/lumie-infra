@@ -50,7 +50,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/values/$(tt.params.repo-name).yaml
+            value: applications/$(tt.params.repo-name)/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -160,7 +160,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/values/$(tt.params.repo-name).yaml
+            value: applications/$(tt.params.repo-name)/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -275,7 +275,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/values/poolc-frontend-dev.yaml,web-apps/values/poolc-frontend.yaml
+            value: applications/poolc-dev/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -330,7 +330,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: web-apps/values/poolc-backend-dev.yaml,web-apps/values/poolc-backend.yaml
+            value: applications/poolc-dev/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
