@@ -384,7 +384,7 @@ spec:
           - name: service-name
             value: tenant-svc
           - name: context-dir
-            value: springboot
+            value: .
           - name: dockerfile-path
             value: services/platform/tenant-svc/Dockerfile
           - name: image-prefix
