@@ -22,7 +22,7 @@ controllers:
           - sh
           - -c
           - |
-            git clone --depth 1 --branch main https://github0213.com/Mayne0213/K3S-HOME.git /tmp/repo
+            git clone --depth 1 --branch main https://github.com/Mayne0213/lumie-infra.git /tmp/repo
             rm -rf /www/assets
             cp -r /tmp/repo/applications/homer/assets /www/assets
             cp /config/config.yml /www/assets/config.yml

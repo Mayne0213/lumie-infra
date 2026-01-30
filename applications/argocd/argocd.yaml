@@ -16,11 +16,11 @@ spec:
         valueFiles:
           - $values/applications/argocd/helm-values.yaml
     # Source 2: Helm values from Git repo
-    - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    - repoURL: https://github.com/Mayne0213/lumie-infra.git
       targetRevision: main
       ref: values
     # Source 3: Common chart for additional resources (Ingresses)
-    - repoURL: https://github0213.com/Mayne0213/K3S-HOME.git
+    - repoURL: https://github.com/Mayne0213/lumie-infra.git
       targetRevision: main
       path: charts/common
       helm:

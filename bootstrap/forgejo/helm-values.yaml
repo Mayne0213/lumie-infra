@@ -58,10 +58,10 @@ gitea:
     APP_NAME: Forgejo - K3S-HOME
 
     server:
-      DOMAIN: github0213.com
-      ROOT_URL: https://github0213.com
+      DOMAIN: github.com
+      ROOT_URL: https://github.com
       HTTP_PORT: 3000
-      SSH_DOMAIN: github0213.com
+      SSH_DOMAIN: github.com
       SSH_PORT: 22
       SSH_LISTEN_PORT: 2222
       LFS_START_SERVER: true
@@ -191,14 +191,14 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-  - host: github0213.com
+  - host: github.com
     paths:
     - path: /
       pathType: Prefix
   tls:
   - secretName: github-tls
     hosts:
-    - github0213.com
+    - github.com
 
 # =============================================================================
 # RESOURCES (VPA recommended, no CPU limit for stability)
