@@ -14,7 +14,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: applications/billing-svc
-    tag: latest
+    tag: 8390ee16
     pullPolicy: IfNotPresent
 
   # Multiple container ports
