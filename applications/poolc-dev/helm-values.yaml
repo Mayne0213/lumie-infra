@@ -17,7 +17,7 @@ common:
         port: 80
       ingress:
         enabled: true
-        className: traefik
+        className: kong
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-prod
           traefik.ingress.kubernetes.io/router.middlewares: poolc-dev-poolc-strip-api-prefix@kubernetescrd
@@ -140,7 +140,7 @@ common:
         port: 80
       ingress:
         enabled: true
-        className: traefik
+        className: kong
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-prod
         hosts:

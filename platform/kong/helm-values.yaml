@@ -18,6 +18,10 @@ gateway:
     admin_access_log: "/dev/stdout"
     proxy_error_log: "/dev/stderr"
     admin_error_log: "/dev/stderr"
+    # PROXY Protocol support (HAProxy sends proxy_protocol)
+    trusted_ips: "0.0.0.0/0,::/0"
+    real_ip_header: "proxy_protocol"
+    real_ip_recursive: "on"
 
   proxy:
     enabled: true
@@ -26,10 +30,15 @@ gateway:
       enabled: true
       containerPort: 8000
       servicePort: 80
+      parameters:
+        - proxy_protocol
     tls:
       enabled: true
       containerPort: 8443
       servicePort: 443
+      parameters:
+        - http2
+        - proxy_protocol
 
   admin:
     enabled: true

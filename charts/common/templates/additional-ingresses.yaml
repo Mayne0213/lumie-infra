@@ -9,7 +9,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: {{ $ingress.className | default "traefik" }}
+  ingressClassName: {{ $ingress.className | default "kong" }}
   {{- if $ingress.tls }}
   tls:
     {{- range $ingress.tls }}

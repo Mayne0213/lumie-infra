@@ -49,7 +49,7 @@ server:
   # Ingress 설정
   ingress:
     enabled: true
-    ingressClassName: traefik
+    ingressClassName: kong
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:

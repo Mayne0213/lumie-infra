@@ -20,11 +20,11 @@ common:
       email: bluemayne0213@icloud.com
       privateKeySecretRef: letsencrypt-prod
       solvers:
-        - ingressClass: traefik
+        - ingressClass: kong
 
     - name: letsencrypt-staging
       server: https://acme-staging-v02.api.letsencrypt.org/directory
       email: bluemayne0213@icloud.com
       privateKeySecretRef: letsencrypt-staging
       solvers:
-        - ingressClass: traefik
+        - ingressClass: kong

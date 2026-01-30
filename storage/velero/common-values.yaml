@@ -18,7 +18,7 @@ common:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
         traefik.ingress.kubernetes.io/router.priority: "100"
-      className: traefik
+      className: kong
       hosts:
         - host: velero0213.kro.kr
           paths:

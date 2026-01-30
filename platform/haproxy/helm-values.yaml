@@ -1,5 +1,5 @@
 # HAProxy Helm Chart Values
-# TCP proxy for PROXY Protocol forwarding to Traefik
+# TCP proxy for PROXY Protocol forwarding to Kong
 
 # =============================================================================
 # DEPLOYMENT KIND - DaemonSet for HA
@@ -75,29 +75,29 @@ config: |
       timeout client 30s
       timeout server 30s
 
-  # HTTP frontend - PROXY Protocol to Traefik
+  # HTTP frontend - PROXY Protocol to Kong
   frontend http_front
       bind *:80
       mode tcp
-      default_backend traefik_http
+      default_backend kong_http
 
-  # HTTPS frontend - PROXY Protocol to Traefik
+  # HTTPS frontend - PROXY Protocol to Kong
   frontend https_front
       bind *:443
       mode tcp
-      default_backend traefik_https
+      default_backend kong_https
 
   # HTTP backend - send PROXY Protocol v2
-  backend traefik_http
+  backend kong_http
       mode tcp
       balance roundrobin
-      server traefik traefik.kube-system.svc.cluster.local:80 send-proxy-v2 check
+      server kong kong-gateway-proxy.kong.svc.cluster.local:80 send-proxy-v2 check
 
   # HTTPS backend - send PROXY Protocol v2
-  backend traefik_https
+  backend kong_https
       mode tcp
       balance roundrobin
-      server traefik traefik.kube-system.svc.cluster.local:443 send-proxy-v2 check
+      server kong kong-gateway-proxy.kong.svc.cluster.local:443 send-proxy-v2 check
 
 # =============================================================================
 # CONTAINER PORTS (must match hostPorts)
