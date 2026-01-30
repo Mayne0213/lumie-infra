@@ -29,8 +29,6 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
-    managedNamespaceMetadata:
-      labels:
     retry:
       limit: 5
       backoff:
