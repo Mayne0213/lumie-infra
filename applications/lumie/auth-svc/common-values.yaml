@@ -1,0 +1,227 @@
+# auth-svc common chart values
+
+common:
+  name: auth-svc
+  namespace: lumie-platform
+
+  # Deployment
+  deployment:
+    enabled: true
+
+  replicaCount: 2
+
+  # Image
+  image:
+    registry: zot0213.kro.kr
+    repository: applications/auth-svc
+    tag: fae5cd50
+    pullPolicy: IfNotPresent
+
+  # Multiple container ports
+  ports:
+    - name: http
+      containerPort: 8080
+      protocol: TCP
+    - name: grpc
+      containerPort: 9090
+      protocol: TCP
+
+  # Pod-level security context
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+
+  # Container-level security context
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+
+  # Environment variables
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: "prod"
+    # Database (for tenant schema user lookups)
+    - name: DB_HOST
+      value: "lumie-db-rw.lumie-db.svc"
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: "lumie"
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-db-secrets
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-db-secrets
+          key: password
+    # Redis
+    - name: REDIS_HOST
+      value: "redis-master.lumie-cache.svc"
+    - name: REDIS_PORT
+      value: "6379"
+    - name: REDIS_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-redis-secrets
+          key: REDIS_PASSWORD
+    # RabbitMQ
+    - name: RABBITMQ_HOST
+      value: "rabbitmq.lumie-event.svc"
+    - name: RABBITMQ_PORT
+      value: "5672"
+    - name: RABBITMQ_USERNAME
+      value: "lumie"
+    - name: RABBITMQ_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-rabbitmq-secrets
+          key: RABBITMQ_PASSWORD
+    # tenant-svc gRPC
+    - name: TENANT_SVC_GRPC_HOST
+      value: "tenant-svc-grpc.lumie-platform.svc"
+    # JWT
+    - name: JWT_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-jwt-secrets
+          key: JWT_SECRET_KEY
+    - name: JWT_ACCESS_EXPIRATION
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-jwt-secrets
+          key: JWT_ACCESS_EXPIRATION
+    - name: JWT_REFRESH_EXPIRATION
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-jwt-secrets
+          key: JWT_REFRESH_EXPIRATION
+    # OAuth2 - Google
+    - name: GOOGLE_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-oauth-secrets
+          key: GOOGLE_CLIENT_ID
+    - name: GOOGLE_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-oauth-secrets
+          key: GOOGLE_CLIENT_SECRET
+    # OAuth2 - Kakao
+    - name: KAKAO_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-oauth-secrets
+          key: KAKAO_CLIENT_ID
+    - name: KAKAO_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: auth-svc-oauth-secrets
+          key: KAKAO_CLIENT_SECRET
+
+  # Resources (VPA-based)
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 512Mi
+
+  # Health checks (Spring Boot Actuator)
+  healthCheck:
+    enabled: true
+    port: http
+    livenessProbe:
+      path: /actuator/health/liveness
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readinessProbe:
+      path: /actuator/health/readiness
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    startupProbe:
+      path: /actuator/health
+      periodSeconds: 5
+      failureThreshold: 30
+
+  # Service (HTTP only, gRPC via separate manifest)
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 8080
+        targetPort: http
+        protocol: TCP
+
+  ingress:
+    enabled: false
+
+  # ServiceMonitor for Prometheus
+  serviceMonitor:
+    enabled: true
+    endpoints:
+      - port: http
+        interval: 30s
+        path: /actuator/prometheus
+
+  # Vault Static Secrets
+  vaultStaticSecrets:
+    # Database credentials
+    - name: auth-svc-db-vss
+      path: platform/lumie-db
+      destination:
+        name: auth-svc-db-secrets
+        transformation:
+          templates:
+            username: "{{ .Secrets.LUMIE_DB_USERNAME }}"
+            password: "{{ .Secrets.LUMIE_DB_PASSWORD }}"
+    # Redis credentials
+    - name: auth-svc-redis-vss
+      path: platform/redis
+      destination:
+        name: auth-svc-redis-secrets
+        transformation:
+          templates:
+            REDIS_PASSWORD: "{{ .Secrets.REDIS_PASSWORD }}"
+    # RabbitMQ credentials
+    - name: auth-svc-rabbitmq-vss
+      path: platform/rabbitmq
+      destination:
+        name: auth-svc-rabbitmq-secrets
+        transformation:
+          templates:
+            RABBITMQ_PASSWORD: "{{ .Secrets.RABBITMQ_PASSWORD }}"
+    # JWT secrets
+    - name: auth-svc-jwt-vss
+      path: security/jwt
+      destination:
+        name: auth-svc-jwt-secrets
+        transformation:
+          templates:
+            JWT_SECRET_KEY: "{{ .Secrets.JWT_SECRET_KEY }}"
+            JWT_ACCESS_EXPIRATION: "{{ .Secrets.JWT_ACCESS_EXPIRATION }}"
+            JWT_REFRESH_EXPIRATION: "{{ .Secrets.JWT_REFRESH_EXPIRATION }}"
+    # OAuth secrets
+    - name: auth-svc-oauth-vss
+      path: security/oauth
+      destination:
+        name: auth-svc-oauth-secrets
+        transformation:
+          templates:
+            GOOGLE_CLIENT_ID: "{{ .Secrets.GOOGLE_CLIENT_ID }}"
+            GOOGLE_CLIENT_SECRET: "{{ .Secrets.GOOGLE_CLIENT_SECRET }}"
+            KAKAO_CLIENT_ID: "{{ .Secrets.KAKAO_CLIENT_ID }}"
+            KAKAO_CLIENT_SECRET: "{{ .Secrets.KAKAO_CLIENT_SECRET }}"
