@@ -37,12 +37,12 @@ spec:
         - name: GIT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: forgejo-credentials
+              name: github-credentials
               key: username
         - name: GIT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: forgejo-credentials
+              name: github-credentials
               key: password
       script: |
         #!/bin/sh
