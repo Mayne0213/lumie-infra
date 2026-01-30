@@ -6,10 +6,8 @@ gateway:
   enabled: true
 
   image:
-    repository: zot0213.kro.kr/platform/kong
+    repository: kong/kong-gateway
     tag: "3.9"
-    pullSecrets:
-      - zot-registry-creds
 
   env:
     database: "off"
@@ -66,14 +64,10 @@ gateway:
 controller:
   enabled: true
 
-  image:
-    pullSecrets:
-      - zot-registry-creds
-
   ingressController:
     enabled: true
     image:
-      repository: zot0213.kro.kr/platform/kong-ingress-controller
+      repository: kong/kubernetes-ingress-controller
       tag: "3.4"
 
     gatewayDiscovery:
