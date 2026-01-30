@@ -9,7 +9,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/Mayne0213/K3S-HOME.git
+    repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     path: bootstrap
 

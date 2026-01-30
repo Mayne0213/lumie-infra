@@ -18,11 +18,11 @@ spec:
       valueFiles:
       - $values/bootstrap/forgejo/helm-values.yaml
   # Source 2: Git repo for values reference
-  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
+  - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     ref: values
   # Source 3: Local manifests (VaultStaticSecrets, redirects)
-  - repoURL: https://github.com/Mayne0213/K3S-HOME.git
+  - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     path: bootstrap/forgejo/manifests
   destination:
