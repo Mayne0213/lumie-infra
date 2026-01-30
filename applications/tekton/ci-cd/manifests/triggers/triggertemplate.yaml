@@ -276,6 +276,8 @@ spec:
             value: "true"
           - name: values-file-path
             value: applications/poolc-dev/helm-values.yaml
+          - name: yq-path
+            value: ".common.components[1].image.tag"
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -331,6 +333,8 @@ spec:
             value: "true"
           - name: values-file-path
             value: applications/poolc-dev/helm-values.yaml
+          - name: yq-path
+            value: ".common.components[0].image.tag"
         workspaces:
           - name: shared-workspace
             emptyDir: {}
