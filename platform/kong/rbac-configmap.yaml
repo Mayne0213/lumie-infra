@@ -1,0 +1,27 @@
+# Additional RBAC for Kong Ingress Controller
+# Required for ConfigMap access (needed by KIC to sync configuration)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kong-controller-configmap
+  labels:
+    app.kubernetes.io/instance: kong
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kong-controller-configmap
+  labels:
+    app.kubernetes.io/instance: kong
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kong-controller-configmap
+subjects:
+- kind: ServiceAccount
+  name: kong-controller
+  namespace: kong
