@@ -156,14 +156,14 @@
 - name: Clone GitOps repository for app-of-apps
   ansible.builtin.git:
     repo: "{{ gitops_repo }}"
-    dest: /tmp/k3s-home-gitops
+    dest: /tmp/lumie-infra-gitops
     version: "{{ gitops_branch }}"
     force: true
 
 - name: Apply root app-of-apps
   kubernetes.core.k8s:
     state: present
-    src: "/tmp/k3s-home-gitops/{{ item }}"
+    src: "/tmp/lumie-infra-gitops/{{ item }}"
   loop: "{{ app_of_apps_paths }}"
   environment:
     KUBECONFIG: "{{ k3s_kubeconfig }}"
@@ -182,7 +182,7 @@
 
 - name: Clean up cloned repository
   ansible.builtin.file:
-    path: /tmp/k3s-home-gitops
+    path: /tmp/lumie-infra-gitops
     state: absent
 
 - name: Display ArgoCD applications

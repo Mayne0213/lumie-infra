@@ -1,4 +1,4 @@
-# K3S-HOME
+# lumie-infra
 
 ![K3s](https://img.shields.io/badge/K3s-v1.34-blue?logo=k3s)
 ![ArgoCD](https://img.shields.io/badge/ArgoCD-GitOps-orange?logo=argo)
@@ -40,7 +40,7 @@ A production-grade, GitOps-driven home lab Kubernetes cluster running on Oracle 
 ## Directory Structure
 
 ```
-K3S-HOME/
+lumie-infra/
 ├── provision/          # Terraform + Ansible (Infrastructure as Code)
 ├── bootstrap/          # Foundation services (Sync Wave -1)
 ├── platform/           # Platform services
