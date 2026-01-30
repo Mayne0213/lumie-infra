@@ -9,7 +9,7 @@ spec:
     - name: GIT_REPO_URL
       description: Git repository URL to update (K3S-HOME)
       type: string
-      default: "https://github0213.com/Mayne0213/K3S-HOME.git"
+      default: "https://github.com/Mayne0213/lumie-infra.git"
     - name: GIT_BRANCH
       description: Git branch to update
       type: string

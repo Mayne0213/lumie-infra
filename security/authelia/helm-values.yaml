@@ -220,7 +220,7 @@ configMap:
           authorization_policy: one_factor
           claims_policy: default
           redirect_uris:
-            - https://github0213.com/user/oauth2/authelia/callback
+            - https://github.com/user/oauth2/authelia/callback
           scopes:
             - openid
             - profile
@@ -234,7 +234,7 @@ configMap:
           authorization_policy: one_factor
           claims_policy: default
           redirect_uris:
-            - https://github0213.com/user/oauth2/authelia/callback
+            - https://github.com/user/oauth2/authelia/callback
           scopes:
             - openid
             - profile

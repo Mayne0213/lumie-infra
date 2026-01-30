@@ -8,7 +8,7 @@ argocd_chart_version: "7.7.10"
 argocd_namespace: argocd
 
 # Git repository for app-of-apps
-gitops_repo: https://github0213.com/Mayne0213/K3S-HOME.git
+gitops_repo: https://github.com/Mayne0213/lumie-infra.git
 gitops_branch: main
 
 # Root app-of-apps paths (relative to repo root)
