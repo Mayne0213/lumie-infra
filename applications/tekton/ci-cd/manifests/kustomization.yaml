@@ -3,11 +3,9 @@ kind: Kustomization
 
 resources:
   # Secrets
-  - secrets/forgejo-credentials.yaml
   - secrets/zot-registry-credentials.yaml
   - secrets/github-credentials.yaml
   # Tasks
-  - tasks/kaniko-clone-build.yaml
   - tasks/kaniko-clone-build-github.yaml
   - tasks/git-update-values.yaml
   # Pipelines
