@@ -7,7 +7,7 @@ spec:
   description: Update helm values file with new image digest and push to git
   params:
     - name: GIT_REPO_URL
-      description: Git repository URL to update (K3S-HOME)
+      description: Git repository URL to update (lumie-infra)
       type: string
       default: "https://github.com/Mayne0213/lumie-infra.git"
     - name: GIT_BRANCH
@@ -51,7 +51,7 @@ spec:
         cd $(workspaces.source.path)
 
         # Configure git
-        git config --global user.email "tekton@k3s-home.local"
+        git config --global user.email "tekton@lumie.local"
         git config --global user.name "Tekton CI"
         git config --global credential.helper store
 
@@ -60,8 +60,8 @@ spec:
 
         # Clone repository
         echo "Cloning $(params.GIT_REPO_URL)..."
-        git clone --depth=1 --branch=$(params.GIT_BRANCH) "$REPO_URL" k3s-home
-        cd k3s-home
+        git clone --depth=1 --branch=$(params.GIT_BRANCH) "$REPO_URL" lumie-infra
+        cd lumie-infra
 
         # Parse comma-separated file paths
         VALUES_FILES="$(params.VALUES_FILE_PATH)"

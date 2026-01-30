@@ -55,7 +55,7 @@ gitea:
 
   # Forgejo configuration (app.ini)
   config:
-    APP_NAME: Forgejo - K3S-HOME
+    APP_NAME: Forgejo - lumie-infra
 
     server:
       DOMAIN: github.com

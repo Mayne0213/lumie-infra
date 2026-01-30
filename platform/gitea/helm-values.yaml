@@ -50,7 +50,7 @@ gitea:
 
   # Gitea configuration (app.ini)
   config:
-    APP_NAME: Gitea - K3S-HOME
+    APP_NAME: Gitea - lumie-infra
 
     server:
       DOMAIN: github.com
