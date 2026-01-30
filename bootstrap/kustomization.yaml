@@ -9,4 +9,4 @@ resources:
 - minio/argocd.yaml
 - zot/argocd.yaml
 - vault/argocd.yaml
-- forgejo/argocd.yaml
+# - forgejo/argocd.yaml  # Disabled: migrated to GitHub
