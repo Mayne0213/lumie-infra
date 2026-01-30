@@ -1,10 +1,18 @@
 # LUMIE Platform Namespaces
-# 7 namespaces for multi-tenant LMS platform
+# 8 namespaces for multi-tenant LMS platform
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: lumie-gateway
+  name: kong
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-frontend
   labels:
     app.kubernetes.io/part-of: lumie
     goldilocks.fairwinds.com/enabled: "true"
