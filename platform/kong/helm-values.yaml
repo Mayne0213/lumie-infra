@@ -8,6 +8,8 @@ gateway:
   image:
     repository: zot0213.kro.kr/platform/kong
     tag: "3.9"
+    pullSecrets:
+      - zot-registry-creds
 
   env:
     database: "off"
@@ -19,7 +21,7 @@ gateway:
 
   proxy:
     enabled: true
-    type: LoadBalancer
+    type: ClusterIP
     http:
       enabled: true
       containerPort: 8000
@@ -54,6 +56,10 @@ gateway:
 # Controller (Kong Ingress Controller) - uses kong-ingress-controller subchart
 controller:
   enabled: true
+
+  image:
+    pullSecrets:
+      - zot-registry-creds
 
   ingressController:
     enabled: true
