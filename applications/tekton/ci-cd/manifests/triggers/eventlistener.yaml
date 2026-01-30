@@ -212,7 +212,7 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie']"
+              value: "body.repository.name in ['lumie-backend']"
       bindings:
         - ref: github-push-binding
       template:
