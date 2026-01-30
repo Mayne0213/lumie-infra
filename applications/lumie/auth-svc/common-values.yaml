@@ -65,7 +65,7 @@ common:
           key: password
     # Redis
     - name: REDIS_HOST
-      value: "redis-master.lumie-cache.svc"
+      value: "redis.lumie-cache.svc"
     - name: REDIS_PORT
       value: "6379"
     - name: REDIS_PASSWORD
