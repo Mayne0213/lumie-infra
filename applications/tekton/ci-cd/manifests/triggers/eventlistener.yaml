@@ -129,14 +129,14 @@ spec:
         - ref: forgejo-push-binding
       template:
         ref: mas-build-template
-    - name: forgejo-push-poolc-frontend
+    - name: github-push-poolc-frontend
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: forgejo-webhook-secret
+                secretName: github-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -155,17 +155,17 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['poolc-frontend']"
       bindings:
-        - ref: forgejo-push-binding
+        - ref: github-push-binding
       template:
         ref: poolc-frontend-build-template
-    - name: forgejo-push-poolc-backend
+    - name: github-push-poolc-backend
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: forgejo-webhook-secret
+                secretName: github-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -184,7 +184,7 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['poolc-backend']"
       bindings:
-        - ref: forgejo-push-binding
+        - ref: github-push-binding
       template:
         ref: poolc-backend-build-template
     # GitHub Lumie triggers
