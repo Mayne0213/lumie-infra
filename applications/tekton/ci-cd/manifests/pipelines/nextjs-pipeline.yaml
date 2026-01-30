@@ -45,7 +45,7 @@ spec:
   tasks:
     - name: build-push
       taskRef:
-        name: kaniko-clone-build
+        name: kaniko-clone-build-github
       params:
         - name: GIT_URL
           value: $(params.git-url)
