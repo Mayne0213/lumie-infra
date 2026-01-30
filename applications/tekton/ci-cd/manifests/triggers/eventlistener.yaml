@@ -100,14 +100,14 @@ spec:
         - ref: forgejo-push-binding
       template:
         ref: fastapi-build-template
-    - name: forgejo-push-mas
+    - name: github-push-mas
       interceptors:
         - ref:
             name: "github"
           params:
             - name: "secretRef"
               value:
-                secretName: forgejo-webhook-secret
+                secretName: github-webhook-secret
                 secretKey: webhook-secret
             - name: "eventTypes"
               value: ["push"]
@@ -126,7 +126,7 @@ spec:
             - name: "filter"
               value: "body.repository.name in ['mas']"
       bindings:
-        - ref: forgejo-push-binding
+        - ref: github-push-binding
       template:
         ref: mas-build-template
     - name: github-push-poolc-frontend
