@@ -14,8 +14,8 @@ resources:
   - haproxy/argocd.yaml
   - cert-manager/argocd.yaml
 
-  # Git server (파일 유지, Forgejo로 마이그레이션 후 삭제 예정)
-  # - gitea/argocd.yaml
+  # GitHub redirect
+  - gitea/argocd-redirect.yaml
 
   # LUMIE Event Bus
   - rabbitmq-operator/argocd.yaml
