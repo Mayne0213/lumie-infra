@@ -18,11 +18,22 @@ controllers:
         image:
           repository: zot0213.kro.kr/applications/alpine-git
           tag: v2.47.1
+        env:
+          - name: GITHUB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: github-creds
+                key: username
+          - name: GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: github-creds
+                key: password
         command:
           - sh
           - -c
           - |
-            git clone --depth 1 --branch main https://github.com/Mayne0213/lumie-infra.git /tmp/repo
+            git clone --depth 1 --branch main https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/Mayne0213/lumie-infra.git /tmp/repo
             rm -rf /www/assets
             cp -r /tmp/repo/applications/homer/assets /www/assets
             cp /config/config.yml /www/assets/config.yml
