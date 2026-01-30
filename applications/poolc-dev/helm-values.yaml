@@ -130,7 +130,7 @@ common:
       image:
         registry: zot0213.kro.kr
         repository: web-apps/poolc-frontend
-        tag: ecb273a6
+        tag: c9eec026
         pullPolicy: Always
       replicaCount: 1
       containerPort: 80
