@@ -5,8 +5,6 @@ resources:
 # 0: minio (오브젝트 스토리지)
 # 1: zot (Private container registry)
 # 2: vault + VSO (시크릿 저장소)
-# 3: forgejo (Git 서버 - Gitea 대체)
 - minio/argocd.yaml
 - zot/argocd.yaml
 - vault/argocd.yaml
-# - forgejo/argocd.yaml  # Disabled: migrated to GitHub
