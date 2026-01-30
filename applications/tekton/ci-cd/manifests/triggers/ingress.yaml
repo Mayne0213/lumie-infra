@@ -6,7 +6,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
-  ingressClassName: traefik
+  ingressClassName: kong
   tls:
     - hosts:
         - tekton0213.kro.kr

@@ -103,7 +103,7 @@ csi:
 # Ingress for UI
 ingress:
   enabled: true
-  ingressClassName: traefik
+  ingressClassName: kong
   host: longhorn0213.kro.kr
   tls: true
   tlsSecret: longhorn-tls

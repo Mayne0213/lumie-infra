@@ -100,7 +100,7 @@ server:
   # Main Ingress with Authelia middleware
   ingress:
     enabled: true
-    ingressClassName: traefik
+    ingressClassName: kong
     hostname: argocd0213.kro.kr
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod

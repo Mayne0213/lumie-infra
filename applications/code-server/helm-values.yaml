@@ -14,7 +14,7 @@ persistence:
 
 ingress:
   enabled: true
-  ingressClassName: traefik
+  ingressClassName: kong
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
