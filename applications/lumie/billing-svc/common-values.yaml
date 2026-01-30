@@ -1,0 +1,167 @@
+# billing-svc common chart values
+
+common:
+  name: billing-svc
+  namespace: lumie-platform
+
+  # Deployment
+  deployment:
+    enabled: true
+
+  replicaCount: 2
+
+  # Image
+  image:
+    registry: zot0213.kro.kr
+    repository: applications/billing-svc
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  # Multiple container ports
+  ports:
+    - name: http
+      containerPort: 8080
+      protocol: TCP
+    - name: grpc
+      containerPort: 9090
+      protocol: TCP
+
+  # Pod-level security context
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+
+  # Container-level security context
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+
+  # Environment variables
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: "prod"
+    - name: DB_HOST
+      value: "lumie-db-rw.lumie-db.svc"
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: "lumie"
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: billing-svc-db-secrets
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: billing-svc-db-secrets
+          key: password
+    - name: RABBITMQ_HOST
+      value: "rabbitmq.lumie-event.svc"
+    - name: RABBITMQ_PORT
+      value: "5672"
+    - name: RABBITMQ_USERNAME
+      value: "lumie"
+    - name: RABBITMQ_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: billing-svc-rabbitmq-secrets
+          key: RABBITMQ_PASSWORD
+    - name: TENANT_SVC_GRPC_HOST
+      value: "tenant-svc-grpc.lumie-platform.svc"
+    # TODO: Toss Payments integration (to be implemented later)
+    # - name: TOSS_SECRET_KEY
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: billing-svc-toss-secrets
+    #       key: TOSS_SECRET_KEY
+    # - name: TOSS_CLIENT_KEY
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: billing-svc-toss-secrets
+    #       key: TOSS_CLIENT_KEY
+
+  # Resources
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 512Mi
+
+  # Health checks (Spring Boot Actuator)
+  healthCheck:
+    enabled: true
+    port: http
+    livenessProbe:
+      path: /actuator/health/liveness
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readinessProbe:
+      path: /actuator/health/readiness
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    startupProbe:
+      path: /actuator/health
+      periodSeconds: 5
+      failureThreshold: 30
+
+  # Service (HTTP only, gRPC via separate manifest)
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 8080
+        targetPort: http
+        protocol: TCP
+
+  ingress:
+    enabled: false
+
+  # ServiceMonitor for Prometheus
+  serviceMonitor:
+    enabled: true
+    endpoints:
+      - port: http
+        interval: 30s
+        path: /actuator/prometheus
+
+  # Vault Static Secrets
+  vaultStaticSecrets:
+    # Database credentials
+    - name: billing-svc-db-vss
+      path: platform/lumie-db
+      destination:
+        name: billing-svc-db-secrets
+        transformation:
+          templates:
+            username: "{{ .Secrets.LUMIE_DB_USERNAME }}"
+            password: "{{ .Secrets.LUMIE_DB_PASSWORD }}"
+    # RabbitMQ credentials
+    - name: billing-svc-rabbitmq-vss
+      path: platform/rabbitmq
+      destination:
+        name: billing-svc-rabbitmq-secrets
+        transformation:
+          templates:
+            RABBITMQ_PASSWORD: "{{ .Secrets.RABBITMQ_PASSWORD }}"
+    # TODO: Toss Payments integration (to be implemented later)
+    # - name: billing-svc-toss-vss
+    #   path: applications/toss
+    #   destination:
+    #     name: billing-svc-toss-secrets
+    #     transformation:
+    #       templates:
+    #         TOSS_SECRET_KEY: "{{ .Secrets.TOSS_SECRET_KEY }}"
+    #         TOSS_CLIENT_KEY: "{{ .Secrets.TOSS_CLIENT_KEY }}"
