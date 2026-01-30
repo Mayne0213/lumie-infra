@@ -212,11 +212,40 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie-backend']"
+              value: "body.repository.name in ['lumie-backend'] && (body.commits.exists(c, c.added.exists(f, f.startsWith('services/platform/tenant-svc/')) || c.modified.exists(f, f.startsWith('services/platform/tenant-svc/'))) || body.commits.exists(c, c.added.exists(f, f.startsWith('libs/')) || c.modified.exists(f, f.startsWith('libs/'))))"
       bindings:
         - ref: github-push-binding
       template:
         ref: lumie-tenant-svc-build-template
+    - name: github-push-lumie-billing-svc
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: github-webhook-secret
+                secretKey: webhook-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/main')"
+            - name: "overlays"
+              value:
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.repository.name in ['lumie-backend'] && (body.commits.exists(c, c.added.exists(f, f.startsWith('services/platform/billing-svc/')) || c.modified.exists(f, f.startsWith('services/platform/billing-svc/'))) || body.commits.exists(c, c.added.exists(f, f.startsWith('libs/')) || c.modified.exists(f, f.startsWith('libs/'))))"
+      bindings:
+        - ref: github-push-binding
+      template:
+        ref: lumie-billing-svc-build-template
   resources:
     kubernetesResource:
       spec:
