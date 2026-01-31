@@ -2,7 +2,7 @@
 
 common:
   name: tenant-svc
-  namespace: lumie-platform
+  namespace: lumie-tenant
 
   # Deployment
   deployment:

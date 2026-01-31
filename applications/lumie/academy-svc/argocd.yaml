@@ -22,7 +22,7 @@ spec:
     path: applications/lumie/academy-svc/manifests
   destination:
     server: https://kubernetes.default.svc
-    namespace: lumie-platform
+    namespace: lumie-academy
   syncPolicy:
     automated:
       prune: true

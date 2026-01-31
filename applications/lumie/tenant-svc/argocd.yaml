@@ -22,7 +22,7 @@ spec:
     path: applications/lumie/tenant-svc/manifests
   destination:
     server: https://kubernetes.default.svc
-    namespace: lumie-platform
+    namespace: lumie-tenant
   syncPolicy:
     automated:
       prune: true

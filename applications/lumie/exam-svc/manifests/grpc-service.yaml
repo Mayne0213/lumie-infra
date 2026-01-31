@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: exam-svc-grpc
-  namespace: lumie-platform
+  namespace: lumie-exam
   labels:
     app: exam-svc
     service-type: grpc

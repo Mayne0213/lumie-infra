@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: academy-svc-grpc
-  namespace: lumie-platform
+  namespace: lumie-academy
   labels:
     app: academy-svc
 spec:

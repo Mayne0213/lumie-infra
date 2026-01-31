@@ -19,7 +19,7 @@ spec:
     ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: lumie-support
+    namespace: lumie-grading
   syncPolicy:
     automated:
       prune: true

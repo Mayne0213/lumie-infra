@@ -1,47 +1,7 @@
 # LUMIE Platform Namespaces
-# 8 namespaces for multi-tenant LMS platform
-# Note: kong namespace is managed in platform/kong (cluster-level infrastructure)
+# Each microservice has its own namespace: lumie-{service-name}
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: lumie-frontend
-  labels:
-    app.kubernetes.io/part-of: lumie
-    goldilocks.fairwinds.com/enabled: "true"
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: lumie-platform
-  labels:
-    app.kubernetes.io/part-of: lumie
-    goldilocks.fairwinds.com/enabled: "true"
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: lumie-core
-  labels:
-    app.kubernetes.io/part-of: lumie
-    goldilocks.fairwinds.com/enabled: "true"
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: lumie-support
-  labels:
-    app.kubernetes.io/part-of: lumie
-    goldilocks.fairwinds.com/enabled: "true"
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: lumie-event
-  labels:
-    app.kubernetes.io/part-of: lumie
-    goldilocks.fairwinds.com/enabled: "true"
----
+# Infrastructure namespaces
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -54,6 +14,71 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: lumie-cache
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-event
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+# Service namespaces
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-tenant
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-auth
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-billing
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-academy
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-exam
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-grading
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-frontend
   labels:
     app.kubernetes.io/part-of: lumie
     goldilocks.fairwinds.com/enabled: "true"

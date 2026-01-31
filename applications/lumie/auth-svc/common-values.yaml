@@ -2,7 +2,7 @@
 
 common:
   name: auth-svc
-  namespace: lumie-platform
+  namespace: lumie-auth
 
   # Deployment
   deployment:
@@ -87,7 +87,7 @@ common:
           key: RABBITMQ_PASSWORD
     # tenant-svc gRPC
     - name: TENANT_SVC_GRPC_HOST
-      value: "tenant-svc-grpc.lumie-platform.svc"
+      value: "tenant-svc-grpc.lumie-tenant.svc"
     # JWT
     - name: JWT_SECRET_KEY
       valueFrom:

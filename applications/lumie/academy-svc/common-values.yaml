@@ -2,7 +2,7 @@
 
 common:
   name: academy-svc
-  namespace: lumie-platform
+  namespace: lumie-academy
 
   # Deployment
   deployment:
@@ -74,9 +74,9 @@ common:
           name: academy-svc-rabbitmq-secrets
           key: RABBITMQ_PASSWORD
     - name: TENANT_SVC_GRPC_HOST
-      value: "tenant-svc-grpc.lumie-platform.svc"
+      value: "tenant-svc-grpc.lumie-tenant.svc"
     - name: BILLING_SVC_GRPC_HOST
-      value: "billing-svc-grpc.lumie-platform.svc"
+      value: "billing-svc-grpc.lumie-billing.svc"
 
   # Resources
   resources:

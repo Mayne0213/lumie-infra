@@ -2,7 +2,7 @@
 
 common:
   name: exam-svc
-  namespace: lumie-platform
+  namespace: lumie-exam
 
   # Deployment
   deployment:
@@ -74,13 +74,13 @@ common:
           name: exam-svc-rabbitmq-secrets
           key: RABBITMQ_PASSWORD
     - name: TENANT_SVC_GRPC_HOST
-      value: "tenant-svc-grpc.lumie-platform.svc"
+      value: "tenant-svc-grpc.lumie-tenant.svc"
     - name: BILLING_SVC_GRPC_HOST
-      value: "billing-svc-grpc.lumie-platform.svc"
+      value: "billing-svc-grpc.lumie-billing.svc"
     - name: ACADEMY_SVC_GRPC_HOST
-      value: "academy-svc-grpc.lumie-platform.svc"
+      value: "academy-svc-grpc.lumie-academy.svc"
     - name: GRADING_SVC_URL
-      value: "http://grading-svc.lumie-support.svc:8000"
+      value: "http://grading-svc.lumie-grading.svc:8000"
 
   # Resources
   resources:
