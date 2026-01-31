@@ -79,7 +79,7 @@ controller:
   # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
-      cpu: 350m
+      cpu: 50m
       memory: 1024Mi
     limits:
       memory: 1024Mi
