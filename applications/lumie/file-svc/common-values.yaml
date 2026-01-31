@@ -1,0 +1,152 @@
+# file-svc common chart values
+
+common:
+  name: file-svc
+  namespace: lumie-file
+
+  # Deployment
+  deployment:
+    enabled: true
+
+  replicaCount: 2
+
+  # Image
+  image:
+    registry: zot0213.kro.kr
+    repository: applications/file-svc
+    tag: main
+    pullPolicy: IfNotPresent
+
+  # Container ports
+  ports:
+    - name: http
+      containerPort: 8080
+      protocol: TCP
+
+  # Pod-level security context
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+
+  # Container-level security context
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+
+  # Environment variables
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: "prod"
+    - name: DB_HOST
+      value: "lumie-db-rw.lumie-db.svc"
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: "lumie"
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: file-svc-db-secrets
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: file-svc-db-secrets
+          key: password
+    - name: TENANT_SVC_GRPC_HOST
+      value: "tenant-svc-grpc.lumie-tenant.svc"
+    - name: MINIO_ENDPOINT
+      valueFrom:
+        secretKeyRef:
+          name: file-svc-minio-secrets
+          key: endpoint
+    - name: MINIO_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: file-svc-minio-secrets
+          key: accessKey
+    - name: MINIO_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: file-svc-minio-secrets
+          key: secretKey
+    - name: MINIO_BUCKET_NAME
+      value: "lumie-files"
+
+  # Resources
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 512Mi
+
+  # Health checks (Spring Boot Actuator)
+  healthCheck:
+    enabled: true
+    port: http
+    livenessProbe:
+      path: /actuator/health/liveness
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readinessProbe:
+      path: /actuator/health/readiness
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    startupProbe:
+      path: /actuator/health
+      periodSeconds: 5
+      failureThreshold: 30
+
+  # Service (HTTP only)
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 8080
+        targetPort: http
+        protocol: TCP
+
+  ingress:
+    enabled: false
+
+  # ServiceMonitor for Prometheus
+  serviceMonitor:
+    enabled: true
+    endpoints:
+      - port: http
+        interval: 30s
+        path: /actuator/prometheus
+
+  # Vault Static Secrets
+  vaultStaticSecrets:
+    # Database credentials
+    - name: file-svc-db-vss
+      path: platform/lumie-db
+      destination:
+        name: file-svc-db-secrets
+        transformation:
+          templates:
+            username: "{{ .Secrets.LUMIE_DB_USERNAME }}"
+            password: "{{ .Secrets.LUMIE_DB_PASSWORD }}"
+    # MinIO credentials
+    - name: file-svc-minio-vss
+      path: bootstrap/minio
+      destination:
+        name: file-svc-minio-secrets
+        transformation:
+          templates:
+            endpoint: "{{ .Secrets.MINIO_ENDPOINT }}"
+            accessKey: "{{ .Secrets.MINIO_ACCESS_KEY_ID }}"
+            secretKey: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"
