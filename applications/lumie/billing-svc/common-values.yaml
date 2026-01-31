@@ -2,7 +2,7 @@
 
 common:
   name: billing-svc
-  namespace: lumie-platform
+  namespace: lumie-billing
 
   # Deployment
   deployment:
@@ -74,7 +74,7 @@ common:
           name: billing-svc-rabbitmq-secrets
           key: RABBITMQ_PASSWORD
     - name: TENANT_SVC_GRPC_HOST
-      value: "tenant-svc-grpc.lumie-platform.svc"
+      value: "tenant-svc-grpc.lumie-tenant.svc"
     # TODO: Toss Payments integration (to be implemented later)
     # - name: TOSS_SECRET_KEY
     #   valueFrom:

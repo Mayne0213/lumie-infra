@@ -22,7 +22,7 @@ spec:
     path: applications/lumie/exam-svc/manifests
   destination:
     server: https://kubernetes.default.svc
-    namespace: lumie-platform
+    namespace: lumie-exam
   syncPolicy:
     automated:
       prune: true

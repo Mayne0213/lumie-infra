@@ -13,7 +13,7 @@ spec:
     path: applications/lumie/db-migrations
   destination:
     server: https://kubernetes.default.svc
-    namespace: lumie-platform
+    namespace: lumie-db
   syncPolicy:
     automated:
       prune: true

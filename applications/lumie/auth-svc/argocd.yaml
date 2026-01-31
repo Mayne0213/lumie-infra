@@ -22,7 +22,7 @@ spec:
     path: applications/lumie/auth-svc/manifests
   destination:
     server: https://kubernetes.default.svc
-    namespace: lumie-platform
+    namespace: lumie-auth
   syncPolicy:
     automated:
       prune: true
