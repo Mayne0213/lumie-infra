@@ -29,9 +29,9 @@ admissionController:
     resources:
       requests:
         cpu: 100m
-        memory: 512Mi
+        memory: 128Mi
       limits:
-        memory: 512Mi
+        memory: 128Mi
 
   initContainer:
     image:
@@ -63,9 +63,9 @@ backgroundController:
   resources:
     requests:
       cpu: 50m
-      memory: 256Mi
+      memory: 128Mi
     limits:
-      memory: 256Mi
+      memory: 128Mi
 
   serviceMonitor:
     enabled: true
@@ -85,9 +85,9 @@ cleanupController:
   resources:
     requests:
       cpu: 50m
-      memory: 256Mi
+      memory: 128Mi
     limits:
-      memory: 256Mi
+      memory: 128Mi
 
   serviceMonitor:
     enabled: true
@@ -107,9 +107,9 @@ reportsController:
   resources:
     requests:
       cpu: 50m
-      memory: 256Mi
+      memory: 128Mi
     limits:
-      memory: 256Mi
+      memory: 128Mi
 
   serviceMonitor:
     enabled: true
