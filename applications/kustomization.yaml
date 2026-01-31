@@ -29,4 +29,7 @@ resources:
   - lumie/tenant-svc/argocd.yaml
   - lumie/auth-svc/argocd.yaml
   - lumie/billing-svc/argocd.yaml
+  - lumie/academy-svc/argocd.yaml
+  - lumie/exam-svc/argocd.yaml
+  - lumie/grading-svc/argocd.yaml
   - lumie/lumie-frontend/argocd.yaml
