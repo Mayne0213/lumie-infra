@@ -63,16 +63,16 @@ common:
         secretKeyRef:
           name: auth-svc-db-secrets
           key: password
-    # Redis
-    - name: REDIS_HOST
-      value: "redis.lumie-cache.svc"
-    - name: REDIS_PORT
-      value: "6379"
+    # Redis Sentinel
     - name: REDIS_PASSWORD
       valueFrom:
         secretKeyRef:
           name: auth-svc-redis-secrets
           key: REDIS_PASSWORD
+    - name: REDIS_SENTINEL_MASTER
+      value: "mymaster"
+    - name: REDIS_SENTINEL_NODES
+      value: "redis.lumie-cache.svc:26379"
     # RabbitMQ
     - name: RABBITMQ_HOST
       value: "rabbitmq.lumie-event.svc"
