@@ -84,7 +84,8 @@ spec:
           fi
 
           # Update image tag using sed (extract key from YQ_PATH)
-          sed -i "s/^\(\s*${TAG_KEY}:\s*\).*/\1${IMAGE_TAG}/" "$VALUES_FILE"
+          # Quote the tag to prevent YAML interpreting numeric tags as numbers
+          sed -i "s/^\(\s*${TAG_KEY}:\s*\).*/\1\"${IMAGE_TAG}\"/" "$VALUES_FILE"
 
           # Add to staging
           git add "$VALUES_FILE"
