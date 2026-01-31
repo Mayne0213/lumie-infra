@@ -333,6 +333,35 @@ spec:
         - ref: github-push-binding
       template:
         ref: lumie-auth-svc-build-template
+    - name: github-push-lumie-academy-svc
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: github-webhook-secret
+                secretKey: webhook-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/main')"
+            - name: "overlays"
+              value:
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/core/academy-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/')) || c.modified.exists(f, f.startsWith('services/core/academy-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/')))"
+      bindings:
+        - ref: github-push-binding
+      template:
+        ref: lumie-academy-svc-build-template
   resources:
     kubernetesResource:
       spec:

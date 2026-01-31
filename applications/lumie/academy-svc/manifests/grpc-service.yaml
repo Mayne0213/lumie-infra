@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: academy-svc-grpc
+  namespace: lumie-platform
+  labels:
+    app: academy-svc
+spec:
+  type: ClusterIP
+  ports:
+  - name: grpc
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
+  selector:
+    app: academy-svc
