@@ -39,3 +39,19 @@ patches:
     - op: replace
       path: /spec/template/spec/containers/0/args/4
       value: zot0213.kro.kr/tekton/triggers-eventlistenersink:v0.34.0
+# Schedule on master node
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+  patch: |-
+    - op: add
+      path: /spec/template/spec/tolerations
+      value:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+    - op: add
+      path: /spec/template/spec/nodeSelector
+      value:
+        node-role.kubernetes.io/control-plane: "true"
