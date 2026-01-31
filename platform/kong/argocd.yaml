@@ -12,6 +12,7 @@ spec:
     chart: ingress
     targetRevision: 0.14.0
     helm:
+      skipCrds: true
       valueFiles:
       - $values/platform/kong/helm-values.yaml
   - repoURL: https://github.com/Mayne0213/lumie-infra.git
@@ -34,6 +35,7 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
+    - SkipCrds=true
     retry:
       limit: 5
       backoff:
