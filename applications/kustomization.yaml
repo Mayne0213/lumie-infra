@@ -31,5 +31,6 @@ resources:
   - lumie/billing-svc/argocd.yaml
   - lumie/academy-svc/argocd.yaml
   - lumie/exam-svc/argocd.yaml
+  - lumie/content-svc/argocd.yaml
   - lumie/grading-svc/argocd.yaml
   - lumie/lumie-frontend/argocd.yaml
