@@ -456,6 +456,12 @@ spec:
         template:
           spec:
             serviceAccountName: tekton-triggers-sa
+            tolerations:
+              - key: "node-role.kubernetes.io/control-plane"
+                operator: "Exists"
+                effect: "NoSchedule"
+            nodeSelector:
+              node-role.kubernetes.io/control-plane: "true"
             containers:
               - resources:
                   requests:
