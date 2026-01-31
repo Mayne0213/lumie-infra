@@ -27,13 +27,13 @@ common:
       - secretName: joossam-tls
         hosts:
           - joossameng.kro.kr
-  # Resource settings - increased for parallel OMR processing (40 concurrent)
+  # Resource settings
   resources:
     requests:
       cpu: 100m
-      memory: 2Gi
+      memory: 100Mi
     limits:
-      memory: 2Gi
+      memory: 1Gi
   healthCheck:
     enabled: true
     path: /
