@@ -14,7 +14,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: applications/academy-svc
-    tag: 87acc7ff
+    tag: 0ed3627d
     pullPolicy: IfNotPresent
 
   # Multiple container ports
