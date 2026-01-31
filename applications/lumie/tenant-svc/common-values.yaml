@@ -14,7 +14,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: applications/tenant-svc
-    tag: 6bb44bac
+    tag: 000b4d22
     pullPolicy: IfNotPresent
 
   # Multiple container ports
