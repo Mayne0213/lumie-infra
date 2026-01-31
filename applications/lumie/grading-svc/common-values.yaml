@@ -1,0 +1,90 @@
+# grading-svc common chart values
+# OMR 채점 서비스 (Python FastAPI)
+
+common:
+  name: grading-svc
+  namespace: lumie-support
+
+  # Deployment
+  deployment:
+    enabled: true
+
+  replicaCount: 1
+
+  # Image
+  image:
+    registry: zot0213.kro.kr
+    repository: applications/grading-svc
+    tag: main
+    pullPolicy: Always
+
+  # Container ports
+  ports:
+    - name: http
+      containerPort: 8000
+      protocol: TCP
+
+  # Pod-level security context
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+
+  # Container-level security context
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+
+  # Environment variables
+  env:
+    - name: HOST
+      value: "0.0.0.0"
+    - name: PORT
+      value: "8000"
+
+  # Resources (OpenCV requires more memory)
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 1Gi
+
+  # Health checks (FastAPI)
+  healthCheck:
+    enabled: true
+    port: http
+    livenessProbe:
+      path: /health
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readinessProbe:
+      path: /health
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+
+  # Service
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 8000
+        targetPort: http
+        protocol: TCP
+
+  ingress:
+    enabled: false
+
+  # ServiceMonitor disabled (FastAPI needs custom metrics setup)
+  serviceMonitor:
+    enabled: false

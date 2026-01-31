@@ -1,0 +1,153 @@
+# exam-svc common chart values
+
+common:
+  name: exam-svc
+  namespace: lumie-platform
+
+  # Deployment
+  deployment:
+    enabled: true
+
+  replicaCount: 2
+
+  # Image
+  image:
+    registry: zot0213.kro.kr
+    repository: applications/exam-svc
+    tag: main
+    pullPolicy: IfNotPresent
+
+  # Multiple container ports
+  ports:
+    - name: http
+      containerPort: 8080
+      protocol: TCP
+    - name: grpc
+      containerPort: 9090
+      protocol: TCP
+
+  # Pod-level security context
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+
+  # Container-level security context
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+
+  # Environment variables
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: "prod"
+    - name: DB_HOST
+      value: "lumie-db-rw.lumie-db.svc"
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: "lumie"
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: exam-svc-db-secrets
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: exam-svc-db-secrets
+          key: password
+    - name: RABBITMQ_HOST
+      value: "rabbitmq.lumie-event.svc"
+    - name: RABBITMQ_PORT
+      value: "5672"
+    - name: RABBITMQ_USERNAME
+      value: "lumie"
+    - name: RABBITMQ_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: exam-svc-rabbitmq-secrets
+          key: RABBITMQ_PASSWORD
+    - name: TENANT_SVC_GRPC_HOST
+      value: "tenant-svc-grpc.lumie-platform.svc"
+    - name: BILLING_SVC_GRPC_HOST
+      value: "billing-svc-grpc.lumie-platform.svc"
+    - name: ACADEMY_SVC_GRPC_HOST
+      value: "academy-svc-grpc.lumie-platform.svc"
+    - name: GRADING_SVC_URL
+      value: "http://grading-svc.lumie-support.svc:8000"
+
+  # Resources
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 512Mi
+
+  # Health checks (Spring Boot Actuator)
+  healthCheck:
+    enabled: true
+    port: http
+    livenessProbe:
+      path: /actuator/health/liveness
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readinessProbe:
+      path: /actuator/health/readiness
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    startupProbe:
+      path: /actuator/health
+      periodSeconds: 5
+      failureThreshold: 30
+
+  # Service (HTTP only, gRPC via separate manifest)
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 8080
+        targetPort: http
+        protocol: TCP
+
+  ingress:
+    enabled: false
+
+  # ServiceMonitor for Prometheus
+  serviceMonitor:
+    enabled: true
+    endpoints:
+      - port: http
+        interval: 30s
+        path: /actuator/prometheus
+
+  # Vault Static Secrets
+  vaultStaticSecrets:
+    # RabbitMQ credentials
+    - name: exam-svc-rabbitmq-vss
+      path: platform/rabbitmq
+      destination:
+        name: exam-svc-rabbitmq-secrets
+        transformation:
+          templates:
+            RABBITMQ_PASSWORD: "{{ .Secrets.RABBITMQ_PASSWORD }}"
+    # Database credentials
+    - name: exam-svc-db-vss
+      path: platform/lumie-db
+      destination:
+        name: exam-svc-db-secrets
+        transformation:
+          templates:
+            username: "{{ .Secrets.LUMIE_DB_USERNAME }}"
+            password: "{{ .Secrets.LUMIE_DB_PASSWORD }}"
