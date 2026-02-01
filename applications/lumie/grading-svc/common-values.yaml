@@ -15,7 +15,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: applications/grading-svc
-    tag: main
+    tag: "679cf9f4"
     pullPolicy: Always
 
   # Container ports
