@@ -79,7 +79,7 @@ controller:
   # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
     requests:
-      cpu: 50m
+      cpu: 130m
       memory: 1024Mi
     limits:
       memory: 1024Mi
@@ -132,7 +132,7 @@ repoServer:
   # Increased memory for concurrent Helm chart fetching
   resources:
     requests:
-      cpu: 35m
+      cpu: 25m
       memory: 1024Mi
     limits:
       memory: 1024Mi

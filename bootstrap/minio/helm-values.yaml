@@ -36,7 +36,7 @@ rootPasswordSecretKey: root-password
 # Resource settings (VPA recommended, no CPU limit for stability)
 resources:
   requests:
-    cpu: 63m
+    cpu: 110m
     memory: 194Mi
   limits:
     memory: 194Mi

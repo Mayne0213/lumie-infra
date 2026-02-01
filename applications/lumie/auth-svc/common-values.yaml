@@ -130,7 +130,7 @@ common:
   # Resources (VPA-based)
   resources:
     requests:
-      cpu: 100m
+      cpu: 30m
       memory: 512Mi
     limits:
       memory: 512Mi
