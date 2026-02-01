@@ -55,6 +55,11 @@ manager:
 admissionWebhooks:
   certManager:
     enabled: false
+  # Only intercept Pods in namespaces with this label (auto-instrumentation)
+  # Since no namespace has this label, Pod webhook is effectively disabled
+  namespaceSelector:
+    matchLabels:
+      opentelemetry-auto-instrumentation: "enabled"
 
 # =============================================================================
 # RBAC
