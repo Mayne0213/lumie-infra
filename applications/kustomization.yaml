@@ -26,7 +26,6 @@ resources:
   # LUMIE Platform
   - lumie/argocd.yaml
   - lumie-dev/argocd.yaml
-  - lumie/db-migrations/argocd.yaml
   - lumie/tenant-svc/argocd.yaml
   - lumie/auth-svc/argocd.yaml
   - lumie/billing-svc/argocd.yaml
