@@ -167,7 +167,21 @@ common:
         protocol: TCP
 
   ingress:
-    enabled: false
+    enabled: true
+    className: kong
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      konghq.com/strip-path: "true"
+      konghq.com/plugins: lumie-cors
+    hosts:
+      - host: lumie0213.kro.kr
+        paths:
+          - path: /api/auth
+            pathType: Prefix
+    tls:
+      - hosts:
+          - lumie0213.kro.kr
+        secretName: lumie-api-tls
 
   # ServiceMonitor for Prometheus
   serviceMonitor:
