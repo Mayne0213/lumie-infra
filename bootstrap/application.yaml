@@ -8,6 +8,12 @@ metadata:
 spec:
   project: default
 
+  ignoreDifferences:
+  - group: argoproj.io
+    kind: Application
+    jsonPointers:
+    - /spec/syncPolicy/automated/allowEmpty
+
   source:
     repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
