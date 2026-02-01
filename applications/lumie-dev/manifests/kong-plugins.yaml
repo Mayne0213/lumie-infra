@@ -1,0 +1,28 @@
+# Kong CORS Plugin for Lumie Dev
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: lumie-dev-cors
+  namespace: lumie-dev
+config:
+  origins:
+    - "https://dev.lumie0213.kro.kr"
+    - "http://localhost:3000"
+  methods:
+    - GET
+    - POST
+    - PUT
+    - PATCH
+    - DELETE
+    - OPTIONS
+  headers:
+    - Accept
+    - Authorization
+    - Content-Type
+    - X-Tenant-Slug
+    - X-Request-Id
+  exposed_headers:
+    - X-Request-Id
+  credentials: true
+  max_age: 3600
+plugin: cors
