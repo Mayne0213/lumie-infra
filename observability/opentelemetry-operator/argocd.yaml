@@ -9,6 +9,12 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
+  ignoreDifferences:
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    jsonPointers:
+    - /spec/conversion/webhook/clientConfig/caBundle
+    - /spec/versions
   sources:
   - repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
     chart: opentelemetry-operator
