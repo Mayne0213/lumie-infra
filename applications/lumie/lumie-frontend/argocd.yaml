@@ -17,8 +17,6 @@ spec:
   - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     ref: values
-  - repoURL: https://github.com/Mayne0213/lumie-infra.git
-    targetRevision: main
     path: applications/lumie/lumie-frontend/manifests
   destination:
     server: https://kubernetes.default.svc

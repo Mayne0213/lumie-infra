@@ -24,18 +24,15 @@ spec:
     helm:
       valueFiles:
       - $values/bootstrap/vault/vso-helm-values.yaml
-  # Source 3: Git repo for values reference
+  # Source 3: Git repo for values + Common chart for RBAC
   - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     ref: values
-  # Source 4: Common chart for RBAC
-  - repoURL: https://github.com/Mayne0213/lumie-infra.git
-    targetRevision: main
     path: charts/common
     helm:
       valueFiles:
       - $values/bootstrap/vault/common-values.yaml
-  # Source 5: Local manifests (VaultAuth, VaultStaticSecrets)
+  # Source 4: Local manifests (VaultAuth, VaultStaticSecrets)
   - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     path: bootstrap/vault/manifests
