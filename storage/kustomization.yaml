@@ -15,3 +15,6 @@ resources:
 
   # LUMIE Cache
   - redis/argocd.yaml
+
+  # Connection pooling for multi-tenancy
+  - pgbouncer/argocd.yaml
