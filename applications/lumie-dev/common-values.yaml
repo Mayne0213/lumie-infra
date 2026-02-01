@@ -77,3 +77,13 @@ common:
         transformation:
           templates:
             secret: "{{ .Secrets.JWT_SECRET_KEY }}"
+    # MinIO credentials (for file-svc)
+    - name: lumie-dev-minio-vss
+      path: bootstrap/minio
+      destination:
+        name: lumie-dev-minio-secrets
+        transformation:
+          templates:
+            access-key: "{{ .Secrets.MINIO_ACCESS_KEY_ID }}"
+            secret-key: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"
+            endpoint: "{{ .Secrets.MINIO_ENDPOINT }}"
