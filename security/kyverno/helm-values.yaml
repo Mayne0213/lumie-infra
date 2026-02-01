@@ -28,7 +28,7 @@ admissionController:
       tag: v1.13.4
     resources:
       requests:
-        cpu: 100m
+        cpu: 25m
         memory: 128Mi
       limits:
         memory: 128Mi
@@ -62,7 +62,7 @@ backgroundController:
 
   resources:
     requests:
-      cpu: 50m
+      cpu: 15m
       memory: 128Mi
     limits:
       memory: 128Mi
@@ -84,7 +84,7 @@ cleanupController:
 
   resources:
     requests:
-      cpu: 50m
+      cpu: 25m
       memory: 128Mi
     limits:
       memory: 128Mi
@@ -106,7 +106,7 @@ reportsController:
 
   resources:
     requests:
-      cpu: 50m
+      cpu: 25m
       memory: 128Mi
     limits:
       memory: 128Mi

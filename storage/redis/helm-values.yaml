@@ -26,7 +26,7 @@ master:
   resources:
     requests:
       memory: 256Mi
-      cpu: 50m
+      cpu: 20m
     limits:
       memory: 256Mi
 
@@ -40,7 +40,7 @@ replica:
   resources:
     requests:
       memory: 256Mi
-      cpu: 50m
+      cpu: 20m
     limits:
       memory: 256Mi
 
