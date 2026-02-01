@@ -725,7 +725,7 @@ spec:
           - name: app-name
             value: grading-svc
           - name: context-dir
-            value: ./grading
+            value: ./services/grading
           - name: image-prefix
             value: applications/
           - name: update-values

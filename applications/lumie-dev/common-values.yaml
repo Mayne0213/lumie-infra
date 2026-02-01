@@ -1,0 +1,79 @@
+# Lumie Development Environment
+# ArgoCD manages: namespace, database, secrets
+# Tilt manages: deployments, services
+
+common:
+  name: lumie-dev
+
+  # Disable deployment (Tilt manages this)
+  deployment:
+    enabled: false
+
+  # Disable service (Tilt manages this)
+  service:
+    enabled: false
+
+  ingress:
+    enabled: false
+
+  # CNPG Database for dev environment
+  database:
+    enabled: true
+    clusterName: lumie-dev
+    instances: 1  # Single instance for dev
+    version: "16.6"
+    name: lumie
+    owner: lumie
+    encoding: UTF8
+    localeCollate: C
+    localeCType: C
+    enableSuperuserAccess: true
+    storage:
+      class: local-path
+      size: 5Gi  # Smaller for dev
+    resources:
+      memory: 256Mi
+      cpu: 50m
+    postgresql:
+      parameters:
+        max_connections: "100"
+        shared_buffers: "64MB"
+        effective_cache_size: "192MB"
+    backup:
+      enabled: false  # No backup for dev
+
+  # Vault Static Secrets (uses vault/vault-auth)
+  vaultStaticSecrets:
+    # Database credentials
+    - name: lumie-dev-db-vss
+      path: platform/lumie-db
+      destination:
+        name: lumie-dev-db-secrets
+        transformation:
+          templates:
+            username: "{{ .Secrets.LUMIE_DB_USERNAME }}"
+            password: "{{ .Secrets.LUMIE_DB_PASSWORD }}"
+    # RabbitMQ credentials
+    - name: lumie-dev-rabbitmq-vss
+      path: platform/rabbitmq
+      destination:
+        name: lumie-dev-rabbitmq-secrets
+        transformation:
+          templates:
+            password: "{{ .Secrets.RABBITMQ_PASSWORD }}"
+    # Redis credentials
+    - name: lumie-dev-redis-vss
+      path: platform/redis
+      destination:
+        name: lumie-dev-redis-secrets
+        transformation:
+          templates:
+            password: "{{ .Secrets.REDIS_PASSWORD }}"
+    # JWT secrets (for auth-svc)
+    - name: lumie-dev-jwt-vss
+      path: security/jwt
+      destination:
+        name: lumie-dev-jwt-secrets
+        transformation:
+          templates:
+            secret: "{{ .Secrets.JWT_SECRET_KEY }}"
