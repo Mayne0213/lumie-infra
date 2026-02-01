@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pgbouncer
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  - repoURL: https://icoretech.github.io/helm
+    chart: pgbouncer
+    targetRevision: 4.1.0
+    helm:
+      valueFiles:
+      - $values/storage/pgbouncer/helm-values.yaml
+  - repoURL: https://github.com/Mayne0213/lumie-infra.git
+    targetRevision: main
+    ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lumie-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+  revisionHistoryLimit: 10
