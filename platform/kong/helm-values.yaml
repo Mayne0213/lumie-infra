@@ -20,6 +20,9 @@ gateway:
     trusted_ips: "0.0.0.0/0,::/0"
     real_ip_header: "proxy_protocol"
     real_ip_recursive: "on"
+    # Large file upload support (for container registry, etc.)
+    nginx_proxy_client_max_body_size: "0"  # 0 = unlimited
+    nginx_proxy_client_body_buffer_size: "8m"
 
   proxy:
     enabled: true

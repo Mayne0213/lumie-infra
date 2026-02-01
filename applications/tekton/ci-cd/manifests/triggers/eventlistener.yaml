@@ -217,35 +217,6 @@ spec:
         - ref: github-push-binding
       template:
         ref: lumie-frontend-build-template
-    - name: github-push-lumie-db-migrations
-      interceptors:
-        - ref:
-            name: "github"
-          params:
-            - name: "secretRef"
-              value:
-                secretName: github-webhook-secret
-                secretKey: webhook-secret
-            - name: "eventTypes"
-              value: ["push"]
-        - ref:
-            name: "cel"
-          params:
-            - name: "filter"
-              value: "body.ref.startsWith('refs/heads/main')"
-            - name: "overlays"
-              value:
-                - key: branch_name
-                  expression: "body.ref.split('/')[2]"
-        - ref:
-            name: "cel"
-          params:
-            - name: "filter"
-              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('libs/db-migrations/')) || c.modified.exists(f, f.startsWith('libs/db-migrations/')))"
-      bindings:
-        - ref: github-push-binding
-      template:
-        ref: lumie-db-migrations-build-template
     - name: github-push-lumie-tenant-svc
       interceptors:
         - ref:
