@@ -23,8 +23,6 @@ spec:
   - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     ref: values
-  - repoURL: https://github.com/Mayne0213/lumie-infra.git
-    targetRevision: main
     path: charts/common
     helm:
       valueFiles:
