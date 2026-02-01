@@ -73,7 +73,9 @@ ingress:
     className: kong
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-      traefik.ingress.kubernetes.io/router.middlewares: zot-zot-upload@kubernetescrd
+      konghq.com/read-timeout: "300000"
+      konghq.com/write-timeout: "300000"
+      konghq.com/connect-timeout: "60000"
     hosts:
     - host: zot0213.kro.kr
       paths:
