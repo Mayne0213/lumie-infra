@@ -17,12 +17,13 @@ controller:
     # Client cache settings - disable encryption for simplicity
     clientCache:
       persistenceModel: direct-unencrypted
-    # Resource settings (request = limit for QoS Guaranteed)
+    # Resource settings (request = limit for QoS Guaranteed, no CPU limit)
     resources:
       requests:
         cpu: 15m
         memory: 128Mi
       limits:
+        cpu: null
         memory: 128Mi
 
   kubeRbacProxy:
@@ -31,6 +32,7 @@ controller:
         cpu: 10m
         memory: 128Mi
       limits:
+        cpu: null
         memory: 128Mi
 
 # Telemetry (disabled for now)
