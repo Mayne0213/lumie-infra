@@ -6,10 +6,15 @@ metadata:
   name: lumie-dev-api
   namespace: lumie-dev
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     konghq.com/strip-path: "true"
     konghq.com/plugins: lumie-dev-cors
 spec:
   ingressClassName: kong
+  tls:
+    - hosts:
+        - dev.lumie0213.kro.kr
+      secretName: lumie-dev-tls
   rules:
     - host: dev.lumie0213.kro.kr
       http:
