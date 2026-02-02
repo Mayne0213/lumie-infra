@@ -13,18 +13,25 @@ defaultAuthMethod:
 controller:
   replicas: 1
 
-  # Resource settings (VPA recommended, no CPU limit for stability)
-  resources:
-    requests:
-      cpu: 15m
-      memory: 128Mi
-    limits:
-      memory: 128Mi
-
   manager:
     # Client cache settings - disable encryption for simplicity
     clientCache:
       persistenceModel: direct-unencrypted
+    # Resource settings (request = limit for QoS Guaranteed)
+    resources:
+      requests:
+        cpu: 15m
+        memory: 128Mi
+      limits:
+        memory: 128Mi
+
+  kubeRbacProxy:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 128Mi
 
 # Telemetry (disabled for now)
 telemetry:
