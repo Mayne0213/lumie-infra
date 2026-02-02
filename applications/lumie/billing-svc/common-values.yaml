@@ -120,6 +120,7 @@ common:
   service:
     enabled: true
     type: ClusterIP
+    port: 8080  # For ingress backend
     ports:
       - name: http
         port: 8080
