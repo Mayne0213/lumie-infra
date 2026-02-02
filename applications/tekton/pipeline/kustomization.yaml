@@ -39,6 +39,17 @@ patches:
     - op: add
       path: /metadata/labels/pod-security.kubernetes.io~1warn
       value: privileged
+    - op: add
+      path: /metadata/labels/goldilocks.fairwinds.com~1enabled
+      value: "true"
+- target:
+    version: v1
+    kind: Namespace
+    name: tekton-pipelines-resolvers
+  patch: |-
+    - op: add
+      path: /metadata/labels/goldilocks.fairwinds.com~1enabled
+      value: "true"
 # Remove CPU limits and set memory request = limit for stability
 - target:
     group: apps
@@ -61,7 +72,10 @@ patches:
       path: /spec/template/spec/containers/0/resources/limits/cpu
     - op: replace
       path: /spec/template/spec/containers/0/resources/requests/memory
-      value: 1Gi
+      value: 256Mi
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/memory
+      value: 256Mi
 # Schedule on master node
 - target:
     group: apps
