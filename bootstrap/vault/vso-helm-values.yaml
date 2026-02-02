@@ -17,9 +17,9 @@ controller:
   resources:
     requests:
       cpu: 15m
-      memory: 100Mi
+      memory: 128Mi
     limits:
-      memory: 100Mi
+      memory: 128Mi
 
   manager:
     # Client cache settings - disable encryption for simplicity

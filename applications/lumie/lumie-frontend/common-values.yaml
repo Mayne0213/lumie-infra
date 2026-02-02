@@ -44,7 +44,7 @@ common:
   resources:
     requests:
       cpu: 30m
-      memory: 128Mi
+      memory: 256Mi
     limits:
       memory: 256Mi
 

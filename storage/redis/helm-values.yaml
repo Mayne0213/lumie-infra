@@ -66,3 +66,9 @@ metrics:
   serviceMonitor:
     enabled: true
     namespace: lumie-cache
+  resources:
+    requests:
+      cpu: 10m
+      memory: 192Mi
+    limits:
+      memory: 192Mi
