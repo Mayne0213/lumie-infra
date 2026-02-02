@@ -76,6 +76,7 @@ common:
   service:
     enabled: true
     type: ClusterIP
+    port: 8000  # For ingress backend
     ports:
       - name: http
         port: 8000

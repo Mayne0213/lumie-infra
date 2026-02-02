@@ -73,6 +73,8 @@ common:
         secretKeyRef:
           name: academy-svc-rabbitmq-secrets
           key: RABBITMQ_PASSWORD
+    - name: AUTH_SVC_GRPC_HOST
+      value: "auth-svc-grpc.lumie-auth.svc"
     - name: TENANT_SVC_GRPC_HOST
       value: "tenant-svc-grpc.lumie-tenant.svc"
     - name: BILLING_SVC_GRPC_HOST
@@ -111,6 +113,7 @@ common:
   service:
     enabled: true
     type: ClusterIP
+    port: 8080  # For ingress backend
     ports:
       - name: http
         port: 8080
