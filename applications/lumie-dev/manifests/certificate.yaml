@@ -1,0 +1,13 @@
+# TLS Certificate for dev.lumie0213.kro.kr
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: lumie-dev-tls
+  namespace: lumie-dev
+spec:
+  secretName: lumie-dev-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - dev.lumie0213.kro.kr
