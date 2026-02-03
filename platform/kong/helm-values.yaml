@@ -6,7 +6,7 @@ gateway:
   enabled: true
 
   image:
-    repository: kong/kong-gateway
+    repository: zot0213.kro.kr/platform/kong-gateway
     tag: "3.9"
 
   env:
@@ -70,7 +70,7 @@ controller:
   ingressController:
     enabled: true
     image:
-      repository: kong/kubernetes-ingress-controller
+      repository: zot0213.kro.kr/platform/kong-ingress-controller
       tag: "3.4"
 
     gatewayDiscovery:

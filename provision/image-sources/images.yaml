@@ -15,13 +15,19 @@ images:
     dest: platform/rabbitmq
 
   # Kong Gateway
-  - name: kong
+  - name: kong-gateway
     source: kong/kong-gateway
     tag: "3.9"
-    dest: platform/kong
+    dest: platform/kong-gateway
 
   # Kong Ingress Controller
   - name: kong-ingress-controller
     source: kong/kubernetes-ingress-controller
     tag: "3.4"
     dest: platform/kong-ingress-controller
+
+  # HAProxy
+  - name: haproxy
+    source: library/haproxy
+    tag: "3.0-alpine"
+    dest: platform/haproxy
