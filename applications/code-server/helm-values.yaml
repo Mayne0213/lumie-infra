@@ -1,7 +1,7 @@
 fullnameOverride: code-server
 
 image:
-  repository: zot0213.kro.kr/linuxserver/code-server
+  repository: zot0213.kro.kr/codercom/code-server
   tag: 4.108.2
   pullPolicy: Always
 
@@ -11,7 +11,6 @@ persistence:
   accessMode: ReadWriteOnce
   size: 5Gi
   storageClass: local-path
-  mountPath: /config
 
 ingress:
   enabled: true
@@ -64,28 +63,9 @@ extraArgs:
 extraVars:
   - name: TZ
     value: "Asia/Seoul"
-  - name: PS1
-    value: "coder:\\w~ "
-  - name: PUID
-    value: "1000"
-  - name: PGID
-    value: "1000"
 
-# Init container to set permissions on /config
-extraInitContainers:
-  - name: init-chmod-config
-    image: zot0213.kro.kr/library/busybox:latest
-    imagePullPolicy: IfNotPresent
-    command:
-      - sh
-      - -c
-      - |
-        chown -R 1000:1000 /config
-    securityContext:
-      runAsUser: 0
-    volumeMounts:
-      - name: data
-        mountPath: /config
+# Init container for permissions (chart default handles /home/coder)
+extraInitContainers: ""
 
 # Health checks
 startupProbe:

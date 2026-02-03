@@ -215,6 +215,7 @@ configMaps:
                     {"prefix": "velero/**"},
                     {"prefix": "rabbitmqoperator/**"},
                     {"prefix": "linuxserver/**"},
+                    {"prefix": "codercom/**"},
                     {"prefix": "b4bz/**"},
                     {"prefix": "alpine/**"},
                     {"prefix": "sosedoff/**"},
