@@ -7,10 +7,11 @@
 kind: DaemonSet
 
 # =============================================================================
-# IMAGE - Zot Registry
+# IMAGE - Docker Hub (bootstrap component - external registry required)
+# HAProxy cannot use Zot because HAProxy must be running to access Zot
 # =============================================================================
 image:
-  repository: zot0213.kro.kr/platform/haproxy
+  repository: docker.io/library/haproxy
   tag: 3.0-alpine
 
 # =============================================================================
