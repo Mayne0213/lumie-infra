@@ -12,12 +12,6 @@ common:
   ingress:
     enabled: false
 
-  # Vault Static Secret to create database URL for pgweb
-  vaultStaticSecrets:
-    - name: lumie-db-vss
-      path: applications/lumie
-      destination:
-        name: lumie-db-app
-        transformation:
-          templates:
-            uri: "postgresql://{{ .Secrets.LUMIE_DB_USERNAME }}:{{ .Secrets.LUMIE_DB_PASSWORD }}@lumie-db-rw.lumie-db.svc.cluster.local:5432/lumie"
+  # No secrets needed - using pre-existing secret from lumie-db namespace
+  # Requires manual secret copy: kubectl get secret lumie-db-app -n lumie-db -o yaml | \
+  #   sed 's/namespace: lumie-db/namespace: pgweb/' | kubectl apply -f -
