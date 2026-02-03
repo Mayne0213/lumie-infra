@@ -14,9 +14,10 @@ service:
   port: 5432
 
 config:
-  # Admin credentials for PgBouncer (matches CNPG lumie-dev-db-app secret)
-  adminUser: lumie
-  adminPassword: nIbBiyobn24YVHOU2WrFr0qRCeX3ZOAkCoZrMadcx2mPGuPAh52AWd2cvrqD3FtH
+  # Use Vault-synced secret (from secret/storage/postgresql via VSO)
+  existingAdminSecret: lumie-dev-db-secrets
+  adminUserKey: username
+  adminPasswordKey: password
 
   databases:
     lumie:
