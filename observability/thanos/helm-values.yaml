@@ -15,7 +15,7 @@ global:
 # Use internal Zot registry
 image:
   registry: zot0213.kro.kr
-  repository: observability/thanos
+  repository: thanos/thanos
   tag: v0.37.2
 
 # Object storage configuration (MinIO S3)

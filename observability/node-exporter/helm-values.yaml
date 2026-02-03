@@ -4,7 +4,7 @@
 # Image configuration - use zot registry
 image:
   registry: zot0213.kro.kr
-  repository: observability/node-exporter
+  repository: prometheus/node-exporter
   tag: "v1.8.2"
 
 fullnameOverride: node-exporter

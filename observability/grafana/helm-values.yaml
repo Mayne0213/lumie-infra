@@ -4,7 +4,7 @@
 # Image configuration - use zot registry
 image:
   registry: zot0213.kro.kr
-  repository: observability/grafana
+  repository: grafana/grafana
   tag: "12.3.1"
 
 fullnameOverride: grafana

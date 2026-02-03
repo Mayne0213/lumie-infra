@@ -6,7 +6,7 @@ upgradeCRDs: false
 
 # Image configuration (mirrored via Zot - internal cluster address)
 image:
-  repository: zot0213.kro.kr/storage/velero
+  repository: zot0213.kro.kr/velero/velero
   tag: v1.17.1
   pullPolicy: IfNotPresent
 
@@ -25,7 +25,7 @@ resources:
 initContainers:
   # AWS plugin for S3-compatible storage (Minio) - mirrored via Zot
   - name: velero-plugin-for-aws
-    image: zot0213.kro.kr/storage/velero-plugin-aws:v1.13.1
+    image: zot0213.kro.kr/velero/velero-plugin-for-aws:v1.13.1
     volumeMounts:
       - mountPath: /target
         name: plugins

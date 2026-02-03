@@ -122,7 +122,7 @@ webhooksCleanup:
   enabled: true
   image:
     registry: zot0213.kro.kr
-    repository: applications/kubectl
+    repository: bitnami/kubectl
     tag: "1.32"
 
 # Policy reports cleanup (post-upgrade hook)
@@ -130,7 +130,7 @@ policyReportsCleanup:
   enabled: true
   image:
     registry: zot0213.kro.kr
-    repository: applications/kubectl
+    repository: bitnami/kubectl
     tag: "1.32"
 
 # Features configuration

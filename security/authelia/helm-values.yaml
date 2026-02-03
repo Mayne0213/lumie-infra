@@ -4,7 +4,7 @@
 # Image configuration - use zot registry
 image:
   registry: zot0213.kro.kr
-  repository: security/authelia
+  repository: authelia/authelia
   tag: "4.39.13"
 
 # Ingress - disabled, using manifests/ingress.yaml due to chart schema complexity
@@ -250,7 +250,7 @@ redis:
     enabled: false
   image:
     registry: zot0213.kro.kr
-    repository: storage/redis
+    repository: bitnami/redis
     tag: "8.4.0"
   master:
     # Resource settings (VPA recommended, no CPU limit for stability)

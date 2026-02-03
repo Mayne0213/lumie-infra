@@ -3,7 +3,7 @@
 
 # Image configuration - use zot registry
 image:
-  repository: zot0213.kro.kr/observability/goldilocks
+  repository: zot0213.kro.kr/fairwinds-ops/goldilocks
   tag: "v4.10.0"
 
 # Dashboard configuration
@@ -13,7 +13,7 @@ dashboard:
 
   # Dashboard image - use zot registry
   image:
-    repository: zot0213.kro.kr/observability/goldilocks
+    repository: zot0213.kro.kr/fairwinds-ops/goldilocks
     tag: "v4.10.0"
 
   # Resource settings (no CPU limit for stability)

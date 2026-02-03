@@ -7,7 +7,7 @@ global:
     allowInsecureImages: true
 
 image:
-  repository: storage/redis
+  repository: bitnami/redis
   tag: "8.4.0"
 
 # Replication architecture with Sentinel
@@ -48,7 +48,7 @@ replica:
 sentinel:
   enabled: true
   image:
-    repository: storage/redis-sentinel
+    repository: bitnami/redis-sentinel
     tag: "8.4.0"
   quorum: 2
   downAfterMilliseconds: 5000

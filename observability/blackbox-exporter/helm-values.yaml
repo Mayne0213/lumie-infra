@@ -4,7 +4,7 @@
 # Image configuration - use zot registry
 image:
   registry: zot0213.kro.kr
-  repository: observability/blackbox-exporter
+  repository: prometheus/blackbox-exporter
   tag: "v0.25.0"
 
 fullnameOverride: blackbox-exporter

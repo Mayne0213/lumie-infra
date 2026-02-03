@@ -16,17 +16,17 @@ fullnameOverride: otel-operator
 manager:
   # Operator image from Zot registry
   image:
-    repository: zot0213.kro.kr/observability/opentelemetry-operator
+    repository: zot0213.kro.kr/open-telemetry/opentelemetry-operator
     tag: "0.141.0"
 
   # Default collector image for OpenTelemetryCollector CRs (when not specified)
   collectorImage:
-    repository: zot0213.kro.kr/observability/opentelemetry-collector-contrib
+    repository: zot0213.kro.kr/open-telemetry/opentelemetry-collector-contrib
     tag: "0.144.0"
 
   # Target Allocator image for prometheus receiver target distribution
   targetAllocatorImage:
-    repository: zot0213.kro.kr/observability/opentelemetry-target-allocator
+    repository: zot0213.kro.kr/open-telemetry/opentelemetry-target-allocator
     tag: "0.141.0"
 
   # Resource limits (VPA recommended, no CPU limit)

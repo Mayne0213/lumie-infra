@@ -5,7 +5,7 @@
 falcoctl:
   image:
     registry: zot0213.kro.kr
-    repository: security/falcoctl
+    repository: falcosecurity/falcoctl
     tag: "0.11.0"
 
 # Driver configuration - use modern_ebpf (no compilation needed)
@@ -16,7 +16,7 @@ driver:
 # Image configuration - use internal Zot registry
 image:
   registry: zot0213.kro.kr
-  repository: security/falco
+  repository: falcosecurity/falco
   tag: 0.40.0
 
 # Resource settings (VPA recommended, no CPU limit for stability)
@@ -141,7 +141,7 @@ falcosidekick:
   # Image configuration - use zot registry
   image:
     registry: zot0213.kro.kr
-    repository: security/falcosidekick
+    repository: falcosecurity/falcosidekick
     tag: 2.31.1
 
   # Resource settings (VPA recommended, no CPU limit for stability)

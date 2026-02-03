@@ -3,7 +3,7 @@ fullnameOverride: umami
 # Image configuration - use zot registry
 image:
   registry: zot0213.kro.kr
-  repository: applications/umami
+  repository: umami-software/umami
   tag: "postgresql-latest"
 
 # Disable PostgreSQL subchart (using CNPG Cluster in same namespace)

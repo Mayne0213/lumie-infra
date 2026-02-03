@@ -9,7 +9,7 @@ extraEnv:
 # Operator image
 image:
   registry: zot0213.kro.kr
-  repository: security/trivy-operator
+  repository: aquasecurity/trivy-operator
   tag: "0.28.0"
   pullPolicy: IfNotPresent
 
@@ -17,7 +17,7 @@ image:
 trivy:
   image:
     registry: zot0213.kro.kr
-    repository: security/trivy
+    repository: aquasecurity/trivy
     tag: "0.68.2"
   mode: Standalone
   storageClassEnabled: true

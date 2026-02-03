@@ -205,22 +205,22 @@ configMaps:
                   "onDemand": true,
                   "tlsVerify": true,
                   "content": [
-                    {"prefix": "library/**", "destination": "/"},
-                    {"prefix": "bitnami/**", "destination": "/"},
-                    {"prefix": "grafana/**", "destination": "/observability"},
-                    {"prefix": "kong/**", "destination": "/platform"},
-                    {"prefix": "authelia/**", "destination": "/security"},
-                    {"prefix": "aquasecurity/**", "destination": "/security"},
-                    {"prefix": "falcosecurity/**", "destination": "/security"},
-                    {"prefix": "velero/**", "destination": "/storage"},
-                    {"prefix": "rabbitmqoperator/**", "destination": "/platform"},
-                    {"prefix": "linuxserver/**", "destination": "/applications"},
-                    {"prefix": "b4bz/**", "destination": "/applications"},
-                    {"prefix": "alpine/**", "destination": "/applications"},
-                    {"prefix": "sosedoff/**", "destination": "/storage"},
-                    {"prefix": "kiwigrid/**", "destination": "/observability"},
-                    {"prefix": "minio/**", "destination": "/storage"},
-                    {"prefix": "otwld/**", "destination": "/storage"}
+                    {"prefix": "library/**"},
+                    {"prefix": "bitnami/**"},
+                    {"prefix": "grafana/**"},
+                    {"prefix": "kong/**"},
+                    {"prefix": "authelia/**"},
+                    {"prefix": "aquasecurity/**"},
+                    {"prefix": "falcosecurity/**"},
+                    {"prefix": "velero/**"},
+                    {"prefix": "rabbitmqoperator/**"},
+                    {"prefix": "linuxserver/**"},
+                    {"prefix": "b4bz/**"},
+                    {"prefix": "alpine/**"},
+                    {"prefix": "sosedoff/**"},
+                    {"prefix": "kiwigrid/**"},
+                    {"prefix": "minio/**"},
+                    {"prefix": "otwld/**"}
                   ]
                 },
                 {
@@ -228,13 +228,13 @@ configMaps:
                   "onDemand": true,
                   "tlsVerify": true,
                   "content": [
-                    {"prefix": "cloudnative-pg/**", "destination": "/storage"},
-                    {"prefix": "kyverno/**", "destination": "/kyverno"},
-                    {"prefix": "tektoncd/**", "destination": "/tekton"},
-                    {"prefix": "headlamp-k8s/**", "destination": "/applications"},
-                    {"prefix": "umami-software/**", "destination": "/applications"},
-                    {"prefix": "open-telemetry/**", "destination": "/observability"},
-                    {"prefix": "prymitive/**", "destination": "/observability"}
+                    {"prefix": "cloudnative-pg/**"},
+                    {"prefix": "kyverno/**"},
+                    {"prefix": "tektoncd/**"},
+                    {"prefix": "headlamp-k8s/**"},
+                    {"prefix": "umami-software/**"},
+                    {"prefix": "open-telemetry/**"},
+                    {"prefix": "prymitive/**"}
                   ]
                 },
                 {
@@ -242,9 +242,9 @@ configMaps:
                   "onDemand": true,
                   "tlsVerify": true,
                   "content": [
-                    {"prefix": "prometheus/**", "destination": "/observability"},
-                    {"prefix": "thanos/**", "destination": "/observability"},
-                    {"prefix": "prometheus-operator/**", "destination": "/observability"}
+                    {"prefix": "prometheus/**"},
+                    {"prefix": "thanos/**"},
+                    {"prefix": "prometheus-operator/**"}
                   ]
                 },
                 {
@@ -252,8 +252,8 @@ configMaps:
                   "onDemand": true,
                   "tlsVerify": true,
                   "content": [
-                    {"prefix": "kube-state-metrics/**", "destination": "/observability"},
-                    {"prefix": "autoscaling/**", "destination": "/observability"}
+                    {"prefix": "kube-state-metrics/**"},
+                    {"prefix": "autoscaling/**"}
                   ]
                 },
                 {
@@ -261,7 +261,7 @@ configMaps:
                   "onDemand": true,
                   "tlsVerify": true,
                   "content": [
-                    {"prefix": "fairwinds-ops/**", "destination": "/observability"}
+                    {"prefix": "fairwinds-ops/**"}
                   ]
                 },
                 {
@@ -269,7 +269,7 @@ configMaps:
                   "onDemand": true,
                   "tlsVerify": true,
                   "content": [
-                    {"prefix": "kaniko-project/**", "destination": "/applications"}
+                    {"prefix": "kaniko-project/**"}
                   ]
                 }
               ]

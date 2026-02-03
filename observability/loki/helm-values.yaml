@@ -5,7 +5,7 @@
 # Sidecar image (for config reload)
 sidecar:
   image:
-    repository: zot0213.kro.kr/observability/k8s-sidecar
+    repository: zot0213.kro.kr/kiwigrid/k8s-sidecar
     tag: "1.28.0"
   rules:
     enabled: true
@@ -14,7 +14,7 @@ sidecar:
 loki:
   image:
     registry: zot0213.kro.kr
-    repository: observability/loki
+    repository: grafana/loki
     tag: "3.3.2"
 
   # Use local filesystem storage (emptyDir)

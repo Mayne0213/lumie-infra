@@ -6,7 +6,7 @@
 clusterOperator:
   image:
     registry: zot0213.kro.kr
-    repository: platform/rabbitmq-cluster-operator
+    repository: rabbitmqoperator/cluster-operator
     tag: "2.19.0"
   command:
     - /manager
@@ -26,7 +26,7 @@ clusterOperator:
 # Default RabbitMQ image for clusters
 rabbitmqImage:
   registry: zot0213.kro.kr
-  repository: platform/rabbitmq
+  repository: bitnami/rabbitmq
   tag: "4.1-management"
 
 # Disable credential updater (using Vault secrets)
