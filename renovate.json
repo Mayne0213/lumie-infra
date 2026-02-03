@@ -23,8 +23,9 @@
       "groupName": "Prometheus Stack"
     }
   ],
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "fileMatch": ["^renovate\\.json$"],
       "matchStrings": [
         "\"docker:(?<depName>[^\"]+)\":\\s*\"(?<currentValue>[^\"]+)\""
@@ -33,6 +34,7 @@
       "registryUrlTemplate": "https://registry-1.docker.io"
     },
     {
+      "customType": "regex",
       "fileMatch": ["^renovate\\.json$"],
       "matchStrings": [
         "\"ghcr:(?<depName>[^\"]+)\":\\s*\"(?<currentValue>[^\"]+)\""
@@ -41,6 +43,7 @@
       "registryUrlTemplate": "https://ghcr.io"
     },
     {
+      "customType": "regex",
       "fileMatch": ["^renovate\\.json$"],
       "matchStrings": [
         "\"quay:(?<depName>[^\"]+)\":\\s*\"(?<currentValue>[^\"]+)\""
@@ -49,6 +52,7 @@
       "registryUrlTemplate": "https://quay.io"
     },
     {
+      "customType": "regex",
       "fileMatch": ["^renovate\\.json$"],
       "matchStrings": [
         "\"k8s:(?<depName>[^\"]+)\":\\s*\"(?<currentValue>[^\"]+)\""
