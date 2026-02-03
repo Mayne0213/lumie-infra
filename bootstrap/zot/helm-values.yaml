@@ -236,7 +236,8 @@ configMaps:
                     {"prefix": "headlamp-k8s/**"},
                     {"prefix": "umami-software/**"},
                     {"prefix": "open-telemetry/**"},
-                    {"prefix": "prymitive/**"}
+                    {"prefix": "prymitive/**"},
+                    {"prefix": "icoretech/**"}
                   ]
                 },
                 {
