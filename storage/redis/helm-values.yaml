@@ -7,8 +7,8 @@ global:
     allowInsecureImages: true
 
 image:
-  repository: bitnami/redis
-  tag: "8.4.0"
+  repository: bitnamilegacy/redis
+  tag: "8.2.1-debian-12-r0"
 
 # Replication architecture with Sentinel
 architecture: replication
@@ -48,8 +48,8 @@ replica:
 sentinel:
   enabled: true
   image:
-    repository: bitnami/redis-sentinel
-    tag: "8.4.0"
+    repository: bitnamilegacy/redis-sentinel
+    tag: "8.2.1-debian-12-r0"
   quorum: 2
   downAfterMilliseconds: 5000
   failoverTimeout: 60000

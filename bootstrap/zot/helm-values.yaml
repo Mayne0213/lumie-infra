@@ -220,7 +220,8 @@ configMaps:
                     {"prefix": "sosedoff/**"},
                     {"prefix": "kiwigrid/**"},
                     {"prefix": "minio/**"},
-                    {"prefix": "otwld/**"}
+                    {"prefix": "otwld/**"},
+                    {"prefix": "bitnamilegacy/**"}
                   ]
                 },
                 {
