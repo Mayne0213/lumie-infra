@@ -11,7 +11,3 @@ common:
 
   ingress:
     enabled: false
-
-  # No secrets needed - using pre-existing secret from lumie-db namespace
-  # Requires manual secret copy: kubectl get secret lumie-db-app -n lumie-db -o yaml | \
-  #   sed 's/namespace: lumie-db/namespace: pgweb/' | kubectl apply -f -

@@ -21,9 +21,6 @@ spec:
     helm:
       valueFiles:
       - $values/storage/pgweb/common-values.yaml
-  - repoURL: https://github.com/Mayne0213/lumie-infra.git
-    targetRevision: main
-    path: storage/pgweb/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: pgweb
