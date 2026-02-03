@@ -198,6 +198,7 @@ configMaps:
             },
             "sync": {
               "enable": true,
+              "downloadDir": "/tmp/zot/sync",
               "registries": [
                 {
                   "urls": ["https://registry-1.docker.io"],
