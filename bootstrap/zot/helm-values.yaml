@@ -54,13 +54,13 @@ controllers:
                 port: 5000
               initialDelaySeconds: 30
               periodSeconds: 10
-        # Resource settings - increased for CVE scanning with embedded Trivy
+        # Resource settings - increased for handling large image pushes
         resources:
           requests:
-            cpu: 100m
-            memory: 1Gi
+            cpu: 50m
+            memory: 512Mi
           limits:
-            memory: 1Gi
+            memory: 512Mi
 service:
   zot:
     controller: zot
@@ -149,10 +149,16 @@ configMaps:
                 "**": {
                   "anonymousPolicy": ["read"],
                   "defaultPolicy": ["read"],
-                  "policies": [{
-                    "groups": ["admins"],
-                    "actions": ["read", "create", "update", "delete"]
-                  }]
+                  "policies": [
+                    {
+                      "groups": ["admins"],
+                      "actions": ["read", "create", "update", "delete"]
+                    },
+                    {
+                      "users": ["admin"],
+                      "actions": ["read", "create", "update", "delete"]
+                    }
+                  ]
                 }
               }
             },
@@ -185,10 +191,7 @@ configMaps:
               }
             },
             "search": {
-              "enable": true,
-              "cve": {
-                "updateInterval": "24h"
-              }
+              "enable": true
             },
             "ui": {
               "enable": true
