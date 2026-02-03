@@ -53,6 +53,14 @@ resources:
     memory: 64Mi
 
 # =============================================================================
+# TOLERATIONS - Allow scheduling on control-plane nodes
+# =============================================================================
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+
+# =============================================================================
 # HAPROXY CONFIGURATION
 # =============================================================================
 config: |
