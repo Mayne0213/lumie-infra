@@ -112,7 +112,7 @@ common:
   database:
     enabled: true
     instances: 2
-    version: "16.6"
+    version: "18.1"
     name: authelia
     owner: authelia
     bootstrap:
