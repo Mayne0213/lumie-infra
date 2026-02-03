@@ -251,7 +251,7 @@ redis:
   image:
     registry: zot0213.kro.kr
     repository: storage/redis
-    tag: latest
+    tag: "8.4.0"
   master:
     # Resource settings (VPA recommended, no CPU limit for stability)
     resources:
