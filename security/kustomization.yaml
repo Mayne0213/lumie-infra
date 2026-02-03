@@ -10,4 +10,4 @@ resources:
   - authelia/argocd.yaml
   - falco/argocd.yaml
   - kyverno/argocd.yaml
-  - trivy/argocd.yaml
+  # trivy removed - using Zot's built-in CVE scanning instead
