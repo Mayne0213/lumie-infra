@@ -2,7 +2,7 @@ fullnameOverride: code-server
 
 image:
   repository: zot0213.kro.kr/applications/code-server
-  tag: 4.104.2
+  tag: 4.108.2
   pullPolicy: Always
 
 # Persistence configuration for workspace data

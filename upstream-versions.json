@@ -4,7 +4,7 @@
   "_applications": "--- Applications ---",
   "docker:alpine/git": "v2.47.1",
   "docker:bitnami/kubectl": "1.32",
-  "docker:linuxserver/code-server": "4.104.2",
+  "docker:linuxserver/code-server": "4.108.2",
   "docker:b4bz/homer": "v25.11.1",
   "ghcr:headlamp-k8s/headlamp": "v0.39.0",
   "ghcr:umami-software/umami": "postgresql-latest",
