@@ -1,16 +1,17 @@
 # Falco Helm Values
 # Chart: https://github.com/falcosecurity/charts/tree/master/charts/falco
 
+# Falcoctl image configuration - use internal Zot registry
+falcoctl:
+  image:
+    registry: zot0213.kro.kr
+    repository: security/falcoctl
+    tag: "0.11.0"
+
 # Driver configuration - use modern_ebpf (no compilation needed)
 driver:
   enabled: true
   kind: modern_ebpf  # Uses modern eBPF features, no driver compilation needed
-  loader:
-    # Image configuration for falcoctl (driver loader)
-    image:
-      registry: zot0213.kro.kr
-      repository: security/falcoctl
-      tag: 0.11.0
 
 # Image configuration - use internal Zot registry
 image:
