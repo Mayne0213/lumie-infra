@@ -7,10 +7,10 @@
 kind: DaemonSet
 
 # =============================================================================
-# IMAGE - Docker Hub (bootstrap component - external registry required)
+# IMAGE - Zot Registry
 # =============================================================================
 image:
-  repository: docker.io/library/haproxy
+  repository: zot0213.kro.kr/platform/haproxy
   tag: 3.0-alpine
 
 # =============================================================================
