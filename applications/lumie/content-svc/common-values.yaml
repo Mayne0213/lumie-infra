@@ -153,12 +153,12 @@ common:
         transformation:
           templates:
             RABBITMQ_PASSWORD: "{{ .Secrets.RABBITMQ_PASSWORD }}"
-    # Database credentials
+    # Database credentials (from Vault storage/postgresql)
     - name: content-svc-db-vss
-      path: platform/lumie-db
+      path: storage/postgresql
       destination:
         name: content-svc-db-secrets
         transformation:
           templates:
-            username: "{{ .Secrets.LUMIE_DB_USERNAME }}"
-            password: "{{ .Secrets.LUMIE_DB_PASSWORD }}"
+            username: "{{ .Secrets.POSTGRES_USER }}"
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"

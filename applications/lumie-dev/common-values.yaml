@@ -28,6 +28,9 @@ common:
     localeCollate: C
     localeCType: C
     enableSuperuserAccess: true
+    # Use Vault-managed credentials
+    bootstrap:
+      secret: lumie-dev-db-bootstrap-secret
     storage:
       class: local-path
       size: 5Gi  # Smaller for dev
@@ -44,15 +47,25 @@ common:
 
   # Vault Static Secrets (uses vault/vault-auth)
   vaultStaticSecrets:
-    # Database credentials
+    # Database bootstrap credentials for CNPG
+    - name: lumie-dev-db-bootstrap-vss
+      path: storage/postgresql
+      destination:
+        name: lumie-dev-db-bootstrap-secret
+        type: kubernetes.io/basic-auth
+        transformation:
+          templates:
+            username: "{{ .Secrets.POSTGRES_USER }}"
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"
+    # Database credentials for services
     - name: lumie-dev-db-vss
-      path: platform/lumie-db
+      path: storage/postgresql
       destination:
         name: lumie-dev-db-secrets
         transformation:
           templates:
-            username: "{{ .Secrets.LUMIE_DB_USERNAME }}"
-            password: "{{ .Secrets.LUMIE_DB_PASSWORD }}"
+            username: "{{ .Secrets.POSTGRES_USER }}"
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"
     # RabbitMQ credentials
     - name: lumie-dev-rabbitmq-vss
       path: platform/rabbitmq

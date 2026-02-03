@@ -27,6 +27,9 @@ common:
     localeCollate: C
     localeCType: C
     enableSuperuserAccess: true
+    # Use Vault-managed credentials instead of CNPG auto-generated
+    bootstrap:
+      secret: lumie-db-bootstrap-secret
     storage:
       class: local-path
       size: 20Gi
@@ -49,3 +52,15 @@ common:
         max_wal_size: "2GB"
     backup:
       enabled: false
+
+  # Vault Static Secrets for CNPG bootstrap
+  vaultStaticSecrets:
+    - name: lumie-db-bootstrap-vss
+      path: storage/postgresql
+      destination:
+        name: lumie-db-bootstrap-secret
+        type: kubernetes.io/basic-auth
+        transformation:
+          templates:
+            username: "{{ .Secrets.POSTGRES_USER }}"
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"

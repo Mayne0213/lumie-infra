@@ -154,15 +154,15 @@ common:
 
   # Vault Static Secrets
   vaultStaticSecrets:
-    # Database credentials
+    # Database credentials (from Vault storage/postgresql)
     - name: billing-svc-db-vss
-      path: platform/lumie-db
+      path: storage/postgresql
       destination:
         name: billing-svc-db-secrets
         transformation:
           templates:
-            username: "{{ .Secrets.LUMIE_DB_USERNAME }}"
-            password: "{{ .Secrets.LUMIE_DB_PASSWORD }}"
+            username: "{{ .Secrets.POSTGRES_USER }}"
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"
     # RabbitMQ credentials
     - name: billing-svc-rabbitmq-vss
       path: platform/rabbitmq

@@ -51,12 +51,12 @@ spec:
         - name: PGUSER
           valueFrom:
             secretKeyRef:
-              name: lumie-db-app
+              name: lumie-db-bootstrap-secret
               key: username
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              name: lumie-db-app
+              name: lumie-db-bootstrap-secret
               key: password
         command:
         - /bin/sh
