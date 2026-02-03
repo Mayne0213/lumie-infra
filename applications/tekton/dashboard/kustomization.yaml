@@ -8,7 +8,7 @@ resources:
 # Override upstream images to use zot registry
 images:
 - name: ghcr.io/tektoncd/dashboard/dashboard-9623576a202fe86c8b7d1bc489905f86
-  newName: zot0213.kro.kr/tekton/dashboard
+  newName: zot0213.kro.kr/tektoncd/dashboard/dashboard-9623576a202fe86c8b7d1bc489905f86
   newTag: v0.63.1
 
 patches:
