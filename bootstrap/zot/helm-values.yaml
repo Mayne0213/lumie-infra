@@ -150,7 +150,7 @@ configMaps:
                   "anonymousPolicy": ["read"],
                   "defaultPolicy": ["read"],
                   "policies": [{
-                    "users": ["admin"],
+                    "groups": ["admins"],
                     "actions": ["read", "create", "update", "delete"]
                   }]
                 }
@@ -166,7 +166,7 @@ configMaps:
                     "name": "Authelia",
                     "issuer": "https://auth0213.kro.kr",
                     "clientid": "zot",
-                    "scopes": ["openid", "profile", "email"],
+                    "scopes": ["openid", "profile", "email", "groups"],
                     "credentialsFile": "/etc/zot/oidc-credentials.json"
                   }
                 }
