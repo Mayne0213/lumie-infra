@@ -14,10 +14,14 @@ service:
   port: 5432
 
 config:
-  # Use Vault-synced secret (from secret/storage/postgresql via VSO)
+  # Use Vault-synced secret for admin (from secret/storage/postgresql via VSO)
   existingAdminSecret: lumie-dev-db-secrets
   adminUserKey: username
   adminPasswordKey: password
+
+  # Auth delegation to PostgreSQL using auth_query
+  authUser: bluemayne
+  authPassword: ""  # Will use existingAdminSecret
 
   databases:
     lumie:
@@ -31,6 +35,9 @@ config:
     default_pool_size: 20
     min_pool_size: 5
     reserve_pool_size: 5
+    # Auth delegation to PostgreSQL
+    auth_type: scram-sha-256
+    auth_query: SELECT usename, passwd FROM pg_shadow WHERE usename=$1
     # server_reset_query removed - session mode maintains search_path
     # server_reset_query_always removed - not needed for multi-tenancy
     ignore_startup_parameters: extra_float_digits
