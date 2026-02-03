@@ -25,9 +25,3 @@ images:
     source: kong/kubernetes-ingress-controller
     tag: "3.4"
     dest: platform/kong-ingress-controller
-
-  # HAProxy
-  - name: haproxy
-    source: library/haproxy
-    tag: "3.0-alpine"
-    dest: platform/haproxy
