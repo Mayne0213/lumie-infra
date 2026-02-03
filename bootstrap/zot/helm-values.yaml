@@ -195,6 +195,83 @@ configMaps:
             },
             "ui": {
               "enable": true
+            },
+            "sync": {
+              "enable": true,
+              "registries": [
+                {
+                  "urls": ["https://registry-1.docker.io"],
+                  "onDemand": true,
+                  "tlsVerify": true,
+                  "content": [
+                    {"prefix": "library/**", "destination": "/"},
+                    {"prefix": "bitnami/**", "destination": "/"},
+                    {"prefix": "grafana/**", "destination": "/observability"},
+                    {"prefix": "kong/**", "destination": "/platform"},
+                    {"prefix": "authelia/**", "destination": "/security"},
+                    {"prefix": "aquasecurity/**", "destination": "/security"},
+                    {"prefix": "falcosecurity/**", "destination": "/security"},
+                    {"prefix": "velero/**", "destination": "/storage"},
+                    {"prefix": "rabbitmqoperator/**", "destination": "/platform"},
+                    {"prefix": "linuxserver/**", "destination": "/applications"},
+                    {"prefix": "b4bz/**", "destination": "/applications"},
+                    {"prefix": "alpine/**", "destination": "/applications"},
+                    {"prefix": "sosedoff/**", "destination": "/storage"},
+                    {"prefix": "kiwigrid/**", "destination": "/observability"},
+                    {"prefix": "minio/**", "destination": "/storage"},
+                    {"prefix": "otwld/**", "destination": "/storage"}
+                  ]
+                },
+                {
+                  "urls": ["https://ghcr.io"],
+                  "onDemand": true,
+                  "tlsVerify": true,
+                  "content": [
+                    {"prefix": "cloudnative-pg/**", "destination": "/storage"},
+                    {"prefix": "kyverno/**", "destination": "/kyverno"},
+                    {"prefix": "tektoncd/**", "destination": "/tekton"},
+                    {"prefix": "headlamp-k8s/**", "destination": "/applications"},
+                    {"prefix": "umami-software/**", "destination": "/applications"},
+                    {"prefix": "open-telemetry/**", "destination": "/observability"},
+                    {"prefix": "prymitive/**", "destination": "/observability"}
+                  ]
+                },
+                {
+                  "urls": ["https://quay.io"],
+                  "onDemand": true,
+                  "tlsVerify": true,
+                  "content": [
+                    {"prefix": "prometheus/**", "destination": "/observability"},
+                    {"prefix": "thanos/**", "destination": "/observability"},
+                    {"prefix": "prometheus-operator/**", "destination": "/observability"}
+                  ]
+                },
+                {
+                  "urls": ["https://registry.k8s.io"],
+                  "onDemand": true,
+                  "tlsVerify": true,
+                  "content": [
+                    {"prefix": "kube-state-metrics/**", "destination": "/observability"},
+                    {"prefix": "autoscaling/**", "destination": "/observability"}
+                  ]
+                },
+                {
+                  "urls": ["https://us-docker.pkg.dev"],
+                  "onDemand": true,
+                  "tlsVerify": true,
+                  "content": [
+                    {"prefix": "fairwinds-ops/**", "destination": "/observability"}
+                  ]
+                },
+                {
+                  "urls": ["https://gcr.io"],
+                  "onDemand": true,
+                  "tlsVerify": true,
+                  "content": [
+                    {"prefix": "kaniko-project/**", "destination": "/applications"}
+                  ]
+                }
+              ]
             }
           }
         }
