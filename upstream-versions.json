@@ -1,6 +1,6 @@
 {
   "_comment": "Upstream image versions tracked by Renovate",
-  "docker:library/postgres": "17.7",
+  "docker:library/postgres": "16.11",
   "docker:bitnami/redis": "8.4.0",
   "docker:grafana/grafana": "11.5.2",
   "docker:grafana/loki": "3.4.2",
@@ -11,7 +11,7 @@
   "docker:aquasecurity/trivy-operator": "0.28.0",
   "docker:kiwigrid/k8s-sidecar": "1.28.0",
   "docker:minio/minio": "RELEASE.2025-01-20T14-49-07Z",
-  "ghcr:cloudnative-pg/postgresql": "17.4",
+  "ghcr:cloudnative-pg/postgresql": "16.6",
   "ghcr:kyverno/kyverno": "v1.14.0",
   "quay:prometheus/prometheus": "v3.2.1",
   "quay:prometheus/alertmanager": "v0.28.0",
