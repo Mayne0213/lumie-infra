@@ -19,9 +19,8 @@ config:
   adminUserKey: username
   adminPasswordKey: password
 
-  # Auth delegation to PostgreSQL using auth_query
-  authUser: bluemayne
-  authPassword: ""  # Will use existingAdminSecret
+  # Userlist managed by VSO (pgbouncer-userlist-vss in lumie-dev common-values)
+  existingUserlistSecret: pgbouncer-userlist
 
   databases:
     lumie:
@@ -35,9 +34,7 @@ config:
     default_pool_size: 20
     min_pool_size: 5
     reserve_pool_size: 5
-    # Auth delegation to PostgreSQL
     auth_type: scram-sha-256
-    auth_query: SELECT usename, passwd FROM pg_shadow WHERE usename=$1
     # server_reset_query removed - session mode maintains search_path
     # server_reset_query_always removed - not needed for multi-tenancy
     ignore_startup_parameters: extra_float_digits

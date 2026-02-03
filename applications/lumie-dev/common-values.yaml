@@ -100,3 +100,11 @@ common:
             access-key: "{{ .Secrets.MINIO_ACCESS_KEY_ID }}"
             secret-key: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"
             endpoint: "{{ .Secrets.MINIO_ENDPOINT }}"
+    # PgBouncer userlist (format: "username" "password")
+    - name: pgbouncer-userlist-vss
+      path: storage/postgresql
+      destination:
+        name: pgbouncer-userlist
+        transformation:
+          templates:
+            userlist.txt: '"{{ .Secrets.POSTGRES_USER }}" "{{ .Secrets.POSTGRES_PASSWORD }}"'
