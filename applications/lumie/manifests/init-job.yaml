@@ -37,7 +37,7 @@ spec:
           echo "CNPG cluster is ready!"
       containers:
       - name: init-db
-        image: zot0213.kro.kr/storage/postgresql:16.6
+        image: zot0213.kro.kr/storage/postgresql:18.1
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false

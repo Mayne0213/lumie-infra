@@ -20,7 +20,7 @@ common:
     enabled: true
     clusterName: lumie
     instances: 2
-    version: "16.6"
+    version: "18.1"
     name: lumie
     owner: lumie
     encoding: UTF8
