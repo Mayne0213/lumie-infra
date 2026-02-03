@@ -65,6 +65,31 @@ extraVars:
     value: "Asia/Seoul"
   - name: PS1
     value: "coder:\\w~ "
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+
+# Mount data volume to /config for linuxserver image
+extraVolumeMounts:
+  - name: data
+    mountPath: /config
+
+# Extra init container to set permissions on /config
+extraInitContainers: |
+  - name: init-chmod-config
+    image: zot0213.kro.kr/library/busybox:latest
+    imagePullPolicy: IfNotPresent
+    command:
+      - sh
+      - -c
+      - |
+        chown -R 1000:1000 /config
+    securityContext:
+      runAsUser: 0
+    volumeMounts:
+      - name: data
+        mountPath: /config
 
 # Health checks
 startupProbe:

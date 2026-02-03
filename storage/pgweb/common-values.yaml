@@ -12,12 +12,12 @@ common:
   ingress:
     enabled: false
 
-  # Vault Static Secrets (VSO)
+  # Vault Static Secret to create database URL for pgweb
   vaultStaticSecrets:
-    - name: postgresql-vss
-      path: storage/postgresql
+    - name: lumie-db-vss
+      path: applications/lumie
       destination:
-        name: pgweb-password
+        name: lumie-db-app
         transformation:
           templates:
-            database-url: "postgresql://{{ .Secrets.POSTGRES_USER }}:{{ .Secrets.POSTGRES_PASSWORD }}@{{ .Secrets.POSTGRES_HOST }}:{{ .Secrets.POSTGRES_PORT }}/postgres"
+            uri: "postgresql://{{ .Secrets.LUMIE_DB_USERNAME }}:{{ .Secrets.LUMIE_DB_PASSWORD }}@lumie-db-rw.lumie-db.svc.cluster.local:5432/lumie"
