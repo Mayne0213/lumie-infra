@@ -19,7 +19,7 @@ spec:
           restartPolicy: OnFailure
           initContainers:
             - name: pg-dump
-              image: {{ .Values.common.database.dumpBackup.postgresImage | default "zot0213.kro.kr/storage/postgresql:16.6" }}
+              image: {{ .Values.common.database.dumpBackup.postgresImage | default "zot0213.kro.kr/storage/postgresql:18.1" }}
               command:
                 - /bin/sh
                 - -c

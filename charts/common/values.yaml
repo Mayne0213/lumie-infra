@@ -279,7 +279,7 @@ common:
   database:
     enabled: false
     instances: 2
-    version: "16.6"
+    version: "18.1"
     name: ""        # Database name (defaults to app name + "DB")
     owner: ""       # Database owner (defaults to app name)
     storage:
@@ -298,7 +298,7 @@ common:
       bucket: ""                 # Defaults to <app>-db-backup
       volumeSize: "1Gi"
       minioEndpoint: "https://s3.minio0213.kro.kr"
-      postgresImage: "zot0213.kro.kr/storage/postgresql:16.6"
+      postgresImage: "zot0213.kro.kr/storage/postgresql:18.1"
       minioImage: "zot0213.kro.kr/storage/minio-mc:latest"
       successfulJobsHistoryLimit: 3
       failedJobsHistoryLimit: 3
