@@ -272,6 +272,14 @@ configMaps:
                   "content": [
                     {"prefix": "kaniko-project/**"}
                   ]
+                },
+                {
+                  "urls": ["https://mirror.gcr.io"],
+                  "onDemand": true,
+                  "tlsVerify": true,
+                  "content": [
+                    {"prefix": "aquasec/**"}
+                  ]
                 }
               ]
             }
