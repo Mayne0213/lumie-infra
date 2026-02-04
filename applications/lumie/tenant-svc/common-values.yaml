@@ -149,7 +149,7 @@ common:
         transformation:
           templates:
             RABBITMQ_PASSWORD: "{{ .Secrets.RABBITMQ_PASSWORD }}"
-    # Database credentials (from Vault storage/postgresql)
+    # Database credentials
     - name: tenant-svc-db-vss
       path: storage/postgresql
       destination:

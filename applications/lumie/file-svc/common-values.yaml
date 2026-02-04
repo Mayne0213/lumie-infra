@@ -146,7 +146,7 @@ common:
 
   # Vault Static Secrets
   vaultStaticSecrets:
-    # Database credentials (from Vault storage/postgresql)
+    # Database credentials
     - name: file-svc-db-vss
       path: storage/postgresql
       destination:
