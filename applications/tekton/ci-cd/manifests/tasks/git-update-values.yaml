@@ -102,10 +102,22 @@ spec:
         echo "Changes:"
         git diff --cached
 
-        # Commit and push
+        # Commit and push with retry logic for concurrent updates
         git commit -m "CHORE(app): update $(params.APP_NAME) image to $IMAGE_TAG"
 
         echo "Pushing to $(params.GIT_BRANCH)..."
-        git push origin $(params.GIT_BRANCH)
+        MAX_RETRIES=5
+        RETRY_COUNT=0
+        while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          if git push origin $(params.GIT_BRANCH); then
+            echo "Successfully updated values files"
+            exit 0
+          fi
+          RETRY_COUNT=$((RETRY_COUNT + 1))
+          echo "Push failed, retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+          sleep $((RETRY_COUNT * 2))
+          git pull --rebase origin $(params.GIT_BRANCH)
+        done
 
-        echo "Successfully updated values files"
+        echo "Failed to push after $MAX_RETRIES attempts"
+        exit 1
