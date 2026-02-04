@@ -1,9 +1,9 @@
-# Lumie Dev Backend API Ingress
-# Routes /api/* requests to backend services via Kong
+# Lumie Dev - Public API Routes (No JWT required)
+# Login, register, refresh, OAuth2 endpoints
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: lumie-dev-api
+  name: lumie-dev-api-public
   namespace: lumie-dev
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -19,13 +19,73 @@ spec:
     - host: dev.lumie0213.kro.kr
       http:
         paths:
-          - path: /api/auth
+          # Auth public endpoints (login, register, refresh, oauth2)
+          - path: /api/auth/login
             pathType: Prefix
             backend:
               service:
                 name: auth-svc
                 port:
                   number: 8080
+          - path: /api/auth/register
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-svc
+                port:
+                  number: 8080
+          - path: /api/auth/refresh
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-svc
+                port:
+                  number: 8080
+          - path: /api/auth/oauth2
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-svc
+                port:
+                  number: 8080
+---
+# Lumie Dev - Protected API Routes (JWT required)
+# All other endpoints require valid JWT token
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lumie-dev-api-protected
+  namespace: lumie-dev
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    konghq.com/strip-path: "true"
+    konghq.com/plugins: lumie-dev-cors,lumie-dev-jwt,lumie-dev-jwt-claims
+spec:
+  ingressClassName: kong
+  tls:
+    - hosts:
+        - dev.lumie0213.kro.kr
+      secretName: lumie-dev-tls
+  rules:
+    - host: dev.lumie0213.kro.kr
+      http:
+        paths:
+          # Auth protected endpoints (logout, me, etc.)
+          - path: /api/auth/logout
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-svc
+                port:
+                  number: 8080
+          - path: /api/auth/me
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-svc
+                port:
+                  number: 8080
+          # Tenant service
           - path: /api/tenant
             pathType: Prefix
             backend:
@@ -33,6 +93,7 @@ spec:
                 name: tenant-svc
                 port:
                   number: 8080
+          # Academy service
           - path: /api/academy
             pathType: Prefix
             backend:
@@ -40,6 +101,7 @@ spec:
                 name: academy-svc
                 port:
                   number: 8080
+          # Billing service
           - path: /api/billing
             pathType: Prefix
             backend:
@@ -47,6 +109,7 @@ spec:
                 name: billing-svc
                 port:
                   number: 8080
+          # Exam service
           - path: /api/exam
             pathType: Prefix
             backend:
@@ -54,6 +117,7 @@ spec:
                 name: exam-svc
                 port:
                   number: 8080
+          # Content service
           - path: /api/content
             pathType: Prefix
             backend:
@@ -61,6 +125,7 @@ spec:
                 name: content-svc
                 port:
                   number: 8080
+          # File service
           - path: /api/file
             pathType: Prefix
             backend:
@@ -68,6 +133,7 @@ spec:
                 name: file-svc
                 port:
                   number: 8080
+          # Grading service
           - path: /api/grading
             pathType: Prefix
             backend:

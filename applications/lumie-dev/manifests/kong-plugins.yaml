@@ -26,3 +26,62 @@ config:
   credentials: true
   max_age: 3600
 plugin: cors
+---
+# Kong Consumer for JWT validation
+# Represents the auth-svc as the token issuer
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: lumie-auth-issuer
+  namespace: lumie-dev
+  annotations:
+    kubernetes.io/ingress.class: kong
+username: lumie-auth-svc
+credentials:
+  - kong-jwt-credential
+---
+# Kong JWT Plugin for protected routes
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: lumie-dev-jwt
+  namespace: lumie-dev
+plugin: jwt
+config:
+  key_claim_name: iss
+  claims_to_verify:
+    - exp
+  header_names:
+    - Authorization
+---
+# Post-function plugin to extract JWT claims to headers
+# This runs after JWT validation and sets X-User-Id, X-Tenant-Slug headers
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: lumie-dev-jwt-claims
+  namespace: lumie-dev
+plugin: post-function
+config:
+  access:
+    - |
+      local jwt_token = kong.ctx.shared.authenticated_jwt_token
+      if jwt_token then
+        local jwt = require "kong.plugins.jwt.jwt_parser"
+        local token, err = jwt:new(jwt_token)
+        if token then
+          local claims = token.claims
+          if claims.sub then
+            kong.service.request.set_header("X-User-Id", claims.sub)
+          end
+          if claims.tenant_slug then
+            kong.service.request.set_header("X-Tenant-Slug", claims.tenant_slug)
+          end
+          if claims.tenant_id then
+            kong.service.request.set_header("X-Tenant-Id", claims.tenant_id)
+          end
+          if claims.role then
+            kong.service.request.set_header("X-User-Role", claims.role)
+          end
+        end
+      end
