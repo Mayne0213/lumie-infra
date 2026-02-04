@@ -4,19 +4,20 @@ kind: Kustomization
 resources:
 - https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 
-# Override upstream images to use zot registry
+# Override upstream images to use zot registry (mirrors ghcr.io/tektoncd/**)
+# Image names include hash suffix - must match exactly for Zot on-demand sync
 images:
 - name: ghcr.io/tektoncd/pipeline/controller-10a3e32792f33651396d02b6855a6e36
-  newName: zot0213.kro.kr/tekton/pipeline-controller
+  newName: zot0213.kro.kr/tektoncd/pipeline/controller-10a3e32792f33651396d02b6855a6e36
   newTag: v1.6.0
 - name: ghcr.io/tektoncd/pipeline/webhook-d4749e605405422fd87700164e31b2d1
-  newName: zot0213.kro.kr/tekton/pipeline-webhook
+  newName: zot0213.kro.kr/tektoncd/pipeline/webhook-d4749e605405422fd87700164e31b2d1
   newTag: v1.6.0
 - name: ghcr.io/tektoncd/pipeline/events-a9042f7efb0cbade2a868a1ee5ddd52c
-  newName: zot0213.kro.kr/tekton/pipeline-events
+  newName: zot0213.kro.kr/tektoncd/pipeline/events-a9042f7efb0cbade2a868a1ee5ddd52c
   newTag: v1.6.0
 - name: ghcr.io/tektoncd/pipeline/resolvers-ff86b24f130c42b88983d3c13993056d
-  newName: zot0213.kro.kr/tekton/pipeline-resolvers
+  newName: zot0213.kro.kr/tektoncd/pipeline/resolvers-ff86b24f130c42b88983d3c13993056d
   newTag: v1.6.0
 
 patches:
