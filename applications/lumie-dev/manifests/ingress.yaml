@@ -68,3 +68,10 @@ spec:
                 name: file-svc
                 port:
                   number: 8080
+          - path: /api/grading
+            pathType: Prefix
+            backend:
+              service:
+                name: grading-svc
+                port:
+                  number: 8000
