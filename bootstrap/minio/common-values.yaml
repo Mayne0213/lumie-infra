@@ -36,7 +36,7 @@ common:
               - key: kubernetes.io/hostname
                 operator: In
                 values:
-                  - k3s-master
+                  - k3s-worker-1
 
     - name: minio-pv-worker2
       capacity: 45Gi

@@ -8,7 +8,7 @@
   become: yes
   roles:
     - common
-    - minio-storage
+    - storage-setup
 
 - name: Install K3s Workers (Account 0214)
   hosts: workers_0214
