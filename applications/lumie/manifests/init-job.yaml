@@ -21,7 +21,7 @@ spec:
       initContainers:
       # Wait for CNPG cluster to be ready
       - name: wait-for-db
-        image: zot0213.kro.kr/bitnami/kubectl:1.32
+        image: zot0213.kro.kr/bitnami/kubectl:latest
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false
