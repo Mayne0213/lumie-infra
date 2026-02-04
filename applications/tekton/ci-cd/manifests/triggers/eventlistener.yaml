@@ -241,7 +241,7 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/platform/tenant-svc/') || f.startsWith('libs/messaging/')) || c.modified.exists(f, f.startsWith('services/platform/tenant-svc/') || f.startsWith('libs/messaging/')))"
+              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/platform/tenant-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/common/')) || c.modified.exists(f, f.startsWith('services/platform/tenant-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/common/')))"
       bindings:
         - ref: github-push-binding
       template:
@@ -270,7 +270,7 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/platform/billing-svc/') || f.startsWith('libs/messaging/')) || c.modified.exists(f, f.startsWith('services/platform/billing-svc/') || f.startsWith('libs/messaging/')))"
+              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/platform/billing-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/common/')) || c.modified.exists(f, f.startsWith('services/platform/billing-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/common/')))"
       bindings:
         - ref: github-push-binding
       template:
@@ -299,7 +299,7 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/platform/auth-svc/') || f.startsWith('libs/messaging/')) || c.modified.exists(f, f.startsWith('services/platform/auth-svc/') || f.startsWith('libs/messaging/')))"
+              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/platform/auth-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/common/')) || c.modified.exists(f, f.startsWith('services/platform/auth-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/common/')))"
       bindings:
         - ref: github-push-binding
       template:
@@ -328,7 +328,7 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/core/academy-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/')) || c.modified.exists(f, f.startsWith('services/core/academy-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/')))"
+              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/core/academy-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')) || c.modified.exists(f, f.startsWith('services/core/academy-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')))"
       bindings:
         - ref: github-push-binding
       template:
@@ -357,7 +357,7 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/core/exam-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/')) || c.modified.exists(f, f.startsWith('services/core/exam-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/')))"
+              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/core/exam-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')) || c.modified.exists(f, f.startsWith('services/core/exam-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')))"
       bindings:
         - ref: github-push-binding
       template:
@@ -386,7 +386,7 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/core/content-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/')) || c.modified.exists(f, f.startsWith('services/core/content-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/')))"
+              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/core/content-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')) || c.modified.exists(f, f.startsWith('services/core/content-svc/') || f.startsWith('libs/messaging/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')))"
       bindings:
         - ref: github-push-binding
       template:
@@ -415,7 +415,7 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/support/file-svc/') || f.startsWith('libs/grpc-api/')) || c.modified.exists(f, f.startsWith('services/support/file-svc/') || f.startsWith('libs/grpc-api/')))"
+              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/support/file-svc/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')) || c.modified.exists(f, f.startsWith('services/support/file-svc/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')))"
       bindings:
         - ref: github-push-binding
       template:
