@@ -49,7 +49,6 @@ config:
     - Authorization
 ---
 # Cluster-wide JWT Claims Extraction Plugin
-# Extracts JWT claims and sets X-User-Id, X-Tenant-Slug headers
 apiVersion: configuration.konghq.com/v1
 kind: KongClusterPlugin
 metadata:

@@ -18,9 +18,14 @@ spec:
   - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     ref: values
+  - repoURL: https://github.com/Mayne0213/lumie-infra.git
+    targetRevision: main
     path: platform/kong
     directory:
       include: 'rbac-*.yaml'
+  - repoURL: https://github.com/Mayne0213/lumie-infra.git
+    targetRevision: main
+    path: platform/kong/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: kong

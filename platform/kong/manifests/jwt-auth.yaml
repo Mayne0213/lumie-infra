@@ -3,7 +3,7 @@ apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultStaticSecret
 metadata:
   name: kong-jwt-credential-vss
-  namespace: lumie-exam
+  namespace: kong
 spec:
   vaultAuthRef: vault/vault-auth
   mount: secret
@@ -30,7 +30,7 @@ apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
 metadata:
   name: lumie-auth-issuer
-  namespace: lumie-exam
+  namespace: kong
   annotations:
     kubernetes.io/ingress.class: kong
 username: lumie-auth-svc
