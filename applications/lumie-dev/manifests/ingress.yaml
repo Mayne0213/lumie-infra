@@ -1,5 +1,5 @@
 # Lumie Dev - Public API Routes (No JWT required)
-# Login, register, refresh, OAuth2 endpoints
+# Auth service handles its own path-based authorization
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -19,29 +19,8 @@ spec:
     - host: dev.lumie0213.kro.kr
       http:
         paths:
-          # Auth public endpoints (login, register, refresh, oauth2)
-          - path: /api/auth/login
-            pathType: Prefix
-            backend:
-              service:
-                name: auth-svc
-                port:
-                  number: 8080
-          - path: /api/auth/register
-            pathType: Prefix
-            backend:
-              service:
-                name: auth-svc
-                port:
-                  number: 8080
-          - path: /api/auth/refresh
-            pathType: Prefix
-            backend:
-              service:
-                name: auth-svc
-                port:
-                  number: 8080
-          - path: /api/auth/oauth2
+          # Auth service (public endpoints handled by backend security config)
+          - path: /api/auth
             pathType: Prefix
             backend:
               service:
@@ -70,21 +49,6 @@ spec:
     - host: dev.lumie0213.kro.kr
       http:
         paths:
-          # Auth protected endpoints (logout, me, etc.)
-          - path: /api/auth/logout
-            pathType: Prefix
-            backend:
-              service:
-                name: auth-svc
-                port:
-                  number: 8080
-          - path: /api/auth/me
-            pathType: Prefix
-            backend:
-              service:
-                name: auth-svc
-                port:
-                  number: 8080
           # Tenant service
           - path: /api/tenant
             pathType: Prefix
