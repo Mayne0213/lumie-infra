@@ -14,7 +14,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: applications/exam-svc
-    tag: "d3a8e0e8"
+    tag: "688667e8"
     pullPolicy: IfNotPresent
 
   # Multiple container ports
