@@ -14,7 +14,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: applications/spreadsheet-svc
-    tag: "latest"
+    tag: "688667e8"
     pullPolicy: IfNotPresent
 
   # Multiple container ports
