@@ -1,0 +1,31 @@
+# WebSocket endpoint needs different Kong configuration
+# JWT validation is handled in WebSocket handshake, not via Kong plugin
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spreadsheet-svc-ws
+  namespace: lumie-spreadsheet
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    konghq.com/protocols: "https,wss"
+    konghq.com/plugins: lumie-cors
+    # WebSocket specific settings
+    konghq.com/read-timeout: "3600000"
+    konghq.com/write-timeout: "3600000"
+spec:
+  ingressClassName: kong
+  rules:
+    - host: lumie0213.kro.kr
+      http:
+        paths:
+          - path: /ws/spreadsheet
+            pathType: Prefix
+            backend:
+              service:
+                name: spreadsheet-svc
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - lumie0213.kro.kr
+      secretName: lumie-api-tls

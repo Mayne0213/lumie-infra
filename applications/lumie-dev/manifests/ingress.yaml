@@ -105,3 +105,42 @@ spec:
                 name: grading-svc
                 port:
                   number: 8000
+          # Spreadsheet service
+          - path: /api/spreadsheet
+            pathType: Prefix
+            backend:
+              service:
+                name: spreadsheet-svc
+                port:
+                  number: 8080
+---
+# Lumie Dev - WebSocket Routes
+# JWT validation handled in WebSocket handshake, not Kong
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lumie-dev-websocket
+  namespace: lumie-dev
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    konghq.com/plugins: lumie-cors
+    konghq.com/read-timeout: "3600000"
+    konghq.com/write-timeout: "3600000"
+spec:
+  ingressClassName: kong
+  tls:
+    - hosts:
+        - dev.lumie0213.kro.kr
+      secretName: lumie-dev-tls
+  rules:
+    - host: dev.lumie0213.kro.kr
+      http:
+        paths:
+          # Spreadsheet WebSocket
+          - path: /ws/spreadsheet
+            pathType: Prefix
+            backend:
+              service:
+                name: spreadsheet-svc
+                port:
+                  number: 8080
