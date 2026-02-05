@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - certificate.yaml
   - ingress.yaml
-  - kong-plugins.yaml
+  - kong-jwt.yaml

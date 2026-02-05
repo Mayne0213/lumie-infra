@@ -1,0 +1,38 @@
+# Kong JWT Credential from Vault
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: kong-jwt-credential-vss
+  namespace: lumie-billing
+spec:
+  vaultAuthRef: vault/vault-auth
+  mount: secret
+  type: kv-v2
+  path: security/jwt
+  refreshAfter: 1h
+  destination:
+    create: true
+    name: kong-jwt-credential
+    labels:
+      konghq.com/credential: jwt
+    transformation:
+      excludeRaw: true
+      templates:
+        algorithm:
+          text: "HS256"
+        key:
+          text: "lumie-auth-svc"
+        secret:
+          text: "{{ .Secrets.JWT_SECRET_KEY }}"
+---
+# Kong Consumer for JWT validation
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: lumie-auth-issuer
+  namespace: lumie-billing
+  annotations:
+    kubernetes.io/ingress.class: kong
+username: lumie-auth-svc
+credentials:
+  - kong-jwt-credential

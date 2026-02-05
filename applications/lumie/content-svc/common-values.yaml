@@ -124,7 +124,7 @@ common:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       konghq.com/strip-path: "true"
-      konghq.com/plugins: lumie-cors
+      konghq.com/plugins: lumie-cors,lumie-jwt,lumie-jwt-claims
     hosts:
       - host: lumie0213.kro.kr
         paths:

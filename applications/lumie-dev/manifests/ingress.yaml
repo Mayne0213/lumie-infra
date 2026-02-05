@@ -8,7 +8,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     konghq.com/strip-path: "true"
-    konghq.com/plugins: lumie-dev-cors
+    konghq.com/plugins: lumie-cors
 spec:
   ingressClassName: kong
   tls:
@@ -38,7 +38,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     konghq.com/strip-path: "true"
-    konghq.com/plugins: lumie-dev-cors,lumie-dev-jwt,lumie-dev-jwt-claims
+    konghq.com/plugins: lumie-cors,lumie-jwt,lumie-jwt-claims
 spec:
   ingressClassName: kong
   tls:
