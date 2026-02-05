@@ -100,18 +100,6 @@ common:
             access-key: "{{ .Secrets.MINIO_ACCESS_KEY_ID }}"
             secret-key: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"
             endpoint: "{{ .Secrets.MINIO_ENDPOINT }}"
-    # Kong JWT credential (for Kong JWT plugin)
-    - name: lumie-dev-kong-jwt-vss
-      path: security/jwt
-      destination:
-        name: kong-jwt-credential
-        labels:
-          konghq.com/credential: jwt
-        transformation:
-          templates:
-            key: "lumie-auth-svc"
-            algorithm: "HS256"
-            secret: "{{ .Secrets.JWT_SECRET_KEY }}"
     # PgBouncer userlist (format: "username" "password")
     - name: pgbouncer-userlist-vss
       path: storage/postgresql
