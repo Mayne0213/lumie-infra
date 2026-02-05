@@ -420,6 +420,35 @@ spec:
         - ref: github-push-binding
       template:
         ref: lumie-file-svc-build-template
+    - name: github-push-lumie-spreadsheet-svc
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: github-webhook-secret
+                secretKey: webhook-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/main')"
+            - name: "overlays"
+              value:
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.repository.name in ['lumie-backend'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/core/spreadsheet-svc/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')) || c.modified.exists(f, f.startsWith('services/core/spreadsheet-svc/') || f.startsWith('libs/grpc-api/') || f.startsWith('libs/common/')))"
+      bindings:
+        - ref: github-push-binding
+      template:
+        ref: lumie-spreadsheet-svc-build-template
     # Lumie AI triggers
     - name: github-push-lumie-grading-svc
       interceptors:
