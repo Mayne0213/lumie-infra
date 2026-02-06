@@ -88,7 +88,7 @@ common:
     - name: minio-console
       replicaCount: 1
       image:
-        repository: zot.mayne.kro.kr/storage/minio-console
+        repository: zot.mayne.kro.kr/minio/console
         tag: "v1.9.1"
         pullPolicy: IfNotPresent
       containerPort: 9090

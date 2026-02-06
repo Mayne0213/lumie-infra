@@ -294,7 +294,7 @@ common:
       bucket: ""                 # Defaults to <app>-db-backup
       volumeSize: "1Gi"
       minioEndpoint: "https://s3.minio0213.kro.kr"
-      postgresImage: "zot.mayne.kro.kr/storage/postgresql:18.1"
-      minioImage: "zot.mayne.kro.kr/storage/minio-mc:latest"
+      postgresImage: "zot.mayne.kro.kr/cloudnative-pg/postgresql:18.1"
+      minioImage: "zot.mayne.kro.kr/minio/mc:latest"
       successfulJobsHistoryLimit: 3
       failedJobsHistoryLimit: 3
