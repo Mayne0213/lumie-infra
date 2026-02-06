@@ -6,7 +6,7 @@ metadata:
   name: spreadsheet-svc-ws
   namespace: lumie-spreadsheet
   annotations:
-    konghq.com/protocols: "https,wss"
+    konghq.com/protocols: "https"
     konghq.com/plugins: lumie-cors
     # WebSocket specific settings
     konghq.com/read-timeout: "3600000"
