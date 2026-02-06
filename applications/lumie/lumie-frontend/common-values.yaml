@@ -10,7 +10,7 @@ common:
   image:
     registry: zot0213.kro.kr
     repository: applications/lumie-frontend
-    tag: "a5f2b0f7"
+    tag: "77246a0d"
     pullPolicy: IfNotPresent
 
   ports:
