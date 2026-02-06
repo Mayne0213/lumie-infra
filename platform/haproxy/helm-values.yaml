@@ -252,32 +252,11 @@ config: |
       # Redirect all other HTTP to HTTPS
       redirect scheme https code 301 if !is_acme
 
-  # HTTPS frontend - SNI routing (TCP mode for inspection)
+  # HTTPS frontend - TLS termination with SNI
   frontend https_front
-      bind *:443
-      mode tcp
-      tcp-request inspect-delay 5s
-      tcp-request content accept if { req_ssl_hello_type 1 }
-      # Route Teleport traffic (passthrough)
-      acl is_teleport req_ssl_sni -i mayne.kro.kr
-      use_backend teleport_passthrough if is_teleport
-      # Default: TLS termination for other traffic
-      default_backend https_termination
-
-  # Teleport backend - TCP passthrough (no TLS termination)
-  backend teleport_passthrough
-      mode tcp
-      server teleport teleport.teleport.svc.cluster.local:443 check
-
-  # HTTPS termination backend - terminates TLS then forwards to Kong
-  backend https_termination
-      mode tcp
-      server haproxy-https 127.0.0.1:8443 send-proxy-v2
-
-  # Internal HTTPS frontend - TLS termination
-  frontend https_internal
-      bind 127.0.0.1:8443 ssl crt /etc/ssl/certs/ alpn h2,http/1.1 accept-proxy
+      bind *:443 ssl crt /etc/ssl/certs/ alpn h2,http/1.1
       mode http
+      # Add headers for backend
       http-request set-header X-Forwarded-Proto https
       http-request set-header X-Forwarded-Port 443
       http-request set-header X-Real-IP %[src]

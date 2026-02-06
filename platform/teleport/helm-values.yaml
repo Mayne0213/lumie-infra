@@ -58,9 +58,14 @@ resources:
 # SERVICE CONFIGURATION
 # =============================================================================
 service:
-  type: LoadBalancer
+  type: NodePort
   spec:
-    loadBalancerIP: ""
+    ports:
+      - name: https
+        port: 443
+        targetPort: 443
+        nodePort: 30443
+        protocol: TCP
 
 # =============================================================================
 # HIGH AVAILABILITY - Single replica for standalone
@@ -76,7 +81,7 @@ proxyListenerMode: multiplex
 
 # Additional public addresses for internal cluster access
 publicAddr:
-  - mayne.kro.kr:443
+  - mayne.kro.kr:30443
   - teleport.teleport.svc.cluster.local:443
 
 # =============================================================================
