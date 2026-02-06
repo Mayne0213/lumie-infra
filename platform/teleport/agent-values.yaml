@@ -115,6 +115,34 @@ apps:
       env: prod
       category: storage
 
+  # Container Registry
+  - name: zot
+    uri: http://zot.zot.svc.cluster.local:5000
+    labels:
+      env: prod
+      category: platform
+
+  # Alert Dashboard
+  - name: karma
+    uri: http://karma.alertmanager.svc.cluster.local:80
+    labels:
+      env: prod
+      category: observability
+
+  # Website Analytics
+  - name: umami
+    uri: http://umami.umami.svc.cluster.local:3000
+    labels:
+      env: prod
+      category: applications
+
+  # Documentation
+  - name: docusaurus
+    uri: http://docusaurus.docusaurus.svc.cluster.local:80
+    labels:
+      env: prod
+      category: applications
+
 # =============================================================================
 # TOLERATIONS - Allow scheduling on control-plane nodes
 # =============================================================================
