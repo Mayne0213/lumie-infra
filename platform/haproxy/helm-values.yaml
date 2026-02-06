@@ -237,9 +237,9 @@ config: |
       log global
       option httplog
       timeout connect 10s
-      timeout client 30s
-      timeout server 30s
-      timeout http-request 10s
+      timeout client 300s
+      timeout server 300s
+      timeout http-request 300s
       timeout http-keep-alive 10s
 
   # HTTP frontend - redirect to HTTPS
