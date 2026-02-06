@@ -31,7 +31,7 @@
 
   "_platform": "--- Platform ---",
   "docker:kong/kong-gateway": "3.9.0",
-  "docker:kong/kubernetes-ingress-controller": "3.4.0",
+  "docker:kong/kubernetes-ingress-controller": "3.5.3",
   "docker:bitnami/rabbitmq": "4.1-management",
   "docker:bitnami/rabbitmq-cluster-operator": "2.19.0",
 
