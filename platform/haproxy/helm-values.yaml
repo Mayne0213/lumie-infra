@@ -148,6 +148,9 @@ initContainers:
       - name: tekton-triggers-tls
         mountPath: /etc/ssl/source/tekton-triggers-tls
         readOnly: true
+      - name: argocd-server-tls
+        mountPath: /etc/ssl/source/argocd-server-tls
+        readOnly: true
 
 # =============================================================================
 # EXTRA VOLUMES - TLS certificates and secrets
@@ -213,6 +216,10 @@ extraVolumes:
   - name: tekton-triggers-tls
     secret:
       secretName: tekton-triggers-tls
+      optional: true
+  - name: argocd-server-tls
+    secret:
+      secretName: argocd-server-tls
       optional: true
 
 # =============================================================================
