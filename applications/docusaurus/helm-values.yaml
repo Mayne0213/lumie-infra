@@ -13,20 +13,9 @@ common:
     enabled: true
     type: ClusterIP
     port: 80
+  # Ingress disabled - access via Teleport
   ingress:
-    enabled: true
-    className: kong
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-    hosts:
-      - host: docusaurus0213.kro.kr
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      - secretName: docusaurus-tls
-        hosts:
-          - docusaurus0213.kro.kr
+    enabled: false
   # Resource settings (no CPU limit for stability)
   resources:
     requests:

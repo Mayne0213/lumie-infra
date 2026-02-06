@@ -102,20 +102,9 @@ spec:
             path: /health
             port: http
 
+        # Ingress disabled - access via Teleport
         ingress:
-          enabled: true
-          ingressClassName: kong
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
-            traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
-          hosts:
-            - karma0213.kro.kr
-          path: /
-          pathType: Prefix
-          tls:
-            - secretName: karma-tls
-              hosts:
-                - karma0213.kro.kr
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: alertmanager
