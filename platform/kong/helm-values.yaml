@@ -7,7 +7,7 @@ gateway:
 
   image:
     repository: kong
-    tag: "3.8"
+    tag: "3.7"
 
   env:
     database: "off"
@@ -71,14 +71,11 @@ controller:
     enabled: true
     image:
       repository: kong/kubernetes-ingress-controller
-      tag: "3.5.3"
+      tag: "3.4"
 
     gatewayDiscovery:
       enabled: true
       generateAdminApiService: true
-
-    env:
-      feature_gates: FillIDs=false
 
   resources:
     requests:
