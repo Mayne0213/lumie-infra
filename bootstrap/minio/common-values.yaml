@@ -114,27 +114,8 @@ common:
         enabled: true
         port: 9090
 
-  # Console Ingress
-  additionalIngresses:
-    - name: console
-      serviceName: minio-console
-      servicePort: 9090
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-      hosts:
-        - host: minio.minio0213.kro.kr
-          paths:
-            - path: /
-              pathType: Prefix
-        - host: minio0213.kro.kr
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - secretName: minio-console-tls
-          hosts:
-            - minio.minio0213.kro.kr
-            - minio0213.kro.kr
+  # Console Ingress disabled - access via Teleport (teleport0213.kro.kr)
+  additionalIngresses: []
 
   # Vault Static Secrets (VSO)
   vaultStaticSecrets:

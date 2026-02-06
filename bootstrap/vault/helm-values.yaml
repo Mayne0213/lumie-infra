@@ -46,20 +46,9 @@ server:
     limits:
       memory: 156Mi
 
-  # Ingress 설정
+  # Ingress disabled - access via Teleport (teleport0213.kro.kr)
   ingress:
-    enabled: true
-    ingressClassName: kong
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-    hosts:
-      - host: vault0213.kro.kr
-        paths:
-          - /
-    tls:
-      - secretName: vault-tls
-        hosts:
-          - vault0213.kro.kr
+    enabled: false
 
   # 서비스 타입
   service:

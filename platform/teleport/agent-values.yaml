@@ -1,0 +1,137 @@
+# Teleport Kube Agent Helm Values
+# Chart: https://charts.releases.teleport.dev (teleport-kube-agent)
+# Purpose: App access for internal infrastructure services
+
+# =============================================================================
+# CONNECTION TO TELEPORT CLUSTER
+# =============================================================================
+# Agent uses internal service (external users use teleport0213.kro.kr)
+proxyAddr: teleport.teleport.svc.cluster.local:443
+insecureSkipProxyTLSVerify: true
+
+# =============================================================================
+# JOIN METHOD
+# =============================================================================
+# Using Kubernetes join method for in-cluster authentication
+# This method uses the Kubernetes ServiceAccount token to authenticate
+# and doesn't require a static token
+joinParams:
+  method: kubernetes
+  tokenName: teleport-agent
+
+# =============================================================================
+# ROLES - Enable app access
+# =============================================================================
+roles: app
+
+# =============================================================================
+# IMAGE CONFIGURATION
+# =============================================================================
+# Using distroless image for security (bootstrap - external registry)
+image: public.ecr.aws/gravitational/teleport-distroless
+
+# =============================================================================
+# RESOURCES (VPA recommended, no CPU limit)
+# =============================================================================
+resources:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+# =============================================================================
+# STATIC APPS CONFIGURATION
+# =============================================================================
+# Internal infrastructure services proxied through Teleport
+apps:
+  # Monitoring
+  - name: grafana
+    uri: http://grafana.grafana.svc.cluster.local:80
+    labels:
+      env: prod
+      category: observability
+
+  # GitOps
+  - name: argocd
+    uri: http://argocd-server.argocd.svc.cluster.local:80
+    labels:
+      env: prod
+      category: platform
+
+  # Secrets Management
+  - name: vault
+    uri: http://vault.vault.svc.cluster.local:8200
+    labels:
+      env: prod
+      category: security
+
+  # Kubernetes Dashboard
+  - name: headlamp
+    uri: http://headlamp.headlamp.svc.cluster.local:80
+    labels:
+      env: prod
+      category: platform
+
+  # VPA Recommendations
+  - name: goldilocks
+    uri: http://goldilocks-dashboard.goldilocks.svc.cluster.local:80
+    labels:
+      env: prod
+      category: observability
+
+  # IDE
+  - name: code-server
+    uri: http://code-server.code-server.svc.cluster.local:8080
+    labels:
+      env: prod
+      category: applications
+
+  # Database Web UI
+  - name: pgweb
+    uri: http://pgweb.pgweb.svc.cluster.local:80
+    labels:
+      env: prod
+      category: storage
+
+  # CI/CD Dashboard
+  - name: tekton
+    uri: http://tekton-dashboard.tekton-pipelines.svc.cluster.local:9097
+    labels:
+      env: prod
+      category: applications
+
+  # Object Storage Console
+  - name: minio
+    uri: http://minio-console.minio.svc.cluster.local:9090
+    labels:
+      env: prod
+      category: storage
+
+  # Backup UI
+  - name: velero
+    uri: http://velero-ui.velero.svc.cluster.local:3000
+    labels:
+      env: prod
+      category: storage
+
+# =============================================================================
+# TOLERATIONS - Allow scheduling on control-plane nodes
+# =============================================================================
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+
+# =============================================================================
+# AFFINITY - Prefer scheduling on worker nodes
+# =============================================================================
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: teleport-kube-agent
+          topologyKey: kubernetes.io/hostname

@@ -27,20 +27,9 @@ resources:
   limits:
     memory: 100Mi
 
+# Ingress disabled - access via Teleport (teleport0213.kro.kr)
 ingress:
-  enabled: true
-  ingressClassName: kong
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-  hosts:
-    - host: kubernetes0213.kro.kr
-      paths:
-        - path: /
-          type: ImplementationSpecific
-  tls:
-    - secretName: headlamp-tls
-      hosts:
-        - kubernetes0213.kro.kr
+  enabled: false
 
 # Config
 config:

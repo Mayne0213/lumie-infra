@@ -28,21 +28,9 @@ dashboard:
     type: ClusterIP
     port: 80
 
+  # Ingress disabled - access via Teleport (teleport0213.kro.kr)
   ingress:
-    enabled: true
-    ingressClassName: kong
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
-    hosts:
-      - host: goldilocks0213.kro.kr
-        paths:
-          - path: /
-            type: Prefix
-    tls:
-      - secretName: goldilocks-dashboard-tls
-        hosts:
-          - goldilocks0213.kro.kr
+    enabled: false
   
   # Affinity - Soft Anti-Affinity to spread pods across nodes
   affinity:

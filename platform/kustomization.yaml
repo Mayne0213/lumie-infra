@@ -9,8 +9,8 @@ resources:
   - priority-classes/argocd.yaml
 
   # Core infrastructure (Kong replaced Traefik)
-  - reflector/argocd.yaml
   - kong/argocd.yaml
+  - teleport/argocd.yaml
   - coredns-config/argocd.yaml
   - haproxy/argocd.yaml
   - cert-manager/argocd.yaml

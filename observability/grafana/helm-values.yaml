@@ -128,19 +128,8 @@ grafana.ini:
   news:
     news_feed_enabled: false
 
+# Ingress disabled - access via Teleport (teleport0213.kro.kr)
 ingress:
-  enabled: true
-  ingressClassName: kong
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
-  hosts:
-    - grafana0213.kro.kr
-    - www.grafana0213.kro.kr
-  tls:
-    - secretName: grafana-tls
-      hosts:
-        - grafana0213.kro.kr
-        - www.grafana0213.kro.kr
+  enabled: false
 
 # extraObjects removed - DB credentials now provided by CNPG cluster secret (grafana-db-app)

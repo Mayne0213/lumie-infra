@@ -1,5 +1,6 @@
 # HAProxy Helm Chart Values
 # TLS termination proxy with certificate management
+# Note: Infrastructure services (Grafana, ArgoCD, Vault, etc.) moved to Teleport
 
 # =============================================================================
 # DEPLOYMENT KIND - DaemonSet for HA
@@ -102,39 +103,19 @@ initContainers:
     volumeMounts:
       - name: ssl-certs
         mountPath: /etc/ssl/certs
-      # Source TLS secrets (mirrored by Reflector)
+      # Source TLS secrets (customer-facing services only)
+      # Infrastructure services moved to Teleport
       - name: authelia-tls
         mountPath: /etc/ssl/source/authelia-tls
-        readOnly: true
-      - name: grafana-tls
-        mountPath: /etc/ssl/source/grafana-tls
-        readOnly: true
-      - name: goldilocks-tls
-        mountPath: /etc/ssl/source/goldilocks-tls
         readOnly: true
       - name: homer-tls
         mountPath: /etc/ssl/source/homer-tls
         readOnly: true
-      - name: vault-tls
-        mountPath: /etc/ssl/source/vault-tls
-        readOnly: true
       - name: zot-tls
         mountPath: /etc/ssl/source/zot-tls
         readOnly: true
-      - name: argocd-tls
-        mountPath: /etc/ssl/source/argocd-tls
-        readOnly: true
-      - name: headlamp-tls
-        mountPath: /etc/ssl/source/headlamp-tls
-        readOnly: true
-      - name: code-server-tls
-        mountPath: /etc/ssl/source/code-server-tls
-        readOnly: true
       - name: minio-api-tls
         mountPath: /etc/ssl/source/minio-api-tls
-        readOnly: true
-      - name: minio-console-tls
-        mountPath: /etc/ssl/source/minio-console-tls
         readOnly: true
       - name: lumie-frontend-tls
         mountPath: /etc/ssl/source/lumie-frontend-tls
@@ -142,20 +123,8 @@ initContainers:
       - name: lumie-dev-tls
         mountPath: /etc/ssl/source/lumie-dev-tls
         readOnly: true
-      - name: pgweb-tls
-        mountPath: /etc/ssl/source/pgweb-tls
-        readOnly: true
       - name: umami-tls
         mountPath: /etc/ssl/source/umami-tls
-        readOnly: true
-      - name: tekton-dashboard-tls
-        mountPath: /etc/ssl/source/tekton-dashboard-tls
-        readOnly: true
-      - name: karma-tls
-        mountPath: /etc/ssl/source/karma-tls
-        readOnly: true
-      - name: velero-tls
-        mountPath: /etc/ssl/source/velero-tls
         readOnly: true
       - name: docusaurus-tls
         mountPath: /etc/ssl/source/docusaurus-tls
@@ -185,50 +154,23 @@ initContainers:
 extraVolumes:
   - name: ssl-certs
     emptyDir: {}
-  # TLS secrets mirrored by Reflector to haproxy namespace
+  # TLS secrets for customer-facing services
+  # Infrastructure services (grafana, argocd, vault, etc.) moved to Teleport
   - name: authelia-tls
     secret:
       secretName: authelia-tls
-      optional: true
-  - name: grafana-tls
-    secret:
-      secretName: grafana-tls
-      optional: true
-  - name: goldilocks-tls
-    secret:
-      secretName: goldilocks-dashboard-tls
       optional: true
   - name: homer-tls
     secret:
       secretName: homer-tls
       optional: true
-  - name: vault-tls
-    secret:
-      secretName: vault-tls
-      optional: true
   - name: zot-tls
     secret:
       secretName: zot-tls
       optional: true
-  - name: argocd-tls
-    secret:
-      secretName: argocd-server-tls
-      optional: true
-  - name: headlamp-tls
-    secret:
-      secretName: headlamp-tls
-      optional: true
-  - name: code-server-tls
-    secret:
-      secretName: code-server-tls
-      optional: true
   - name: minio-api-tls
     secret:
       secretName: minio-api-tls
-      optional: true
-  - name: minio-console-tls
-    secret:
-      secretName: minio-console-tls
       optional: true
   - name: lumie-frontend-tls
     secret:
@@ -238,25 +180,9 @@ extraVolumes:
     secret:
       secretName: lumie-dev-tls
       optional: true
-  - name: pgweb-tls
-    secret:
-      secretName: pgweb-tls
-      optional: true
   - name: umami-tls
     secret:
       secretName: umami-tls
-      optional: true
-  - name: tekton-dashboard-tls
-    secret:
-      secretName: tekton-dashboard-tls
-      optional: true
-  - name: karma-tls
-    secret:
-      secretName: karma-tls
-      optional: true
-  - name: velero-tls
-    secret:
-      secretName: velero-ui-tls
       optional: true
   - name: docusaurus-tls
     secret:
@@ -336,7 +262,7 @@ config: |
       http-request set-header X-Real-IP %[src]
       default_backend kong_http
 
-  # HTTP backend - forward to Kong (no PROXY protocol needed in HTTP mode)
+  # HTTP backend - forward to Kong
   backend kong_http
       mode http
       balance roundrobin

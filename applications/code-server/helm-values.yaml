@@ -12,24 +12,9 @@ persistence:
   size: 5Gi
   storageClass: local-path
 
+# Ingress disabled - access via Teleport (teleport0213.kro.kr)
 ingress:
-  enabled: true
-  ingressClassName: kong
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
-  hosts:
-    - host: vscode0213.kro.kr
-      paths:
-        - /
-    - host: www.vscode0213.kro.kr
-      paths:
-        - /
-  tls:
-    - secretName: code-server-tls
-      hosts:
-        - vscode0213.kro.kr
-        - www.vscode0213.kro.kr
+  enabled: false
 
 # Service configuration
 service:

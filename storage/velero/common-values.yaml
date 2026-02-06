@@ -9,27 +9,11 @@ common:
   service:
     enabled: false
 
+  # Ingress disabled - access via Teleport (teleport0213.kro.kr)
   ingress:
     enabled: false
 
-  # Health check ingress for velero-ui
-  additionalIngresses:
-    - name: health
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        traefik.ingress.kubernetes.io/router.priority: "100"
-      className: kong
-      hosts:
-        - host: velero0213.kro.kr
-          paths:
-            - path: /health
-              pathType: Exact
-      tls:
-        - secretName: velero-ui-tls
-          hosts:
-            - velero0213.kro.kr
-      serviceName: velero-ui
-      servicePort: 3000
+  additionalIngresses: []
 
   # Vault Static Secrets (VSO)
   vaultStaticSecrets:

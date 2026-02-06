@@ -97,15 +97,9 @@ server:
     serviceMonitor:
       enabled: true
 
-  # Main Ingress with Authelia middleware
+  # Ingress disabled - access via Teleport (teleport0213.kro.kr)
   ingress:
-    enabled: true
-    ingressClassName: kong
-    hostname: argocd0213.kro.kr
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
-    tls: true
+    enabled: false
 
   # Resource settings (VPA recommended, no CPU limit for stability)
   resources:

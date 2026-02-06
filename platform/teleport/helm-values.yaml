@@ -1,0 +1,102 @@
+# Teleport Cluster Helm Values
+# Chart: https://charts.releases.teleport.dev (teleport-cluster)
+# Mode: Standalone with ACME certificates
+#
+# Note: App access is configured via teleport-kube-agent (separate ArgoCD Application)
+
+# =============================================================================
+# CLUSTER CONFIGURATION
+# =============================================================================
+clusterName: teleport0213.kro.kr
+chartMode: standalone
+
+# =============================================================================
+# IMAGE CONFIGURATION
+# =============================================================================
+# Using distroless image for security (bootstrap - external registry)
+# Teleport needs to be accessible before Zot can be used
+image: public.ecr.aws/gravitational/teleport-distroless
+
+# =============================================================================
+# AUTHENTICATION
+# =============================================================================
+authentication:
+  type: local
+  localAuth: true
+  secondFactors:
+    - webauthn
+    - otp
+
+# =============================================================================
+# TLS CONFIGURATION - Using cert-manager instead of ACME
+# =============================================================================
+acme: false
+
+# Use certificate from cert-manager
+tls:
+  existingSecretName: teleport-tls
+
+# =============================================================================
+# PERSISTENCE
+# =============================================================================
+persistence:
+  enabled: true
+  storageClassName: local-path
+  volumeSize: 5Gi
+
+# =============================================================================
+# RESOURCES (VPA recommended, no CPU limit)
+# =============================================================================
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    memory: 1Gi
+
+# =============================================================================
+# SERVICE CONFIGURATION
+# =============================================================================
+service:
+  type: LoadBalancer
+  spec:
+    loadBalancerIP: ""
+
+# =============================================================================
+# HIGH AVAILABILITY - Single replica for standalone
+# =============================================================================
+highAvailability:
+  replicaCount: 1
+  requireAntiAffinity: false
+
+# =============================================================================
+# PROXY CONFIGURATION
+# =============================================================================
+proxyListenerMode: multiplex
+
+# =============================================================================
+# OPERATOR - Enabled for managing Teleport CRDs (ProvisionTokens, etc.)
+# =============================================================================
+operator:
+  enabled: true
+
+# =============================================================================
+# TOLERATIONS - Allow scheduling on control-plane nodes
+# =============================================================================
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+
+# =============================================================================
+# AFFINITY - Prefer scheduling on worker nodes
+# =============================================================================
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: teleport-cluster
+          topologyKey: kubernetes.io/hostname

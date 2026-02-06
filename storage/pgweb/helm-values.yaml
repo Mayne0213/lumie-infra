@@ -59,28 +59,7 @@ service:
         port: 80
         targetPort: 8081
 
+# Ingress disabled - access via Teleport (teleport0213.kro.kr)
 ingress:
   main:
-    enabled: true
-    className: kong
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
-    hosts:
-      - host: pgweb0213.kro.kr
-        paths:
-          - path: /
-            service:
-              identifier: main
-              port: http
-      - host: www.pgweb0213.kro.kr
-        paths:
-          - path: /
-            service:
-              identifier: main
-              port: http
-    tls:
-      - secretName: pgweb-tls
-        hosts:
-          - pgweb0213.kro.kr
-          - www.pgweb0213.kro.kr
+    enabled: false
