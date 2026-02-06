@@ -72,30 +72,10 @@ service:
         port: 80
         targetPort: 8080
 
+# Ingress disabled - mayne.kro.kr now used by Teleport
 ingress:
   main:
-    enabled: true
-    className: kong
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-    hosts:
-      - host: mayne.kro.kr
-        paths:
-          - path: /
-            service:
-              identifier: main
-              port: http
-      - host: www.mayne.kro.kr
-        paths:
-          - path: /
-            service:
-              identifier: main
-              port: http
-    tls:
-      - secretName: homer-tls
-        hosts:
-          - mayne.kro.kr
-          - www.mayne.kro.kr
+    enabled: false
 
 persistence:
   www:
