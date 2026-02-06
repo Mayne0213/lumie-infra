@@ -123,7 +123,7 @@ webhooksCleanup:
   image:
     registry: zot.mayne.kro.kr
     repository: bitnami/kubectl
-    tag: "1.32"
+    tag: "latest"
 
 # Policy reports cleanup (post-upgrade hook)
 policyReportsCleanup:
@@ -131,7 +131,7 @@ policyReportsCleanup:
   image:
     registry: zot.mayne.kro.kr
     repository: bitnami/kubectl
-    tag: "1.32"
+    tag: "latest"
 
 # Features configuration
 features:
