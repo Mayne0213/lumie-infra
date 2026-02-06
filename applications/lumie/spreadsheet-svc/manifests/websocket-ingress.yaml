@@ -6,7 +6,6 @@ metadata:
   name: spreadsheet-svc-ws
   namespace: lumie-spreadsheet
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
     konghq.com/protocols: "https,wss"
     konghq.com/plugins: lumie-cors
     # WebSocket specific settings
@@ -25,7 +24,3 @@ spec:
                 name: spreadsheet-svc
                 port:
                   number: 8080
-  tls:
-    - hosts:
-        - lumie0213.kro.kr
-      secretName: lumie-api-tls

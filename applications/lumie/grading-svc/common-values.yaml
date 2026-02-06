@@ -93,7 +93,6 @@ common:
     enabled: true
     className: kong
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
       konghq.com/strip-path: "true"
       konghq.com/plugins: lumie-cors,lumie-jwt,lumie-jwt-claims
       # 대용량 이미지 배치 처리를 위한 타임아웃 설정 (밀리초)
@@ -105,10 +104,7 @@ common:
         paths:
           - path: /api/grading
             pathType: Prefix
-    tls:
-      - hosts:
-          - lumie0213.kro.kr
-        secretName: lumie-api-tls
+    tls: []
 
   # ServiceMonitor disabled (FastAPI needs custom metrics setup)
   serviceMonitor:

@@ -131,7 +131,6 @@ common:
     enabled: true
     className: kong
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
       konghq.com/strip-path: "true"
       konghq.com/plugins: lumie-cors,lumie-jwt,lumie-jwt-claims
     hosts:
@@ -139,10 +138,7 @@ common:
         paths:
           - path: /api/billing
             pathType: Prefix
-    tls:
-      - hosts:
-          - lumie0213.kro.kr
-        secretName: lumie-api-tls
+    tls: []
 
   # ServiceMonitor for Prometheus
   serviceMonitor:
