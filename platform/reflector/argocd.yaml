@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: reflector
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: reflector
+  sources:
+    # Reflector Helm chart
+    - repoURL: https://emberstack.github.io/helm-charts
+      chart: reflector
+      targetRevision: 10.0.4
+      helm:
+        releaseName: reflector
+        valueFiles:
+          - $values/platform/reflector/helm-values.yaml
+    # Values from git repo
+    - repoURL: https://github.com/Mayne0213/lumie-infra.git
+      targetRevision: main
+      ref: values
+    # Additional manifests (Job to annotate secrets)
+    - repoURL: https://github.com/Mayne0213/lumie-infra.git
+      targetRevision: main
+      path: platform/reflector/manifests
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

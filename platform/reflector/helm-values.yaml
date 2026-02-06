@@ -1,0 +1,20 @@
+# Reflector Helm Values
+# Mirrors secrets and configmaps across namespaces
+
+# Image configuration
+image:
+  repository: docker.io/emberstack/kubernetes-reflector
+  tag: 10.0.4
+
+# Resource settings
+resources:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+  limits:
+    memory: 128Mi
+
+# Configuration
+configuration:
+  logging:
+    minimumLevel: Information
