@@ -11,6 +11,7 @@ resources:
   # Core infrastructure (Kong replaced Traefik)
   - kong/argocd.yaml
   - teleport/argocd.yaml
+  - reflector/argocd.yaml
   - coredns-config/argocd.yaml
   - haproxy/argocd.yaml
   - cert-manager/argocd.yaml
