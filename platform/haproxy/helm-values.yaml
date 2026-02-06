@@ -123,9 +123,7 @@ initContainers:
       - name: lumie-dev-tls
         mountPath: /etc/ssl/source/lumie-dev-tls
         readOnly: true
-      - name: umami-tls
-        mountPath: /etc/ssl/source/umami-tls
-        readOnly: true
+      # umami-tls removed - access via Teleport
       - name: docusaurus-tls
         mountPath: /etc/ssl/source/docusaurus-tls
         readOnly: true
@@ -180,10 +178,7 @@ extraVolumes:
     secret:
       secretName: lumie-dev-tls
       optional: true
-  - name: umami-tls
-    secret:
-      secretName: umami-tls
-      optional: true
+  # umami-tls removed - access via Teleport
   - name: docusaurus-tls
     secret:
       secretName: docusaurus-tls

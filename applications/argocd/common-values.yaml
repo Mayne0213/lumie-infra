@@ -1,4 +1,5 @@
 # Common chart values for argocd
+# UI/main access via Teleport, only webhook exposed externally
 
 common:
   name: argocd
@@ -13,9 +14,9 @@ common:
   ingress:
     enabled: false
 
-  # Additional Ingresses (Authelia bypass for webhook and health)
+  # Only webhook exposed externally (GitHub needs direct access)
+  # UI and health endpoints accessed via Teleport
   additionalIngresses:
-    # Webhook - GitHub needs direct access without Authelia
     - name: webhook
       serviceName: argocd-server
       servicePort: 80
@@ -26,23 +27,6 @@ common:
           paths:
             - path: /api/webhook
               pathType: Prefix
-      tls:
-        - secretName: argocd-server-tls
-          hosts:
-            - argocd0213.kro.kr
-
-    # Health check - monitoring needs direct access
-    - name: health
-      serviceName: argocd-server
-      servicePort: 80
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        traefik.ingress.kubernetes.io/router.priority: "100"
-      hosts:
-        - host: argocd0213.kro.kr
-          paths:
-            - path: /healthz
-              pathType: Exact
       tls:
         - secretName: argocd-server-tls
           hosts:

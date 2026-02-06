@@ -1,4 +1,5 @@
 # Common chart values for code-server
+# All access via Teleport (no external ingress)
 
 common:
   name: code-server
@@ -13,24 +14,7 @@ common:
   ingress:
     enabled: false
 
-  # Health check ingress
-  additionalIngresses:
-    - name: health
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        traefik.ingress.kubernetes.io/router.priority: "100"
-      className: kong
-      hosts:
-        - host: vscode0213.kro.kr
-          paths:
-            - path: /healthz
-              pathType: Exact
-      tls:
-        - secretName: code-server-tls
-          hosts:
-            - vscode0213.kro.kr
-      serviceName: code-server
-      servicePort: 8080
+  # No external ingress - access via Teleport only
 
   # RBAC - ClusterRoleBinding for cluster-admin access
   rbac:

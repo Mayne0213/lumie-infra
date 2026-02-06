@@ -1,4 +1,6 @@
 # Common chart values for alertmanager
+# Karma UI access via Teleport (no external ingress)
+
 common:
   name: alertmanager
 
@@ -12,24 +14,7 @@ common:
   ingress:
     enabled: false
 
-  # Health check ingress for karma
-  additionalIngresses:
-    - name: health
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        traefik.ingress.kubernetes.io/router.priority: "100"
-      className: kong
-      hosts:
-        - host: karma0213.kro.kr
-          paths:
-            - path: /health
-              pathType: Exact
-      tls:
-        - secretName: karma-tls
-          hosts:
-            - karma0213.kro.kr
-      serviceName: karma
-      servicePort: 8080
+  # No external ingress - access via Teleport only
 
   # Vault Static Secrets (VSO)
   vaultStaticSecrets:

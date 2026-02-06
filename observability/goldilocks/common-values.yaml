@@ -1,4 +1,6 @@
 # Common chart values for goldilocks
+# All access via Teleport (no external ingress)
+
 common:
   name: goldilocks
 
@@ -12,21 +14,4 @@ common:
   ingress:
     enabled: false
 
-  # Health check ingress
-  additionalIngresses:
-    - name: health
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        traefik.ingress.kubernetes.io/router.priority: "100"
-      className: kong
-      hosts:
-        - host: goldilocks0213.kro.kr
-          paths:
-            - path: /healthz
-              pathType: Exact
-      tls:
-        - secretName: goldilocks-dashboard-tls
-          hosts:
-            - goldilocks0213.kro.kr
-      serviceName: goldilocks-dashboard
-      servicePort: 80
+  # No external ingress - access via Teleport only

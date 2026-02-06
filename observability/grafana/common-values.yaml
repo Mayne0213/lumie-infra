@@ -1,4 +1,6 @@
 # Common chart values for grafana
+# All access via Teleport (no external ingress)
+
 common:
   name: grafana
 
@@ -12,47 +14,7 @@ common:
   ingress:
     enabled: false
 
-  # Additional Ingresses
-  additionalIngresses:
-    # Health check ingress
-    - name: health
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        traefik.ingress.kubernetes.io/router.priority: "100"
-      className: kong
-      hosts:
-        - host: grafana0213.kro.kr
-          paths:
-            - path: /api/health
-              pathType: Exact
-      tls:
-        - secretName: grafana-tls
-          hosts:
-            - grafana0213.kro.kr
-      serviceName: grafana
-      servicePort: 80
-
-    # Embed ingress (for public dashboard embedding)
-    - name: embed
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        traefik.ingress.kubernetes.io/router.priority: "100"
-      className: kong
-      hosts:
-        - host: grafana0213.kro.kr
-          paths:
-            - path: /d-solo
-              pathType: Prefix
-            - path: /public
-              pathType: Prefix
-            - path: /api
-              pathType: Prefix
-      tls:
-        - secretName: grafana-tls
-          hosts:
-            - grafana0213.kro.kr
-      serviceName: grafana
-      servicePort: 80
+  # No external ingress - access via Teleport only
 
   # CNPG Database configuration
   database:
