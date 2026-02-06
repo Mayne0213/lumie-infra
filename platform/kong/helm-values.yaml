@@ -7,7 +7,7 @@ gateway:
 
   image:
     repository: kong
-    tag: "3.9"
+    tag: "3.8"
 
   env:
     database: "off"
@@ -76,6 +76,9 @@ controller:
     gatewayDiscovery:
       enabled: true
       generateAdminApiService: true
+
+    env:
+      feature_gates: FillIDs=false
 
   resources:
     requests:

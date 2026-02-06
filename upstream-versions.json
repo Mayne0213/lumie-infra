@@ -30,7 +30,7 @@
   "k8s:autoscaling/vpa-recommender": "1.0.0",
 
   "_platform": "--- Platform ---",
-  "docker:kong/kong-gateway": "3.9.0",
+  "docker:kong": "3.8",
   "docker:kong/kubernetes-ingress-controller": "3.5.3",
   "docker:bitnami/rabbitmq": "4.1-management",
   "docker:bitnami/rabbitmq-cluster-operator": "2.19.0",
