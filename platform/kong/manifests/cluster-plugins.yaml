@@ -47,6 +47,8 @@ config:
     - exp
   header_names:
     - Authorization
+  cookie_names:
+    - lumie_access_token
 ---
 # Cluster-wide JWT Claims Extraction Plugin
 apiVersion: configuration.konghq.com/v1
