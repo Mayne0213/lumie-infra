@@ -145,6 +145,9 @@ initContainers:
       - name: mas-tls
         mountPath: /etc/ssl/source/mas-tls
         readOnly: true
+      - name: tekton-triggers-tls
+        mountPath: /etc/ssl/source/tekton-triggers-tls
+        readOnly: true
 
 # =============================================================================
 # EXTRA VOLUMES - TLS certificates and secrets
@@ -206,6 +209,10 @@ extraVolumes:
   - name: mas-tls
     secret:
       secretName: mas-tls
+      optional: true
+  - name: tekton-triggers-tls
+    secret:
+      secretName: tekton-triggers-tls
       optional: true
 
 # =============================================================================
