@@ -103,7 +103,7 @@ apps:
 
   # Object Storage Console
   - name: minio
-    uri: http://minio-console.minio.svc.cluster.local:9090
+    uri: http://minio-ui.minio.svc.cluster.local:9090
     labels:
       env: prod
       category: storage

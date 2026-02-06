@@ -83,9 +83,9 @@ common:
                 values:
                   - k3s-worker-4
 
-  # MinIO Console (using components format)
+  # MinIO Console UI (separate from chart's built-in console)
   components:
-    - name: minio-console
+    - name: minio-ui
       replicaCount: 1
       image:
         repository: zot.mayne.kro.kr/minio/console
@@ -108,7 +108,7 @@ common:
               podAffinityTerm:
                 labelSelector:
                   matchLabels:
-                    app: minio-console
+                    app: minio-ui
                 topologyKey: kubernetes.io/hostname
       service:
         enabled: true
