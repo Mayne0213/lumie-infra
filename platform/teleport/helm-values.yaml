@@ -74,6 +74,11 @@ highAvailability:
 # =============================================================================
 proxyListenerMode: multiplex
 
+# Additional public addresses for internal cluster access
+publicAddr:
+  - mayne.kro.kr:443
+  - teleport.teleport.svc.cluster.local:443
+
 # =============================================================================
 # OPERATOR - Enabled for managing Teleport CRDs (ProvisionTokens, etc.)
 # =============================================================================
