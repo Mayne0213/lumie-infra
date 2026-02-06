@@ -12,7 +12,7 @@ common:
 
   # Image
   image:
-    registry: zot0213.kro.kr
+    registry: zot.mayne.kro.kr
     repository: applications/academy-svc
     tag: "073d34bc"
     pullPolicy: IfNotPresent

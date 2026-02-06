@@ -1,7 +1,7 @@
 fullnameOverride: code-server
 
 image:
-  repository: zot0213.kro.kr/codercom/code-server
+  repository: zot.mayne.kro.kr/codercom/code-server
   tag: 4.108.2
   pullPolicy: Always
 

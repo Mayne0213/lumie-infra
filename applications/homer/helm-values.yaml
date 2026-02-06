@@ -7,7 +7,7 @@ controllers:
     initContainers:
       copy-homer-files:
         image:
-          repository: zot0213.kro.kr/b4bz/homer
+          repository: zot.mayne.kro.kr/b4bz/homer
           tag: v25.11.1
         command:
           - sh
@@ -16,7 +16,7 @@ controllers:
             cp -r /www/* /tmp/www/
       copy-assets:
         image:
-          repository: zot0213.kro.kr/alpine/git
+          repository: zot.mayne.kro.kr/alpine/git
           tag: v2.47.1
         env:
           - name: GITHUB_USERNAME
@@ -42,7 +42,7 @@ controllers:
     containers:
       main:
         image:
-          repository: zot0213.kro.kr/b4bz/homer
+          repository: zot.mayne.kro.kr/b4bz/homer
           tag: v25.11.1
           pullPolicy: IfNotPresent
         # Resource settings (no CPU limit for stability)

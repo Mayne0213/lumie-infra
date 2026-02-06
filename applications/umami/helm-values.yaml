@@ -2,7 +2,7 @@ fullnameOverride: umami
 
 # Image configuration - use zot registry
 image:
-  registry: zot0213.kro.kr
+  registry: zot.mayne.kro.kr
   repository: umami-software/umami
   tag: "postgresql-latest"
 

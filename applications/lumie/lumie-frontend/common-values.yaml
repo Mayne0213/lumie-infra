@@ -8,7 +8,7 @@ common:
   replicaCount: 2
 
   image:
-    registry: zot0213.kro.kr
+    registry: zot.mayne.kro.kr
     repository: applications/lumie-frontend
     tag: "77246a0d"
     pullPolicy: IfNotPresent

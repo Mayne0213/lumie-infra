@@ -31,7 +31,7 @@
 "ghcr:cloudnative-pg/postgresql": "18.1"
 
 # Zot이 이미지를 미리 pull하도록 트리거
-curl -u admin:PASSWORD https://zot0213.kro.kr/v2/storage/postgresql/manifests/18.1
+curl -u admin:PASSWORD https://zot.mayne.kro.kr/v2/storage/postgresql/manifests/18.1
 ```
 
 ### 1.2 전체 백업 (필수)
@@ -75,7 +75,7 @@ metadata:
   namespace: lumie-dev
 spec:
   instances: 1
-  imageName: zot0213.kro.kr/storage/postgresql:18.1
+  imageName: zot.mayne.kro.kr/storage/postgresql:18.1
 
   bootstrap:
     initdb:
@@ -134,7 +134,7 @@ metadata:
   namespace: lumie-dev
 spec:
   instances: 1
-  imageName: zot0213.kro.kr/storage/postgresql:18.1
+  imageName: zot.mayne.kro.kr/storage/postgresql:18.1
   storage:
     size: 5Gi
 
@@ -201,7 +201,7 @@ database:
   version: "18.1"
 
 # 3. charts/common/templates/cnpg-dump-backup.yaml
-image: zot0213.kro.kr/storage/postgresql:18.1
+image: zot.mayne.kro.kr/storage/postgresql:18.1
 
 # 4. 각 앱의 common-values.yaml (필요시)
 # - applications/lumie-dev/common-values.yaml

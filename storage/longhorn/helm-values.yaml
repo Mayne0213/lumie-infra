@@ -8,44 +8,44 @@ preUpgradeChecker:
 image:
   longhorn:
     engine:
-      repository: zot0213.kro.kr/longhorn/longhorn-engine
+      repository: zot.mayne.kro.kr/longhorn/longhorn-engine
       tag: v1.8.1
     manager:
-      repository: zot0213.kro.kr/longhorn/longhorn-manager
+      repository: zot.mayne.kro.kr/longhorn/longhorn-manager
       tag: v1.8.1
     ui:
-      repository: zot0213.kro.kr/longhorn/longhorn-ui
+      repository: zot.mayne.kro.kr/longhorn/longhorn-ui
       tag: v1.8.1
     instanceManager:
-      repository: zot0213.kro.kr/longhorn/longhorn-instance-manager
+      repository: zot.mayne.kro.kr/longhorn/longhorn-instance-manager
       tag: v1.8.1
     shareManager:
-      repository: zot0213.kro.kr/longhorn/longhorn-share-manager
+      repository: zot.mayne.kro.kr/longhorn/longhorn-share-manager
       tag: v1.8.1
     backingImageManager:
-      repository: zot0213.kro.kr/longhorn/backing-image-manager
+      repository: zot.mayne.kro.kr/longhorn/backing-image-manager
       tag: v1.8.1
     supportBundleKit:
-      repository: zot0213.kro.kr/longhorn/longhorn-support-bundle-kit
+      repository: zot.mayne.kro.kr/longhorn/longhorn-support-bundle-kit
       tag: v0.0.47
   csi:
     attacher:
-      repository: zot0213.kro.kr/longhorn/csi-attacher
+      repository: zot.mayne.kro.kr/longhorn/csi-attacher
       tag: v4.7.0
     provisioner:
-      repository: zot0213.kro.kr/longhorn/csi-provisioner
+      repository: zot.mayne.kro.kr/longhorn/csi-provisioner
       tag: v4.0.1
     nodeDriverRegistrar:
-      repository: zot0213.kro.kr/longhorn/csi-node-driver-registrar
+      repository: zot.mayne.kro.kr/longhorn/csi-node-driver-registrar
       tag: v2.12.0
     resizer:
-      repository: zot0213.kro.kr/longhorn/csi-resizer
+      repository: zot.mayne.kro.kr/longhorn/csi-resizer
       tag: v1.12.0
     snapshotter:
-      repository: zot0213.kro.kr/longhorn/csi-snapshotter
+      repository: zot.mayne.kro.kr/longhorn/csi-snapshotter
       tag: v7.0.2
     livenessProbe:
-      repository: zot0213.kro.kr/longhorn/livenessprobe
+      repository: zot.mayne.kro.kr/longhorn/livenessprobe
       tag: v2.14.0
   pullPolicy: IfNotPresent
 

@@ -13,7 +13,7 @@ common:
 
   # Image
   image:
-    registry: zot0213.kro.kr
+    registry: zot.mayne.kro.kr
     repository: applications/grading-svc
     tag: "e691d72d"
     pullPolicy: Always

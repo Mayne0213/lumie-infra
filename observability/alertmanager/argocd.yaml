@@ -62,7 +62,7 @@ spec:
         fullnameOverride: karma
 
         image:
-          repository: zot0213.kro.kr/observability/karma
+          repository: zot.mayne.kro.kr/observability/karma
           tag: v0.122
 
         replicaCount: 1

@@ -3,7 +3,7 @@
 
 # Image configuration - use zot registry
 image:
-  registry: zot0213.kro.kr
+  registry: zot.mayne.kro.kr
   repository: grafana/grafana
   tag: "12.3.1"
 

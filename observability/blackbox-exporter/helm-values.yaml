@@ -3,7 +3,7 @@
 
 # Image configuration - use zot registry
 image:
-  registry: zot0213.kro.kr
+  registry: zot.mayne.kro.kr
   repository: prometheus/blackbox-exporter
   tag: "v0.25.0"
 
@@ -111,7 +111,7 @@ serviceMonitor:
       url: https://pgweb0213.kro.kr
       module: http_auth_ok
     - name: zot
-      url: https://zot0213.kro.kr
+      url: https://zot.mayne.kro.kr
       module: http_2xx
 
     # User Applications

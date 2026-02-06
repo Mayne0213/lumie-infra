@@ -5,7 +5,7 @@
 # Cluster Operator
 clusterOperator:
   image:
-    registry: zot0213.kro.kr
+    registry: zot.mayne.kro.kr
     repository: rabbitmqoperator/cluster-operator
     tag: "2.19.0"
   command:
@@ -25,7 +25,7 @@ clusterOperator:
 
 # Default RabbitMQ image for clusters
 rabbitmqImage:
-  registry: zot0213.kro.kr
+  registry: zot.mayne.kro.kr
   repository: bitnami/rabbitmq
   tag: "4.1-management"
 

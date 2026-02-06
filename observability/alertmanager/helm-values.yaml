@@ -3,7 +3,7 @@
 
 # Image configuration - use zot registry
 image:
-  repository: zot0213.kro.kr/prometheus/alertmanager
+  repository: zot.mayne.kro.kr/prometheus/alertmanager
   tag: "v0.30.0"
 
 fullnameOverride: alertmanager

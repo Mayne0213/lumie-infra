@@ -190,7 +190,7 @@ services:
         tag: "platform"
         tagstyle: "is-info"
         keywords: "container registry"
-        url: "https://zot0213.kro.kr"
+        url: "https://zot.mayne.kro.kr"
         target: "_blank"
 
   - name: "Monitoring"

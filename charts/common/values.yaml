@@ -11,7 +11,7 @@ common:
 
   # Image configuration
   image:
-    registry: zot0213.kro.kr
+    registry: zot.mayne.kro.kr
     repository: web-apps/app
     tag: latest
     pullPolicy: Always
@@ -294,7 +294,7 @@ common:
       bucket: ""                 # Defaults to <app>-db-backup
       volumeSize: "1Gi"
       minioEndpoint: "https://s3.minio0213.kro.kr"
-      postgresImage: "zot0213.kro.kr/storage/postgresql:18.1"
-      minioImage: "zot0213.kro.kr/storage/minio-mc:latest"
+      postgresImage: "zot.mayne.kro.kr/storage/postgresql:18.1"
+      minioImage: "zot.mayne.kro.kr/storage/minio-mc:latest"
       successfulJobsHistoryLimit: 3
       failedJobsHistoryLimit: 3

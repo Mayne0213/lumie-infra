@@ -4,7 +4,7 @@
 replicaCount: 1
 
 image:
-  registry: zot0213.kro.kr
+  registry: zot.mayne.kro.kr
   repository: icoretech/pgbouncer-docker
   tag: "1.25.1"
   pullPolicy: IfNotPresent

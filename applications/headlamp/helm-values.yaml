@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  registry: zot0213.kro.kr
+  registry: zot.mayne.kro.kr
   repository: headlamp-k8s/headlamp
   tag: v0.39.0
   pullPolicy: IfNotPresent

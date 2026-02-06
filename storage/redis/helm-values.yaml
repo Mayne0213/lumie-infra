@@ -2,7 +2,7 @@
 # Bitnami Redis Helm chart
 
 global:
-  imageRegistry: zot0213.kro.kr
+  imageRegistry: zot.mayne.kro.kr
   security:
     allowInsecureImages: true
 

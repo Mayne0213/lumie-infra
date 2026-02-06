@@ -47,7 +47,7 @@ spec:
       description: Git commit SHA
   steps:
     - name: clone
-      image: zot0213.kro.kr/alpine/git:v2.47.1
+      image: zot.mayne.kro.kr/alpine/git:v2.47.1
       env:
         - name: GIT_USERNAME
           valueFrom:
@@ -71,7 +71,7 @@ spec:
         echo "Cloned $(params.GIT_URL) at $COMMIT"
         ls -la $(params.CONTEXT)/
     - name: setup-docker-config
-      image: zot0213.kro.kr/library/alpine:3.19
+      image: zot.mayne.kro.kr/library/alpine:3.19
       env:
         - name: IMAGE
           value: $(params.IMAGE)
@@ -94,7 +94,7 @@ spec:
         - name: kaniko-docker
           mountPath: /kaniko/.docker
     - name: build-and-push
-      image: zot0213.kro.kr/kaniko-project/executor:debug
+      image: zot.mayne.kro.kr/kaniko-project/executor:debug
       args: ["$(params.BUILD_ARGS[*])"]
       env:
         - name: DOCKER_CONFIG

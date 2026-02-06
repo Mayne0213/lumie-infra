@@ -5,12 +5,12 @@ metadata:
   namespace: opentelemetry
 spec:
   mode: daemonset
-  image: zot0213.kro.kr/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.144.0
+  image: zot.mayne.kro.kr/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.144.0
 
   # Target Allocator for ServiceMonitor-based scrape target discovery
   targetAllocator:
     enabled: true
-    image: zot0213.kro.kr/open-telemetry/opentelemetry-operator/target-allocator:0.141.0
+    image: zot.mayne.kro.kr/open-telemetry/opentelemetry-operator/target-allocator:0.141.0
     allocationStrategy: per-node
     serviceAccount: otel-collector-targetallocator
     prometheusCR:

@@ -21,7 +21,7 @@ spec:
       initContainers:
       # Wait for CNPG cluster to be ready
       - name: wait-for-db
-        image: zot0213.kro.kr/bitnami/kubectl:latest
+        image: zot.mayne.kro.kr/bitnami/kubectl:latest
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false
@@ -37,7 +37,7 @@ spec:
           echo "CNPG cluster is ready!"
       containers:
       - name: init-db
-        image: zot0213.kro.kr/cloudnative-pg/postgresql:18.1
+        image: zot.mayne.kro.kr/cloudnative-pg/postgresql:18.1
         securityContext:
           runAsNonRoot: true
           allowPrivilegeEscalation: false

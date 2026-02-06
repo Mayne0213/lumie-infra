@@ -35,7 +35,7 @@ spec:
         - name: GIT_REVISION
           value: $(params.git-revision)
         - name: IMAGE
-          value: zot0213.kro.kr/$(params.app-name)
+          value: zot.mayne.kro.kr/$(params.app-name)
         - name: TAG
           value: $(params.git-revision)
         - name: CONTEXT
