@@ -65,6 +65,7 @@ apps:
     labels:
       env: prod
       category: security
+      teleport.icon: kube
 
   # Kubernetes Dashboard
   - name: headlamp
@@ -72,6 +73,7 @@ apps:
     labels:
       env: prod
       category: platform
+      teleport.icon: kube
 
   # VPA Recommendations
   - name: goldilocks
@@ -79,6 +81,7 @@ apps:
     labels:
       env: prod
       category: observability
+      teleport.icon: kube
 
   # IDE
   - name: code-server
@@ -86,6 +89,7 @@ apps:
     labels:
       env: prod
       category: applications
+      teleport.icon: kube
 
   # Database Web UI
   - name: pgweb
@@ -93,6 +97,7 @@ apps:
     labels:
       env: prod
       category: storage
+      teleport.icon: postgres
 
   # CI/CD Dashboard
   - name: tekton
@@ -100,6 +105,7 @@ apps:
     labels:
       env: prod
       category: applications
+      teleport.icon: kube
 
   # Object Storage Console
   - name: minio
@@ -107,6 +113,7 @@ apps:
     labels:
       env: prod
       category: storage
+      teleport.icon: kube
 
   # Backup UI
   - name: velero
@@ -114,6 +121,7 @@ apps:
     labels:
       env: prod
       category: storage
+      teleport.icon: kube
 
   # Container Registry
   - name: zot
@@ -121,6 +129,7 @@ apps:
     labels:
       env: prod
       category: platform
+      teleport.icon: kube
 
   # Alert Dashboard
   - name: karma
@@ -128,6 +137,7 @@ apps:
     labels:
       env: prod
       category: observability
+      teleport.icon: kube
 
   # Website Analytics
   - name: umami
@@ -135,6 +145,7 @@ apps:
     labels:
       env: prod
       category: applications
+      teleport.icon: kube
 
   # Documentation
   - name: docusaurus
@@ -142,6 +153,7 @@ apps:
     labels:
       env: prod
       category: applications
+      teleport.icon: kube
 
   # Alertmanager
   - name: alertmanager
@@ -149,6 +161,7 @@ apps:
     labels:
       env: prod
       category: observability
+      teleport.icon: kube
 
   # Prometheus
   - name: prometheus
@@ -163,6 +176,7 @@ apps:
     labels:
       env: prod
       category: observability
+      teleport.icon: kube
 
   # Message Queue Management
   - name: rabbitmq
@@ -177,6 +191,7 @@ apps:
     labels:
       env: prod
       category: platform
+      teleport.icon: kube
 
 # =============================================================================
 # TOLERATIONS - Allow scheduling on control-plane nodes
