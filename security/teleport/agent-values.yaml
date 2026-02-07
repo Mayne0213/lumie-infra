@@ -102,6 +102,9 @@ apps:
   # CI/CD Dashboard
   - name: tekton
     uri: http://tekton-dashboard.tekton-pipelines.svc.cluster.local:9097
+    rewrite:
+      headers:
+        - "Origin: http://tekton-dashboard.tekton-pipelines.svc.cluster.local:9097"
     labels:
       env: prod
       category: applications
