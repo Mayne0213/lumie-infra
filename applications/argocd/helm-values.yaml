@@ -30,6 +30,8 @@ configs:
         - PipelineRun
         - TaskRun
     # Custom health check for Ingress (ADDRESS not required with HAProxy)
+    # Enable Helm chart rendering inside kustomize (for helmCharts generator)
+    kustomize.buildOptions: --enable-helm
     resource.customizations.health.networking.k8s.io_Ingress: |
       hs = {}
       hs.status = "Healthy"
