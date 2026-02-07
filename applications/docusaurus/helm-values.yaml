@@ -5,7 +5,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: web-apps/docusaurus
-    tag: 05a4692f # Updated by ArgoCD Image Updater
+    tag: "34117228"
     pullPolicy: Always
   replicaCount: 1
   containerPort: 80 # nginx
