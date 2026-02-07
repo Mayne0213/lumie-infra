@@ -37,12 +37,30 @@ tls:
   existingSecretName: teleport-tls
 
 # =============================================================================
-# PERSISTENCE
+# PERSISTENCE - Using PostgreSQL backend (infra-db)
 # =============================================================================
 persistence:
-  enabled: true
-  storageClassName: local-path
-  volumeSize: 5Gi
+  enabled: false
+
+# =============================================================================
+# EXTRA ENVIRONMENT - DB credentials from Vault
+# =============================================================================
+extraEnv:
+  - name: PGPASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: infra-db-credentials
+        key: password
+
+# =============================================================================
+# POSTGRESQL BACKEND
+# =============================================================================
+auth:
+  teleportConfig:
+    teleport:
+      storage:
+        type: postgresql
+        conn_string: "host=infra-db-rw.infra-db.svc.cluster.local port=5432 dbname=teleport user=bluemayne sslmode=disable"
 
 # =============================================================================
 # RESOURCES (VPA recommended, no CPU limit)

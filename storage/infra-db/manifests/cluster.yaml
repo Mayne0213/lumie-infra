@@ -1,0 +1,37 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: infra-db
+spec:
+  instances: 1
+  imageName: zot.mayne.kro.kr/storage/postgresql-wal2json:18.1
+
+  bootstrap:
+    initdb:
+      database: teleport
+      owner: bluemayne
+      secret:
+        name: infra-db-bootstrap-secret
+      postInitSQL:
+        - "ALTER USER bluemayne REPLICATION"
+
+  storage:
+    storageClass: local-path
+    size: 2Gi
+
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "50m"
+    limits:
+      memory: "256Mi"
+
+  enableSuperuserAccess: true
+
+  postgresql:
+    parameters:
+      wal_level: "logical"
+      max_replication_slots: "2"
+
+  monitoring:
+    enablePodMonitor: true

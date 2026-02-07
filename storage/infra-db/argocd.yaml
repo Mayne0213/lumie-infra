@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: infra-db
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  - repoURL: https://github.com/Mayne0213/lumie-infra.git
+    targetRevision: main
+    path: storage/infra-db/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: infra-db
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+  revisionHistoryLimit: 10
