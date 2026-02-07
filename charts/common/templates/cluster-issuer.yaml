@@ -12,8 +12,24 @@ spec:
       name: {{ .privateKeySecretRef }}
     solvers:
     {{- range .solvers }}
+    {{- if .ingressClass }}
     - http01:
         ingress:
           class: {{ .ingressClass }}
+    {{- end }}
+    {{- if .dns01 }}
+    - dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            name: {{ .dns01.secretName }}
+            key: {{ .dns01.secretKey }}
+      {{- if .dns01.dnsZones }}
+      selector:
+        dnsZones:
+        {{- range .dns01.dnsZones }}
+        - {{ . }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
     {{- end }}
 {{- end }}

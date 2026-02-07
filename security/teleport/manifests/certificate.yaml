@@ -9,4 +9,5 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-    - teleport.lumie-infra.com
+    - lumie-infra.com
+    - "*.lumie-infra.com"

@@ -21,6 +21,9 @@ spec:
     helm:
       valueFiles:
       - $values/platform/cert-manager/common-values.yaml
+  - repoURL: https://github.com/Mayne0213/lumie-infra.git
+    targetRevision: main
+    path: platform/cert-manager/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager

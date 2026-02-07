@@ -21,6 +21,11 @@ common:
       privateKeySecretRef: letsencrypt-prod
       solvers:
         - ingressClass: kong
+        - dns01:
+            secretName: cloudflare-api-token
+            secretKey: api-token
+            dnsZones:
+              - lumie-infra.com
 
     - name: letsencrypt-staging
       server: https://acme-staging-v02.api.letsencrypt.org/directory
