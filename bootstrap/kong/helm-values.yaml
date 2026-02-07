@@ -34,12 +34,6 @@ gateway:
       - SETGID
       - DAC_OVERRIDE
 
-  # Run on control-plane nodes as well
-  tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      operator: Exists
-      effect: NoSchedule
-
   env:
     database: "off"
     nginx_worker_processes: "2"
