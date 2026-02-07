@@ -909,3 +909,109 @@ spec:
           - name: docker-credentials
             secret:
               secretName: zot-registry-credentials
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: lumie-report-svc-build-template
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+    - name: git-revision
+      description: Git commit SHA
+    - name: git-branch
+      description: Git branch name
+    - name: repo-name
+      description: Repository name
+    - name: repo-full-name
+      description: Full repository name (org/repo)
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: report-svc-build-
+        namespace: tekton-pipelines
+        labels:
+          tekton.dev/pipeline: fastapi-build-deploy
+          app: report-svc
+          branch: $(tt.params.git-branch)
+      spec:
+        timeouts:
+          pipeline: 30m
+        pipelineRef:
+          name: fastapi-build-deploy
+        onSuccessfulCompletion: delete
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-branch)
+          - name: app-name
+            value: report-svc
+          - name: context-dir
+            value: ./services/report
+          - name: image-prefix
+            value: applications/
+          - name: update-values
+            value: "false"
+        workspaces:
+          - name: shared-workspace
+            emptyDir: {}
+          - name: docker-credentials
+            secret:
+              secretName: zot-registry-credentials
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: lumie-audio-svc-build-template
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+    - name: git-revision
+      description: Git commit SHA
+    - name: git-branch
+      description: Git branch name
+    - name: repo-name
+      description: Repository name
+    - name: repo-full-name
+      description: Full repository name (org/repo)
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: audio-svc-build-
+        namespace: tekton-pipelines
+        labels:
+          tekton.dev/pipeline: fastapi-build-deploy
+          app: audio-svc
+          branch: $(tt.params.git-branch)
+      spec:
+        timeouts:
+          pipeline: 30m
+        pipelineRef:
+          name: fastapi-build-deploy
+        onSuccessfulCompletion: delete
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-branch)
+          - name: app-name
+            value: audio-svc
+          - name: context-dir
+            value: ./services/audio
+          - name: image-prefix
+            value: applications/
+          - name: update-values
+            value: "false"
+        workspaces:
+          - name: shared-workspace
+            emptyDir: {}
+          - name: docker-credentials
+            secret:
+              secretName: zot-registry-credentials

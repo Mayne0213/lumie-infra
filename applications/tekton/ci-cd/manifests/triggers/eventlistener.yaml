@@ -479,6 +479,64 @@ spec:
         - ref: github-push-binding
       template:
         ref: lumie-grading-svc-build-template
+    - name: github-push-lumie-report-svc
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: github-webhook-secret
+                secretKey: webhook-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/main')"
+            - name: "overlays"
+              value:
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.repository.name in ['lumie-ai'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/report/')) || c.modified.exists(f, f.startsWith('services/report/')))"
+      bindings:
+        - ref: github-push-binding
+      template:
+        ref: lumie-report-svc-build-template
+    - name: github-push-lumie-audio-svc
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: github-webhook-secret
+                secretKey: webhook-secret
+            - name: "eventTypes"
+              value: ["push"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/main')"
+            - name: "overlays"
+              value:
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.repository.name in ['lumie-ai'] && body.commits.exists(c, c.added.exists(f, f.startsWith('services/audio/')) || c.modified.exists(f, f.startsWith('services/audio/')))"
+      bindings:
+        - ref: github-push-binding
+      template:
+        ref: lumie-audio-svc-build-template
   resources:
     kubernetesResource:
       spec:
