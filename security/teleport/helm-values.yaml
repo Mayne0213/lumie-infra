@@ -7,7 +7,7 @@
 # =============================================================================
 # CLUSTER CONFIGURATION
 # =============================================================================
-clusterName: lumie-infra.com
+clusterName: teleport.lumie-infra.com
 chartMode: standalone
 
 # =============================================================================
@@ -99,7 +99,7 @@ proxyListenerMode: multiplex
 
 # Additional public addresses for internal cluster access
 publicAddr:
-  - lumie-infra.com:31156
+  - teleport.lumie-infra.com:31156
   - teleport.teleport.svc.cluster.local:443
 
 # =============================================================================

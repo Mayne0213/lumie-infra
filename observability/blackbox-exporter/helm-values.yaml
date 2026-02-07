@@ -115,8 +115,8 @@ serviceMonitor:
       module: http_2xx
 
     # User Applications
-    - name: homer
-      url: https://lumie-infra.com
+    - name: teleport
+      url: https://teleport.lumie-infra.com:31156
       module: http_2xx
     - name: portfolio
       url: https://minjo0213.kro.kr
