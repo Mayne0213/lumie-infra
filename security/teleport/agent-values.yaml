@@ -143,6 +143,41 @@ apps:
       env: prod
       category: applications
 
+  # Alertmanager
+  - name: alertmanager
+    uri: http://alertmanager.alertmanager.svc.cluster.local:9093
+    labels:
+      env: prod
+      category: observability
+
+  # Prometheus
+  - name: prometheus
+    uri: http://prometheus-kube-prometheus-prometheus.prometheus.svc.cluster.local:9090
+    labels:
+      env: prod
+      category: observability
+
+  # Thanos Query
+  - name: thanos
+    uri: http://thanos-query.thanos.svc.cluster.local:9090
+    labels:
+      env: prod
+      category: observability
+
+  # Message Queue Management
+  - name: rabbitmq
+    uri: http://rabbitmq.lumie-event.svc.cluster.local:15672
+    labels:
+      env: prod
+      category: platform
+
+  # API Gateway Manager
+  - name: kong
+    uri: http://kong-gateway-manager.kong.svc.cluster.local:8002
+    labels:
+      env: prod
+      category: platform
+
 # =============================================================================
 # TOLERATIONS - Allow scheduling on control-plane nodes
 # =============================================================================
