@@ -16,20 +16,7 @@ metadata:
     app: {{ $comp.name }}
     app.kubernetes.io/instance: {{ $.Release.Name }}
 spec:
-  {{/* Traefik middleware can only have ONE type - check forwardAuth first, then stripPrefix */}}
-  {{- if and $comp.middleware.forwardAuth $comp.middleware.forwardAuth.address }}
-  forwardAuth:
-    address: {{ $comp.middleware.forwardAuth.address }}
-    {{- if $comp.middleware.forwardAuth.trustForwardHeader }}
-    trustForwardHeader: {{ $comp.middleware.forwardAuth.trustForwardHeader }}
-    {{- end }}
-    {{- if $comp.middleware.forwardAuth.authResponseHeaders }}
-    authResponseHeaders:
-      {{- range $comp.middleware.forwardAuth.authResponseHeaders }}
-      - {{ . }}
-      {{- end }}
-    {{- end }}
-  {{- else if and $comp.middleware.stripPrefix $comp.middleware.stripPrefix.prefixes }}
+  {{- if and $comp.middleware.stripPrefix $comp.middleware.stripPrefix.prefixes }}
   stripPrefix:
     prefixes:
       {{- range $comp.middleware.stripPrefix.prefixes }}
@@ -51,20 +38,7 @@ metadata:
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 spec:
-  {{/* Traefik middleware can only have ONE type - check forwardAuth first, then stripPrefix */}}
-  {{- if and .Values.common.middleware.forwardAuth .Values.common.middleware.forwardAuth.address }}
-  forwardAuth:
-    address: {{ .Values.common.middleware.forwardAuth.address }}
-    {{- if .Values.common.middleware.forwardAuth.trustForwardHeader }}
-    trustForwardHeader: {{ .Values.common.middleware.forwardAuth.trustForwardHeader }}
-    {{- end }}
-    {{- if .Values.common.middleware.forwardAuth.authResponseHeaders }}
-    authResponseHeaders:
-      {{- range .Values.common.middleware.forwardAuth.authResponseHeaders }}
-      - {{ . }}
-      {{- end }}
-    {{- end }}
-  {{- else if and .Values.common.middleware.stripPrefix .Values.common.middleware.stripPrefix.prefixes }}
+  {{- if and .Values.common.middleware.stripPrefix .Values.common.middleware.stripPrefix.prefixes }}
   stripPrefix:
     prefixes:
       {{- range .Values.common.middleware.stripPrefix.prefixes }}

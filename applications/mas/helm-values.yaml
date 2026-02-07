@@ -198,7 +198,6 @@ ingress:
     className: kong
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
-      traefik.ingress.kubernetes.io/router.middlewares: authelia-authelia-auth@kubernetescrd
     hosts:
       - host: mas0213.kro.kr
         paths:

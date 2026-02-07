@@ -223,10 +223,6 @@ common:
     name: ""  # If empty, defaults to <fullname>-middleware
     stripPrefix:
       prefixes: []
-    forwardAuth:
-      address: ""
-      trustForwardHeader: false
-      authResponseHeaders: []
 
   # ServiceMonitor for Prometheus
   serviceMonitor:

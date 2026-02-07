@@ -26,19 +26,6 @@ common:
         hosts:
           - auth0213.kro.kr
 
-  # Traefik Middleware for forwardAuth
-  middleware:
-    enabled: true
-    name: authelia-auth
-    forwardAuth:
-      address: http://authelia.authelia.svc.cluster.local/api/authz/forward-auth
-      trustForwardHeader: true
-      authResponseHeaders:
-        - Remote-User
-        - Remote-Groups
-        - Remote-Email
-        - Remote-Name
-
   # ConfigMap for users database
   configMap:
     enabled: true
