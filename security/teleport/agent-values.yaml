@@ -133,7 +133,7 @@ apps:
 
   # Alert Dashboard
   - name: karma
-    uri: http://karma.alertmanager.svc.cluster.local:80
+    uri: http://karma.alertmanager.svc.cluster.local:8080
     labels:
       env: prod
       category: observability
@@ -150,6 +150,9 @@ apps:
   # Documentation
   - name: docusaurus
     uri: http://docusaurus.docusaurus.svc.cluster.local:80
+    rewrite:
+      redirect:
+        - "docusaurus.docusaurus.svc.cluster.local"
     labels:
       env: prod
       category: applications
