@@ -136,7 +136,7 @@ configMap:
   # TOTP configuration
   totp:
     disable: false
-    issuer: mayne.kro.kr
+    issuer: lumie-infra.com
 
   # OIDC Identity Provider
   identity_providers:
