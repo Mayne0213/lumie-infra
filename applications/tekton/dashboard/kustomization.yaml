@@ -3,8 +3,6 @@ kind: Kustomization
 
 resources:
 - https://infra.tekton.dev/tekton-releases/dashboard/latest/release-full.yaml
-# Ingress disabled - access via Teleport (teleport0213.kro.kr)
-# - manifests/ingress.yaml
 
 # Override upstream images to use zot registry
 images:
