@@ -8,12 +8,10 @@ resources:
   # Cluster-wide resources
   - priority-classes/argocd.yaml
 
-  # Core infrastructure (Kong replaced Traefik)
+  # Core infrastructure
   - kong/argocd.yaml
   - teleport/argocd.yaml
-  - reflector/argocd.yaml
   - coredns-config/argocd.yaml
-  - haproxy/argocd.yaml
   - cert-manager/argocd.yaml
 
   # GitHub redirect

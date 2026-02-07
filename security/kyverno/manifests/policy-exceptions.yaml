@@ -22,7 +22,7 @@ spec:
         - cert-manager
         - external-secrets
         - gitea
-        - haproxy
+        - kong
         - minio
         - vault
         - zot
