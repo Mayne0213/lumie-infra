@@ -59,6 +59,13 @@ resources:
 # =============================================================================
 service:
   type: NodePort
+  spec:
+    ports:
+      - name: tls
+        port: 443
+        targetPort: 3080
+        nodePort: 31156
+        protocol: TCP
 
 # =============================================================================
 # HIGH AVAILABILITY - Single replica for standalone
