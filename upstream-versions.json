@@ -60,7 +60,7 @@
   "docker:velero/velero": "v1.17.1",
   "docker:velero/velero-plugin-for-aws": "v1.13.1",
   "docker:otwld/velero-ui": "v0.10.1",
-  "ghcr:cloudnative-pg/cloudnative-pg": "1.25.1",
+  "ghcr:cloudnative-pg/cloudnative-pg": "1.28.1",
   "ghcr:cloudnative-pg/postgresql": "18.1",
   "ghcr:cloudnative-pg/pgbouncer": "1.25.1",
 
