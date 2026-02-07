@@ -7,19 +7,10 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  sources:
-  - repoURL: https://charts.releases.teleport.dev
-    chart: teleport-cluster
-    targetRevision: 18.1.2
-    helm:
-      valueFiles:
-      - $values/security/teleport/helm-values.yaml
-  - repoURL: https://github.com/Mayne0213/lumie-infra.git
+  source:
+    repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
-    ref: values
-  - repoURL: https://github.com/Mayne0213/lumie-infra.git
-    targetRevision: main
-    path: security/teleport/manifests
+    path: security/teleport
   destination:
     server: https://kubernetes.default.svc
     namespace: teleport

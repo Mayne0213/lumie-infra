@@ -76,14 +76,7 @@ resources:
 # SERVICE CONFIGURATION
 # =============================================================================
 service:
-  type: NodePort
-  spec:
-    ports:
-      - name: tls
-        port: 443
-        targetPort: 3080
-        nodePort: 31156
-        protocol: TCP
+  type: ClusterIP
 
 # =============================================================================
 # HIGH AVAILABILITY - Single replica for standalone
@@ -95,11 +88,18 @@ highAvailability:
 # =============================================================================
 # PROXY CONFIGURATION
 # =============================================================================
+proxy:
+  highAvailability:
+    replicaCount: 1
+  teleportConfig:
+    proxy_service:
+      web_listen_addr: 0.0.0.0:443
+
 proxyListenerMode: multiplex
 
 # Additional public addresses for internal cluster access
 publicAddr:
-  - lumie-infra.com:31156
+  - lumie-infra.com:443
   - teleport.teleport.svc.cluster.local:443
 
 # =============================================================================
@@ -117,14 +117,12 @@ tolerations:
     effect: NoSchedule
 
 # =============================================================================
-# AFFINITY - Prefer scheduling on worker nodes
+# AFFINITY - Pin to master node (hostNetwork :443)
 # =============================================================================
 affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: teleport-cluster
-          topologyKey: kubernetes.io/hostname
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
