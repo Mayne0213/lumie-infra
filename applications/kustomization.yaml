@@ -14,7 +14,6 @@ resources:
   - headlamp/argocd.yaml
   - mas/argocd.yaml
   - joossam/argocd.yaml
-  # - poolc-dev/argocd.yaml  # disabled
 
   # Tekton CI/CD
   - tekton/pipeline/argocd.yaml
