@@ -8,3 +8,4 @@ resources:
 - minio/argocd.yaml
 - zot/argocd.yaml
 - vault/argocd.yaml
+- kong/argocd.yaml

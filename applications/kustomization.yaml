@@ -8,7 +8,6 @@ resources:
   # ArgoCD self-management (installed by Ansible, managed by GitOps)
   - argocd/argocd.yaml
 
-  - homer/argocd.yaml
   - docusaurus/argocd.yaml
   - code-server/argocd.yaml
   - umami/argocd.yaml

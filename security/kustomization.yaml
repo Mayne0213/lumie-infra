@@ -11,3 +11,4 @@ resources:
   - falco/argocd.yaml
   - kyverno/argocd.yaml
   - trivy/argocd.yaml
+  - teleport/argocd.yaml

@@ -9,13 +9,8 @@ resources:
   - priority-classes/argocd.yaml
 
   # Core infrastructure
-  - kong/argocd.yaml
-  - teleport/argocd.yaml
   - coredns-config/argocd.yaml
   - cert-manager/argocd.yaml
-
-  # GitHub redirect
-  - gitea/argocd-redirect.yaml
 
   # LUMIE Event Bus
   - rabbitmq-operator/argocd.yaml

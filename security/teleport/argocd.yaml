@@ -13,13 +13,13 @@ spec:
     targetRevision: 18.1.2
     helm:
       valueFiles:
-      - $values/platform/teleport/helm-values.yaml
+      - $values/security/teleport/helm-values.yaml
   - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     ref: values
   - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
-    path: platform/teleport/manifests
+    path: security/teleport/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: teleport
@@ -61,7 +61,7 @@ spec:
     targetRevision: 18.1.2
     helm:
       valueFiles:
-      - $values/platform/teleport/agent-values.yaml
+      - $values/security/teleport/agent-values.yaml
   - repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
     ref: values
