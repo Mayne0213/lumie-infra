@@ -5,7 +5,7 @@
 # Global settings
 global:
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
 
 # CRDs - disable Helm installation to avoid annotation size limit
 # CRDs must be installed manually: kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.13.4/install.yaml
@@ -13,7 +13,7 @@ crds:
   install: false
   migration:
     image:
-      registry: zot.mayne.kro.kr
+      registry: zot.lumie-infra.com
       repository: kyverno/kyverno-cli
       tag: v1.13.4
 
@@ -23,7 +23,7 @@ admissionController:
 
   container:
     image:
-      registry: zot.mayne.kro.kr
+      registry: zot.lumie-infra.com
       repository: kyverno/kyverno
       tag: v1.13.4
     resources:
@@ -35,7 +35,7 @@ admissionController:
 
   initContainer:
     image:
-      registry: zot.mayne.kro.kr
+      registry: zot.lumie-infra.com
       repository: kyverno/kyvernopre
       tag: v1.13.4
     resources:
@@ -56,7 +56,7 @@ backgroundController:
   enabled: true
 
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: kyverno/background-controller
     tag: v1.13.4
 
@@ -78,7 +78,7 @@ cleanupController:
   enabled: true
 
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: kyverno/cleanup-controller
     tag: v1.13.4
 
@@ -100,7 +100,7 @@ reportsController:
   enabled: true
 
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: kyverno/reports-controller
     tag: v1.13.4
 
@@ -121,7 +121,7 @@ reportsController:
 webhooksCleanup:
   enabled: true
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: bitnami/kubectl
     tag: "latest"
 
@@ -129,7 +129,7 @@ webhooksCleanup:
 policyReportsCleanup:
   enabled: true
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: bitnami/kubectl
     tag: "latest"
 

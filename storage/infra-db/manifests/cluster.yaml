@@ -4,7 +4,7 @@ metadata:
   name: infra-db
 spec:
   instances: 1
-  imageName: zot.mayne.kro.kr/storage/postgresql-wal2json:18.1
+  imageName: zot.lumie-infra.com/storage/postgresql-wal2json:18.1
 
   bootstrap:
     initdb:

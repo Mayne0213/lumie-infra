@@ -3,7 +3,7 @@
 
 # Image configuration - use zot registry
 image:
-  registry: zot.mayne.kro.kr
+  registry: zot.lumie-infra.com
   repository: authelia/authelia
   tag: "4.39.13"
 
@@ -201,7 +201,7 @@ configMap:
           authorization_policy: one_factor
           claims_policy: default
           redirect_uris:
-            - https://zot.mayne.kro.kr/zot/auth/callback/oidc
+            - https://zot.lumie-infra.com/zot/auth/callback/oidc
           scopes:
             - openid
             - profile
@@ -249,7 +249,7 @@ redis:
   auth:
     enabled: false
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: bitnamilegacy/redis
     tag: "8.2.1-debian-12-r0"
   master:

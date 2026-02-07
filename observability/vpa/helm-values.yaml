@@ -8,7 +8,7 @@ recommender:
 
   # Image configuration - use zot registry
   image:
-    repository: zot.mayne.kro.kr/autoscaling/vpa-recommender
+    repository: zot.lumie-infra.com/autoscaling/vpa-recommender
     tag: "1.0.0"
 
   # Resource settings (no CPU limit for stability)

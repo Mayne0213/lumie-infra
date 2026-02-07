@@ -62,7 +62,7 @@ spec:
         fullnameOverride: karma
 
         image:
-          repository: zot.mayne.kro.kr/prymitive/karma
+          repository: zot.lumie-infra.com/prymitive/karma
           tag: v0.122
 
         replicaCount: 1

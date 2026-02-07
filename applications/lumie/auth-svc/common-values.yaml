@@ -12,7 +12,7 @@ common:
 
   # Image
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: applications/auth-svc
     tag: "ca6e4a37"
     pullPolicy: IfNotPresent

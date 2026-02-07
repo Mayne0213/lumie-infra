@@ -5,7 +5,7 @@
 # Sidecar image (for config reload)
 sidecar:
   image:
-    repository: zot.mayne.kro.kr/kiwigrid/k8s-sidecar
+    repository: zot.lumie-infra.com/kiwigrid/k8s-sidecar
     tag: "1.28.0"
   rules:
     enabled: true
@@ -13,7 +13,7 @@ sidecar:
 # Image configuration - use zot registry
 loki:
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: grafana/loki
     tag: "3.3.2"
 

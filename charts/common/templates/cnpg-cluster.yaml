@@ -18,7 +18,7 @@ metadata:
   name: {{ $clusterName }}-db
 spec:
   instances: {{ .Values.common.database.instances | default 2 }}
-  imageName: zot.mayne.kro.kr/cloudnative-pg/postgresql:{{ .Values.common.database.version | default "16.11" }}
+  imageName: zot.lumie-infra.com/cloudnative-pg/postgresql:{{ .Values.common.database.version | default "16.11" }}
   bootstrap:
     initdb:
       database: {{ .Values.common.database.name | default (printf "%sDB" ($clusterName | title)) }}

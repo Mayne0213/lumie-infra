@@ -8,7 +8,7 @@ extraEnv:
 
 # Operator image
 image:
-  registry: zot.mayne.kro.kr
+  registry: zot.lumie-infra.com
   repository: aquasec/trivy-operator
   tag: "0.28.0"
   pullPolicy: IfNotPresent
@@ -16,7 +16,7 @@ image:
 # Trivy scanner image used by the operator
 trivy:
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: aquasec/trivy
     tag: "0.68.2"
   mode: Standalone

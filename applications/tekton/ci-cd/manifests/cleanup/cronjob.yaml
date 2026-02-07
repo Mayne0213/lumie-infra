@@ -17,7 +17,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: cleanup
-              image: zot.mayne.kro.kr/bitnami/kubectl:latest
+              image: zot.lumie-infra.com/bitnami/kubectl:latest
               command:
                 - /bin/sh
                 - -c

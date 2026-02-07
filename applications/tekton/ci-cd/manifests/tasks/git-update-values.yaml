@@ -32,7 +32,7 @@ spec:
       description: Workspace for git operations
   steps:
     - name: update-and-push
-      image: zot.mayne.kro.kr/alpine/git:v2.47.1
+      image: zot.lumie-infra.com/alpine/git:v2.47.1
       env:
         - name: GIT_USERNAME
           valueFrom:

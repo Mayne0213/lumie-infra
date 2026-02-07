@@ -3,7 +3,7 @@
 common:
   name: docusaurus
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: web-apps/docusaurus
     tag: 05a4692f # Updated by ArgoCD Image Updater
     pullPolicy: Always

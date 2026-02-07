@@ -17,7 +17,7 @@ controllers:
     initContainers:
       db-init:
         image:
-          repository: zot.mayne.kro.kr/web-apps/mas
+          repository: zot.lumie-infra.com/web-apps/mas
           tag: 7777de55 # Updated by ArgoCD Image Updater
           pullPolicy: Always
         command:
@@ -98,7 +98,7 @@ controllers:
     containers:
       main:
         image:
-          repository: zot.mayne.kro.kr/web-apps/mas
+          repository: zot.lumie-infra.com/web-apps/mas
           tag: 7777de55 # Updated by ArgoCD Image Updater
           pullPolicy: Always
         securityContext:

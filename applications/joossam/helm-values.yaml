@@ -3,7 +3,7 @@
 common:
   name: joossam
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: web-apps/joossam
     tag: b58b56cb # Updated by ArgoCD Image Updater
     pullPolicy: Always

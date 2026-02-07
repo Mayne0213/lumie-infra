@@ -3,7 +3,7 @@
 replicaCount: 1
 
 image:
-  registry: zot.mayne.kro.kr
+  registry: zot.lumie-infra.com
   repository: headlamp-k8s/headlamp
   tag: v0.39.0
   pullPolicy: IfNotPresent

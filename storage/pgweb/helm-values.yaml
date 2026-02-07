@@ -9,7 +9,7 @@ controllers:
     containers:
       main:
         image:
-          repository: zot.mayne.kro.kr/sosedoff/pgweb
+          repository: zot.lumie-infra.com/sosedoff/pgweb
           tag: "0.17.0"
         args:
           - "--bind=0.0.0.0"

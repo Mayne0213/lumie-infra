@@ -3,7 +3,7 @@
 
 # Operator image - Zot registry
 image:
-  repository: zot.mayne.kro.kr/cloudnative-pg/cloudnative-pg
+  repository: zot.lumie-infra.com/cloudnative-pg/cloudnative-pg
   tag: "1.25.1"
   pullPolicy: IfNotPresent
 

@@ -19,7 +19,7 @@ spec:
           restartPolicy: OnFailure
           initContainers:
             - name: pg-dump
-              image: {{ .Values.common.database.dumpBackup.postgresImage | default "zot.mayne.kro.kr/cloudnative-pg/postgresql:18.1" }}
+              image: {{ .Values.common.database.dumpBackup.postgresImage | default "zot.lumie-infra.com/cloudnative-pg/postgresql:18.1" }}
               command:
                 - /bin/sh
                 - -c
@@ -60,7 +60,7 @@ spec:
                   memory: 512Mi
           containers:
             - name: upload-to-minio
-              image: {{ .Values.common.database.dumpBackup.minioImage | default "zot.mayne.kro.kr/minio/mc:latest" }}
+              image: {{ .Values.common.database.dumpBackup.minioImage | default "zot.lumie-infra.com/minio/mc:latest" }}
               command:
                 - /bin/sh
                 - -c

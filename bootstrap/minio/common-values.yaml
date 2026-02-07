@@ -88,7 +88,7 @@ common:
     - name: minio-ui
       replicaCount: 1
       image:
-        repository: zot.mayne.kro.kr/minio/console
+        repository: zot.lumie-infra.com/minio/console
         tag: "v1.9.1"
         pullPolicy: IfNotPresent
       containerPort: 9090

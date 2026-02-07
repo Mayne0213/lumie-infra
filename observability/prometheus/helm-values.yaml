@@ -16,12 +16,12 @@ prometheusOperator:
   createCustomResource: false
   # Image configuration - use zot registry
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: prometheus-operator/prometheus-operator
     tag: v0.87.0
   prometheusConfigReloader:
     image:
-      registry: zot.mayne.kro.kr
+      registry: zot.lumie-infra.com
       repository: prometheus-operator/prometheus-config-reloader
       tag: v0.87.0
   # Resource settings (no CPU limit for stability)
@@ -117,7 +117,7 @@ prometheus:
       - name: zot-registry-credentials
     # Image configuration - use zot registry
     image:
-      registry: zot.mayne.kro.kr
+      registry: zot.lumie-infra.com
       repository: prometheus/prometheus
       tag: v3.8.0
     # Enable OTLP receiver for OTel Collector (Prometheus 3.0+ native OTLP)
@@ -154,7 +154,7 @@ prometheus:
 
     # Thanos Sidecar configuration (query only, no S3 upload)
     thanos:
-      image: zot.mayne.kro.kr/thanos/thanos:v0.37.2
+      image: zot.lumie-infra.com/thanos/thanos:v0.37.2
       # objectStorageConfig removed - no upload to MinIO, local storage only
 
     # Use emptyDir (no persistent storage)

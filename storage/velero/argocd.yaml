@@ -65,7 +65,7 @@ spec:
     helm:
       values: |
         image:
-          repository: zot.mayne.kro.kr/otwld/velero-ui
+          repository: zot.lumie-infra.com/otwld/velero-ui
           tag: "0.10.1"
           pullPolicy: IfNotPresent
 

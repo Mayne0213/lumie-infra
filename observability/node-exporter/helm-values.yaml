@@ -3,7 +3,7 @@
 
 # Image configuration - use zot registry
 image:
-  registry: zot.mayne.kro.kr
+  registry: zot.lumie-infra.com
   repository: prometheus/node-exporter
   tag: "v1.8.2"
 

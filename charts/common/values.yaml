@@ -11,7 +11,7 @@ common:
 
   # Image configuration
   image:
-    registry: zot.mayne.kro.kr
+    registry: zot.lumie-infra.com
     repository: web-apps/app
     tag: latest
     pullPolicy: Always
@@ -290,7 +290,7 @@ common:
       bucket: ""                 # Defaults to <app>-db-backup
       volumeSize: "1Gi"
       minioEndpoint: "http://minio.minio.svc.cluster.local:9000"
-      postgresImage: "zot.mayne.kro.kr/cloudnative-pg/postgresql:18.1"
-      minioImage: "zot.mayne.kro.kr/minio/mc:latest"
+      postgresImage: "zot.lumie-infra.com/cloudnative-pg/postgresql:18.1"
+      minioImage: "zot.lumie-infra.com/minio/mc:latest"
       successfulJobsHistoryLimit: 3
       failedJobsHistoryLimit: 3
