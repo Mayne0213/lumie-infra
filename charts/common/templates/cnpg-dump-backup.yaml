@@ -90,7 +90,7 @@ spec:
                   mc ls "minio/${BACKUP_PATH}/"
               env:
                 - name: MINIO_ENDPOINT
-                  value: {{ .Values.common.database.dumpBackup.minioEndpoint | default "https://s3.minio0213.kro.kr" }}
+                  value: {{ .Values.common.database.dumpBackup.minioEndpoint | default "http://minio.minio.svc.cluster.local:9000" }}
                 - name: MINIO_ACCESS_KEY
                   valueFrom:
                     secretKeyRef:

@@ -63,7 +63,7 @@ spec:
   backup:
     barmanObjectStore:
       destinationPath: s3://{{ $clusterName }}
-      endpointURL: https://s3.minio0213.kro.kr
+      endpointURL: http://minio.minio.svc.cluster.local:9000
       s3Credentials:
         accessKeyId:
           name: {{ $clusterName }}-db-backup-creds

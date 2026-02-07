@@ -62,18 +62,9 @@ environment:
   # Limit Go runtime CPU usage
   GOMAXPROCS: "1"
 
-# API Ingress (S3 endpoint)
+# API Ingress disabled - all consumers use internal service address
 ingress:
-  enabled: true
-  ingressClassName: kong
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-  hosts:
-    - s3.minio0213.kro.kr
-  tls:
-    - secretName: minio-api-tls
-      hosts:
-        - s3.minio0213.kro.kr
+  enabled: false
 
 # Console Ingress disabled (using custom console-deployment in manifests/)
 consoleIngress:
