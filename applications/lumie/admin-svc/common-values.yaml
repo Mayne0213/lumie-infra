@@ -14,7 +14,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/admin-svc
-    tag: "latest"
+    tag: "2b9a3abb"
     pullPolicy: IfNotPresent
 
   # Multiple container ports
