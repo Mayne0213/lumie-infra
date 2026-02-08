@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: build-concurrency-limit
+  namespace: tekton-pipelines
+spec:
+  hard:
+    requests.memory: 5Gi
+  scopeSelector:
+    matchExpressions:
+    - scopeName: NotBestEffort
+      operator: Exists

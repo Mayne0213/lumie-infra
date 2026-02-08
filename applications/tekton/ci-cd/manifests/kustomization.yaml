@@ -2,6 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  # Resource Quota (limits concurrent builds to 2)
+  - resource-quota.yaml
   # Secrets
   - secrets/zot-registry-credentials.yaml
   - secrets/github-credentials.yaml

@@ -96,6 +96,10 @@ spec:
     - name: build-and-push
       image: zot.lumie-infra.com/kaniko-project/executor:debug
       args: ["$(params.BUILD_ARGS[*])"]
+      resources:
+        requests:
+          memory: 2Gi
+          cpu: 500m
       env:
         - name: DOCKER_CONFIG
           value: /kaniko/.docker

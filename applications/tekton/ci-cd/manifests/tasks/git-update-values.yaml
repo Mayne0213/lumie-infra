@@ -33,6 +33,10 @@ spec:
   steps:
     - name: update-and-push
       image: zot.lumie-infra.com/alpine/git:v2.47.1
+      resources:
+        requests:
+          memory: 128Mi
+          cpu: 100m
       env:
         - name: GIT_USERNAME
           valueFrom:
