@@ -62,6 +62,14 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: lumie-admin
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: lumie-exam
   labels:
     app.kubernetes.io/part-of: lumie
@@ -79,6 +87,14 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: lumie-spreadsheet
+  labels:
+    app.kubernetes.io/part-of: lumie
+    goldilocks.fairwinds.com/enabled: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lumie-attendance
   labels:
     app.kubernetes.io/part-of: lumie
     goldilocks.fairwinds.com/enabled: "true"

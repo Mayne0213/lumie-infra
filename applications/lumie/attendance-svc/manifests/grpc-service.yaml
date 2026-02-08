@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: attendance-svc-grpc
+  namespace: lumie-attendance
+  labels:
+    app: attendance-svc
+spec:
+  type: ClusterIP
+  ports:
+  - name: grpc
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
+  selector:
+    app: attendance-svc

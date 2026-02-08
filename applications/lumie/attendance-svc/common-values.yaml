@@ -1,8 +1,8 @@
-# academy-svc common chart values
+# attendance-svc common chart values
 
 common:
-  name: academy-svc
-  namespace: lumie-academy
+  name: attendance-svc
+  namespace: lumie-attendance
 
   # Deployment
   deployment:
@@ -13,8 +13,8 @@ common:
   # Image
   image:
     registry: zot.lumie-infra.com
-    repository: applications/academy-svc
-    tag: "bdca5a64"
+    repository: applications/attendance-svc
+    tag: "latest"
     pullPolicy: IfNotPresent
 
   # Multiple container ports
@@ -55,12 +55,12 @@ common:
     - name: DB_USERNAME
       valueFrom:
         secretKeyRef:
-          name: academy-svc-db-secrets
+          name: attendance-svc-db-secrets
           key: username
     - name: DB_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: academy-svc-db-secrets
+          name: attendance-svc-db-secrets
           key: password
     - name: RABBITMQ_HOST
       value: "rabbitmq.lumie-event.svc"
@@ -71,16 +71,14 @@ common:
     - name: RABBITMQ_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: academy-svc-rabbitmq-secrets
+          name: attendance-svc-rabbitmq-secrets
           key: RABBITMQ_PASSWORD
     - name: AUTH_SVC_GRPC_HOST
       value: "auth-svc-grpc.lumie-auth.svc"
     - name: TENANT_SVC_GRPC_HOST
       value: "tenant-svc-grpc.lumie-tenant.svc"
-    - name: BILLING_SVC_GRPC_HOST
-      value: "billing-svc-grpc.lumie-billing.svc"
-    - name: ADMIN_SVC_GRPC_HOST
-      value: "admin-svc-grpc.lumie-admin.svc"
+    - name: ACADEMY_SVC_GRPC_HOST
+      value: "academy-svc-grpc.lumie-academy.svc"
 
   # Resources
   resources:
@@ -115,7 +113,7 @@ common:
   service:
     enabled: true
     type: ClusterIP
-    port: 8080  # For ingress backend
+    port: 8080
     ports:
       - name: http
         port: 8080
@@ -131,7 +129,7 @@ common:
     hosts:
       - host: lumie0213.kro.kr
         paths:
-          - path: /api/academy
+          - path: /api/attendance
             pathType: Prefix
     tls: []
 
@@ -146,18 +144,18 @@ common:
   # Vault Static Secrets
   vaultStaticSecrets:
     # RabbitMQ credentials
-    - name: academy-svc-rabbitmq-vss
+    - name: attendance-svc-rabbitmq-vss
       path: platform/rabbitmq
       destination:
-        name: academy-svc-rabbitmq-secrets
+        name: attendance-svc-rabbitmq-secrets
         transformation:
           templates:
             RABBITMQ_PASSWORD: "{{ .Secrets.RABBITMQ_PASSWORD }}"
     # Database credentials (from Vault storage/postgresql)
-    - name: academy-svc-db-vss
+    - name: attendance-svc-db-vss
       path: storage/postgresql
       destination:
-        name: academy-svc-db-secrets
+        name: attendance-svc-db-secrets
         transformation:
           templates:
             username: "{{ .Secrets.POSTGRES_USER }}"

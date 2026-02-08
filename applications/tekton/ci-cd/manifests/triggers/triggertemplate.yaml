@@ -457,6 +457,120 @@ spec:
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
+  name: lumie-attendance-svc-build-template
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+    - name: git-revision
+      description: Git commit SHA
+    - name: git-branch
+      description: Git branch name
+    - name: repo-name
+      description: Repository name
+    - name: repo-full-name
+      description: Full repository name (org/repo)
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: attendance-svc-build-
+        namespace: tekton-pipelines
+        labels:
+          tekton.dev/pipeline: lumie-springboot-build-deploy
+          app: attendance-svc
+          branch: $(tt.params.git-branch)
+      spec:
+        timeouts:
+          pipeline: 45m
+        pipelineRef:
+          name: lumie-springboot-build-deploy
+        onSuccessfulCompletion: delete
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-branch)
+          - name: service-name
+            value: attendance-svc
+          - name: context-dir
+            value: .
+          - name: dockerfile-path
+            value: services/core/attendance-svc/Dockerfile
+          - name: image-prefix
+            value: applications/
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: applications/lumie/attendance-svc/common-values.yaml
+        workspaces:
+          - name: shared-workspace
+            emptyDir: {}
+          - name: docker-credentials
+            secret:
+              secretName: zot-registry-credentials
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: lumie-admin-svc-build-template
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+    - name: git-revision
+      description: Git commit SHA
+    - name: git-branch
+      description: Git branch name
+    - name: repo-name
+      description: Repository name
+    - name: repo-full-name
+      description: Full repository name (org/repo)
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1
+      kind: PipelineRun
+      metadata:
+        generateName: admin-svc-build-
+        namespace: tekton-pipelines
+        labels:
+          tekton.dev/pipeline: lumie-springboot-build-deploy
+          app: admin-svc
+          branch: $(tt.params.git-branch)
+      spec:
+        timeouts:
+          pipeline: 45m
+        pipelineRef:
+          name: lumie-springboot-build-deploy
+        onSuccessfulCompletion: delete
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-branch)
+          - name: service-name
+            value: admin-svc
+          - name: context-dir
+            value: .
+          - name: dockerfile-path
+            value: services/core/admin-svc/Dockerfile
+          - name: image-prefix
+            value: applications/
+          - name: update-values
+            value: "true"
+          - name: values-file-path
+            value: applications/lumie/admin-svc/common-values.yaml
+        workspaces:
+          - name: shared-workspace
+            emptyDir: {}
+          - name: docker-credentials
+            secret:
+              secretName: zot-registry-credentials
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
   name: lumie-frontend-build-template
   namespace: tekton-pipelines
 spec:
