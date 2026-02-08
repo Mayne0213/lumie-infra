@@ -96,7 +96,7 @@ spec:
     - name: build-and-push
       image: zot.lumie-infra.com/kaniko-project/executor:debug
       args: ["$(params.BUILD_ARGS[*])"]
-      resources:
+      computeResources:
         requests:
           memory: 2Gi
           cpu: 500m
