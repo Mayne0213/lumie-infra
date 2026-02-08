@@ -14,7 +14,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/file-svc
-    tag: "688667e8"
+    tag: "68b5730f"
     pullPolicy: IfNotPresent
 
   # Container ports
