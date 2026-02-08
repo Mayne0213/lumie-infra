@@ -75,9 +75,9 @@ gateway:
   resources:
     requests:
       cpu: 50m
-      memory: 1024Mi
+      memory: 896Mi
     limits:
-      memory: 1024Mi
+      memory: 896Mi
 
   podAnnotations:
     prometheus.io/scrape: "true"
