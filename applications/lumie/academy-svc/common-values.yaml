@@ -14,7 +14,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/academy-svc
-    tag: "073d34bc"
+    tag: "a06d2942"
     pullPolicy: IfNotPresent
 
   # Multiple container ports
