@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keycloak
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+  - repoURL: https://codecentric.github.io/helm-charts
+    chart: keycloakx
+    targetRevision: 7.1.7
+    helm:
+      valueFiles:
+      - $values/security/keycloak/helm-values.yaml
+  - repoURL: https://github.com/Mayne0213/lumie-infra.git
+    targetRevision: main
+    ref: values
+    path: charts/common
+    helm:
+      valueFiles:
+      - $values/security/keycloak/common-values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: keycloak
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: 'true'
+  revisionHistoryLimit: 10

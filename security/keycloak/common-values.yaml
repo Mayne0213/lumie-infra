@@ -1,0 +1,60 @@
+# Common chart values for keycloak
+
+common:
+  name: keycloak
+
+  # Disable deployment (external chart creates it)
+  deployment:
+    enabled: false
+
+  service:
+    enabled: false
+
+  # Ingress disabled - access via Teleport only
+  ingress:
+    enabled: false
+
+  # Vault Static Secrets (VSO)
+  vaultStaticSecrets:
+    # DB bootstrap secret (for CNPG)
+    - name: keycloak-db-bootstrap-static
+      path: storage/postgresql
+      destination:
+        name: keycloak-db-bootstrap
+        transformation:
+          templates:
+            username: keycloak
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"
+      rolloutRestartTargets:
+        - kind: StatefulSet
+          name: keycloak
+
+    # Keycloak admin password
+    - name: keycloak-secrets-static
+      path: security/keycloak
+      destination:
+        name: keycloak-secrets
+        transformation:
+          templates:
+            KEYCLOAK_ADMIN_PASSWORD: "{{ .Secrets.KEYCLOAK_ADMIN_PASSWORD }}"
+      rolloutRestartTargets:
+        - kind: StatefulSet
+          name: keycloak
+
+  # CNPG Database configuration
+  database:
+    enabled: true
+    instances: 2
+    version: "18.1"
+    name: keycloak
+    owner: keycloak
+    bootstrap:
+      secret: keycloak-db-bootstrap
+    storage:
+      class: local-path
+      size: 1Gi
+    resources:
+      memory: 256Mi
+      cpu: 50m
+    backup:
+      enabled: false

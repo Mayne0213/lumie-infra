@@ -247,7 +247,8 @@ configMaps:
                   "content": [
                     {"prefix": "prometheus/**"},
                     {"prefix": "thanos/**"},
-                    {"prefix": "prometheus-operator/**"}
+                    {"prefix": "prometheus-operator/**"},
+                    {"prefix": "keycloak/**"}
                   ]
                 },
                 {

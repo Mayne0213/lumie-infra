@@ -9,6 +9,7 @@ resources:
   # external-secrets removed - using VSO (Vault Secrets Operator) instead
   - authelia/argocd.yaml
   - falco/argocd.yaml
+  - keycloak/argocd.yaml
   - kyverno/argocd.yaml
   - trivy/argocd.yaml
   - teleport/argocd.yaml

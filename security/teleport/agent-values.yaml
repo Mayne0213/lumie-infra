@@ -191,6 +191,13 @@ apps:
       env: prod
       category: platform
 
+  # Identity Provider
+  - name: keycloak
+    uri: http://keycloak.keycloak.svc.cluster.local:8080
+    labels:
+      env: prod
+      category: security
+
   # API Gateway Manager
   - name: kong
     uri: http://kong-gateway-manager.kong.svc.cluster.local:8002

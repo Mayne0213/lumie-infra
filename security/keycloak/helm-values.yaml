@@ -1,0 +1,84 @@
+# Keycloak Helm Values (codecentric/keycloakx)
+# Future: Google, Kakao, Apple social login for Lumie app
+
+# Image - Zot registry (quay:keycloak/** mapped)
+image:
+  repository: zot.lumie-infra.com/keycloak/keycloak
+  tag: "26.5.1"
+
+# Start Keycloak in production mode
+command:
+  - "/opt/keycloak/bin/kc.sh"
+args:
+  - "start"
+
+# Startup probe - Keycloak needs time to build optimized config on first start
+startupProbe: |
+  httpGet:
+    path: '/health'
+    port: http-internal
+    scheme: HTTP
+  initialDelaySeconds: 60
+  timeoutSeconds: 1
+  failureThreshold: 120
+  periodSeconds: 5
+
+# Proxy - behind Kong reverse proxy
+proxy:
+  enabled: true
+  mode: xforwarded
+
+http:
+  relativePath: /
+
+# Hostname - dynamic via Teleport proxy
+extraEnv: |
+  - name: KC_HOSTNAME_STRICT
+    value: "false"
+  - name: KEYCLOAK_ADMIN
+    value: admin
+  - name: KEYCLOAK_ADMIN_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-secrets
+        key: KEYCLOAK_ADMIN_PASSWORD
+
+# External PostgreSQL (CNPG via common chart)
+database:
+  vendor: postgres
+  hostname: keycloak-db-rw
+  port: 5432
+  database: keycloak
+  username: keycloak
+  existingSecret: keycloak-db-bootstrap
+  existingSecretKey: password
+
+# DB readiness check
+dbchecker:
+  enabled: true
+  image:
+    repository: zot.lumie-infra.com/library/busybox
+    tag: "1.37"
+
+# Resources (VPA 기반 조정 예정)
+resources:
+  requests:
+    cpu: 100m
+    memory: 1Gi
+  limits:
+    memory: 1Gi
+
+# Disable anti-affinity (single replica)
+affinity: ""
+
+# Disable built-in ingress (access via Teleport only)
+ingress:
+  enabled: false
+
+# Metrics & Health
+metrics:
+  enabled: true
+health:
+  enabled: true
+serviceMonitor:
+  enabled: true
