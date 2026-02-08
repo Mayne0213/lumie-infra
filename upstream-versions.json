@@ -32,7 +32,7 @@
   "docker:bitnami/rabbitmq-cluster-operator": "2.19.0",
   "_security": "--- Security ---",
   "ghcr:teleport/teleport-distroless": "18.1.2",
-  "docker:authelia/authelia": "4.39.13",
+  "docker:authelia/authelia": "4.39.15",
   "quay:keycloak/keycloak": "26.5.1",
   "gcr:aquasec/trivy-operator": "0.28.0",
   "gcr:aquasec/trivy": "0.68.2",
