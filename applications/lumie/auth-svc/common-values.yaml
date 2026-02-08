@@ -14,7 +14,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/auth-svc
-    tag: "ca6e4a37"
+    tag: "68b5730f"
     pullPolicy: IfNotPresent
 
   # Multiple container ports
