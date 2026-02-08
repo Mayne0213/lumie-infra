@@ -193,7 +193,7 @@ apps:
 
   # Identity Provider
   - name: keycloak
-    uri: http://keycloak.keycloak.svc.cluster.local:8080
+    uri: http://keycloak-keycloakx-http.keycloak.svc.cluster.local
     labels:
       env: prod
       category: security
