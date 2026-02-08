@@ -10,16 +10,16 @@ image:
 postgresql:
   enabled: false
 
-# External database configuration - points to CNPG Cluster
+# External database configuration - points to shared infra-db cluster
 externalDatabase:
   type: postgresql
-  hostname: umami-db-rw  # CNPG service name
+  hostname: infra-db-rw.infra-db.svc.cluster.local
   port: 5432
   auth:
     database: umami
-    username: umami  # CNPG bootstrap.initdb.owner
+    username: umami
 
-# Use CNPG-generated secret for DATABASE_URL
+# Use VSO-generated secret for DATABASE_URL
 database:
   existingSecret: umami-db-app
   databaseUrlKey: uri

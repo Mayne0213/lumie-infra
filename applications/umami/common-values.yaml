@@ -25,36 +25,20 @@ common:
           templates:
             hash-salt: "{{ .Secrets.UMAMI_HASH_SALT }}"
 
-  # CNPG Database configuration
+    # DB secret (replaces CNPG auto-generated umami-db-app)
+    - name: umami-db-app-vss
+      path: storage/postgresql
+      destination:
+        name: umami-db-app
+        transformation:
+          templates:
+            host: infra-db-rw.infra-db.svc.cluster.local
+            port: "5432"
+            username: umami
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"
+            dbname: umami
+            uri: "postgresql://umami:{{ .Secrets.POSTGRES_PASSWORD }}@infra-db-rw.infra-db.svc.cluster.local:5432/umami"
+
+  # CNPG Database disabled - using shared infra-db cluster
   database:
-    enabled: true
-    instances: 2
-    version: "18.1"
-    name: umami
-    owner: umami
-    encoding: UTF8
-    localeCollate: C
-    localeCType: C
-    enableSuperuserAccess: true
-    storage:
-      class: local-path
-      size: 1Gi
-    resources:
-      memory: 256Mi
-      cpu: 50m
-    postgresql:
-      parameters:
-        max_connections: "50"
-        shared_buffers: "64MB"
-        effective_cache_size: "192MB"
-        maintenance_work_mem: "32MB"
-        checkpoint_completion_target: "0.9"
-        wal_buffers: "4MB"
-        default_statistics_target: "100"
-        random_page_cost: "1.1"
-        effective_io_concurrency: "200"
-        work_mem: "1MB"
-        min_wal_size: "256MB"
-        max_wal_size: "1GB"
-    backup:
-      enabled: false
+    enabled: false

@@ -16,18 +16,21 @@ common:
 
   # No external ingress - access via Teleport only
 
-  # CNPG Database configuration
+  # CNPG Database disabled - using shared infra-db cluster
   database:
-    enabled: true
-    instances: 2
-    version: "18.1"
-    name: grafana
-    owner: grafana
-    storage:
-      class: local-path
-      size: 1Gi
-    resources:
-      memory: 256Mi
-      cpu: 50m
-    backup:
-      enabled: false
+    enabled: false
+
+  # VSO: Create grafana-db-app secret (replaces CNPG auto-generated secret)
+  vaultStaticSecrets:
+    - name: grafana-db-app-vss
+      path: storage/postgresql
+      destination:
+        name: grafana-db-app
+        transformation:
+          templates:
+            host: infra-db-rw.infra-db.svc.cluster.local
+            port: "5432"
+            username: grafana
+            password: "{{ .Secrets.POSTGRES_PASSWORD }}"
+            dbname: grafana
+            uri: "postgresql://grafana:{{ .Secrets.POSTGRES_PASSWORD }}@infra-db-rw.infra-db.svc.cluster.local:5432/grafana"

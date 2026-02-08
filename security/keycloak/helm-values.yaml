@@ -43,10 +43,10 @@ extraEnv: |
         name: keycloak-secrets
         key: KEYCLOAK_ADMIN_PASSWORD
 
-# External PostgreSQL (CNPG via common chart)
+# External PostgreSQL (shared infra-db cluster)
 database:
   vendor: postgres
-  hostname: keycloak-db-rw
+  hostname: infra-db-rw.infra-db.svc.cluster.local
   port: 5432
   database: keycloak
   username: keycloak

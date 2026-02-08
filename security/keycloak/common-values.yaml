@@ -16,7 +16,7 @@ common:
 
   # Vault Static Secrets (VSO)
   vaultStaticSecrets:
-    # DB bootstrap secret (for CNPG)
+    # DB credential secret (password for shared infra-db)
     - name: keycloak-db-bootstrap-static
       path: storage/postgresql
       destination:
@@ -41,20 +41,6 @@ common:
         - kind: StatefulSet
           name: keycloak
 
-  # CNPG Database configuration
+  # CNPG Database disabled - using shared infra-db cluster
   database:
-    enabled: true
-    instances: 2
-    version: "18.1"
-    name: keycloak
-    owner: keycloak
-    bootstrap:
-      secret: keycloak-db-bootstrap
-    storage:
-      class: local-path
-      size: 1Gi
-    resources:
-      memory: 256Mi
-      cpu: 50m
-    backup:
-      enabled: false
+    enabled: false

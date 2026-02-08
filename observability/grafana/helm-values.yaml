@@ -132,4 +132,4 @@ grafana.ini:
 ingress:
   enabled: false
 
-# extraObjects removed - DB credentials now provided by CNPG cluster secret (grafana-db-app)
+# DB credentials provided by VSO secret (grafana-db-app) pointing to shared infra-db cluster
