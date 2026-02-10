@@ -75,9 +75,9 @@ gateway:
   resources:
     requests:
       cpu: 50m
-      memory: 896Mi
+      memory: 640Mi
     limits:
-      memory: 896Mi
+      memory: 640Mi
 
   podAnnotations:
     prometheus.io/scrape: "true"
@@ -100,9 +100,9 @@ controller:
   resources:
     requests:
       cpu: 25m
-      memory: 128Mi
+      memory: 192Mi
     limits:
-      memory: 256Mi
+      memory: 192Mi
 
 # Disable test deployment
 deployment:
