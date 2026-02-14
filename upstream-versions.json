@@ -1,7 +1,7 @@
 {
   "_comment": "Upstream image versions tracked by Renovate",
   "_applications": "--- Applications ---",
-  "docker:alpine/git": "v2.47.1",
+  "docker:alpine/git": "v2.52.0",
   "docker:bitnami/kubectl": "latest",
   "docker:codercom/code-server": "4.108.2",
   "ghcr:headlamp-k8s/headlamp": "v0.39.0",
