@@ -24,7 +24,7 @@
   "quay:prometheus-operator/prometheus-config-reloader": "v0.87.0",
   "quay:thanos/thanos": "v0.37.2",
   "k8s:kube-state-metrics/kube-state-metrics": "v2.13.0",
-  "k8s:autoscaling/vpa-recommender": "1.0.0",
+  "k8s:autoscaling/vpa-recommender": "1.6.0",
   "_platform": "--- Platform ---",
   "docker:kong": "3.7",
   "docker:kong/kubernetes-ingress-controller": "3.4",
