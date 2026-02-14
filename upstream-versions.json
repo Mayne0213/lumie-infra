@@ -4,7 +4,7 @@
   "docker:alpine/git": "v2.47.1",
   "docker:bitnami/kubectl": "latest",
   "docker:codercom/code-server": "4.108.2",
-  "ghcr:headlamp-k8s/headlamp": "v0.39.0",
+  "ghcr:headlamp-k8s/headlamp": "v0.40.1",
   "ghcr:umami-software/umami": "postgresql-latest",
   "_observability": "--- Observability ---",
   "docker:grafana/grafana": "12.3.1",
