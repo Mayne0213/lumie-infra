@@ -73,83 +73,21 @@ serviceMonitor:
   additionalLabels:
     release: prometheus
   targets:
-    # Infrastructure Services
-    - name: argocd
-      url: https://argocd0213.kro.kr/healthz
-      module: http_2xx
-    - name: grafana
-      url: https://grafana0213.kro.kr/api/health
-      module: http_2xx
-    - name: vault
-      url: https://vault0213.kro.kr
-      module: http_2xx
-    - name: authelia
-      url: https://auth0213.kro.kr
-      module: http_2xx
-    - name: karma
-      url: https://karma0213.kro.kr/health
-      module: http_2xx
-    - name: gitea
-      url: https://github.com
-      module: http_2xx
-    - name: minio-console
-      url: https://minio0213.kro.kr
-      module: http_2xx
-    - name: velero-ui
-      url: https://velero0213.kro.kr/health
-      module: http_2xx
-    - name: headlamp
-      url: https://kubernetes0213.kro.kr
-      module: http_2xx
-    - name: goldilocks
-      url: https://goldilocks0213.kro.kr/healthz
-      module: http_2xx
-    - name: code-server
-      url: https://vscode0213.kro.kr/healthz
-      module: http_2xx
-    - name: pgweb
-      url: https://pgweb0213.kro.kr
-      module: http_auth_ok
-    - name: zot
-      url: https://zot.lumie-infra.com
-      module: http_2xx
-
     # User Applications
-    - name: teleport
+    - name: joossameng
+      url: https://joossameng.com
+      module: http_2xx
+    - name: lumie
+      url: https://lumie0213.kro.kr
+      module: http_2xx
+    - name: lumie-infra
       url: https://lumie-infra.com
       module: http_2xx
-    - name: portfolio
-      url: https://minjo0213.kro.kr
-      module: http_2xx
-    - name: docusaurus
-      url: https://docusaurus0213.kro.kr
-      module: http_2xx
-    - name: jotion
-      url: https://jotion0213.kro.kr
-      module: http_2xx
-    - name: jovies
-      url: https://jovies.kro.kr
-      module: http_2xx
-    - name: todo
-      url: https://todo0213.kro.kr
-      module: http_2xx
-    - name: umami
-      url: https://umami0213.kro.kr
-      module: http_2xx
-    - name: mas
-      url: https://mas0213.kro.kr
-      module: http_auth_ok
     - name: jaejadle
-      url: https://jaejadle.kro.kr
+      url: https://disciples-church.com
       module: http_2xx
-    - name: jaejadle-dev
-      url: https://dev.jaejadle.kro.kr
-      module: http_2xx
-    - name: joossam
+    - name: joossam-omr
       url: https://joossameng.kro.kr
-      module: http_2xx
-    - name: joossam-dev
-      url: https://dev.joossameng.kro.kr
       module: http_2xx
 
 prometheusRule:
