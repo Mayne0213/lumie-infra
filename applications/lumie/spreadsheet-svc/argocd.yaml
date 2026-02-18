@@ -7,17 +7,10 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  sources:
-  - repoURL: https://github.com/Mayne0213/lumie-infra.git
+  source:
+    repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
-    path: charts/common
-    helm:
-      valueFiles:
-      - $values/applications/lumie/spreadsheet-svc/common-values.yaml
-  - repoURL: https://github.com/Mayne0213/lumie-infra.git
-    targetRevision: main
-    ref: values
-    path: applications/lumie/spreadsheet-svc/manifests
+    path: applications/lumie/spreadsheet-svc
   destination:
     server: https://kubernetes.default.svc
     namespace: lumie-spreadsheet

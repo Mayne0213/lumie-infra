@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmGlobals:
+  chartHome: ../../charts
+
+helmCharts:
+  - name: common
+    releaseName: lumie
+    namespace: lumie-db
+    valuesFile: common-values.yaml
+
+resources:
+  - manifests/namespaces.yaml
+  - manifests/init-job.yaml

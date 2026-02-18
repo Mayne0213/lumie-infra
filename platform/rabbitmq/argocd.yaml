@@ -7,19 +7,10 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  sources:
-    # VaultStaticSecret from common chart + values ref
-    - repoURL: https://github.com/Mayne0213/lumie-infra.git
-      targetRevision: main
-      ref: values
-      path: charts/common
-      helm:
-        valueFiles:
-          - $values/platform/rabbitmq/common-values.yaml
-    # RabbitmqCluster CR and ConfigMap
-    - repoURL: https://github.com/Mayne0213/lumie-infra.git
-      targetRevision: main
-      path: platform/rabbitmq/manifests
+  source:
+    repoURL: https://github.com/Mayne0213/lumie-infra.git
+    targetRevision: main
+    path: platform/rabbitmq
   destination:
     server: https://kubernetes.default.svc
     namespace: lumie-event

@@ -7,16 +7,10 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  sources:
-    - repoURL: https://github.com/Mayne0213/lumie-infra.git
-      targetRevision: main
-      path: charts/common
-      helm:
-        valueFiles:
-          - $values/applications/joossam/helm-values.yaml
-    - repoURL: https://github.com/Mayne0213/lumie-infra.git
-      targetRevision: main
-      ref: values
+  source:
+    repoURL: https://github.com/Mayne0213/lumie-infra.git
+    targetRevision: main
+    path: applications/joossam
   destination:
     server: https://kubernetes.default.svc
     namespace: joossam
