@@ -14,7 +14,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/spreadsheet-svc
-    tag: "2b9a3abb"
+    tag: "30bd2db4"
     pullPolicy: IfNotPresent
 
   # Multiple container ports
