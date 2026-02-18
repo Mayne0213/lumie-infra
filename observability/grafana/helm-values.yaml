@@ -114,10 +114,10 @@ datasources:
 
 grafana.ini:
   server:
-    root_url: "https://grafana0213.kro.kr"
+    root_url: "https://grafana.lumie-infra.com"
   auth.anonymous:
     enabled: true
-    org_role: Admin
+    org_role: Viewer
   security:
     allow_embedding: true
   auth.basic:
