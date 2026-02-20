@@ -1,0 +1,79 @@
+# Analysis Service Helm Values
+# AI 모의고사 분석 서비스 (Python FastAPI + Anthropic Claude)
+
+common:
+  name: analysis-svc
+  image:
+    registry: zot.lumie-infra.com
+    repository: applications/analysis-svc
+    tag: latest # Updated by Tekton CI
+    pullPolicy: Always
+  replicaCount: 1
+  containerPort: 8000
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: kong
+    annotations:
+      # AI 생성 요청은 시간이 걸릴 수 있음
+      konghq.com/read-timeout: "120000"
+      konghq.com/write-timeout: "120000"
+    hosts:
+      - host: joossameng.kro.kr
+        paths:
+          - path: /api/analysis
+            pathType: Prefix
+  # Environment variables
+  env:
+    - name: HOST
+      value: "0.0.0.0"
+    - name: PORT
+      value: "8000"
+    - name: ANTHROPIC_MODEL
+      value: "claude-sonnet-4-20250514"
+  # Secret env from Vault
+  envFrom:
+    - secretRef:
+        name: analysis-svc-secrets
+  # Vault Static Secret for ANTHROPIC_API_KEY
+  vaultStaticSecrets:
+    - name: analysis-svc-vss
+      path: applications/mas
+      destination:
+        name: analysis-svc-secrets
+        transformation:
+          templates:
+            ANTHROPIC_API_KEY: "{{ .Secrets.ANTHROPIC_API_KEY }}"
+  # Resource settings
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+  healthCheck:
+    enabled: true
+    path: /health
+    startupProbe:
+      periodSeconds: 10
+      failureThreshold: 30
+    livenessProbe:
+      initialDelaySeconds: 0
+      periodSeconds: 30
+      timeoutSeconds: 10
+      failureThreshold: 3
+    readinessProbe:
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 10
+  externalSecret:
+    enabled: false
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname

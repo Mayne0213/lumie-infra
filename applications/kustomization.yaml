@@ -14,6 +14,7 @@ resources:
   - headlamp/argocd.yaml
   - mas/argocd.yaml
   - joossam/argocd.yaml
+  - analysis-svc/argocd.yaml
 
   # Tekton CI/CD
   - tekton/pipeline/argocd.yaml
