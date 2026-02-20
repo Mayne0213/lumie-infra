@@ -82,10 +82,7 @@ common:
     - name: GRADING_SVC_URL
       value: "http://grading-svc.lumie-grading.svc:8000"
     - name: MINIO_ENDPOINT
-      valueFrom:
-        secretKeyRef:
-          name: exam-svc-minio-secrets
-          key: endpoint
+      value: "http://minio.minio.svc:9000"
     - name: MINIO_ACCESS_KEY
       valueFrom:
         secretKeyRef:
@@ -97,7 +94,7 @@ common:
           name: exam-svc-minio-secrets
           key: secretKey
     - name: MINIO_BUCKET_NAME
-      value: "lumie-files"
+      value: "lumie"
 
   # Resources
   resources:
