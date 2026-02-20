@@ -15,7 +15,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/grading-svc
-    tag: "369b672c"
+    tag: "6b50597b"
     pullPolicy: Always
 
   # Container ports
