@@ -81,6 +81,23 @@ common:
       value: "academy-svc-grpc.lumie-academy.svc"
     - name: GRADING_SVC_URL
       value: "http://grading-svc.lumie-grading.svc:8000"
+    - name: MINIO_ENDPOINT
+      valueFrom:
+        secretKeyRef:
+          name: exam-svc-minio-secrets
+          key: endpoint
+    - name: MINIO_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: exam-svc-minio-secrets
+          key: accessKey
+    - name: MINIO_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: exam-svc-minio-secrets
+          key: secretKey
+    - name: MINIO_BUCKET_NAME
+      value: "lumie-files"
 
   # Resources
   resources:
@@ -162,3 +179,13 @@ common:
           templates:
             username: "{{ .Secrets.POSTGRES_USER }}"
             password: "{{ .Secrets.POSTGRES_PASSWORD }}"
+    # MinIO credentials
+    - name: exam-svc-minio-vss
+      path: bootstrap/minio
+      destination:
+        name: exam-svc-minio-secrets
+        transformation:
+          templates:
+            endpoint: "{{ .Secrets.MINIO_ENDPOINT }}"
+            accessKey: "{{ .Secrets.MINIO_ACCESS_KEY_ID }}"
+            secretKey: "{{ .Secrets.MINIO_SECRET_ACCESS_KEY }}"

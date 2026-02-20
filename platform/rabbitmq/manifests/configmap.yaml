@@ -93,6 +93,20 @@ data:
           "durable": true
         },
         {
+          "name": "grading.omr-request",
+          "vhost": "/",
+          "durable": true,
+          "arguments": {
+            "x-dead-letter-exchange": "lumie.dlx",
+            "x-message-ttl": 600000
+          }
+        },
+        {
+          "name": "grading.omr-request.dlq",
+          "vhost": "/",
+          "durable": true
+        },
+        {
           "name": "grading.omr-completed",
           "vhost": "/",
           "durable": true,
@@ -155,6 +169,20 @@ data:
           "source": "lumie.dlx",
           "vhost": "/",
           "destination": "dlq.failed-messages",
+          "destination_type": "queue",
+          "routing_key": ""
+        },
+        {
+          "source": "lumie.commands",
+          "vhost": "/",
+          "destination": "grading.omr-request",
+          "destination_type": "queue",
+          "routing_key": "grading.omr.request"
+        },
+        {
+          "source": "lumie.dlx",
+          "vhost": "/",
+          "destination": "grading.omr-request.dlq",
           "destination_type": "queue",
           "routing_key": ""
         },
