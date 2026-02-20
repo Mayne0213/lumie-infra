@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: analysis-svc
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Mayne0213/lumie-infra.git
+    targetRevision: main
+    path: applications/analysis-svc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: analysis-svc
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    managedNamespaceMetadata:
+      labels:
+        goldilocks.fairwinds.com/enabled: "true"
+        zot-registry: "enabled"
+    syncOptions:
+      - CreateNamespace=true
+  revisionHistoryLimit: 10
