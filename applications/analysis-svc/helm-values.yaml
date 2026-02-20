@@ -6,7 +6,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/analysis-svc
-    tag: latest # Updated by Tekton CI
+    tag: "2fb4fe74"
     pullPolicy: Always
   replicaCount: 1
   containerPort: 8000
