@@ -100,9 +100,9 @@ common:
   resources:
     requests:
       cpu: 30m
-      memory: 512Mi
+      memory: 1Gi
     limits:
-      memory: 512Mi
+      memory: 1Gi
 
   # Health checks (Spring Boot Actuator)
   healthCheck:
