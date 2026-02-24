@@ -105,3 +105,11 @@ spec:
                 name: grading-svc
                 port:
                   number: 8000
+          # AI service
+          - path: /api/ai
+            pathType: Prefix
+            backend:
+              service:
+                name: ai-svc
+                port:
+                  number: 8080
