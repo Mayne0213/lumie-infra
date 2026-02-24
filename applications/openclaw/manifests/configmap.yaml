@@ -9,6 +9,12 @@ data:
       "gateway": {
         "bind": "lan",
         "trustedProxies": ["10.42.0.0/16"],
+        "auth": {
+          "mode": "trusted-proxy",
+          "trustedProxy": {
+            "userHeader": "Teleport-Jwt-Assertion"
+          }
+        },
         "controlUi": {
           "dangerouslyAllowHostHeaderOriginFallback": true
         }
