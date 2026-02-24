@@ -16,7 +16,8 @@ data:
           }
         },
         "controlUi": {
-          "dangerouslyAllowHostHeaderOriginFallback": true
+          "dangerouslyAllowHostHeaderOriginFallback": true,
+          "dangerouslyDisableDeviceAuth": true
         }
       },
       "agents": {
