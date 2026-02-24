@@ -24,24 +24,6 @@ common:
           templates:
             htpasswd: "{{ .Secrets.ZOT_HTPASSWD }}"
 
-    # OIDC credentials
-    - name: zot-oidc-vss
-      path: bootstrap/zot
-      destination:
-        name: zot-oidc-credentials
-        transformation:
-          templates:
-            credentials.json: '{"clientid":"{{ .Secrets.ZOT_OIDC_CLIENT_ID }}","clientsecret":"{{ .Secrets.ZOT_OIDC_CLIENT_SECRET }}"}'
-
-    # Session keys
-    - name: zot-session-vss
-      path: bootstrap/zot
-      destination:
-        name: zot-session-keys
-        transformation:
-          templates:
-            session-keys.json: '{"hashKey":"{{ .Secrets.ZOT_SESSION_HASH_KEY }}","encryptKey":"{{ .Secrets.ZOT_SESSION_BLOCK_KEY }}"}'
-
     # MinIO S3 credentials
     - name: zot-minio-vss
       path: bootstrap/minio

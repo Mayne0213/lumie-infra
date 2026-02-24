@@ -7,7 +7,6 @@ resources:
 
   # Security apps (vault, cert-manager moved to bootstrap/)
   # external-secrets removed - using VSO (Vault Secrets Operator) instead
-  - authelia/argocd.yaml
   - falco/argocd.yaml
   - keycloak/argocd.yaml
   - kyverno/argocd.yaml

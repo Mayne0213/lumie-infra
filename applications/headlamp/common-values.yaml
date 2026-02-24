@@ -12,21 +12,3 @@ common:
 
   ingress:
     enabled: false
-
-  # Vault Static Secrets (VSO)
-  vaultStaticSecrets:
-    - name: authelia-vss
-      path: security/authelia
-      destination:
-        name: headlamp-oidc
-        transformation:
-          templates:
-            OIDC_CLIENT_ID: "headlamp"
-            OIDC_CLIENT_SECRET: "{{ .Secrets.AUTHELIA_HEADLAMP_CLIENT_SECRET }}"
-            OIDC_ISSUER_URL: "https://auth0213.kro.kr"
-            OIDC_SCOPES: "openid profile email"
-            OIDC_VALIDATOR_CLIENT_ID: "headlamp"
-            OIDC_VALIDATOR_ISSUER_URL: "https://auth0213.kro.kr"
-      rolloutRestartTargets:
-        - kind: Deployment
-          name: headlamp
