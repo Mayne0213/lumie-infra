@@ -210,7 +210,8 @@ configMaps:
                     {"prefix": "umami-software/**"},
                     {"prefix": "open-telemetry/**"},
                     {"prefix": "prymitive/**"},
-                    {"prefix": "icoretech/**"}
+                    {"prefix": "icoretech/**"},
+                    {"prefix": "openclaw/**"}
                   ]
                 },
                 {

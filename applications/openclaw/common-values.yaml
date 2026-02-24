@@ -1,0 +1,70 @@
+# Common chart values for OpenClaw
+# Deployment managed via custom manifests (needs volume mounts)
+
+common:
+  name: openclaw
+
+  # Disable deployment (custom manifest handles it)
+  deployment:
+    enabled: false
+
+  # Service for gateway
+  service:
+    enabled: true
+    type: ClusterIP
+    ports:
+      - name: gateway
+        port: 18789
+        targetPort: 18789
+        protocol: TCP
+
+  # No external ingress - access via Teleport
+  ingress:
+    enabled: false
+
+  # Read-only RBAC for cluster monitoring
+  rbac:
+    enabled: true
+    serviceAccount:
+      create: true
+    clusterRoles:
+      - name: openclaw-readonly
+        rules:
+          - apiGroups: [""]
+            resources: ["pods", "services", "nodes", "namespaces", "events", "configmaps"]
+            verbs: ["get", "list", "watch"]
+          - apiGroups: ["apps"]
+            resources: ["deployments", "statefulsets", "daemonsets", "replicasets"]
+            verbs: ["get", "list", "watch"]
+          - apiGroups: ["batch"]
+            resources: ["jobs", "cronjobs"]
+            verbs: ["get", "list", "watch"]
+          - apiGroups: ["networking.k8s.io"]
+            resources: ["ingresses"]
+            verbs: ["get", "list", "watch"]
+          - apiGroups: ["argoproj.io"]
+            resources: ["applications"]
+            verbs: ["get", "list", "watch"]
+    clusterRoleBindings:
+      - name: openclaw-readonly-binding
+        roleRef:
+          kind: ClusterRole
+          name: openclaw-readonly
+        subjects:
+          - kind: ServiceAccount
+            name: openclaw
+            namespace: openclaw
+
+  # Vault Static Secrets
+  vaultStaticSecrets:
+    - name: openclaw-api-vss
+      path: applications/openclaw
+      destination:
+        name: openclaw-secrets
+        transformation:
+          templates:
+            DEEPSEEK_API_KEY: "{{ .Secrets.DEEPSEEK_API_KEY }}"
+            OPENCLAW_GATEWAY_TOKEN: "{{ .Secrets.OPENCLAW_GATEWAY_TOKEN }}"
+      rolloutRestartTargets:
+        - kind: Deployment
+          name: openclaw
