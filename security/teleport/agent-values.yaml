@@ -206,6 +206,17 @@ apps:
       category: platform
       teleport.icon: kube
 
+  # AI Assistant (OpenClaw)
+  - name: openclaw
+    uri: http://openclaw.openclaw.svc.cluster.local:18789
+    rewrite:
+      headers:
+        - "Origin: http://openclaw.openclaw.svc.cluster.local:18789"
+    labels:
+      env: prod
+      category: applications
+      teleport.icon: kube
+
 # =============================================================================
 # TOLERATIONS - Allow scheduling on control-plane nodes
 # =============================================================================
