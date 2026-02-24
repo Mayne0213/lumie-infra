@@ -14,7 +14,12 @@ controllers:
         args:
           - "--bind=0.0.0.0"
           - "--listen=8081"
-        # No preconfigured database - enter connection details in UI
+        env:
+          PGWEB_DATABASE_URL:
+            valueFrom:
+              secretKeyRef:
+                name: pgweb-db-secrets
+                key: database-url
         # Resource settings (no CPU limit for stability)
         resources:
           requests:
