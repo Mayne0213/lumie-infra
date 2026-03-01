@@ -14,7 +14,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/ai-svc
-    tag: "78605f47"
+    tag: "633f68f8"
     pullPolicy: IfNotPresent
 
   # Ports
