@@ -14,7 +14,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/tenant-svc
-    tag: "f26aa7fa"
+    tag: "633f68f8"
     pullPolicy: IfNotPresent
 
   # Multiple container ports
