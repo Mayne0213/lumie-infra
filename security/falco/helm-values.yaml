@@ -6,7 +6,7 @@ falcoctl:
   image:
     registry: zot.lumie-infra.com
     repository: falcosecurity/falcoctl
-    tag: "0.11.0"
+    tag: "0.12.2"
 
 # Driver configuration - use modern_ebpf (no compilation needed)
 driver:
@@ -17,7 +17,7 @@ driver:
 image:
   registry: zot.lumie-infra.com
   repository: falcosecurity/falco
-  tag: 0.40.0
+  tag: 0.43.0
 
 # Resource settings (VPA recommended, no CPU limit for stability)
 resources:
@@ -41,9 +41,6 @@ falco:
 
   # Performance tuning
   buffered_outputs: true
-
-  # Rate limiting - reduce duplicate alerts
-  outputs_rate: 1        # Max 1 alert per second per rule
 
   # Rules configuration - disable default rules for better performance
   rules_files:
@@ -130,8 +127,9 @@ serviceMonitor:
     release: prometheus
 
 # Grafana dashboard
-grafanaDashboard:
-  enabled: false
+grafana:
+  dashboards:
+    enabled: false
 
 # Falcosidekick integration (for forwarding alerts)
 falcosidekick:
@@ -142,7 +140,7 @@ falcosidekick:
   image:
     registry: zot.lumie-infra.com
     repository: falcosecurity/falcosidekick
-    tag: 2.31.1
+    tag: 2.32.0
 
   # Resource settings (VPA recommended, no CPU limit for stability)
   resources:
@@ -197,16 +195,17 @@ serviceAccount:
   name: falco
 
 # Run as DaemonSet on all nodes
-daemonset:
-  updateStrategy:
-    type: RollingUpdate
+controller:
+  kind: daemonset
+  daemonset:
+    updateStrategy:
+      type: RollingUpdate
 
-# Priority class
-priorityClassName: ""
+# Extra environment variables and volumes
+extra:
+  env: []
+  args: []
 
-# Extra environment variables
-extraEnvVars: []
-
-# Extra volumes
-extraVolumes: []
-extraVolumeMounts: []
+mounts:
+  volumes: []
+  volumeMounts: []
