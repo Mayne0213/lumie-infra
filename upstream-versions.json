@@ -33,7 +33,7 @@
   "docker:bitnami/rabbitmq-cluster-operator": "2.19.0",
   "_security": "--- Security ---",
   "ghcr:teleport/teleport-distroless": "18.1.2",
-  "quay:keycloak/keycloak": "26.5.1",
+  "quay:keycloak/keycloak": "26.5.5",
   "gcr:aquasec/trivy-operator": "0.28.0",
   "gcr:aquasec/trivy": "0.68.2",
   "docker:falcosecurity/falco-no-driver": "0.43.0",
