@@ -129,6 +129,7 @@ apps:
   # Container Registry
   - name: zot
     uri: http://zot.zot.svc.cluster.local:5000
+    public_addr: zot-ui.lumie-infra.com
     labels:
       env: prod
       category: platform
