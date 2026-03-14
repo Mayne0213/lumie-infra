@@ -8,9 +8,9 @@ metadata:
     policies.kyverno.io/severity: medium
     policies.kyverno.io/subject: Pod
     policies.kyverno.io/description: >-
-      Containers must have memory limits defined. CPU limits are not required
-      as they can cause CPU throttling and stability issues. Memory limits
-      prevent OOM situations from affecting the entire node.
+      Containers must have memory limits defined and memory requests must equal
+      memory limits for QoS Guaranteed class. CPU limits should not be set
+      as they cause CPU throttling and stability issues.
 spec:
   validationFailureAction: Audit
   background: true
@@ -59,6 +59,30 @@ spec:
           - resources:
               requests:
                 memory: "?*"
+  - name: require-memory-requests-equal-limits
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    exclude:
+      any:
+      - resources:
+          namespaces:
+          - kube-system
+          - kube-public
+          - kube-node-lease
+          - kyverno
+    validate:
+      message: "Memory requests must equal memory limits."
+      foreach:
+      - list: "request.object.spec.containers"
+        deny:
+          conditions:
+            any:
+            - key: "{{ element.resources.requests.memory }}"
+              operator: NotEquals
+              value: "{{ element.resources.limits.memory }}"
   - name: require-cpu-requests
     match:
       any:
@@ -81,3 +105,25 @@ spec:
           - resources:
               requests:
                 cpu: "?*"
+  - name: disallow-cpu-limits
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    exclude:
+      any:
+      - resources:
+          namespaces:
+          - kube-system
+          - kube-public
+          - kube-node-lease
+          - kyverno
+    validate:
+      message: "CPU limits should not be set. They cause CPU throttling and stability issues."
+      pattern:
+        spec:
+          containers:
+          - resources:
+              limits:
+                X(cpu): "?*"
