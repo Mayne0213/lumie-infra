@@ -3,7 +3,7 @@
   "_applications": "--- Applications ---",
   "docker:alpine/git": "v2.47.1",
   "docker:bitnami/kubectl": "latest",
-  "docker:codercom/code-server": "4.108.2",
+  "docker:codercom/code-server": "4.111.0",
   "ghcr:headlamp-k8s/headlamp": "v0.39.0",
   "ghcr:openclaw/openclaw": "2026.2.23",
   "ghcr:umami-software/umami": "postgresql-latest",
