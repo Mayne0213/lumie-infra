@@ -93,7 +93,7 @@ apps:
 
   # Database Web UI
   - name: pgweb
-    uri: http://pgweb.pgweb.svc.cluster.local:80
+    uri: http://pgweb.lumie-db.svc.cluster.local:80
     labels:
       env: prod
       category: storage
