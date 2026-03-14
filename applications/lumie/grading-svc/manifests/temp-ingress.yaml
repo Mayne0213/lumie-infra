@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grading-svc-temp-ingress
+  namespace: lumie-grading
+  annotations:
+    konghq.com/strip-path: "true"
+    konghq.com/plugins: lumie-cors
+    konghq.com/read-timeout: "300000"
+    konghq.com/write-timeout: "300000"
+    konghq.com/connect-timeout: "60000"
+spec:
+  ingressClassName: kong
+  rules:
+    - host: lumie0213.kro.kr
+      http:
+        paths:
+          - path: /api/temp/grading
+            pathType: Prefix
+            backend:
+              service:
+                name: grading-svc
+                port:
+                  number: 8000
