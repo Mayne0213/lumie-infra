@@ -42,7 +42,7 @@ spec:
           value: $(extensions.build_args)
       template:
         ref: nextjs-build-template
-    - name: github-push-lumie-docs
+    - name: github-push-lumie-document
       interceptors:
         - ref:
             name: "github"
@@ -66,11 +66,11 @@ spec:
             name: "cel"
           params:
             - name: "filter"
-              value: "body.repository.name in ['lumie-docs']"
+              value: "body.repository.name in ['lumie-document']"
       bindings:
         - ref: github-push-binding
       template:
-        ref: lumie-docs-build-template
+        ref: lumie-document-build-template
     - name: github-push-fastapi
       interceptors:
         - ref:

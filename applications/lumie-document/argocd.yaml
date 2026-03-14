@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: lumie-docs
+  name: lumie-document
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -11,10 +11,10 @@ spec:
   source:
     repoURL: https://github.com/Mayne0213/lumie-infra.git
     targetRevision: main
-    path: applications/lumie-docs
+    path: applications/lumie-document
   destination:
     server: https://kubernetes.default.svc
-    namespace: lumie-docs
+    namespace: lumie-document
   syncPolicy:
     automated:
       prune: true

@@ -1,10 +1,10 @@
 # Lumie Docs Web App Helm Values
 
 common:
-  name: lumie-docs
+  name: lumie-document
   image:
     registry: zot.lumie-infra.com
-    repository: web-apps/lumie-docs
+    repository: web-apps/lumie-document
     tag: "827457f6"
     pullPolicy: Always
   replicaCount: 1

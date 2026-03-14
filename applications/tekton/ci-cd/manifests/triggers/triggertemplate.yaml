@@ -61,7 +61,7 @@ spec:
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: lumie-docs-build-template
+  name: lumie-document-build-template
   namespace: tekton-pipelines
 spec:
   params:
@@ -105,7 +105,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie-docs/helm-values.yaml
+            value: applications/lumie-document/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}

@@ -6,6 +6,6 @@ helmGlobals:
 
 helmCharts:
   - name: common
-    releaseName: lumie-docs
-    namespace: lumie-docs
+    releaseName: lumie-document
+    namespace: lumie-document
     valuesFile: helm-values.yaml

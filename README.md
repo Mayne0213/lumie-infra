@@ -123,7 +123,7 @@ lumie-infra/
 │   ├── umami/                #   Web analytics
 │   ├── code-server/          #   Web IDE
 │   ├── headlamp/             #   Kubernetes dashboard
-│   ├── lumie-docs/            #   Documentation site
+│   ├── lumie-document/         #   Documentation site
 │   ├── mas/                  #   Multi-Account System
 │   ├── joossam/              #   LMS component
 │   └── lumie-dev/            #   Development environment
@@ -162,7 +162,7 @@ observability
 ├── blackbox-exporter, goldilocks, vpa
 │
 applications
-├── argocd, tekton, umami, code-server, headlamp, lumie-docs, mas, joossam
+├── argocd, tekton, umami, code-server, headlamp, lumie-document, mas, joossam
 ├── lumie (12 microservices), lumie-dev
 │
 web-apps

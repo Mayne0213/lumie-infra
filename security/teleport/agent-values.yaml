@@ -151,12 +151,12 @@ apps:
       teleport.icon: kube
 
   # Documentation
-  - name: lumie-docs
-    uri: http://lumie-docs.lumie-docs.svc.cluster.local:80
+  - name: lumie-document
+    uri: http://lumie-document.lumie-document.svc.cluster.local:80
     public_addr: docs.lumie-infra.com
     rewrite:
       redirect:
-        - "lumie-docs.lumie-docs.svc.cluster.local"
+        - "lumie-document.lumie-document.svc.cluster.local"
     labels:
       env: prod
       category: applications
