@@ -116,6 +116,17 @@ configMaps:
             "gc": true,
             "gcDelay": "1h",
             "gcInterval": "24h",
+            "retention": {
+              "policies": [
+                {
+                  "repositories": ["**"],
+                  "deleteReferrers": true,
+                  "keepTags": [{
+                    "mostRecentlyPushedCount": 1
+                  }]
+                }
+              ]
+            },
             "storageDriver": {
               "name": "s3",
               "regionendpoint": "http://minio.minio.svc.cluster.local:9000",
