@@ -9,6 +9,3 @@ helmCharts:
     releaseName: lumie
     namespace: lumie-db
     valuesFile: common-values.yaml
-
-resources:
-  - manifests/init-job.yaml
