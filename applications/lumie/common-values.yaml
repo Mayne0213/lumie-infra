@@ -22,7 +22,7 @@ common:
     instances: 2
     version: "18.1"
     name: lumie
-    owner: lumie
+    owner: bluemayne
     encoding: UTF8
     localeCollate: C
     localeCType: C
