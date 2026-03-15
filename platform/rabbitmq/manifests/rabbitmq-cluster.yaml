@@ -49,11 +49,3 @@ spec:
                   - name: definitions
                     mountPath: /etc/rabbitmq/definitions
                     readOnly: true
-                env:
-                  - name: RABBITMQ_DEFAULT_USER
-                    value: lumie
-                  - name: RABBITMQ_DEFAULT_PASS
-                    valueFrom:
-                      secretKeyRef:
-                        name: rabbitmq-secrets
-                        key: rabbitmq-password

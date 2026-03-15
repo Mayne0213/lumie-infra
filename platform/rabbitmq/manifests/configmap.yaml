@@ -14,6 +14,23 @@ data:
           "name": "/"
         }
       ],
+      "users": [
+        {
+          "name": "lumie",
+          "password_hash": "TSfR2onTI0QQvWMVUD2F3ZDjwSzppvMXKuZHsla+fcmzZJEC",
+          "hashing_algorithm": "rabbit_password_hashing_sha256",
+          "tags": ["administrator"]
+        }
+      ],
+      "permissions": [
+        {
+          "user": "lumie",
+          "vhost": "/",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+        }
+      ],
       "exchanges": [
         {
           "name": "lumie.events",
