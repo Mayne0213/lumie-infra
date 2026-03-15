@@ -895,7 +895,9 @@ spec:
           - name: image-prefix
             value: applications/
           - name: update-values
-            value: "false"
+            value: "true"
+          - name: values-file-path
+            value: applications/lumie/ai/report-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}

@@ -81,6 +81,8 @@ common:
       value: "academy-svc-grpc.lumie-academy.svc"
     - name: GRADING_SVC_URL
       value: "http://grading-svc.lumie-grading.svc:8000"
+    - name: REPORT_SVC_URL
+      value: "http://report-svc.lumie-report.svc:8000"
     - name: MINIO_ENDPOINT
       value: "http://minio.minio.svc:9000"
     - name: MINIO_ACCESS_KEY

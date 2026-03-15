@@ -42,3 +42,4 @@ resources:
   - lumie/ai/ai-svc/argocd.yaml
   - lumie/ai/analysis-svc/argocd.yaml
   - lumie/ai/grading-svc/argocd.yaml
+  - lumie/ai/report-svc/argocd.yaml

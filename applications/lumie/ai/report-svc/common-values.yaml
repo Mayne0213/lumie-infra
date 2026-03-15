@@ -1,0 +1,95 @@
+# report-svc common chart values
+# 학생 시험 리포트 생성 서비스 (Python FastAPI)
+
+common:
+  name: report-svc
+  namespace: lumie-report
+
+  # Deployment
+  deployment:
+    enabled: true
+
+  replicaCount: 1
+
+  # Image
+  image:
+    registry: zot.lumie-infra.com
+    repository: applications/report-svc
+    tag: "c7115784"
+    pullPolicy: Always
+
+  # Container ports
+  ports:
+    - name: http
+      containerPort: 8000
+      protocol: TCP
+
+  # Pod-level security context
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+
+  # Container-level security context
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+
+  # Environment variables
+  env:
+    - name: HOST
+      value: "0.0.0.0"
+    - name: PORT
+      value: "8000"
+    - name: EXAM_SERVICE_URL
+      value: "http://exam-svc.lumie-exam.svc:8080"
+    - name: ACADEMY_SERVICE_URL
+      value: "http://academy-svc.lumie-academy.svc:8080"
+
+  # Resources
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 2Gi
+
+  # Health checks (FastAPI)
+  healthCheck:
+    enabled: true
+    port: http
+    livenessProbe:
+      path: /health
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readinessProbe:
+      path: /health
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+
+  # Service
+  service:
+    enabled: true
+    type: ClusterIP
+    port: 8000
+    ports:
+      - name: http
+        port: 8000
+        targetPort: http
+        protocol: TCP
+
+  ingress:
+    enabled: false
+
+  # ServiceMonitor disabled
+  serviceMonitor:
+    enabled: false
