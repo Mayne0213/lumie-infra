@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/Lumie-Edu/lumie-infra.git
     targetRevision: main
-    path: applications/analysis-svc
+    path: applications/lumie/analysis-svc
   destination:
     server: https://kubernetes.default.svc
     namespace: analysis-svc

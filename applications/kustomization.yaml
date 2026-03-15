@@ -12,7 +12,6 @@ resources:
   - code-server/argocd.yaml
   - umami/argocd.yaml
   - headlamp/argocd.yaml
-  - analysis-svc/argocd.yaml
   - openclaw/argocd.yaml
 
   # Tekton CI/CD
@@ -36,3 +35,4 @@ resources:
   - lumie/attendance-svc/argocd.yaml
   - lumie/ai-svc/argocd.yaml
   - lumie/lumie-frontend/argocd.yaml
+  - lumie/analysis-svc/argocd.yaml
