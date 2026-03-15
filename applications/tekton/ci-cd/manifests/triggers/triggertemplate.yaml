@@ -105,7 +105,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie-document/helm-values.yaml
+            value: applications/lumie/document/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -218,7 +218,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/tenant-svc/common-values.yaml
+            value: applications/lumie/backend/tenant-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -275,7 +275,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/auth-svc/common-values.yaml
+            value: applications/lumie/backend/auth-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -332,7 +332,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/billing-svc/common-values.yaml
+            value: applications/lumie/backend/billing-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -389,7 +389,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/academy-svc/common-values.yaml
+            value: applications/lumie/backend/academy-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -446,7 +446,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/attendance-svc/common-values.yaml
+            value: applications/lumie/backend/attendance-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -503,7 +503,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/admin-svc/common-values.yaml
+            value: applications/lumie/backend/admin-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -560,7 +560,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/ai-svc/common-values.yaml
+            value: applications/lumie/ai/ai-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -615,7 +615,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/lumie-frontend/common-values.yaml
+            value: applications/lumie/frontend/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -671,7 +671,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/grading-svc/common-values.yaml
+            value: applications/lumie/ai/grading-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -728,7 +728,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/exam-svc/common-values.yaml
+            value: applications/lumie/backend/exam-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -785,7 +785,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/content-svc/common-values.yaml
+            value: applications/lumie/backend/content-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -842,7 +842,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/lumie/file-svc/common-values.yaml
+            value: applications/lumie/backend/file-svc/common-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
@@ -1003,7 +1003,7 @@ spec:
           - name: update-values
             value: "true"
           - name: values-file-path
-            value: applications/analysis-svc/helm-values.yaml
+            value: applications/lumie/ai/analysis-svc/helm-values.yaml
         workspaces:
           - name: shared-workspace
             emptyDir: {}
