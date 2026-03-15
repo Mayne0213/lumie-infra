@@ -111,10 +111,12 @@ metrics:
     interval: 30s
     scrapeTimeout: 10s
 
-# Disable post-install job by setting all triggers to empty
-# Job is created if any of: buckets, users, policies, customCommands, svcaccts exist
+# Post-install job configuration
 buckets: []
 users: []
 policies: []
-customCommands: []
 svcaccts: []
+
+# ILM lifecycle rule: auto-delete tmp OMR images after 24 hours
+customCommands:
+  - mc ilm rule add lumie/lumie-files --prefix "omr/tmp/" --expire-days 1
