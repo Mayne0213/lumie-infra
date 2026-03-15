@@ -14,7 +14,7 @@ common:
   image:
     registry: zot.lumie-infra.com
     repository: applications/billing-svc
-    tag: "656710fd"
+    tag: "5b14b10f"
     pullPolicy: IfNotPresent
 
   # Multiple container ports
