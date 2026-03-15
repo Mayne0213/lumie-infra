@@ -9,6 +9,11 @@ metadata:
 data:
   definitions.json: |
     {
+      "vhosts": [
+        {
+          "name": "/"
+        }
+      ],
       "exchanges": [
         {
           "name": "lumie.events",
