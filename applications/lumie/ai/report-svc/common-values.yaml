@@ -75,6 +75,8 @@ common:
       periodSeconds: 10
       timeoutSeconds: 5
       failureThreshold: 3
+    startupProbe:
+      path: /health
 
   # Service
   service:
